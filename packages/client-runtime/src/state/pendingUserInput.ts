@@ -163,7 +163,7 @@ export function buildPendingUserInputAnswers(
   questions: ReadonlyArray<PendingUserInputQuestion>,
   draftAnswers: Record<string, PendingUserInputDraftAnswer>,
 ): Record<string, PendingUserInputAnswer> | null {
-  const answers: Record<string, PendingUserInputAnswer> = {};
+  const entries: Array<[string, PendingUserInputAnswer]> = [];
 
   for (const question of questions) {
     const answer = resolvePendingUserInputAnswer(question, draftAnswers[question.id]);
@@ -171,12 +171,8 @@ export function buildPendingUserInputAnswers(
       if (question.required === false && !draftAnswers[question.id]?.attachmentsBlocked) continue;
       return null;
     }
-    Object.defineProperty(answers, question.id, {
-      value: answer,
-      enumerable: true,
-      configurable: true,
-    });
+    entries.push([question.id, answer]);
   }
 
-  return answers;
+  return Object.fromEntries(entries);
 }

@@ -18,6 +18,7 @@ import {
   resolveDefaultableModelSelection,
   resolveNewTaskModelSelection,
   resolveSelectableModelSelection,
+  withStoredThreadModelOptions,
   type ModelOption,
 } from "./modelOptions";
 
@@ -62,6 +63,10 @@ describe("mobile model options", () => {
     } as unknown as ServerConfig;
     expect(isModelSelectionUnavailable(missing, selection, null)).toBe(true);
     expect(resolveSelectableModelSelection(missing, selection, null)).toBe(selection);
+    expect(describeUnavailableModelSelection(missing, selection, null)).toEqual({
+      title: "Oh My Pi model unavailable",
+      detail: "Set up Oh My Pi on this environment, or choose another model.",
+    });
     const restored = { providers: [provider] } as unknown as ServerConfig;
     expect(isModelSelectionUnavailable(restored, selection, null)).toBe(false);
     expect(buildModelOptions(restored, selection, undefined, null)[0]?.selection).toBe(selection);
@@ -187,6 +192,27 @@ describe("mobile model options", () => {
       null,
     );
     expect(explicitOption?.selection.options).toEqual([{ id: "serviceTier", value: "priority" }]);
+  });
+
+  it("carries a thread's stored options onto an optionless pick of its own model", () => {
+    const claude = ProviderInstanceId.make("claudeAgent");
+    const stored: ModelSelection = {
+      instanceId: claude,
+      model: "claude-opus-5-5",
+      options: [{ id: "effort", value: "high" }],
+    };
+    expect(
+      withStoredThreadModelOptions({ instanceId: claude, model: stored.model }, stored),
+    ).toEqual(stored);
+    const remembered: ModelSelection = { ...stored, options: [{ id: "effort", value: "low" }] };
+    expect(withStoredThreadModelOptions(remembered, stored)).toBe(remembered);
+    const otherInstance: ModelSelection = {
+      instanceId: ProviderInstanceId.make("claude_work"),
+      model: stored.model,
+    };
+    expect(withStoredThreadModelOptions(otherInstance, stored)).toBe(otherInstance);
+    const otherModel: ModelSelection = { instanceId: claude, model: "claude-sonnet-5-5" };
+    expect(withStoredThreadModelOptions(otherModel, stored)).toBe(otherModel);
   });
 
   it("limits existing threads to their provider while new tasks keep every provider", () => {

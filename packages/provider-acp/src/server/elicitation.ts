@@ -88,10 +88,20 @@ function choicesFromSchema(property: Record<string, unknown>): ReadonlyArray<Cho
   if (Array.isArray(property.enum)) {
     if (!property.enum.length || !property.enum.every(scalar)) return undefined;
     const names = Array.isArray(property.enumNames) ? property.enumNames : [];
-    return property.enum.map((value, index) => {
-      const label = text(names[index], text(String(value), "Empty"));
+    const counts = new Map<string, number>();
+    for (const value of property.enum) {
+      const label = String(value).trim();
+      counts.set(label, (counts.get(label) ?? 0) + 1);
+    }
+    const choices = property.enum.map((value, index) => {
+      const plain = String(value).trim();
+      const fallback = plain && counts.get(plain) === 1 ? plain : JSON.stringify(value);
+      const label = text(names[index], fallback);
       return { value, label, description: text(String(value), label) };
     });
+    return new Set(choices.map((choice) => choice.label)).size === choices.length
+      ? choices
+      : choices.map((choice) => ({ ...choice, label: JSON.stringify(choice.value) }));
   }
   const branches = property.oneOf ?? property.anyOf;
   if (!Array.isArray(branches) || !branches.length) return undefined;
@@ -128,6 +138,21 @@ export function projectAcpElicitationForm(requestedSchema: unknown, message: str
     return undefined;
   }
   const required = new Set(Array.isArray(schema.required) ? schema.required : []);
+  const companions = new Map<string, string>();
+  for (const [id, value] of Object.entries(properties)) {
+    const property = unknownRecord(value);
+    const companionId = `${id}__other`;
+    if (
+      property?.type === "string" &&
+      choicesFromSchema(property) &&
+      unknownRecord(properties[companionId])?.type === "string" &&
+      !required.has(id) &&
+      !required.has(companionId)
+    ) {
+      companions.set(id, companionId);
+    }
+  }
+  const folded = new Set(companions.values());
   const questions: OrchestrationV2UserInputQuestion[] = [];
   const fields: Field[] = [];
   try {
@@ -160,6 +185,15 @@ export function projectAcpElicitationForm(requestedSchema: unknown, message: str
       ) {
         return undefined;
       }
+      if (
+        type === "array" &&
+        (record.maxItems === 0 ||
+          (typeof record.minItems === "number" &&
+            (record.minItems > (choices?.length ?? 0) ||
+              (typeof record.maxItems === "number" && record.minItems > record.maxItems))))
+      ) {
+        return undefined;
+      }
       if (type === "boolean" && !choices) {
         choices = [
           { value: true, label: "Yes", description: "Yes" },
@@ -174,23 +208,38 @@ export function projectAcpElicitationForm(requestedSchema: unknown, message: str
       }
       const accepts = validator(record);
       fields.push({ id, type, choices, required: required.has(id), accepts });
+      if (folded.has(id)) continue;
       questions.push({
         id,
         header: text(record.title, `Question ${questions.length + 1}`),
-        question: text(record.description, text(record.title, text(message, "Please answer"))),
+        question: companions.has(id)
+          ? text(record.title, text(record.description, message))
+          : text(record.description, text(record.title, text(message, "Please answer"))),
         options: (choices ?? []).map((choice) => ({
           value: String(choice.value),
           label: choice.label,
           description: choice.description,
         })),
         ...(type === "array" ? { multiSelect: true } : {}),
-        allowCustomAnswer: !choices,
+        allowCustomAnswer: !choices || companions.has(id),
         required: required.has(id),
       });
     }
     const acceptsForm = validator(schema);
     const convertAnswers = Effect.fnUntraced(function* (answers: ProviderUserInputAnswers) {
       const content: Record<string, ElicitationContentValue> = {};
+      for (const [id, companionId] of companions) {
+        const answer = Object.hasOwn(answers, id) ? answers[id] : undefined;
+        const field = fields.find((candidate) => candidate.id === id);
+        if (
+          typeof answer === "string" &&
+          !field?.choices?.some((choice) => choice.value === answer)
+        ) {
+          const remapped = { ...answers, [companionId]: answer };
+          delete remapped[id];
+          answers = remapped;
+        }
+      }
       for (const field of fields) {
         let value = Object.hasOwn(answers, field.id) ? answers[field.id] : undefined;
         // Older callers wrap scalar selections in an array (or { answers: [...] }).

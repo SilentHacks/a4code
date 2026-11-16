@@ -3,19 +3,24 @@ import * as NodeCrypto from "node:crypto";
 import { CommandId, OrchestratorMcpFailure, TurnItemId } from "@t3tools/contracts";
 import { readHtmlRenderReference, type HtmlRenderReference } from "@t3tools/shared/htmlRender";
 import * as Effect from "effect/Effect";
+import * as Schema from "effect/Schema";
 
 import * as HtmlRender from "../../../htmlRender/HtmlRender.ts";
 import * as ThreadManagementService from "../../../orchestration-v2/ThreadManagementService.ts";
 import * as McpInvocationContext from "../../McpInvocationContext.ts";
 import * as McpToolAccess from "../../McpToolAccess.ts";
+import { loadCaller } from "../../threadAccess.ts";
 import { HtmlPreviewToolkit, HtmlRenderToolkit, type HtmlToolkit } from "./tools.ts";
 
 const INVALID_PAGE_ERRORS = new Set([
+  "HtmlRenderFileError",
+  "HtmlRenderFileTooLargeError",
   "HtmlRenderImagesNotFoundError",
   "HtmlRenderImageTooLargeError",
   "HtmlRenderPageTooLargeError",
   "HtmlRenderViewportHeightError",
 ]);
+const encodeSource = Schema.encodeEffect(Schema.fromJsonString(Schema.Unknown));
 
 const toFailure = (error: { readonly _tag: string; readonly message: string }) =>
   new OrchestratorMcpFailure({
@@ -23,12 +28,40 @@ const toFailure = (error: { readonly _tag: string; readonly message: string }) =
     message: error.message,
   });
 
+// The server reads the file for the caller, so only a thread that reads files without asking may
+// pass a path; a supervised thread passes the HTML its provider already let it read.
+const pageSource = Effect.fn("HtmlToolkit.pageSource")(function* (input: {
+  readonly html?: string | undefined;
+  readonly path?: string | undefined;
+}) {
+  if (input.html !== undefined && input.path === undefined) {
+    return { html: input.html } satisfies HtmlRender.HtmlRenderSource;
+  }
+  if (input.path === undefined || input.html !== undefined) {
+    return yield* new OrchestratorMcpFailure({
+      code: "invalid_request",
+      message: "Pass exactly one of html or path.",
+    });
+  }
+  const { limits } = yield* loadCaller();
+  if (limits.runtimeMode !== "full-access") {
+    return yield* new OrchestratorMcpFailure({
+      code: "capability_denied",
+      message: "Pass html instead of path: only full-access threads may pass a path.",
+    });
+  }
+  return { path: input.path } satisfies HtmlRender.HtmlRenderSource;
+});
+
 const handlers = {
   // Local-file access limits this host browser to T3-launched agents.
   html_preview: McpToolAccess.readsAsCaller((input) =>
     Effect.gen(function* () {
       const htmlRender = yield* HtmlRender.HtmlRender;
-      const { png, ...preview } = yield* htmlRender.preview(input).pipe(Effect.mapError(toFailure));
+      const source = yield* pageSource(input);
+      const { png, ...preview } = yield* htmlRender
+        .preview({ ...source, width: input.width, appearance: input.appearance })
+        .pipe(Effect.mapError(toFailure));
       return {
         ...preview,
         screenshot: {
@@ -45,6 +78,16 @@ const handlers = {
       const scope = yield* McpInvocationContext.McpInvocationContext;
       const { thread } = yield* McpInvocationContext.requireThreadScope(scope, "html_render");
       const htmlRender = yield* HtmlRender.HtmlRender;
+      const source = yield* pageSource(input);
+      const encodedSource = yield* encodeSource(source).pipe(
+        Effect.mapError(
+          () =>
+            new OrchestratorMcpFailure({
+              code: "invalid_request",
+              message: "The HTML source could not be encoded.",
+            }),
+        ),
+      );
       const threads = yield* ThreadManagementService.ThreadManagementService;
       const digest = (value: string) => NodeCrypto.createHash("sha256").update(value).digest("hex");
       const identity = digest(
@@ -52,8 +95,7 @@ const handlers = {
       );
       const itemId = TurnItemId.make(`item:html-render:${identity}`);
       const requestHash = NodeCrypto.createHash("sha256")
-        .update(`${input.html.length}:`)
-        .update(input.html)
+        .update(encodedSource)
         .update(`${input.title.length}:`)
         .update(input.title)
         .update(String(input.height))
@@ -85,7 +127,7 @@ const handlers = {
         const staged = yield* htmlRender
           .preparePublication({
             threadId: thread.threadId,
-            html: input.html,
+            ...source,
             title: input.title,
             height: input.height,
           })

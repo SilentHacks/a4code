@@ -12,6 +12,7 @@ import * as TestClock from "effect/testing/TestClock";
 import * as ServerConfig from "../config.ts";
 import * as ProjectStore from "../orchestration-v2/ProjectStore.ts";
 import * as ServerSettings from "../serverSettings.ts";
+import * as ProviderSessionRuntime from "../persistence/ProviderSessionRuntime.ts";
 import * as Scanner from "./AgentSessionScanner.ts";
 import { resolveOmpSessionsDirectory } from "./OmpSessionLayout.ts";
 
@@ -243,12 +244,15 @@ it.layer(NodeServices.layer)("OMP session discovery", (it) => {
                 [instanceId]: {
                   driver: ProviderDriverKind.make("omp"),
                   config: { enabled: true, profile: "work" },
-                  environment: [{ name: "HOME", value: root }],
+                  environment: [{ name: "HOME", value: root, sensitive: false }],
                 },
               },
             }),
             ServerConfig.layerTest(root, { prefix: "omp-config-test-" }),
             Layer.mock(ProjectStore.ProjectStoreV2)({ listShells: () => Effect.succeed([]) }),
+            Layer.mock(ProviderSessionRuntime.ProviderSessionRuntimeRepository)({
+              list: () => Effect.succeed([]),
+            }),
             Layer.succeed(HostProcess.Environment, {}),
             Layer.succeed(HostProcess.Platform, "linux"),
           ),

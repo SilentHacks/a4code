@@ -1,8 +1,11 @@
 import { describe, expect, it } from "vite-plus/test";
 import { ProviderDriverKind, ProviderInstanceId, type ServerProvider } from "@t3tools/contracts";
 import {
+  dismissProviderStatusBannerForSession,
   getProviderStatusBannerKey,
+  getProviderStatusDismissalKey,
   getProviderStatusMessage,
+  isProviderStatusBannerDismissedForSession,
   shouldShowProviderStatusBanner,
 } from "./ProviderStatusBanner";
 
@@ -26,18 +29,18 @@ const provider: ServerProvider = {
   },
 };
 
+function shownAfterDismissing(dismissed: ServerProvider, shown: ServerProvider): boolean {
+  return shouldShowProviderStatusBanner(
+    shown,
+    getProviderStatusBannerKey(shown) === getProviderStatusBannerKey(dismissed),
+  );
+}
+
 describe("compatibility banners", () => {
   it("shows and dismisses a warning on a healthy provider, then clears it after policy relaxation", () => {
-    expect(shouldShowProviderStatusBanner(provider, null)).toBe(true);
-    expect(shouldShowProviderStatusBanner(provider, getProviderStatusBannerKey(provider))).toBe(
-      false,
-    );
-    expect(
-      shouldShowProviderStatusBanner(
-        { ...provider, version: "1.0.1" },
-        getProviderStatusBannerKey(provider),
-      ),
-    ).toBe(true);
+    expect(shouldShowProviderStatusBanner(provider, false)).toBe(true);
+    expect(shownAfterDismissing(provider, provider)).toBe(false);
+    expect(shownAfterDismissing(provider, { ...provider, version: "1.0.1" })).toBe(true);
     const relaxed: ServerProvider = {
       ...provider,
       compatibilityAdvisory: {
@@ -66,9 +69,7 @@ describe("compatibility banners", () => {
       };
       expect(getProviderStatusBannerKey(opencode)).toBeNull();
       const failed: ServerProvider = { ...opencode, status: "error", message: "Connection lost" };
-      expect(shouldShowProviderStatusBanner(failed, getProviderStatusBannerKey(opencode))).toBe(
-        true,
-      );
+      expect(shouldShowProviderStatusBanner(failed, false)).toBe(true);
       expect(getProviderStatusMessage(failed)).toBe("Connection lost");
       expect(
         getProviderStatusMessage({
@@ -96,7 +97,7 @@ describe("compatibility banners", () => {
         recommendedRange: ">=1.14.19 <2.0.0",
       },
     };
-    expect(shouldShowProviderStatusBanner(broken, null)).toBe(true);
+    expect(shouldShowProviderStatusBanner(broken, false)).toBe(true);
     const timeoutOnly: ServerProvider = {
       ...broken,
       compatibilityAdvisory: {
@@ -105,18 +106,13 @@ describe("compatibility banners", () => {
         message: null,
       },
     };
-    expect(shouldShowProviderStatusBanner(broken, getProviderStatusBannerKey(timeoutOnly))).toBe(
-      false,
-    );
-    expect(shouldShowProviderStatusBanner(broken, getProviderStatusBannerKey(broken))).toBe(false);
+    expect(shownAfterDismissing(timeoutOnly, broken)).toBe(false);
+    expect(shownAfterDismissing(broken, broken)).toBe(false);
     expect(
-      shouldShowProviderStatusBanner(
-        {
-          ...broken,
-          compatibilityAdvisory: { ...broken.compatibilityAdvisory!, message: "Use 1.14.20." },
-        },
-        getProviderStatusBannerKey(broken),
-      ),
+      shownAfterDismissing(broken, {
+        ...broken,
+        compatibilityAdvisory: { ...broken.compatibilityAdvisory!, message: "Use 1.14.20." },
+      }),
     ).toBe(false);
     expect(getProviderStatusMessage(broken)).toBe(broken.message);
     expect(
@@ -132,5 +128,43 @@ describe("compatibility banners", () => {
     expect(getProviderStatusMessage({ ...broken, auth: { status: "unauthenticated" } })).toBe(
       broken.message,
     );
+  });
+});
+
+describe("banner dismissal", () => {
+  const { compatibilityAdvisory: _advisory, ...healthy } = provider;
+  const failing: ServerProvider = {
+    ...healthy,
+    instanceId: ProviderInstanceId.make("codex-dismissal"),
+    status: "error",
+    message: "Could not start Codex CLI.",
+  };
+
+  it("keeps a dismissed status hidden in other views until the status changes", () => {
+    const key = getProviderStatusDismissalKey("environment-a", failing);
+    expect(isProviderStatusBannerDismissedForSession(key)).toBe(false);
+
+    dismissProviderStatusBannerForSession(key);
+
+    expect(
+      isProviderStatusBannerDismissedForSession(
+        getProviderStatusDismissalKey("environment-a", failing),
+      ),
+    ).toBe(true);
+    expect(
+      isProviderStatusBannerDismissedForSession(
+        getProviderStatusDismissalKey("environment-a", { ...failing, message: "Codex exited." }),
+      ),
+    ).toBe(false);
+  });
+
+  it("keeps a dismissal to the environment it was taken in", () => {
+    dismissProviderStatusBannerForSession(getProviderStatusDismissalKey("environment-c", failing));
+
+    expect(
+      isProviderStatusBannerDismissedForSession(
+        getProviderStatusDismissalKey("environment-d", failing),
+      ),
+    ).toBe(false);
   });
 });

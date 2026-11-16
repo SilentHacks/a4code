@@ -18,12 +18,13 @@ import {
 import type { StaticScreenProps } from "@react-navigation/native";
 import * as Option from "effect/Option";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { ActivityIndicator, Alert, Pressable, View } from "react-native";
+import { ActivityIndicator, Pressable, View } from "react-native";
 
 import { AppText as Text } from "../../components/ui/AppText";
 import * as Dialog from "../../components/ui/Dialog";
 import { EmptyState } from "../../components/ui/EmptyState";
 import { ListRowLayout } from "../../components/ui/ListRowLayout";
+import { ScreenScrollView } from "../../components/ui/ScreenScrollView";
 import { ListSection } from "../../components/ui/ListSection";
 import { downloadAndShareAttachment } from "../../lib/attachmentDownload";
 import { copyTextWithHaptic } from "../../lib/copyTextWithHaptic";
@@ -103,11 +104,11 @@ function ServerFiles(props: {
   );
 
   const reportFailure = (title: string, result: Parameters<typeof squashAtomCommandFailure>[0]) =>
-    Alert.alert(title, hostFilesFailureMessage(squashAtomCommandFailure(result), "Try again."));
+    Dialog.alert(title, hostFilesFailureMessage(squashAtomCommandFailure(result), "Try again."));
 
   const share = async (entry: HostFileEntry) => {
     if (httpBaseUrl === null) {
-      Alert.alert("Not connected", "Reconnect to the environment and try again.");
+      Dialog.alert("Not connected", "Reconnect to the environment and try again.");
       return;
     }
     setBusy(entry.path);
@@ -128,7 +129,7 @@ function ServerFiles(props: {
         signal: new AbortController().signal,
       });
     } catch (cause) {
-      Alert.alert("Could not download", cause instanceof Error ? cause.message : "Try again.");
+      Dialog.alert("Could not download", cause instanceof Error ? cause.message : "Try again.");
     } finally {
       setBusy(null);
     }
@@ -171,7 +172,7 @@ function ServerFiles(props: {
   const showActions = (entry: HostFileEntry) => {
     const directory = isHostDirectoryEntry(entry);
     // Android dialogs hold at most three buttons, so secondary actions nest.
-    Alert.alert(
+    Dialog.alert(
       entry.name,
       displayHostPath(entry.path, listing?.homePath ?? null),
       [
@@ -180,7 +181,7 @@ function ServerFiles(props: {
         {
           text: "More…",
           onPress: () =>
-            Alert.alert(entry.name, undefined, [
+            Dialog.alert(entry.name, undefined, [
               { text: "Rename or move", onPress: () => promptRename(entry) },
               { text: "Delete", style: "destructive", onPress: () => promptDelete(entry) },
               { text: "Cancel", style: "cancel" },
@@ -218,7 +219,7 @@ function ServerFiles(props: {
 
   const askConflict = (names: ReadonlyArray<string>) =>
     new Promise<HostFilesUploadConflict | null>((resolve) =>
-      Alert.alert(
+      Dialog.alert(
         names.length === 1 ? `"${names[0]}" already exists` : `${names.length} files already exist`,
         "Replace them, or keep both with a numbered name.",
         [
@@ -265,10 +266,10 @@ function ServerFiles(props: {
           headers: { "Content-Type": "application/octet-stream" },
         });
         if (result.status < 200 || result.status >= 300) {
-          Alert.alert(`Could not upload ${asset.name}`, result.body || `Status ${result.status}`);
+          Dialog.alert(`Could not upload ${asset.name}`, result.body || `Status ${result.status}`);
         }
       } catch (cause) {
-        Alert.alert(`Could not upload ${asset.name}`, cause instanceof Error ? cause.message : "");
+        Dialog.alert(`Could not upload ${asset.name}`, cause instanceof Error ? cause.message : "");
       }
     }
     setBusy(null);
@@ -313,51 +314,57 @@ function ServerFiles(props: {
           : undefined
       }
     >
-      {!allowed ? (
-        <EmptyState
-          title="Server files unavailable"
-          detail="This connection needs terminal access on the environment to browse its files."
-        />
-      ) : (
-        <ListSection
-          title={currentPath ?? undefined}
-          {...(listing?.truncated
-            ? { footer: `Showing the first ${listing.entries.length} entries.` }
-            : {})}
-        >
-          {error ? <Text className="px-2 text-sm text-destructive">{error}</Text> : null}
-          {loading && listing === null ? <ActivityIndicator /> : null}
-          {listing && entries.length === 0 && !error ? (
-            <Text className="px-2 py-4 text-center text-sm text-foreground-muted">
-              This folder is empty.
-            </Text>
-          ) : null}
-          {entries.map((entry) => {
-            const directory = isHostDirectoryEntry(entry);
-            return (
-              <Pressable
-                key={entry.path}
-                accessibilityRole="button"
-                accessibilityLabel={entry.name}
-                accessibilityHint={directory ? "Opens the folder" : "Shows file actions"}
-                onPress={() => (directory ? void navigate(entry.path) : showActions(entry))}
-                onLongPress={() => showActions(entry)}
-              >
-                <ListRowLayout
-                  icon={directory ? "folder" : entry.kind === "symlink" ? "link" : "doc"}
-                  label={entry.name}
-                  {...(entry.kind === "symlink" && entry.symlinkTarget
-                    ? { description: `→ ${entry.symlinkTarget}` }
-                    : {})}
-                  {...(directory ? {} : { detail: formatHostFileSize(entry.sizeBytes) })}
-                  accessory={busy === entry.path ? <ActivityIndicator /> : undefined}
-                />
-              </Pressable>
-            );
-          })}
-          {listing ? <View className="h-2" /> : null}
-        </ListSection>
-      )}
+      <ScreenScrollView
+        className="flex-1"
+        contentInsetAdjustmentBehavior="automatic"
+        contentContainerClassName="gap-6 px-5 py-4"
+      >
+        {!allowed ? (
+          <EmptyState
+            title="Server files unavailable"
+            detail="This connection needs terminal access on the environment to browse its files."
+          />
+        ) : (
+          <ListSection
+            title={currentPath ?? undefined}
+            {...(listing?.truncated
+              ? { footer: `Showing the first ${listing.entries.length} entries.` }
+              : {})}
+          >
+            {error ? <Text className="px-2 text-sm text-danger-foreground">{error}</Text> : null}
+            {loading && listing === null ? <ActivityIndicator /> : null}
+            {listing && entries.length === 0 && !error ? (
+              <Text className="px-2 py-4 text-center text-sm text-foreground-muted">
+                This folder is empty.
+              </Text>
+            ) : null}
+            {entries.map((entry) => {
+              const directory = isHostDirectoryEntry(entry);
+              return (
+                <Pressable
+                  key={entry.path}
+                  accessibilityRole="button"
+                  accessibilityLabel={entry.name}
+                  accessibilityHint={directory ? "Opens the folder" : "Shows file actions"}
+                  onPress={() => (directory ? void navigate(entry.path) : showActions(entry))}
+                  onLongPress={() => showActions(entry)}
+                >
+                  <ListRowLayout
+                    icon={directory ? "folder" : entry.kind === "symlink" ? "link" : "doc"}
+                    label={entry.name}
+                    {...(entry.kind === "symlink" && entry.symlinkTarget
+                      ? { description: `→ ${entry.symlinkTarget}` }
+                      : {})}
+                    {...(directory ? {} : { detail: formatHostFileSize(entry.sizeBytes) })}
+                    accessory={busy === entry.path ? <ActivityIndicator /> : undefined}
+                  />
+                </Pressable>
+              );
+            })}
+            {listing ? <View className="h-2" /> : null}
+          </ListSection>
+        )}
+      </ScreenScrollView>
     </SettingsScreen>
   );
 }
