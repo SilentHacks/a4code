@@ -1356,7 +1356,6 @@ export const make = Effect.gen(function* () {
             let claudeFields = emptyClaudeFields;
             let historyBytes = prefix?.historyBytes ?? 0;
             let recordBytes = 0;
-            let recordCount = 0;
             let bytesRead = 0;
             const reserve = (bytes: number) => {
               recordBytes += bytes;
@@ -1372,9 +1371,6 @@ export const make = Effect.gen(function* () {
 
             const finishRecord = () => {
               reader.write(decoder.decode());
-              recordCount += 1;
-              // Claude keeps a bounded window, so only the byte budgets limit its length.
-              if (recordCount > MAX_IMPORT_RECORDS && source !== "claudeAgent") return false;
               const value = reader.finish();
               const decoded = decodeTranscriptValue(value);
               if (source === "omp" && Option.isNone(decoded)) return false;
@@ -1407,7 +1403,7 @@ export const make = Effect.gen(function* () {
               reader = createTranscriptJsonReader(reserve, selectTranscriptPath);
               decoder = new TextDecoder();
               recordStarted = false;
-              return true;
+              return records.length <= MAX_IMPORT_RECORDS;
             };
 
             while (bytesRead < readBytes) {
