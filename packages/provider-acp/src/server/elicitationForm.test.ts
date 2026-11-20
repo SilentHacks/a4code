@@ -47,6 +47,36 @@ describe("projectAcpElicitationForm", () => {
     );
   }
 
+  it.effect("accepts typed single choices only when the agent advertises allowOther", () =>
+    Effect.gen(function* () {
+      const schema = {
+        type: "object",
+        properties: {
+          answer: { type: "string", enum: ["Yes", "No"] },
+          many: { type: "array", items: { type: "string", enum: ["Yes", "No"] } },
+        },
+        required: ["answer"],
+      };
+      const strict = projectAcpElicitationForm(schema, "Choose")!;
+      assert.strictEqual(
+        (yield* Effect.result(strict.convertAnswers({ answer: "Maybe" })))._tag,
+        "Failure",
+      );
+      const form = projectAcpElicitationForm(schema, "Choose", { allowOther: true })!;
+      assert.strictEqual(form.questions[0]?.allowCustomAnswer, true);
+      assert.strictEqual(form.questions[1]?.allowCustomAnswer, false);
+      assert.deepStrictEqual(yield* form.convertAnswers({ answer: "Maybe" }), { answer: "Maybe" });
+      assert.strictEqual(
+        (yield* Effect.result(form.convertAnswers({ answer: "" })))._tag,
+        "Failure",
+      );
+      assert.strictEqual(
+        (yield* Effect.result(form.convertAnswers({ answer: "Yes", many: ["Maybe"] })))._tag,
+        "Failure",
+      );
+    }),
+  );
+
   it.effect("asks each question once when a choice has a free-text companion field", () =>
     Effect.gen(function* () {
       // OMP's ask dialog follows each choice `q<n>` with a free-text `q<n>__other` field.

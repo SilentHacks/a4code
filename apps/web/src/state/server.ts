@@ -18,7 +18,7 @@ import { AsyncResult, Atom } from "effect/reactivity";
 import { environmentCatalog } from "../connection/catalog";
 import { connectionAtomRuntime } from "../connection/runtime";
 import { environmentAtomList } from "./environmentAtomList";
-import { primaryEnvironmentIdAtom, themeEnvironmentIdAtom } from "./primaryEnvironment";
+import { primaryEnvironmentIdAtom, localEnvironmentIdAtom } from "./primaryEnvironment";
 import {
   applicationKeybindingsEnvironmentIdAtom,
   createApplicationKeybindingsAtom,
@@ -119,7 +119,7 @@ export const primaryServerKeybindingsAtom = createApplicationKeybindingsAtom({
 const EMPTY_ENVIRONMENT_THEMES: ReadonlyArray<EnvironmentTheme> = [];
 
 const themeServerConfigAtom = Atom.make((get): ServerConfig | null => {
-  const environmentId = get(themeEnvironmentIdAtom);
+  const environmentId = get(localEnvironmentIdAtom);
   return environmentId === null ? null : get(serverEnvironment.configValueAtom(environmentId));
 }).pipe(Atom.withLabel("web-theme-server-config"));
 

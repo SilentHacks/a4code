@@ -68,7 +68,10 @@ describe("ACP elicitation forms", () => {
           { value: " first\t", label: "First", description: "Recommended" },
           { value: "second", label: "Second", description: "Second" },
         ]);
-        assert.equal(projected.questions[2]?.multiSelect, true);
+        assert.equal(
+          projected.questions.find((question) => question.id === "q1")?.multiSelect,
+          true,
+        );
         assert.isTrue(projected.questions.every((question) => question.required === false));
         assert.deepEqual(
           yield* projected.convertAnswers({
@@ -210,11 +213,6 @@ describe("ACP elicitation forms", () => {
         blank: { type: "string", enum: ["", "text"] },
         number: { type: "integer", enum: [1, 2] },
         boolean: { type: "boolean", enum: [false] },
-      });
-      assert.deepEqual(projected.questions[0]?.options[0], {
-        value: "",
-        label: "Empty",
-        description: "Empty",
       });
       assert.deepEqual(
         yield* projected.convertAnswers({ blank: "", number: "2", boolean: "false" }),

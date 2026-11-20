@@ -124,7 +124,11 @@ function validator(schema: Record<string, unknown>): (value: unknown) => boolean
 }
 
 /** Returns undefined when the existing question UX cannot faithfully represent a form. */
-export function projectAcpElicitationForm(requestedSchema: unknown, message: string) {
+export function projectAcpElicitationForm(
+  requestedSchema: unknown,
+  message: string,
+  { allowOther = false }: { readonly allowOther?: boolean } = {},
+) {
   const requested = unknownRecord(requestedSchema);
   if (!requested || (requested.type !== undefined && requested.type !== "object")) return undefined;
   const schema = normalizeAcpSchema({ type: "object", properties: {}, ...requested });
@@ -206,7 +210,11 @@ export function projectAcpElicitationForm(requestedSchema: unknown, message: str
       ) {
         return undefined;
       }
-      const accepts = validator(record);
+      // Devin's allowOther explicitly extends a single choice with a free-text answer.
+      if (allowOther && choices && type !== "array") {
+        properties[id] = { anyOf: [record, { type: "string", minLength: 1 }] };
+      }
+      const accepts = validator(unknownRecord(properties[id])!);
       fields.push({ id, type, choices, required: required.has(id), accepts });
       if (folded.has(id)) continue;
       questions.push({
@@ -221,14 +229,14 @@ export function projectAcpElicitationForm(requestedSchema: unknown, message: str
           description: choice.description,
         })),
         ...(type === "array" ? { multiSelect: true } : {}),
-        allowCustomAnswer: !choices || companions.has(id),
+        allowCustomAnswer: !choices || companions.has(id) || (allowOther && type !== "array"),
         required: required.has(id),
       });
     }
     const acceptsForm = validator(schema);
     const convertAnswers = Effect.fnUntraced(function* (answers: ProviderUserInputAnswers) {
       const content: Record<string, ElicitationContentValue> = {};
-      for (const [id, companionId] of companions) {
+      for (const [id, companionId] of allowOther ? [] : companions) {
         const answer = Object.hasOwn(answers, id) ? answers[id] : undefined;
         const field = fields.find((candidate) => candidate.id === id);
         if (
