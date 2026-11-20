@@ -5,7 +5,7 @@ import {
   type ProviderDriverKind,
   type ResolvedKeybindingsConfig,
 } from "@t3tools/contracts";
-import { RegistryContext } from "@effect/atom-react";
+import { RegistryContext, useAtomValue } from "@effect/atom-react";
 import { T, useGT } from "gt-react";
 import {
   createContext,
@@ -31,7 +31,7 @@ import { shouldShowInstanceBadge, type ProviderInstanceEntry } from "../../provi
 import { ComposerControl, type ComposerControlSize } from "./ComposerControl";
 import { takeOpenTarget, useComposerMenuProps } from "./composerEventScope";
 import { shortcutLabelForCommand } from "../../keybindings";
-import { serverEnvironment } from "../../state/server";
+import { environmentServerConfigsAtom, serverEnvironment } from "../../state/server";
 import { useAtomCommand } from "../../state/use-atom-command";
 
 /** Holds the page still behind the open picker; its lifetime is the popup element's. */
@@ -136,6 +136,33 @@ export const ProviderModelPicker = memo(function ProviderModelPicker(props: {
   const refreshProviders = useAtomCommand(serverEnvironment.refreshProviders, {
     reportFailure: false,
   });
+  const configs = useAtomValue(environmentServerConfigsAtom);
+  const config = props.environmentId === null ? undefined : configs.get(props.environmentId);
+  const supportsModelOptions = config?.environment.capabilities.providerModelOptions === true;
+  const modelOptionSelections = (
+    props.selectedModels ?? [{ instanceId: props.activeInstanceId, model: props.model }]
+  ).filter(({ instanceId, model }) => {
+    const provider = config?.providers.find((entry) => entry.instanceId === instanceId);
+    return (
+      provider?.driver === "acpRegistry" &&
+      provider.enabled &&
+      provider.installed &&
+      provider.models.some((entry) => entry.slug === model)
+    );
+  });
+  const modelOptionSelectionKey = JSON.stringify(modelOptionSelections);
+  const refreshSelectedModelOptions = useEffectEvent(() => {
+    if (props.environmentId === null || !supportsModelOptions) return;
+    for (const { instanceId, model } of modelOptionSelections) {
+      void refreshProviders({ environmentId: props.environmentId, input: { instanceId, model } });
+    }
+  });
+  // oxlint-disable-next-line t3code/no-unreasoned-state-sync -- discovers server-side options for the shown selection, including defaults before the picker opens; provider snapshots publish the result
+  useEffect(() => {
+    if (props.environmentId === null || !supportsModelOptions || modelOptionSelectionKey === "[]")
+      return;
+    refreshSelectedModelOptions();
+  }, [props.environmentId, modelOptionSelectionKey, supportsModelOptions]);
   const refreshModelCatalog = useEffectEvent(() => {
     const environmentId = props.environmentId;
     if (environmentId === null) return;

@@ -52,6 +52,7 @@ import {
   type AcpSessionModeState,
   type AcpToolCallState,
 } from "./runtimeModel.ts";
+import { flattenSelectChoices } from "./sessionConfig.ts";
 
 const MAX_SHOWN_TOOL_CALL_IDS = 256;
 
@@ -1136,6 +1137,7 @@ export class AcpSessionRuntime extends Context.Service<
     readonly getEvents: () => Stream.Stream<AcpSessionRuntimeEvent, never>;
     readonly drainEvents: Effect.Effect<void>;
     readonly getModeState: Effect.Effect<AcpSessionModeState | undefined>;
+    readonly getModelState: Effect.Effect<EffectAcpSchema.SessionModelState | undefined>;
     readonly getConfigOptions: Effect.Effect<ReadonlyArray<EffectAcpSchema.SessionConfigOption>>;
     /** The current configuration options, then each later change. */
     readonly configOptionChanges: Stream.Stream<ReadonlyArray<EffectAcpSchema.SessionConfigOption>>;
@@ -2222,6 +2224,31 @@ export const make = Effect.fn("AcpSessionRuntime.make")(function* (
       }),
     );
 
+  const recordSelectedModel = (
+    sessionId: string,
+    modelId: string,
+    availableModels?: EffectAcpSchema.SessionModelState["availableModels"],
+  ) =>
+    Ref.update(startStateRef, (state) => {
+      if (state._tag !== "Started" || state.result.sessionId !== sessionId) return state;
+      const models = state.result.sessionSetupResult.models;
+      if (models == null && availableModels === undefined) return state;
+      return {
+        ...state,
+        result: {
+          ...state.result,
+          sessionSetupResult: {
+            ...state.result.sessionSetupResult,
+            models: {
+              ...models,
+              availableModels: models?.availableModels ?? availableModels ?? [],
+              currentModelId: modelId,
+            },
+          },
+        },
+      };
+    });
+
   const setConfigOption = (
     configId: string,
     value: string | boolean,
@@ -2275,6 +2302,20 @@ export const make = Effect.fn("AcpSessionRuntime.make")(function* (
                         updatesNow === updatesBefore ? updateConfigOptions(response) : Effect.void,
                       ),
                     ),
+                  ),
+                  Effect.tap(() =>
+                    existing === findModelConfigOption(configOptions) &&
+                    typeof value === "string" &&
+                    existing?.type === "select"
+                      ? recordSelectedModel(
+                          started.sessionId,
+                          value,
+                          flattenSelectChoices(existing.options).map((choice) => ({
+                            modelId: choice.value,
+                            name: choice.name,
+                          })),
+                        )
+                      : Effect.void,
                   ),
                 ),
               ),
@@ -2665,6 +2706,13 @@ export const make = Effect.fn("AcpSessionRuntime.make")(function* (
     getEvents: () => Stream.fromQueue(eventQueue),
     drainEvents,
     getModeState: Ref.get(modeStateRef),
+    getModelState: Ref.get(startStateRef).pipe(
+      Effect.map((state) =>
+        state._tag === "Started"
+          ? (state.result.sessionSetupResult.models ?? undefined)
+          : undefined,
+      ),
+    ),
     getConfigOptions: SubscriptionRef.get(configOptionsRef),
     configOptionChanges: SubscriptionRef.changes(configOptionsRef),
     loadSession: (sessionId, activationOptions) =>
@@ -2961,7 +3009,7 @@ export const make = Effect.fn("AcpSessionRuntime.make")(function* (
             "session/set_model",
             payload,
             acp.agent.setSessionModel(payload),
-          );
+          ).pipe(Effect.tap(() => recordSelectedModel(started.sessionId, modelId)));
         }),
       ),
     setConfigOption,

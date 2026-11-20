@@ -85,6 +85,10 @@ Other settings the agent offers, such as reasoning effort or approval mode, appe
 composer's model picker, beside the model list, like they do for built-in providers. Models and options that change while an agent
 is running update the picker without waiting for another provider probe.
 
+Selecting a model loads its own reasoning levels before you send a message. Models that do not
+offer adjustable thinking have no thinking selector. For remote environments, update the server
+as well as your client to discover these options before the first turn.
+
 ## Commands and skills
 
 Slash commands the agent provides appear under **Provider** in the `/` menu while a session is

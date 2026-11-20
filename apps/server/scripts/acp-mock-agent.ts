@@ -122,7 +122,9 @@ let currentModeId = antigravityProfile
     ? copilotModeId("agent")
     : "ask";
 let currentModelId = antigravityProfile ? "gemini-test-low" : "default";
-let parameterizedModelPicker = false;
+const parameterizedModelPickerFromEnvironment =
+  process.env.T3_ACP_PARAMETERIZED_MODEL_PICKER === "1";
+let parameterizedModelPicker = parameterizedModelPickerFromEnvironment;
 let currentReasoning = "medium";
 let currentContext = "272k";
 let currentFast = false;
@@ -205,6 +207,9 @@ function configOptions(): ReadonlyArray<AcpSchema.SessionConfigOption> {
         ],
       },
     ];
+    if (process.env.T3_ACP_OMIT_MODEL_AFTER_SELECTION === "1" && currentModelId !== "default") {
+      baseOptions.splice(1, 1);
+    }
 
     switch (currentModelId) {
       case "gpt-5.4":
@@ -548,7 +553,9 @@ const program = Effect.gen(function* () {
             }),
         );
       }
-      parameterizedModelPicker = request.capabilities?._meta?.parameterizedModelPicker === true;
+      parameterizedModelPicker =
+        parameterizedModelPickerFromEnvironment ||
+        request.capabilities?._meta?.parameterizedModelPicker === true;
       return {
         protocolVersion: 2,
         info: { name: "t3-acp-mock-agent", version: agentVersion },

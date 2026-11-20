@@ -50,6 +50,7 @@ import {
   useComposerDraft,
   useComposerDraftResetGeneration,
 } from "../../state/use-composer-drafts";
+import { useModelOptionsRefresh } from "../../state/use-model-options-refresh";
 import type { ComposerDocumentAttachment } from "../../lib/composerContext";
 import { useProject, useVisibleThreadShells } from "../../state/entities";
 import { useMentionableEnvironments } from "../../state/environments";
@@ -338,6 +339,7 @@ export const ThreadComposer = function ThreadComposer(props: ThreadComposerProps
       states: uploadStates,
     });
   const currentModelSelection = props.selectedThread.modelSelection;
+  useModelOptionsRefresh(props.environmentId, currentModelSelection);
   const modelUnavailable =
     props.connectionState === "connected" &&
     isModelSelectionUnavailable(

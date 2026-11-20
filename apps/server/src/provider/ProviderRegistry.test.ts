@@ -1025,6 +1025,33 @@ it.layer(
   });
 
   describe("ProviderRegistry.layer", () => {
+    it.effect("rejects model discovery for missing, unsupported, and disabled instances", () =>
+      Effect.gen(function* () {
+        const h = yield* makeWorkspaceRescanHarness;
+        for (const instanceId of [
+          ProviderInstanceId.make("missing"),
+          h.first.instance.instanceId,
+        ]) {
+          const error = yield* h.registry
+            .refreshModelOptions(instanceId, "model")
+            .pipe(Effect.flip);
+          assert.equal(error._tag, "ProviderSetupError");
+          assert.equal(error.instanceId, instanceId);
+        }
+        yield* Ref.set(h.instances, [
+          {
+            ...h.first.instance,
+            enabled: false,
+            refreshModelOptions: () => Effect.die("disabled providers must not spawn a probe"),
+          },
+        ]);
+        const error = yield* h.registry
+          .refreshModelOptions(h.first.instance.instanceId, "model")
+          .pipe(Effect.flip);
+        assert.equal(error._tag, "ProviderSetupError");
+      }).pipe(Effect.scoped),
+    );
+
     it("marks folder catalogs pending when a machine refresh changes the machine models", () => {
       const machineModel = {
         slug: "opencode/big-pickle",

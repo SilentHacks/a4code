@@ -378,6 +378,7 @@ export interface AcpRegistryConfigurationProbeInput {
   readonly settings: AcpRegistrySettings;
   readonly cwd: string;
   readonly environment: NodeJS.ProcessEnv;
+  readonly model?: string;
 }
 
 type AcpRegistryManagementInput = AcpRegistryConfigurationProbeInput;
@@ -505,9 +506,6 @@ export const probeAcpRegistryConfiguration = Effect.fn("AcpRegistryProbe.probeCo
         emptyAcpRegistryAvailableCommands(),
       );
       const commandsAdvertised = yield* Deferred.make<void>();
-      const configOptionsRef = yield* Ref.make<
-        ReadonlyArray<EffectAcpSchema.SessionConfigOption> | undefined
-      >(undefined);
       const modelsAdvertised = yield* Deferred.make<void>();
       yield* runtime.handleElicitation((request) =>
         Effect.gen(function* () {
@@ -548,13 +546,9 @@ export const probeAcpRegistryConfiguration = Effect.fn("AcpRegistryProbe.probeCo
         }
         if (update.sessionUpdate === "config_option_update") {
           const hasAdvertisedModels = acpRegistryAdvertisesModelCatalog(update.configOptions);
-          return Ref.set(configOptionsRef, update.configOptions).pipe(
-            Effect.andThen(
-              hasAdvertisedModels
-                ? Deferred.succeed(modelsAdvertised, undefined).pipe(Effect.asVoid)
-                : Effect.void,
-            ),
-          );
+          return hasAdvertisedModels
+            ? Deferred.succeed(modelsAdvertised, undefined).pipe(Effect.asVoid)
+            : Effect.void;
         }
         return Effect.void;
       });
@@ -593,12 +587,39 @@ export const probeAcpRegistryConfiguration = Effect.fn("AcpRegistryProbe.probeCo
         { concurrency: "unbounded" },
       );
 
+      if (input.model !== undefined) {
+        const options = yield* runtime.getConfigOptions;
+        const modelOption = findModelConfigOption(options);
+        const available = normalizeAcpRegistryLiveConfiguration(
+          options,
+          yield* runtime.getModeState,
+          started.sessionSetupResult.models,
+        );
+        if (!available.models.some((model) => model.id === input.model)) {
+          return yield* new AcpRegistryOperationError({
+            reason: "probe_failed",
+            message: `The ACP agent does not advertise model "${input.model}".`,
+          });
+        }
+        if (modelOption !== undefined) {
+          yield* runtime.setConfigOption(modelOption.id, input.model);
+        } else {
+          yield* runtime.setSessionModel(input.model);
+        }
+      }
+
       // config_option_update replaces the full option set, so an empty notice is authoritative.
       const liveConfiguration = normalizeAcpRegistryLiveConfiguration(
-        (yield* Ref.get(configOptionsRef)) ?? (yield* runtime.getConfigOptions),
+        yield* runtime.getConfigOptions,
         (yield* runtime.getModeState) ?? parseSessionModeState(started.sessionSetupResult),
-        started.sessionSetupResult.models,
+        yield* runtime.getModelState,
       );
+      if (input.model !== undefined && liveConfiguration.currentModelId !== input.model) {
+        return yield* new AcpRegistryOperationError({
+          reason: "probe_failed",
+          message: `The ACP agent did not select model "${input.model}".`,
+        });
+      }
 
       return {
         resolved,

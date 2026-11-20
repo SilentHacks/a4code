@@ -722,6 +722,7 @@ const WsServerGetConfigRpc = Rpc.make(WS_METHODS.serverGetConfig, {
 export const WsServerRefreshProvidersRpc = Rpc.make(WS_METHODS.serverRefreshProviders, {
   payload: Schema.Struct({
     instanceId: Schema.optional(ProviderInstanceId),
+    model: Schema.optional(TrimmedNonEmptyString.check(Schema.isMaxLength(256))),
     cwd: Schema.optional(TrimmedNonEmptyString),
     fresh: Schema.optional(Schema.Boolean),
     /** Bypass model caches; explicit rediscovery may open sessions, background refreshes must not. */
@@ -753,7 +754,11 @@ export const WsServerRefreshProvidersRpc = Rpc.make(WS_METHODS.serverRefreshProv
      * and skills with their `catalogDigest`. Sent by a client whose held lists are not current.
      */
     machineCatalog: Schema.optional(Schema.Boolean),
-  }),
+  }).check(
+    Schema.makeFilter((input) => input.model === undefined || input.instanceId !== undefined, {
+      expected: "an instanceId when requesting model options",
+    }),
+  ),
   success: ServerProviderUpdatedPayload,
   error: Schema.Union([EnvironmentAuthorizationError, ProviderSetupError]),
 });

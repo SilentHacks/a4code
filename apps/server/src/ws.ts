@@ -2487,6 +2487,20 @@ export const layerWsRpc = (
               yield* providerRegistry.refreshModelCatalog;
               return { providers: [] };
             }
+            if (input.model !== undefined && input.instanceId !== undefined) {
+              const providers = yield* providerRegistry.refreshModelOptions(
+                input.instanceId,
+                input.model,
+              );
+              return {
+                providers:
+                  input.omitProviders === true
+                    ? []
+                    : input.workspaceSnapshotsOnDemand === true
+                      ? withoutWorkspaceSnapshots(providers)
+                      : providers,
+              };
+            }
             if (input.refreshModels) {
               yield* providerRegistry.invalidateModelCaches({
                 instanceId: input.instanceId,

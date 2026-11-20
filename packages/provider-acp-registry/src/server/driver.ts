@@ -690,6 +690,27 @@ export const AcpRegistryDriver: ProviderDriver<AcpRegistrySettings, AcpRegistryD
     // Refreshes rebuild the snapshot from the probe, so per-model options
     // learned from earlier sessions are kept here.
     const learnedModels = yield* Ref.make<ReadonlyArray<ServerProviderModel>>([]);
+    const modelOptionsCache = yield* Ref.make({
+      generation: 0,
+      models: new Set<string>(),
+    });
+    const modelOptionsSemaphore = yield* Semaphore.make(1);
+    const withLearnedModels = (provider: ServerProvider) =>
+      Ref.get(learnedModels).pipe(
+        Effect.map((learned) => ({
+          ...provider,
+          // Readiness has no catalog; retain the learned catalog until enrichment arrives.
+          models:
+            provider.nativeSessions === undefined && learned.length > 0
+              ? learned
+              : provider.models.map((model) => {
+                  const previous = learned.find((entry) => entry.slug === model.slug);
+                  return previous === undefined
+                    ? model
+                    : { ...model, capabilities: previous.capabilities };
+                }),
+        })),
+      );
     const applyLiveConfiguration = (
       provider: ServerProvider,
       configuration: AcpRegistryLiveConfiguration,
@@ -715,15 +736,16 @@ export const AcpRegistryDriver: ProviderDriver<AcpRegistrySettings, AcpRegistryD
         (yield* confirmedAuthentication.get)
           ? { ...input, auth: { ...input.auth, status: "authenticated" as const } }
           : input;
+      const learnedProvider = yield* withLearnedModels(provider);
       return yield* Option.isNone(runtimeCoordinator)
-        ? Effect.succeed(provider)
+        ? Effect.succeed(learnedProvider)
         : Effect.all({
             commands: runtimeCoordinator.value.getAvailableCommands(instanceId),
             configuration: runtimeCoordinator.value.getLiveConfiguration(instanceId),
             authAction: runtimeCoordinator.value.getUrlAuthAction(instanceId),
           }).pipe(
             Effect.flatMap(({ commands, configuration, authAction }) => {
-              const withCommands = applyAcpRegistryAvailableCommands(provider, commands);
+              const withCommands = applyAcpRegistryAvailableCommands(learnedProvider, commands);
               return Option.match(configuration, {
                 onNone: () => Effect.succeed(withCommands),
                 onSome: (liveConfiguration) =>
@@ -772,7 +794,15 @@ export const AcpRegistryDriver: ProviderDriver<AcpRegistrySettings, AcpRegistryD
     const invalidateEnrichmentCache = Ref.update(enrichmentCache, (current) => ({
       generation: current.generation + 1,
       entry: null,
-    }));
+    })).pipe(
+      Effect.andThen(
+        Ref.update(modelOptionsCache, (current) => ({
+          generation: current.generation + 1,
+          models: new Set<string>(),
+        })),
+      ),
+      Effect.andThen(clearLearnedModels),
+    );
     const enrichProviderCached = Effect.fn("AcpRegistryDriver.enrichProviderCached")(function* (
       baseSnapshot: ServerProvider,
     ) {
@@ -929,6 +959,87 @@ export const AcpRegistryDriver: ProviderDriver<AcpRegistrySettings, AcpRegistryD
           }),
       ),
     );
+    const refreshModelOptions = Effect.fn("AcpRegistryDriver.refreshModelOptions")(function* (
+      model: string,
+    ) {
+      if (!enabled) {
+        return yield* new ProviderDriverError({
+          driver: DRIVER_KIND,
+          instanceId,
+          detail: "Cannot discover model options for a disabled provider.",
+        });
+      }
+      const current = yield* snapshot.getSnapshot;
+      if (!current.models.some((entry) => entry.slug === model)) {
+        return yield* new ProviderDriverError({
+          driver: DRIVER_KIND,
+          instanceId,
+          detail: `The ACP provider does not advertise model "${model}".`,
+        });
+      }
+      const cache = yield* Ref.get(modelOptionsCache);
+      if (cache.models.has(model)) return;
+      const result = yield* probeAcpRegistryConfiguration({
+        instanceId,
+        settings: effectiveConfig,
+        cwd: host.paths.cwd,
+        environment: processEnvironment,
+        model,
+      }).pipe(
+        Effect.provideService(AcpRegistrySupport.AcpRegistryCatalog, catalog),
+        Effect.provideService(ChildProcessSpawner.ChildProcessSpawner, spawner),
+        Effect.provideService(FileSystem.FileSystem, fileSystem),
+        Effect.provideService(Path.Path, path),
+        Effect.provideService(SecureRandom.SecureRandom, random),
+        Effect.mapError(
+          (cause) =>
+            new ProviderDriverError({
+              driver: DRIVER_KIND,
+              instanceId,
+              detail: `Failed to discover options for model "${model}".`,
+              cause,
+            }),
+        ),
+      );
+      const published = yield* liveSnapshotSemaphore.withPermit(
+        Effect.gen(function* () {
+          if ((yield* Ref.get(modelOptionsCache)).generation !== cache.generation) return;
+          const latest = yield* snapshot.getSnapshot;
+          const ids = new Set(result.probe.modelOptionIds ?? []);
+          const own = result.probe.configOptions.filter((option) => ids.has(option.id));
+          const learned = yield* Ref.get(learnedModels);
+          const models = latest.models.map((entry) => {
+            if (entry.slug !== model) return entry;
+            const sharedIds = new Set(
+              result.probe.configOptions
+                .filter((option) => !ids.has(option.id))
+                .map((option) => option.id),
+            );
+            const shared = (entry.capabilities?.optionDescriptors ?? []).filter((option) =>
+              sharedIds.has(option.id),
+            );
+            return {
+              ...entry,
+              capabilities: createModelCapabilities({ optionDescriptors: [...shared, ...own] }),
+            };
+          });
+          yield* Ref.set(
+            learnedModels,
+            models.map((entry) =>
+              entry.slug === model
+                ? entry
+                : (learned.find((item) => item.slug === entry.slug) ?? entry),
+            ),
+          );
+          yield* Ref.update(modelOptionsCache, (state) => ({
+            ...state,
+            models: new Set([...state.models, model]),
+          }));
+          return true;
+        }),
+      );
+      if (published) yield* snapshot.refresh;
+    }, modelOptionsSemaphore.withPermit);
 
     const provideAcpManagementServices = <A, E>(
       effect: Effect.Effect<
@@ -999,6 +1110,7 @@ export const AcpRegistryDriver: ProviderDriver<AcpRegistrySettings, AcpRegistryD
       accentColor,
       enabled,
       auth,
+      refreshModelOptions,
       snapshot: {
         ...snapshot,
         refresh: snapshot.refresh.pipe(Effect.tap(() => controller.refreshMethods ?? Effect.void)),

@@ -413,9 +413,18 @@ describe("ACP Registry probe", () => {
     );
   });
 
-  it.live.each(["succeeds", "fails"] as const)(
-    "deletes its health-probe session when deletion is advertised and %s",
-    (deleteOutcome) =>
+  it.live.each([
+    {
+      deleteOutcome: "succeeds",
+      model: "gpt-5.4",
+      levels: ["none", "low", "medium", "high", "extra-high"],
+    },
+    { deleteOutcome: "succeeds", model: "claude-opus-4-6", levels: ["low", "medium", "high"] },
+    { deleteOutcome: "succeeds", model: "default", levels: [] },
+    { deleteOutcome: "fails", model: "default", levels: [] },
+  ])(
+    "discovers $model without prompts and deletes its probe session when deletion $deleteOutcome",
+    ({ deleteOutcome, model, levels }) =>
       Effect.gen(function* () {
         const fs = yield* FileSystem.FileSystem;
         const directory = yield* fs.makeTempDirectoryScoped({ prefix: "acp-probe-delete-" });
@@ -441,6 +450,8 @@ describe("ACP Registry probe", () => {
                 env: {
                   ...process.env,
                   T3_ACP_V2_MANAGEMENT: "1",
+                  T3_ACP_PARAMETERIZED_MODEL_PICKER: "1",
+                  T3_ACP_OMIT_MODEL_AFTER_SELECTION: "1",
                   T3_ACP_REQUEST_LOG_PATH: requestLogPath,
                   ...(deleteOutcome === "fails" ? { T3_ACP_FAIL_DELETE_SESSION: "1" } : {}),
                 },
@@ -453,14 +464,34 @@ describe("ACP Registry probe", () => {
           settings: decodeSettings({ agentId: "mock-agent" }),
           cwd: process.cwd(),
           environment: process.env,
+          model,
         }).pipe(Effect.provideService(AcpRegistrySupport.AcpRegistryCatalog, catalog));
         expect(result.probe.ready).toBe(true);
         expect(result.probe.sessionManagement.canDelete).toBe(true);
+        expect(result.probe.currentModelId).toBe(model);
+        expect(
+          result.probe.configOptions.flatMap((option) =>
+            option.type === "select" && option.role === "reasoning"
+              ? option.options.map((choice) => choice.id)
+              : [],
+          ),
+        ).toEqual(levels);
 
         const requests = (yield* fs.readFileString(requestLogPath))
           .split("\n")
           .filter((line) => line.length > 0)
           .map((line) => JSON.parse(line));
+        expect(requests.some((request) => request.method === "session/prompt")).toBe(false);
+        const writes = requests.filter((request) => request.method === "session/set_config_option");
+        expect(writes).toEqual(
+          model === "default"
+            ? []
+            : [
+                expect.objectContaining({
+                  params: expect.objectContaining({ configId: "model", value: model }),
+                }),
+              ],
+        );
         expect(requests.filter((request) => request.method === "session/delete")).toEqual([
           expect.objectContaining({ params: { sessionId: "mock-session-1" } }),
         ]);

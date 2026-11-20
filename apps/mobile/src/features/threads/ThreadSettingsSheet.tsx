@@ -100,6 +100,7 @@ import { threadAllowsProviderSwitch } from "../../state/thread-provider-switchin
 import { environmentServerConfigsAtom, serverEnvironment } from "../../state/server";
 import { mobilePreferencesAtom } from "../../state/preferences";
 import { useAtomCommand } from "../../state/use-atom-command";
+import { useModelOptionsRefresh } from "../../state/use-model-options-refresh";
 import { useNewTaskFlow } from "./new-task-flow-provider";
 import { ScreenContent } from "../../components/ui/ScreenContent";
 import {
@@ -516,6 +517,7 @@ function ThreadSettingsSessionProvider(
   const [pendingModel, setPendingModel] = useState<ModelOption | null>(null);
   const [pendingPrompt, setPendingPrompt] = useState<string | null>(null);
   const displayedPrompt = pendingModel ? (pendingPrompt ?? props.prompt) : props.prompt;
+  useModelOptionsRefresh(props.environmentId, pendingModel?.selection ?? props.selectedModel);
 
   const isApplied = (option: ModelOption) =>
     option.selection.instanceId === props.selectedModel?.instanceId &&
@@ -523,17 +525,19 @@ function ThreadSettingsSessionProvider(
   const isDisplayed = (option: ModelOption) =>
     pendingModel ? option.key === pendingModel.key : isApplied(option);
 
+  const displayedModel =
+    props.providerGroups
+      .flatMap((group) => group.models)
+      .find((option) => (pendingModel ? option.key === pendingModel.key : isApplied(option))) ??
+    pendingModel ??
+    null;
   const displayedDescriptors = pendingModel
     ? resolveProviderOptionDescriptors({
-        capabilities: pendingModel.capabilities,
+        capabilities: displayedModel?.capabilities,
         selections: pendingModel.selection.options,
       })
     : props.optionDescriptors;
   const promptTraits = getPromptControlledTraits(displayedDescriptors, displayedPrompt);
-  const displayedModel =
-    pendingModel ??
-    props.providerGroups.flatMap((group) => group.models).find((option) => isApplied(option)) ??
-    null;
   const runtimeModeChoices = withManagedRuntimeModeLimits(
     runtimeModeChoicesForSupportedModes(displayedModel?.supportedRuntimeModes),
     [config?.managedPolicy],

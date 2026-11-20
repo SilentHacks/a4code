@@ -3,6 +3,7 @@ import {
   isProviderWorkspaceSnapshotCurrent,
   isProviderWorkspaceSnapshotPending,
   ProviderDriverKind,
+  ProviderSetupError,
   type ProviderInstanceId,
   type SecretReference,
   type ServerProvider,
@@ -68,6 +69,11 @@ export class ProviderRegistry extends Context.Service<
     readonly refreshInstance: (
       instanceId: ProviderInstanceId,
     ) => Effect.Effect<ReadonlyArray<ServerProvider>>;
+
+    readonly refreshModelOptions: (
+      instanceId: ProviderInstanceId,
+      model: string,
+    ) => Effect.Effect<ReadonlyArray<ServerProvider>, ProviderSetupError>;
 
     /** Re-reads secret-backed environments first, so a fixed secret applies without a restart. */
     readonly reloadSecretsAndRefresh: (
@@ -834,6 +840,37 @@ export const layer = Layer.effect(
       return yield* refreshOneSource(instance);
     });
 
+    const refreshModelOptions = Effect.fn("ProviderRegistry.refreshModelOptions")(function* (
+      instanceId: ProviderInstanceId,
+      model: string,
+    ) {
+      const instance = yield* instanceRegistry.getInstance(instanceId);
+      if (!instance?.enabled || !instance.refreshModelOptions) {
+        return yield* new ProviderSetupError({
+          instanceId,
+          operation: "model-options",
+          detail: "This provider instance cannot discover model options.",
+        });
+      }
+      yield* instance.refreshModelOptions(model).pipe(
+        Effect.mapError(
+          (cause) =>
+            new ProviderSetupError({
+              instanceId,
+              operation: "model-options",
+              detail: "Could not discover options for the selected model.",
+              cause,
+            }),
+        ),
+      );
+      if (!(yield* isCurrentInstance(instance))) return yield* Ref.get(providersRef);
+      const source = buildSnapshotSource(instance);
+      return yield* source.getSnapshot.pipe(
+        Effect.flatMap((provider) => correlateSnapshotWithSource(source, provider)),
+        Effect.flatMap(syncProvider),
+      );
+    });
+
     const reloadSecretsAndRefresh = Effect.fn("reloadSecretsAndRefresh")(function* (
       instanceId?: ProviderInstanceId,
     ) {
@@ -1329,6 +1366,7 @@ export const layer = Layer.effect(
         refresh(provider).pipe(Effect.catchCause(recoverRefreshFailure)),
       refreshInstance: (instanceId: ProviderInstanceId) =>
         refreshInstance(instanceId).pipe(Effect.catchCause(recoverRefreshFailure)),
+      refreshModelOptions,
       reloadSecretsAndRefresh: (instanceId?: ProviderInstanceId) =>
         reloadSecretsAndRefresh(instanceId).pipe(Effect.catchCause(recoverRefreshFailure)),
       applySecretAndRefresh: (reference: SecretReference, value: string) =>
