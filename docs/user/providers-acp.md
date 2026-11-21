@@ -121,6 +121,9 @@ When a registry agent asks for approval, T3 Code answers by the thread's
 **Auto-accept edits** approves edits and shows the rest, and **Auto** and **Full access** approve
 automatically. File reads and searches never wait for approval.
 
+Devin's daily and weekly usage limits appear in Usage limits once the Devin CLI is signed in on the
+environment. T3 Code reads them with that sign-in, the same way the CLI does.
+
 Devin runs its commands through T3 Code's terminals, and those commands follow the thread's
 permission mode. For other agents, T3 Code shows the command, output, and exit status the agent
 reports but does not run or stop their terminals.

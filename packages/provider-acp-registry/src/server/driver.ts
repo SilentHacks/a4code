@@ -32,6 +32,8 @@ import { AcpRegistryAdapterV2Driver, type AcpRegistryAdapterV2DriverEnv } from "
 import type { ProviderTextGeneration } from "@t3tools/provider-core/server/textGeneration";
 import { ProviderDriverError } from "@t3tools/provider-core/server/errors";
 import { makeManagedServerProvider } from "@t3tools/provider-core/server/managedProvider";
+import { resolveUsageLimitsAfterProbe } from "@t3tools/provider-core/server/usageLimits";
+import { isDevinAgent, makeDevinUsageProbe } from "./devinUsageLimits.ts";
 import { mergeProviderInstanceEnvironment } from "@t3tools/provider-core/server/instanceEnvironment";
 import {
   defaultProviderContinuationIdentity,
@@ -758,6 +760,26 @@ export const AcpRegistryDriver: ProviderDriver<AcpRegistrySettings, AcpRegistryD
             }),
           );
     });
+    const devinUsage = isDevinAgent(effectiveConfig, path.basename)
+      ? yield* makeDevinUsageProbe(processEnvironment).pipe(
+          Effect.provideService(FileSystem.FileSystem, fileSystem),
+          Effect.provideService(Path.Path, path),
+        )
+      : undefined;
+    const publishedDevinUsage = yield* Ref.make<ServerProvider["usageLimits"]>(undefined);
+    // Readiness checks run on the refresh interval, so each one re-reads Devin's quota.
+    const withDevinUsage = (provider: ServerProvider) =>
+      devinUsage === undefined || !provider.enabled || !provider.installed
+        ? Effect.succeed(provider)
+        : devinUsage.pipe(
+            Effect.flatMap((probed) =>
+              Ref.modify(publishedDevinUsage, (published) => {
+                const usageLimits = resolveUsageLimitsAfterProbe({ published, probed });
+                return [usageLimits, usageLimits];
+              }),
+            ),
+            Effect.map((usageLimits) => (usageLimits ? { ...provider, usageLimits } : provider)),
+          );
     // A local executable's version comes only from probing it, so readiness checks reuse the last report.
     const reportedLocalVersion = yield* Ref.make<string | null>(null);
     const checkProvider = checkAcpRegistryProviderReadiness(readinessInput).pipe(
@@ -772,6 +794,7 @@ export const AcpRegistryDriver: ProviderDriver<AcpRegistrySettings, AcpRegistryD
         ),
       ),
       Effect.flatMap(withLiveRuntimeState),
+      Effect.flatMap(withDevinUsage),
     );
     const enrichProvider = checkAcpRegistryProviderStatus(
       {
@@ -854,6 +877,7 @@ export const AcpRegistryDriver: ProviderDriver<AcpRegistrySettings, AcpRegistryD
       // Inspection may fetch the registry when its disk cache is missing; creation must not wait on that.
       initialSnapshot: () => buildInitialAcpRegistrySnapshot(readinessInput),
       checkProvider,
+      ...(devinUsage ? { checkUsageLimits: devinUsage } : {}),
       enrichSnapshot: Effect.fn("enrichSnapshot")(function ({
         snapshot,
         getSnapshot,
