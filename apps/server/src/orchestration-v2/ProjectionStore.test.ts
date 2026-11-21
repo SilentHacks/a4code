@@ -7343,6 +7343,11 @@ it.layer(layerTest)("ProjectionStoreV2", (it) => {
           if (detail.startsWith("SEARCH counts ")) {
             assert.include(detail, "run_key=?", detail);
           }
+          // The fork's unanchored inline HTML publications are read by thread and type.
+          if (detail.includes("turn_items_thread_type_idx")) {
+            assert.include(detail, "(thread_id=? AND type=?)", detail);
+            continue;
+          }
           if (detail.includes("orchestration_v2_projection_turn_items")) {
             // Only held input is read from the sparse index; transcript history stays unread.
             assert.include(

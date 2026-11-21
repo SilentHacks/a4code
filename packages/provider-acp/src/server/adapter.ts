@@ -4596,8 +4596,9 @@ export const makeAcpAdapterV2 = Effect.fn("makeAcpAdapterV2")(function* (
             subagentUpdates.every((update) => update.suppressNormalTool !== false);
           const alreadyOwnedBySubagents = context.subagentOwnedToolCallIds.has(toolCall.toolCallId);
           if (suppressNormalTool) context.subagentOwnedToolCallIds.add(toolCall.toolCallId);
+          // A non-suppressing update (e.g. a failed command) reclaims the row from its subagent.
           if (
-            alreadyOwnedBySubagents ||
+            (alreadyOwnedBySubagents && (suppressNormalTool || subagentUpdates.length === 0)) ||
             (suppressNormalTool && !context.toolStartedAt.has(toolCall.toolCallId))
           ) {
             yield* rearmDeferredFinalize(context);

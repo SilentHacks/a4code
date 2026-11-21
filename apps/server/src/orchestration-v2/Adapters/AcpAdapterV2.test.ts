@@ -2328,6 +2328,8 @@ describe("AcpAdapterV2", () => {
             { label: "Apple", description: "Apple", value: "Apple" },
             { label: "Banana", description: "Banana", value: "Banana" },
           ],
+          allowCustomAnswer: true,
+          required: true,
         },
       ],
       answers: { q0: "Mango" },
