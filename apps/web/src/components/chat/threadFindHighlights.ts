@@ -5,7 +5,6 @@ import { THREAD_FIND_BLOCK_TAGS } from "@t3tools/shared/threadFindText";
 import { observeResize } from "~/lib/observeResize";
 
 const THREAD_FIND_HIGHLIGHT_NAME = "t3-thread-find";
-const THREAD_FIND_ACTIVE_HIGHLIGHT_NAME = "t3-thread-find-active";
 
 const THREAD_FIND_TEXT_SELECTOR = "[data-thread-find-text]";
 const THREAD_FIND_IGNORE_SELECTOR = "[data-thread-find-ignore]";
@@ -116,13 +115,24 @@ export function useThreadFindHighlights(input: {
   readonly activeRowId: string | null;
   readonly activeOccurrence: number;
   readonly onActiveRange: (range: Range | null) => void;
+  readonly onMatchCount?: (count: number) => void;
+  /** Concurrent finds need distinct names; each needs `::highlight` rules for it and `<name>-active`. */
+  readonly highlightName?: string;
 }): void {
-  const { container, query, activeRowId, activeOccurrence, onActiveRange } = input;
+  const {
+    container,
+    query,
+    activeRowId,
+    activeOccurrence,
+    onActiveRange,
+    highlightName = THREAD_FIND_HIGHLIGHT_NAME,
+  } = input;
 
   const rangesRef = useRef<readonly ThreadFindRange[]>([]);
   const paintRef = useRef<ReturnType<typeof makeThreadFindHighlightPainter> | null>(null);
   // The observer repaints with whichever match is selected when text changes.
   const readSelection = useEffectEvent(() => ({ activeRowId, activeOccurrence, onActiveRange }));
+  const reportMatchCount = useEffectEvent((count: number) => input.onMatchCount?.(count));
 
   // oxlint-disable-next-line t3code/no-unreasoned-state-sync -- paints CSS Highlight ranges for the query, repainting on DOM mutations, and clears them on cleanup
   useEffect(() => {
@@ -131,18 +141,19 @@ export function useThreadFindHighlights(input: {
       return;
     }
     const clearHighlights = () => {
-      CSS.highlights.delete(THREAD_FIND_HIGHLIGHT_NAME);
-      CSS.highlights.delete(THREAD_FIND_ACTIVE_HIGHLIGHT_NAME);
+      CSS.highlights.delete(highlightName);
+      CSS.highlights.delete(`${highlightName}-active`);
     };
     rangesRef.current = [];
     if (!container || query.length === 0) {
       readSelection().onActiveRange(null);
+      reportMatchCount(0);
       clearHighlights();
       return;
     }
 
     const cache = new Map<Element, readonly ThreadFindRange[]>();
-    const paint = makeThreadFindHighlightPainter(container);
+    const paint = makeThreadFindHighlightPainter(container, highlightName);
     paintRef.current = paint;
     const repaint = () => {
       const rows = new Set(container.querySelectorAll("[data-timeline-row-id]"));
@@ -162,6 +173,7 @@ export function useThreadFindHighlights(input: {
       }
       for (const row of cache.keys()) if (!rows.has(row)) cache.delete(row);
       rangesRef.current = ranges;
+      reportMatchCount(ranges.length);
       paint.update(cache, ranges, readSelection());
     };
     let frame: number | null = null;
@@ -221,7 +233,7 @@ export function useThreadFindHighlights(input: {
       rangesRef.current = [];
       clearHighlights();
     };
-  }, [container, query]);
+  }, [container, highlightName, query]);
 
   // onActiveRange is read at paint time: its identity follows the caller's
   // layout inputs, and repainting the active highlight for those is wasted work.
@@ -352,15 +364,15 @@ function matchesInZone(
   }
 }
 
-function makeThreadFindHighlightPainter(container: HTMLElement) {
+function makeThreadFindHighlightPainter(container: HTMLElement, name: string) {
   const inactive = new Highlight();
   const active = new Highlight();
   const zoned = new Set<Range>();
   const windows = new Map<Element, Set<Range>>();
   const rangesByRow = new Map<string, Range[]>();
   let selected: Range | null = null;
-  CSS.highlights.set(THREAD_FIND_HIGHLIGHT_NAME, inactive);
-  CSS.highlights.set(THREAD_FIND_ACTIVE_HIGHLIGHT_NAME, active);
+  CSS.highlights.set(name, inactive);
+  CSS.highlights.set(`${name}-active`, active);
   const show = (range: Range) => {
     zoned.add(range);
     if (range !== selected && foldsHiding(range, container).length === 0) inactive.add(range);

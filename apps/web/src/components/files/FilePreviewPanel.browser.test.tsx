@@ -597,6 +597,38 @@ describe("rendered Markdown task saves", () => {
   });
 });
 
+describe("rendered Markdown find", () => {
+  it("opens with mod+f inside the rendered file and steps through its matches", async () => {
+    using _settings = setup();
+    await using screen = await render(
+      markdownPreview(
+        false,
+        "Alpha one\n\n<details><summary>More</summary>\n\nalpha two\n</details>\n",
+      ),
+    );
+    await userEvent.click(screen.getByText("Alpha one"));
+    await userEvent.keyboard(
+      isMacPlatform(navigator.platform) ? "{Meta>}f{/Meta}" : "{Control>}f{/Control}",
+    );
+    const field = screen.getByRole("searchbox", { name: "Find in file" });
+    await expect.element(field).toHaveFocus();
+    await userEvent.keyboard("alpha");
+    const bar = screen.getByRole("search", { name: "Find in file" });
+    const activeText = () => [...(CSS.highlights.get("t3-file-find-active") ?? [])].join();
+    await vi.waitFor(() => expect(bar.element().textContent).toContain("1/2"));
+    await vi.waitFor(() => expect(activeText()).toBe("Alpha"));
+
+    await userEvent.keyboard("{Enter}");
+    await vi.waitFor(() => expect(bar.element().textContent).toContain("2/2"));
+    await vi.waitFor(() => expect(activeText()).toBe("alpha"));
+    await expect.element(screen.getByText("alpha two")).toBeVisible();
+
+    await userEvent.keyboard("{Escape}");
+    await expect.element(field).not.toBeInTheDocument();
+    expect(CSS.highlights.has("t3-file-find")).toBe(false);
+  });
+});
+
 describe("workspace document previews", () => {
   it("keeps an unchanged document loaded when another workspace change lands", async () => {
     using _settings = setup();

@@ -13,6 +13,7 @@ import { THREAD_DETAILS_CARD_GAP } from "./threadDetailsCardLayout";
 
 interface ThreadFindBarProps {
   readonly open: boolean;
+  readonly label?: string;
   readonly query: string;
   readonly matchCount: number;
   readonly counting?: boolean;
@@ -35,6 +36,7 @@ export const THREAD_FIND_BAR_RESERVED_HEIGHT = 36 + THREAD_DETAILS_CARD_GAP;
 export function ThreadFindBar(props: ThreadFindBarProps) {
   const inputRef = useRef<HTMLInputElement | null>(null);
   const gt = useGT();
+  const findLabel = props.label ?? gt("Find in thread");
 
   // oxlint-disable-next-line t3code/no-unreasoned-state-sync -- focuses and selects the input DOM node when the bar opens or a find shortcut fires
   useEffect(() => {
@@ -88,7 +90,7 @@ export function ThreadFindBar(props: ThreadFindBarProps) {
         size="lg"
         onContextMenu={(event) => event.stopPropagation()}
         role="search"
-        aria-label={gt("Find in thread")}
+        aria-label={findLabel}
         aria-busy={props.status === "loading" || props.counting === true}
         className="w-full"
       >
@@ -97,8 +99,8 @@ export function ThreadFindBar(props: ThreadFindBarProps) {
           type="search"
           size="sm"
           value={props.query}
-          aria-label={gt("Find in thread")}
-          placeholder={gt("Find in thread")}
+          aria-label={findLabel}
+          placeholder={findLabel}
           maxLength={200}
           spellCheck={false}
           autoComplete="off"
