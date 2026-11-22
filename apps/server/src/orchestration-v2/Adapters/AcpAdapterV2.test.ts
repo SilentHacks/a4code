@@ -802,7 +802,7 @@ const makeInstructionCompactionHarness = Effect.fnUntraced(function* (
   yield* (yield* McpProviderSessions.McpProviderSessions).set({
     environmentId: EnvironmentId.make("environment-acp-instruction-compaction"),
     threadId,
-    providerSessionId: "mcp-session-acp-instruction-compaction",
+    credentialId: "mcp-session-acp-instruction-compaction",
     providerInstanceId: instanceId,
     endpoint: "http://127.0.0.1:43123/mcp",
     authorizationHeader: "Bearer instruction-compaction-token",
@@ -2628,7 +2628,7 @@ describe("AcpAdapterV2", () => {
         yield* (yield* McpProviderSessions.McpProviderSessions).set({
           environmentId: EnvironmentId.make("environment-acp-instruction-transitions"),
           threadId,
-          providerSessionId: "mcp-session-acp-instruction-transitions",
+          credentialId: "mcp-session-acp-instruction-transitions",
           providerInstanceId: instanceId,
           endpoint: "http://127.0.0.1:43123/mcp",
           authorizationHeader: "Bearer instruction-transition-token",
@@ -6380,7 +6380,7 @@ describe("AcpAdapterV2", () => {
       yield* (yield* McpProviderSessions.McpProviderSessions).set({
         environmentId: EnvironmentId.make("environment-acp-native-fork-source"),
         threadId: sourceThreadId,
-        providerSessionId: "mcp-session-acp-native-fork-source",
+        credentialId: "mcp-session-acp-native-fork-source",
         providerInstanceId: instanceId,
         endpoint: "http://127.0.0.1:43123/mcp",
         authorizationHeader: "Bearer source-thread-token",
@@ -6389,7 +6389,7 @@ describe("AcpAdapterV2", () => {
       yield* (yield* McpProviderSessions.McpProviderSessions).set({
         environmentId: EnvironmentId.make("environment-acp-native-fork"),
         threadId: targetThreadId,
-        providerSessionId: "mcp-session-acp-native-fork",
+        credentialId: "mcp-session-acp-native-fork",
         providerInstanceId: instanceId,
         endpoint: "http://127.0.0.1:43123/mcp",
         authorizationHeader: "Bearer target-thread-token",
@@ -6783,7 +6783,7 @@ describe("AcpAdapterV2", () => {
       yield* (yield* McpProviderSessions.McpProviderSessions).set({
         environmentId: EnvironmentId.make("environment-acp-stop-mcp-call"),
         threadId,
-        providerSessionId: "mcp-session-acp-stop-mcp-call",
+        credentialId: "mcp-session-acp-stop-mcp-call",
         providerInstanceId: instanceId,
         endpoint: `http://127.0.0.1:${address.port}/mcp`,
         authorizationHeader: "Bearer stop-mcp-call-token",
@@ -7198,7 +7198,7 @@ describe("AcpAdapterV2", () => {
       yield* (yield* McpProviderSessions.McpProviderSessions).set({
         environmentId: EnvironmentId.make("environment-acp-rollback-session-target"),
         threadId: rollbackThreadId,
-        providerSessionId: "mcp-session-acp-rollback-session-target",
+        credentialId: "mcp-session-acp-rollback-session-target",
         providerInstanceId: instanceId,
         endpoint: "http://127.0.0.1:43124/mcp",
         authorizationHeader: "Bearer rollback-target-token",

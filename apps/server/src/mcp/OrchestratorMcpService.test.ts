@@ -221,7 +221,7 @@ describe("OrchestratorMcpService", () => {
         requestNamespace: "provider-session:mcp-ack",
         thread: {
           threadId: parentThreadId,
-          providerSessionId: "provider-session:mcp-ack",
+          credentialId: "provider-session:mcp-ack",
           providerInstanceId: ProviderInstanceId.make("codex"),
         },
         client: undefined,
@@ -345,7 +345,7 @@ describe("OrchestratorMcpService", () => {
         requestNamespace: "provider-session:mcp-restart",
         thread: {
           threadId: parentThreadId,
-          providerSessionId: "provider-session:mcp-restart",
+          credentialId: "provider-session:mcp-restart",
           providerInstanceId: ProviderInstanceId.make("codex"),
         },
         client: undefined,
@@ -491,7 +491,7 @@ describe("OrchestratorMcpService", () => {
         requestNamespace: "provider-session:mcp-starting",
         thread: {
           threadId: parentThreadId,
-          providerSessionId: "provider-session:mcp-starting",
+          credentialId: "provider-session:mcp-starting",
           providerInstanceId: ProviderInstanceId.make("codex"),
         },
         client: undefined,
@@ -590,7 +590,7 @@ describe("OrchestratorMcpService", () => {
         requestNamespace: "provider-session:mcp-report",
         thread: {
           threadId: parentThreadId,
-          providerSessionId: "provider-session:mcp-report",
+          credentialId: "provider-session:mcp-report",
           providerInstanceId: ProviderInstanceId.make("codex"),
         },
         client: undefined,
@@ -710,7 +710,7 @@ describe("OrchestratorMcpService", () => {
         requestNamespace: "provider-session:mcp-next",
         thread: {
           threadId: parentThreadId,
-          providerSessionId: "provider-session:mcp-next",
+          credentialId: "provider-session:mcp-next",
           providerInstanceId: ProviderInstanceId.make("codex"),
         },
         client: undefined,
@@ -821,7 +821,7 @@ describe("OrchestratorMcpService", () => {
         requestNamespace: "provider-session:mcp-cancel",
         thread: {
           threadId: parentThreadId,
-          providerSessionId: "provider-session:mcp-cancel",
+          credentialId: "provider-session:mcp-cancel",
           providerInstanceId: ProviderInstanceId.make("codex"),
         },
         client: undefined,
@@ -923,7 +923,7 @@ describe("OrchestratorMcpService", () => {
           requestNamespace: "provider-session:mcp-orphan",
           thread: {
             threadId: parentThreadId,
-            providerSessionId: "provider-session:mcp-orphan",
+            credentialId: "provider-session:mcp-orphan",
             providerInstanceId: ProviderInstanceId.make("codex"),
           },
           client: undefined,
@@ -1032,7 +1032,7 @@ describe("OrchestratorMcpService", () => {
         requestNamespace: "provider-session:mcp-cancel-failed",
         thread: {
           threadId: parentThreadId,
-          providerSessionId: "provider-session:mcp-cancel-failed",
+          credentialId: "provider-session:mcp-cancel-failed",
           providerInstanceId: ProviderInstanceId.make("codex"),
         },
         client: undefined,
@@ -1129,7 +1129,7 @@ describe("OrchestratorMcpService", () => {
         requestNamespace: "provider-session:mcp-cancel-dispose-failed",
         thread: {
           threadId: parentThreadId,
-          providerSessionId: "provider-session:mcp-cancel-dispose-failed",
+          credentialId: "provider-session:mcp-cancel-dispose-failed",
           providerInstanceId: ProviderInstanceId.make("codex"),
         },
         client: undefined,
@@ -1223,7 +1223,7 @@ describe("OrchestratorMcpService", () => {
           requestNamespace: "provider-session:mcp-cancel-dispose-cause",
           thread: {
             threadId: parentThreadId,
-            providerSessionId: "provider-session:mcp-cancel-dispose-cause",
+            credentialId: "provider-session:mcp-cancel-dispose-cause",
             providerInstanceId: ProviderInstanceId.make("codex"),
           },
           client: undefined,
@@ -1315,7 +1315,7 @@ describe("OrchestratorMcpService", () => {
         requestNamespace: "provider-session:mcp-cancel-dispose-failed",
         thread: {
           threadId: parentThreadId,
-          providerSessionId: "provider-session:mcp-cancel-dispose-failed",
+          credentialId: "provider-session:mcp-cancel-dispose-failed",
           providerInstanceId: ProviderInstanceId.make("codex"),
         },
         client: undefined,
@@ -1505,7 +1505,7 @@ describe("OrchestratorMcpService", () => {
         requestNamespace: "provider-session:mcp-cancel-grandchild",
         thread: {
           threadId: parentThreadId,
-          providerSessionId: "provider-session:mcp-cancel-grandchild",
+          credentialId: "provider-session:mcp-cancel-grandchild",
           providerInstanceId: ProviderInstanceId.make("codex"),
         },
         client: undefined,
@@ -1576,7 +1576,7 @@ describe("OrchestratorMcpService provider resolution", () => {
     requestNamespace: "provider-session:mcp-providers",
     thread: {
       threadId: parentThreadId,
-      providerSessionId: "provider-session:mcp-providers",
+      credentialId: "provider-session:mcp-providers",
       providerInstanceId: codexInstanceId,
     },
     client: undefined,
@@ -5245,7 +5245,7 @@ describe("OrchestratorMcpService thread lookup", () => {
             ...client,
             thread: {
               threadId: launched.id,
-              providerSessionId: "provider-session:wait-self",
+              credentialId: "provider-session:wait-self",
               providerInstanceId: ProviderInstanceId.make("codex"),
             },
           },

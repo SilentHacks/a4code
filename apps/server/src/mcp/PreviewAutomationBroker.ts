@@ -107,6 +107,7 @@ interface PreviewAutomationRequestErrorContext {
   readonly operation: PreviewAutomationOperation;
   readonly environmentId: McpInvocationContext.McpInvocationScope["environmentId"];
   readonly threadId: McpInvocationContext.McpThreadCaller["threadId"];
+  /** Preview metadata retains this wire field for the MCP credential, not the provider runtime. */
   readonly providerSessionId: string;
   readonly providerInstanceId: McpInvocationContext.McpThreadCaller["providerInstanceId"];
   readonly clientId: string;
@@ -165,7 +166,7 @@ const selectorDiagnosticsFromInput = (
 
 /** Codex/OpenCode share sessions across threads; include thread id to isolate tabs and ownership. */
 const hostAssignmentKey = (scope: McpInvocationContext.McpThreadInvocationScope): string =>
-  `${scope.environmentId}\u0000${scope.thread.providerSessionId}\u0000${scope.thread.threadId}`;
+  `${scope.environmentId}\u0000${scope.thread.credentialId}\u0000${scope.thread.threadId}`;
 
 const isPreviewTabId = Schema.is(PreviewTabId);
 const decodeControlReason = Schema.decodeUnknownOption(PreviewAutomationControlReason);
@@ -593,7 +594,7 @@ export const make = Effect.gen(function* PreviewAutomationBrokerMake() {
         operation: input.operation,
         environmentId: input.scope.environmentId,
         threadId: input.scope.thread.threadId,
-        providerSessionId: input.scope.thread.providerSessionId,
+        providerSessionId: input.scope.thread.credentialId,
         providerInstanceId: input.scope.thread.providerInstanceId,
         clientId: connection.clientId,
         connectionId: connection.connectionId,
@@ -614,7 +615,7 @@ export const make = Effect.gen(function* PreviewAutomationBrokerMake() {
         operation: input.operation,
         environmentId: input.scope.environmentId,
         threadId: input.scope.thread.threadId,
-        providerSessionId: input.scope.thread.providerSessionId,
+        providerSessionId: input.scope.thread.credentialId,
         providerInstanceId: input.scope.thread.providerInstanceId,
       });
     }

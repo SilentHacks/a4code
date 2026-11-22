@@ -367,7 +367,7 @@ const makeLaptop = Effect.gen(function* () {
     requestNamespace: `provider-session:${caller}`,
     thread: {
       threadId: ThreadId.make(caller),
-      providerSessionId: `provider-session:${caller}`,
+      credentialId: `provider-session:${caller}`,
       providerInstanceId: ProviderInstanceId.make("codex"),
     },
     client: undefined,

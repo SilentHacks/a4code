@@ -242,6 +242,12 @@ export type ProviderSessionManagerV2Error = typeof ProviderSessionManagerV2Error
 
 export interface ProviderSessionManagerV2Shape {
   readonly shutdown: Effect.Effect<void>;
+  readonly ownsMcpCredential: (input: {
+    readonly providerSessionId: ProviderSessionId;
+    readonly threadId: ThreadId;
+    readonly providerInstanceId: ProviderInstanceId;
+    readonly credentialId: string;
+  }) => Effect.Effect<boolean>;
   readonly open: (input: {
     readonly threadId: ThreadId;
     readonly providerSessionId: ProviderSessionId;
@@ -617,7 +623,7 @@ export const layerWithOptions = (
                 const existing = yield* mcpSessions.read(threadId);
                 if (existing !== undefined) {
                   // Reserve before async validation so release cannot revoke between validation and reservation.
-                  reserveMcpCredential(threadId, existing.providerSessionId);
+                  reserveMcpCredential(threadId, existing.credentialId);
                   const rawToken = existing.authorizationHeader.replace(/^Bearer\s+/, "");
                   // Interrupted resolution must release the reservation before the caller learns of it.
                   const resolved = yield* mcpSessionRegistry
@@ -625,7 +631,7 @@ export const layerWithOptions = (
                     .pipe(
                       Effect.onInterrupt(() =>
                         Effect.sync(() =>
-                          dropMcpCredentialReservation(threadId, existing.providerSessionId),
+                          dropMcpCredentialReservation(threadId, existing.credentialId),
                         ),
                       ),
                     );
@@ -641,9 +647,9 @@ export const layerWithOptions = (
                     // A credential issued while the lineage read failed is replaced once it works.
                     (resolved.thread.subagent === true) === subagent
                   ) {
-                    return { mcpCredentialId: existing.providerSessionId, issued: false };
+                    return { mcpCredentialId: existing.credentialId, issued: false };
                   }
-                  dropMcpCredentialReservation(threadId, existing.providerSessionId);
+                  dropMcpCredentialReservation(threadId, existing.credentialId);
                 }
                 yield* mcpSessionRegistry.revokeThread(threadId);
                 const credential = yield* mcpSessionRegistry.issue({
@@ -662,8 +668,8 @@ export const layerWithOptions = (
                       Effect.orElseSucceed(() => false),
                     ),
                 });
-                reserveMcpCredential(threadId, credential.config.providerSessionId);
-                return { mcpCredentialId: credential.config.providerSessionId, issued: true };
+                reserveMcpCredential(threadId, credential.config.credentialId);
+                return { mcpCredentialId: credential.config.credentialId, issued: true };
               }),
             );
       const clearMcpSession = (threadId: ThreadId, mcpCredentialId?: string) =>
@@ -671,10 +677,10 @@ export const layerWithOptions = (
           ? mcpSessionRegistry
               .revokeThread(threadId)
               .pipe(Effect.tap(() => mcpSessions.clear(threadId)))
-          : mcpSessionRegistry.revokeProviderSession(mcpCredentialId).pipe(
+          : mcpSessionRegistry.revokeCredential(mcpCredentialId).pipe(
               Effect.tap(() =>
                 Effect.gen(function* () {
-                  if ((yield* mcpSessions.read(threadId))?.providerSessionId === mcpCredentialId) {
+                  if ((yield* mcpSessions.read(threadId))?.credentialId === mcpCredentialId) {
                     yield* mcpSessions.clear(threadId);
                   }
                 }),
@@ -3152,6 +3158,15 @@ export const layerWithOptions = (
 
       return ProviderSessionManagerV2.of({
         shutdown,
+        ownsMcpCredential: Effect.fn("ProviderSessionManager.ownsMcpCredential")(function* (input) {
+          const entry = (yield* Ref.get(sessions)).get(sessionKey(input.providerSessionId));
+          return (
+            entry !== undefined &&
+            entry.runtime.instanceId === input.providerInstanceId &&
+            entry.mcpCredentialIdByThread.get(input.threadId) === input.credentialId &&
+            (yield* mcpSessions.read(input.threadId))?.credentialId === input.credentialId
+          );
+        }),
         open: (input) =>
           sessionOpen.withLock(
             input.providerSessionId,

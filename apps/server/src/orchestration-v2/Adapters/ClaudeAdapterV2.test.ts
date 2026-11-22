@@ -710,7 +710,7 @@ describe("ClaudeAdapterV2 MCP query overrides", () => {
   ): McpProviderSession.McpProviderSessionConfig => ({
     environmentId: EnvironmentId.make(`environment-${threadId}`),
     threadId,
-    providerSessionId: `mcp-session-${threadId}`,
+    credentialId: `mcp-session-${threadId}`,
     providerInstanceId: ProviderInstanceId.make("claudeAgent"),
     endpoint: "http://127.0.0.1:43123/mcp",
     authorizationHeader,
@@ -844,7 +844,7 @@ describe("ClaudeAdapterV2 native protocol logging", () => {
     const mcpSession = {
       environmentId: EnvironmentId.make("environment-claude-mcp"),
       threadId,
-      providerSessionId: "mcp-session-claude",
+      credentialId: "mcp-session-claude",
       providerInstanceId: ProviderInstanceId.make("claudeAgent"),
       endpoint: "http://127.0.0.1:43123/mcp",
       authorizationHeader: "Bearer secret-claude-token",
@@ -25287,7 +25287,7 @@ describe("ClaudeAdapterV2 background wake turns", () => {
         yield* mcpSessions.set({
           environmentId: EnvironmentId.make("environment-goal-wake"),
           threadId: harness.threadId,
-          providerSessionId: "mcp-session-goal-wake",
+          credentialId: "mcp-session-goal-wake",
           providerInstanceId: ProviderInstanceId.make("claudeAgent"),
           endpoint: "http://127.0.0.1:43123/mcp",
           authorizationHeader: "Bearer secret-claude-token",

@@ -16,7 +16,7 @@ it.effect("reports other missing capabilities with the neutral error", () => {
     requestNamespace: "provider-session-1",
     thread: {
       threadId: ThreadId.make("thread-1"),
-      providerSessionId: "provider-session-1",
+      credentialId: "provider-session-1",
       providerInstanceId: ProviderInstanceId.make("codex"),
     },
     client: undefined,

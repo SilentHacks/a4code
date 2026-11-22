@@ -253,7 +253,7 @@ it.effect.each(["provider-session", "thread", "all"] as const)(
 
       timestamp += 101;
       yield* {
-        "provider-session": registry.revokeProviderSession(issued.config.providerSessionId),
+        "provider-session": registry.revokeCredential(issued.config.credentialId),
         thread: registry.revokeThread(threadId),
         all: registry.revokeAll,
       }[revocation];

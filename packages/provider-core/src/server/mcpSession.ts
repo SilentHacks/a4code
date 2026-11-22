@@ -10,7 +10,7 @@ export const MCP_TOOL_EXPOSURE_HEADER = "t3-tool-exposure";
 export interface McpProviderSessionConfig {
   readonly environmentId: EnvironmentId;
   readonly threadId: ThreadId;
-  readonly providerSessionId: string;
+  readonly credentialId: string;
   readonly providerInstanceId: ProviderInstanceId;
   readonly endpoint: string;
   readonly authorizationHeader: string;

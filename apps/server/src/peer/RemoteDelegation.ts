@@ -576,7 +576,7 @@ const make = Effect.gen(function* () {
     requestNamespace: `remote-task:${parent.threadId}`,
     thread: {
       threadId: parent.threadId,
-      providerSessionId: `remote-task:${remote.threadId}`,
+      credentialId: `remote-task:${remote.threadId}`,
       providerInstanceId: parent.providerInstanceId,
     },
     client: undefined,

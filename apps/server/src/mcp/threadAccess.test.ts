@@ -94,7 +94,7 @@ it.effect("tells a caller with linked environments that the thread may be on one
         client: undefined,
         thread: {
           threadId: fencedThread,
-          providerSessionId: "provider-session",
+          credentialId: "provider-session",
           providerInstanceId: ProviderInstanceId.make("codex"),
         },
       },

@@ -486,7 +486,7 @@ it.effect(
             orchestrator.dispatch({
               ...command,
               commandId: CommandId.make("publish:stale-owner"),
-              providerSessionId: "stale",
+              providerSessionId: ProviderSessionId.make("stale"),
             }),
           ),
         ),

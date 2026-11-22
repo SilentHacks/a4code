@@ -12,7 +12,7 @@ export const layer = Layer.succeed(
         config: {
           environmentId: EnvironmentId.make("environment:mcp-test"),
           threadId,
-          providerSessionId: `mcp-test:${threadId}`,
+          credentialId: `mcp-test:${threadId}`,
           providerInstanceId,
           endpoint: "http://127.0.0.1/mcp",
           authorizationHeader: `Bearer mcp-test:${threadId}`,
@@ -21,7 +21,7 @@ export const layer = Layer.succeed(
       }),
     resolve: () => Effect.undefined,
     touch: () => Effect.void,
-    revokeProviderSession: () => Effect.void,
+    revokeCredential: () => Effect.void,
     revokeThread: () => Effect.void,
     revokeAll: Effect.void,
   }),

@@ -780,7 +780,7 @@ const parentScope: McpInvocationContext.McpInvocationScope = {
   requestNamespace: "provider-session:laptop-parent",
   thread: {
     threadId: parentThreadId,
-    providerSessionId: "provider-session:laptop-parent",
+    credentialId: "provider-session:laptop-parent",
     providerInstanceId: instanceId,
   },
   client: undefined,

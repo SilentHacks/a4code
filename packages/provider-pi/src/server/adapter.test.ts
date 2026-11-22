@@ -2155,7 +2155,7 @@ describe("PiAdapterV2", () => {
       yield* (yield* McpProviderSessions.McpProviderSessions).set({
         environmentId: EnvironmentId.make("environment-pi-mcp"),
         threadId: THREAD_ID,
-        providerSessionId: "mcp-session-pi",
+        credentialId: "mcp-session-pi",
         providerInstanceId: PI_INSTANCE_ID,
         endpoint: "http://127.0.0.1:43123/mcp",
         authorizationHeader: "Bearer secret-pi-token",

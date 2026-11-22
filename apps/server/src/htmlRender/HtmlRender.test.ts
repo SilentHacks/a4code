@@ -278,7 +278,7 @@ describe("HtmlRender", () => {
       const session = {
         environmentId: EnvironmentId.make("html-render-environment"),
         threadId,
-        providerSessionId: "first-credential",
+        credentialId: "first-credential",
         providerInstanceId: ProviderInstanceId.make("claude"),
         endpoint: "http://localhost:8311/mcp",
         authorizationHeader: "Bearer first-token",
@@ -333,7 +333,7 @@ describe("HtmlRender", () => {
       yield* htmlRender.publish({ threadId, ...page });
       yield* mcpSessions.set({
         ...session,
-        providerSessionId: "replacement-credential",
+        credentialId: "replacement-credential",
         providerInstanceId: ProviderInstanceId.make("antigravity"),
         authorizationHeader: "Bearer replacement-token",
       });

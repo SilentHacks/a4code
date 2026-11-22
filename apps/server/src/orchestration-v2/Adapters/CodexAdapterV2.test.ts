@@ -2637,7 +2637,7 @@ describe("CodexAdapterV2 post-settle continuation", () => {
       yield* (yield* McpProviderSessions.McpProviderSessions).set({
         environmentId: EnvironmentId.make("environment-codex-mcp"),
         threadId: ThreadId.make(`thread-${scenario}`),
-        providerSessionId: `provider-session-${scenario}`,
+        credentialId: `provider-session-${scenario}`,
         providerInstanceId: ProviderInstanceId.make("codex"),
         endpoint: "http://127.0.0.1:43123/mcp",
         authorizationHeader: "Bearer secret-codex-token",
@@ -4222,7 +4222,7 @@ describe("CodexAdapterV2 post-settle continuation", () => {
       yield* (yield* McpProviderSessions.McpProviderSessions).set({
         environmentId: EnvironmentId.make("test"),
         threadId: harness.threadId,
-        providerSessionId: "context-session",
+        credentialId: "context-session",
         providerInstanceId: ProviderInstanceId.make("codex"),
         endpoint: "http://127.0.0.1:43123/mcp",
         authorizationHeader: "Bearer test",
@@ -12083,7 +12083,7 @@ describe("CodexAdapterV2 post-settle continuation", () => {
         yield* (yield* McpProviderSessions.McpProviderSessions).set({
           environmentId: EnvironmentId.make("test"),
           threadId: harness.threadId,
-          providerSessionId: "wake-session",
+          credentialId: "wake-session",
           providerInstanceId: ProviderInstanceId.make("codex"),
           endpoint: "http://127.0.0.1:43123/mcp",
           authorizationHeader: "Bearer test",

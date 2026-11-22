@@ -35,7 +35,7 @@ const scope = {
   requestNamespace: "provider-session-1",
   thread: {
     threadId: ThreadId.make("thread-1"),
-    providerSessionId: "provider-session-1",
+    credentialId: "provider-session-1",
     providerInstanceId: ProviderInstanceId.make("codex"),
   },
   client: undefined,
@@ -383,7 +383,7 @@ it.effect("distinguishes malformed remote failures", () =>
       operation: "status",
       environmentId: scope.environmentId,
       threadId: scope.thread.threadId,
-      providerSessionId: scope.thread.providerSessionId,
+      providerSessionId: scope.thread.credentialId,
       providerInstanceId: scope.thread.providerInstanceId,
       clientId: "client-1",
       requestId: "preview-0",
@@ -490,7 +490,7 @@ it.effect("routes requests for background threads through an environment-level h
         thread: {
           ...scope.thread,
           threadId: backgroundThreadId,
-          providerSessionId: "provider-session-background",
+          credentialId: "provider-session-background",
         },
       },
       operation: "status",
@@ -596,7 +596,7 @@ it.effect("pins a provider session to its initial host despite later focus chang
 
     const firstPinnedScope = {
       ...scope,
-      thread: { ...scope.thread, providerSessionId: "provider-session-first-pinned" },
+      thread: { ...scope.thread, credentialId: "provider-session-first-pinned" },
     };
     expect(
       yield* broker.invoke<string>({ scope: firstPinnedScope, operation: "status", input: {} }),
@@ -616,7 +616,7 @@ it.effect("pins a provider session to its initial host despite later focus chang
       yield* broker.invoke<string>({
         scope: {
           ...scope,
-          thread: { ...scope.thread, providerSessionId: "provider-session-second-pinned" },
+          thread: { ...scope.thread, credentialId: "provider-session-second-pinned" },
         },
         operation: "status",
         input: {},
@@ -674,7 +674,7 @@ it.effect("prefers the live tab owner for new sessions without moving existing l
     expect(yield* broker.invoke<string>({ scope, operation: "evaluate", input: {} })).toBe("owner");
     expect(
       yield* broker.invoke<string>({
-        scope: { ...scope, thread: { ...scope.thread, providerSessionId: "explicit-owner" } },
+        scope: { ...scope, thread: { ...scope.thread, credentialId: "explicit-owner" } },
         tabId: PreviewTabId.make("signed-in"),
         operation: "snapshot",
         input: {},
@@ -682,7 +682,7 @@ it.effect("prefers the live tab owner for new sessions without moving existing l
     ).toBe("owner");
     expect(
       yield* broker.invoke<string>({
-        scope: { ...scope, thread: { ...scope.thread, providerSessionId: "other-tab" } },
+        scope: { ...scope, thread: { ...scope.thread, credentialId: "other-tab" } },
         tabId: PreviewTabId.make("different-tab"),
         operation: "evaluate",
         input: {},
@@ -699,7 +699,7 @@ it.effect("prefers the live tab owner for new sessions without moving existing l
     expect(yield* broker.invoke<string>({ scope, operation: "evaluate", input: {} })).toBe("owner");
     expect(
       yield* broker.invoke<string>({
-        scope: { ...scope, thread: { ...scope.thread, providerSessionId: "after-tab-closed" } },
+        scope: { ...scope, thread: { ...scope.thread, credentialId: "after-tab-closed" } },
         operation: "evaluate",
         input: {},
       }),
@@ -980,7 +980,7 @@ it.effect("fails requests assigned to the stream that is replaced", () =>
       operation: "status",
       environmentId: scope.environmentId,
       threadId: scope.thread.threadId,
-      providerSessionId: scope.thread.providerSessionId,
+      providerSessionId: scope.thread.credentialId,
       providerInstanceId: scope.thread.providerInstanceId,
       clientId: "client-1",
       requestId: "preview-0",
@@ -1008,7 +1008,7 @@ it.effect(
         requestNamespace: "provider-session-2",
         thread: {
           threadId: ThreadId.make("thread-2"),
-          providerSessionId: "provider-session-2",
+          credentialId: "provider-session-2",
           providerInstanceId: ProviderInstanceId.make("codex"),
         },
       };

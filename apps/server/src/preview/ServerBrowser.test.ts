@@ -437,7 +437,7 @@ const desktopConnections: Array<{
 }> = [];
 const testThread = {
   threadId: ThreadId.make("browser-test-thread"),
-  providerSessionId: "agent-a",
+  credentialId: "agent-a",
   providerInstanceId: ProviderInstanceId.make("codex"),
 };
 const scope = {
@@ -450,7 +450,7 @@ const scope = {
 };
 const asSession = (providerSessionId: string) => ({
   ...scope,
-  thread: { ...testThread, providerSessionId },
+  thread: { ...testThread, credentialId: providerSessionId },
 });
 const dependencies = Layer.mergeAll(
   Broker.layer,

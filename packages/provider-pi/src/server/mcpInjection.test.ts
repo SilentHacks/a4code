@@ -25,7 +25,7 @@ const threadId = ThreadId.make("thread-pi-t3-mcp");
 const mcpSession = {
   environmentId: EnvironmentId.make("environment-pi-t3-mcp"),
   threadId,
-  providerSessionId: "mcp-session-pi",
+  credentialId: "mcp-session-pi",
   providerInstanceId: ProviderInstanceId.make("pi"),
   endpoint: "http://127.0.0.1:43123/mcp",
   authorizationHeader: "Bearer secret-pi-token",

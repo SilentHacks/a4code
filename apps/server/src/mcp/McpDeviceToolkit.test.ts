@@ -26,7 +26,7 @@ const invocation = (capabilities: ReadonlyArray<McpInvocationContext.McpCapabili
   requestNamespace: "provider-session-device-test",
   thread: {
     threadId,
-    providerSessionId: "provider-session-device-test",
+    credentialId: "provider-session-device-test",
     providerInstanceId: ProviderInstanceId.make("codex"),
   },
   client: undefined,

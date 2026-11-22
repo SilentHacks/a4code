@@ -87,7 +87,7 @@ it.effect("preview_open navigates the opened tab to a dev server in one tool cal
       requestNamespace: "provider-session-1",
       thread: {
         threadId: ThreadId.make("thread-1"),
-        providerSessionId: "provider-session-1",
+        credentialId: "provider-session-1",
         providerInstanceId: ProviderInstanceId.make("codex"),
       },
       client: undefined,

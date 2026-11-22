@@ -228,6 +228,15 @@ const isMessageQuestionAnswer = Schema.is(
   Schema.Union([TrimmedNonEmptyString, Schema.NonEmptyArray(TrimmedNonEmptyString)]),
 );
 
+export class OrchestratorHtmlPublicationOwnerError extends Schema.TaggedError<OrchestratorHtmlPublicationOwnerError>()(
+  "OrchestratorHtmlPublicationOwnerError",
+  { threadId: ThreadId },
+) {
+  override get message(): string {
+    return "HTML could not be published because the calling agent no longer owns this thread. Start a new turn and publish again.";
+  }
+}
+
 export class OrchestratorDispatchError extends Schema.TaggedError<OrchestratorDispatchError>()(
   "OrchestratorDispatchError",
   {
@@ -384,6 +393,7 @@ export class OrchestratorCommandIdConflictError extends Schema.TaggedError<Orche
 }
 
 export const OrchestratorV2Error = Schema.Union([
+  OrchestratorHtmlPublicationOwnerError,
   OrchestratorDispatchError,
   OrchestratorThreadAlreadyExistsError,
   OrchestratorCommandRejectedError,
@@ -15698,11 +15708,7 @@ const makeOrchestrator = Effect.fn("orchestrationV2.Orchestrator.layer")(functio
               providerThread.providerInstanceId === command.providerInstanceId,
           )
         ) {
-          return yield* new OrchestratorDispatchError({
-            commandId: command.commandId,
-            commandType: command.type,
-            cause: "The calling provider no longer owns this thread.",
-          });
+          return yield* new OrchestratorHtmlPublicationOwnerError({ threadId: command.threadId });
         }
         const lastRun = projection.runs.at(-1);
         const now = yield* DateTime.now;

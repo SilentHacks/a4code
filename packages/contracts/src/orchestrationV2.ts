@@ -3778,7 +3778,7 @@ const OrchestrationV2InternalCommand = Schema.Union([
     threadId: ThreadId,
     itemId: TurnItemId,
     providerInstanceId: ProviderInstanceId,
-    providerSessionId: Schema.String,
+    providerSessionId: ProviderSessionId,
     requestHash: Schema.String,
     reference: Schema.Struct({
       attachmentId: Schema.String,

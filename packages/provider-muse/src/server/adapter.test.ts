@@ -391,7 +391,7 @@ describe("MuseAdapterV2", () => {
       yield* (yield* McpProviderSessions.McpProviderSessions).set({
         environmentId: EnvironmentId.make("test-environment"),
         threadId: THREAD_ID,
-        providerSessionId: "test-session",
+        credentialId: "test-session",
         providerInstanceId: INSTANCE_ID,
         endpoint: "http://127.0.0.1:43210/mcp",
         authorizationHeader: "Bearer thread-scoped-test-token",
@@ -447,7 +447,7 @@ describe("MuseAdapterV2", () => {
       yield* (yield* McpProviderSessions.McpProviderSessions).set({
         environmentId: EnvironmentId.make("test-environment"),
         threadId: THREAD_ID,
-        providerSessionId: "test-session",
+        credentialId: "test-session",
         providerInstanceId: INSTANCE_ID,
         endpoint: "http://127.0.0.1:43210/mcp",
         authorizationHeader: "Bearer thread-scoped-test-token",

@@ -87,7 +87,7 @@ describe("CursorAdapterV2", () => {
         yield* mcpSessions.set({
           environmentId: EnvironmentId.make("cursor-lifecycle-environment"),
           threadId,
-          providerSessionId: "cursor-lifecycle-session",
+          credentialId: "cursor-lifecycle-session",
           providerInstanceId: instanceId,
           endpoint: "http://127.0.0.1:43123/mcp",
           authorizationHeader: "Bearer synthetic-cursor-token",
@@ -916,7 +916,7 @@ describe("CursorAdapterV2", () => {
         mcpSessions.set({
           environmentId: EnvironmentId.make("cursor-device-environment"),
           threadId,
-          providerSessionId: "cursor-device-session",
+          credentialId: "cursor-device-session",
           providerInstanceId: instanceId,
           endpoint: "http://127.0.0.1:43123/mcp",
           authorizationHeader: "Bearer synthetic-cursor-token",
@@ -3120,7 +3120,7 @@ describe("CursorAdapterV2", () => {
     const mcpSession = {
       environmentId: EnvironmentId.make("environment-cursor-mcp"),
       threadId,
-      providerSessionId: "mcp-session-cursor",
+      credentialId: "mcp-session-cursor",
       providerInstanceId: ProviderInstanceId.make("cursor"),
       endpoint: "http://127.0.0.1:43123/mcp",
       authorizationHeader: "Bearer secret-cursor-mcp-token",
@@ -3284,7 +3284,7 @@ describe("CursorAdapterV2", () => {
         yield* mcpSessions.set({
           environmentId: EnvironmentId.make("cursor-mcp-environment"),
           threadId,
-          providerSessionId: "cursor-mcp-session",
+          credentialId: "cursor-mcp-session",
           providerInstanceId: instanceId,
           endpoint: "http://127.0.0.1:43123/mcp",
           authorizationHeader: "Bearer synthetic-cursor-token",

@@ -40,7 +40,7 @@ it.effect("applies the theme through the service and reports a refusal as an inv
         requestNamespace: "provider:theme",
         thread: {
           threadId,
-          providerSessionId: "provider:theme",
+          credentialId: "provider:theme",
           providerInstanceId: ProviderInstanceId.make("codex"),
         },
         client: undefined,

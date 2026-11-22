@@ -38,7 +38,7 @@ it.effect("refuses a preferences update when the caller's turn ends while it wai
         requestNamespace: "provider:preferences",
         thread: {
           threadId,
-          providerSessionId: "provider:preferences",
+          credentialId: "provider:preferences",
           providerInstanceId: ProviderInstanceId.make("codex"),
         },
         client: undefined,

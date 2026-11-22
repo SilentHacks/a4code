@@ -421,6 +421,15 @@ export interface ThreadManagementServiceShape {
   readonly ensureLegacyTranscript: (
     threadId: ThreadId,
   ) => Effect.Effect<void, LegacyV1ThreadImporter.LegacyV1ThreadImportError>;
+  readonly publishHtml: (
+    input: Omit<
+      Extract<OrchestrationV2ServerCommand, { type: "html-render.publish" }>,
+      "type" | "providerSessionId"
+    > & { readonly credentialId: string },
+  ) => Effect.Effect<
+    Orchestrator.OrchestratorV2DispatchResult,
+    Orchestrator.OrchestratorV2Error | ThreadManagementProviderInstanceDisabledError
+  >;
   readonly dispatch: (
     command: OrchestrationV2ServerCommand,
   ) => Effect.Effect<
@@ -845,6 +854,38 @@ const make = Effect.gen(function* () {
       Effect.andThen(assertDispatchTargetEnabled(command)),
       Effect.andThen(orchestrator.dispatch(command)),
     );
+
+  const publishHtml = Effect.fn("ThreadManagementService.publishHtml")(function* (
+    input: Parameters<ThreadManagementServiceShape["publishHtml"]>[0],
+  ) {
+    const { thread, providerThreads } = yield* orchestrator.getThreadRecords(input.threadId, [
+      "providerThreads",
+    ]);
+    const owner = providerThreads.find(
+      (candidate) =>
+        candidate.id === thread.activeProviderThreadId &&
+        candidate.providerInstanceId === input.providerInstanceId,
+    );
+    if (
+      thread.deletedAt !== null ||
+      owner?.providerSessionId == null ||
+      !(yield* sessions.ownsMcpCredential({
+        threadId: input.threadId,
+        providerInstanceId: input.providerInstanceId,
+        providerSessionId: owner.providerSessionId,
+        credentialId: input.credentialId,
+      }))
+    )
+      return yield* new Orchestrator.OrchestratorHtmlPublicationOwnerError({
+        threadId: input.threadId,
+      });
+    const { credentialId: _credentialId, ...command } = input;
+    return yield* dispatch({
+      ...command,
+      type: "html-render.publish",
+      providerSessionId: owner.providerSessionId,
+    });
+  });
 
   const getProjectThreadRecords: ThreadManagementServiceShape["getProjectThreadRecords"] = (
     input,
@@ -1788,6 +1829,7 @@ const make = Effect.gen(function* () {
       );
     }),
     dispatch,
+    publishHtml,
     getThreadHistoryPage: Effect.fn("ThreadManagementService.getThreadHistoryPage")(
       function (threadId, cursor, throughEntryId, conversationOnly, workMode) {
         return ensureProjectionTranscript(threadId).pipe(

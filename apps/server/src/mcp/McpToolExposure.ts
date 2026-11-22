@@ -25,10 +25,10 @@ export class McpToolExposure extends Context.Service<
   {
     /** Finds tools for the query and lists them to the session from now on. */
     readonly search: (
-      providerSessionId: string,
+      credentialId: string,
       query: string,
     ) => Effect.Effect<ReadonlyArray<ListedTool>>;
-    readonly isListed: (providerSessionId: string, tool: string) => boolean;
+    readonly isListed: (credentialId: string, tool: string) => boolean;
   }
 >()("t3/mcp/McpToolExposure") {}
 
@@ -49,10 +49,10 @@ export const make = (
   announceListChanged: () => Effect.Effect<void>,
 ) => {
   const loaded = new Map<string, Set<string>>();
-  const load = (providerSessionId: string, names: ReadonlyArray<string>) => {
-    const listed = loaded.get(providerSessionId) ?? new Set<string>();
-    loaded.delete(providerSessionId);
-    loaded.set(providerSessionId, listed);
+  const load = (credentialId: string, names: ReadonlyArray<string>) => {
+    const listed = loaded.get(credentialId) ?? new Set<string>();
+    loaded.delete(credentialId);
+    loaded.set(credentialId, listed);
     for (const name of names) listed.add(name);
     for (const oldest of loaded.keys()) {
       if (loaded.size <= MAX_SESSIONS) break;
@@ -60,7 +60,7 @@ export const make = (
     }
   };
   return McpToolExposure.of({
-    search: Effect.fn("McpToolExposure.search")(function* (providerSessionId, query) {
+    search: Effect.fn("McpToolExposure.search")(function* (credentialId, query) {
       const terms = query
         .toLowerCase()
         .split(/[^a-z0-9_]+/u)
@@ -74,14 +74,14 @@ export const make = (
         .map((match) => match.tool);
       if (found.length > 0) {
         load(
-          providerSessionId,
+          credentialId,
           found.map((tool) => tool.name),
         );
         yield* announceListChanged();
       }
       return found;
     }),
-    isListed: (providerSessionId, tool) =>
-      DIRECT_TOOLS.has(tool) || loaded.get(providerSessionId)?.has(tool) === true,
+    isListed: (credentialId, tool) =>
+      DIRECT_TOOLS.has(tool) || loaded.get(credentialId)?.has(tool) === true,
   });
 };

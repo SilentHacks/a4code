@@ -29,7 +29,7 @@ export type McpCapability = (typeof ALL_MCP_CAPABILITIES)[number];
 
 export interface McpThreadCaller {
   readonly threadId: ThreadId;
-  readonly providerSessionId: string;
+  readonly credentialId: string;
   readonly providerInstanceId: ProviderInstanceId;
   /** A delegated child task; its parent owns the work it hands back. */
   readonly subagent?: boolean;
@@ -241,7 +241,7 @@ const missingCapability = (
       ? {}
       : {
           threadId: invocation.thread.threadId,
-          providerSessionId: invocation.thread.providerSessionId,
+          providerSessionId: invocation.thread.credentialId,
           providerInstanceId: invocation.thread.providerInstanceId,
         }),
   };

@@ -1,3 +1,13 @@
+import type { OrchestrationV2TurnItem } from "@t3tools/contracts";
+import { ProviderSessionId, ProviderThreadId } from "@t3tools/contracts";
+import * as Orchestrator from "../../orchestration-v2/Orchestrator.ts";
+import * as ProviderSessionManager from "../../orchestration-v2/ProviderSessionManager.ts";
+import * as CommandReceiptStore from "../../orchestration-v2/CommandReceiptStore.ts";
+import * as SqlitePersistence from "../../persistence/Sqlite.ts";
+import * as McpSessionRegistry from "../McpSessionRegistry.ts";
+import * as ServerEnvironment from "../../environment/ServerEnvironment.ts";
+import { HttpServer } from "effect/http";
+import * as NetAddress from "effect/net/NetAddress";
 import * as AssetSigner from "../../assets/AssetSigner.ts";
 import * as DocumentText from "../../provider/DocumentText.ts";
 import * as NodeCrypto from "@effect/platform-node/NodeCrypto";
@@ -21,7 +31,6 @@ import {
   TurnItemId,
   type OrchestrationV2ServerCommand,
   type OrchestrationV2ProjectedTurnItem,
-  type OrchestrationV2GetTurnItemResult,
   type OrchestrationV2ThreadShell,
 } from "@t3tools/contracts";
 import { pinOrderKeyBetween } from "@t3tools/shared/pinOrderKey";
@@ -105,7 +114,7 @@ const scope: McpInvocationContext.McpInvocationScope = {
   requestNamespace: "mcp-core-session",
   thread: {
     threadId,
-    providerSessionId: "mcp-core-session",
+    credentialId: "mcp-core-session",
     providerInstanceId: ProviderInstanceId.make("codex"),
   },
   client: undefined,
@@ -352,18 +361,47 @@ it.effect("publishes HTML independently of the provider's tool echo", () => {
   const publications: Array<
     Extract<OrchestrationV2ServerCommand, { type: "html-render.publish" }>
   > = [];
+  let issuedCredentialId: string | undefined;
   let pause: { phase: "before" | "after"; entered: Deferred.Deferred<void> } | undefined;
   return Effect.gen(function* () {
     const server = yield* McpServer.McpServer;
+    const registry = yield* McpSessionRegistry.__testing.make().pipe(
+      Effect.provideService(
+        HttpServer.HttpServer,
+        HttpServer.HttpServer.of({
+          address: NetAddress.inetAddressFromIpStringUnsafe("127.0.0.1", 43123),
+          serve: (() => Effect.void) as HttpServer.HttpServer["Service"]["serve"],
+        }),
+      ),
+      Effect.provideService(
+        ServerEnvironment.ServerEnvironment,
+        ServerEnvironment.ServerEnvironment.of({
+          getEnvironmentId: Effect.succeed(scope.environmentId),
+          getDescriptor: Effect.die("unused"),
+        }),
+      ),
+      Effect.provide(Layer.mergeAll(NodeServices.layer, NodeCrypto.layer)),
+    );
+    const issued = yield* registry.issue({
+      threadId,
+      providerInstanceId: ProviderInstanceId.make("codex"),
+    });
+    const invocation = yield* registry.resolve(
+      issued.config.authorizationHeader.replace(/^Bearer\s+/, ""),
+    );
+    expect(invocation).toBeDefined();
+    issuedCredentialId = invocation!.thread.credentialId;
+
     const result = yield* server
       .callTool({
         name: "html_render",
         arguments: { html: "<p>Revenue</p>", title: "Revenue", height: 240 },
       })
       .pipe(
-        Effect.provideService(McpInvocationContext.McpInvocationContext, scope),
+        Effect.provideService(McpInvocationContext.McpInvocationContext, invocation!),
         Effect.provideService(McpSchema.McpServerClient, client),
       );
+    expect(result.isError, JSON.stringify(result.content)).not.toBe(true);
     const reference = htmlRenderFromToolItem({
       toolName: "t3-code.html_render",
       output: result.structuredContent,
@@ -390,9 +428,26 @@ it.effect("publishes HTML independently of the provider's tool echo", () => {
           },
         })
         .pipe(
-          Effect.provideService(McpInvocationContext.McpInvocationContext, scope),
+          Effect.provideService(McpInvocationContext.McpInvocationContext, invocation!),
           Effect.provideService(McpSchema.McpServerClient, client),
         );
+    const denied = yield* server
+      .callTool({
+        name: "html_render",
+        arguments: { html: "<p>Stale caller</p>", title: "Stale", height: 240 },
+      })
+      .pipe(
+        Effect.provideService(McpInvocationContext.McpInvocationContext, {
+          ...invocation!,
+          thread: { ...invocation!.thread, credentialId: "stale" },
+        }),
+        Effect.provideService(McpSchema.McpServerClient, client),
+      );
+    expect(declaredFailure(denied)).toMatchObject({
+      code: "parent_not_active",
+      message: expect.stringContaining("Start a new turn"),
+    });
+    expect(publications).toHaveLength(1);
     const first = yield* call("<p>Keyed</p>", "revenue");
     expect((yield* call("<p>Keyed</p>", "revenue")).structuredContent).toEqual(
       first.structuredContent,
@@ -479,50 +534,88 @@ it.effect("publishes HTML independently of the provider's tool echo", () => {
         ),
         Layer.provide(FetchHttpClient.layer),
         Layer.provide(
-          Layer.mock(ThreadManagement.ThreadManagementService)({
-            dispatch: (command) =>
-              Effect.gen(function* () {
-                if (pause?.phase === "before") {
-                  yield* Deferred.succeed(pause.entered, undefined);
-                  return yield* Effect.never;
-                }
-                if (
-                  command.type === "html-render.publish" &&
-                  !publications.some((prior) => prior.commandId === command.commandId)
-                )
-                  publications.push(command);
-                if (pause?.phase === "after") {
-                  yield* Deferred.succeed(pause.entered, undefined);
-                  return yield* Effect.never;
-                }
-                return { sequence: 1, storedEvents: [] };
+          ThreadManagement.layer.pipe(
+            Layer.provide(
+              Layer.mock(Orchestrator.OrchestratorV2)({
+                getThreadRecords: (id) =>
+                  Effect.succeed({
+                    thread: {
+                      id,
+                      deletedAt: null,
+                      activeProviderThreadId: ProviderThreadId.make("html-owner"),
+                    },
+                    providerThreads: [
+                      {
+                        id: ProviderThreadId.make("html-owner"),
+                        providerSessionId: ProviderSessionId.make("provider-session:html-runtime"),
+                        providerInstanceId: ProviderInstanceId.make("codex"),
+                      },
+                    ],
+                  } as never),
+                dispatch: (command) =>
+                  Effect.gen(function* () {
+                    if (
+                      command.type === "html-render.publish" &&
+                      command.providerSessionId !== "provider-session:html-runtime"
+                    ) {
+                      return yield* new OrchestratorDispatchError({
+                        commandId: command.commandId,
+                        commandType: command.type,
+                        cause: "The calling provider no longer owns this thread.",
+                      });
+                    }
+                    if (pause?.phase === "before") {
+                      yield* Deferred.succeed(pause.entered, undefined);
+                      return yield* Effect.never;
+                    }
+                    if (
+                      command.type === "html-render.publish" &&
+                      !publications.some((prior) => prior.commandId === command.commandId)
+                    )
+                      publications.push(command);
+                    if (pause?.phase === "after") {
+                      yield* Deferred.succeed(pause.entered, undefined);
+                      return yield* Effect.never;
+                    }
+                    return { sequence: 1, storedEvents: [] };
+                  }),
+                getTurnItem: ({ itemId }) =>
+                  Effect.succeed(
+                    publications.flatMap((command) =>
+                      command.itemId === itemId
+                        ? [
+                            {
+                              type: "dynamic_tool",
+                              input: { publication: { requestHash: command.requestHash } },
+                              output: { htmlRender: command.reference },
+                            },
+                          ]
+                        : [],
+                    )[0] ?? null,
+                  ) as Effect.Effect<OrchestrationV2TurnItem | null>,
+                getThreadShell: (id) =>
+                  Effect.succeed({
+                    id,
+                    deletedAt: null,
+                    archivedAt: null,
+                    activeRunId: RunId.make("mcp-core-run"),
+                    providerInstanceId: ProviderInstanceId.make("codex"),
+                    runtimeMode: id === fullAccessThreadId ? "full-access" : "approval-required",
+                    interactionMode: "default",
+                  } as OrchestrationV2ThreadShell),
               }),
-            getTurnItem: ({ itemId }) =>
-              Effect.succeed({
-                item:
-                  publications.flatMap((command) =>
-                    command.itemId === itemId
-                      ? [
-                          {
-                            type: "dynamic_tool",
-                            input: { publication: { requestHash: command.requestHash } },
-                            output: { htmlRender: command.reference },
-                          },
-                        ]
-                      : [],
-                  )[0] ?? null,
-              }) as Effect.Effect<OrchestrationV2GetTurnItemResult>,
-            getThreadShell: (id) =>
-              Effect.succeed({
-                id,
-                deletedAt: null,
-                archivedAt: null,
-                activeRunId: RunId.make("mcp-core-run"),
-                providerInstanceId: ProviderInstanceId.make("codex"),
-                runtimeMode: id === fullAccessThreadId ? "full-access" : "approval-required",
-                interactionMode: "default",
-              } as OrchestrationV2ThreadShell),
-          }),
+            ),
+            Layer.provide(
+              Layer.mock(ProviderSessionManager.ProviderSessionManagerV2)({
+                ownsMcpCredential: (input) =>
+                  Effect.succeed(input.credentialId === issuedCredentialId),
+              }),
+            ),
+            Layer.provide(ServerSettings.layerTest()),
+            Layer.provide(
+              CommandReceiptStore.layer.pipe(Layer.provide(SqlitePersistence.layerMemory)),
+            ),
+          ),
         ),
         Layer.provideMerge(NodeServices.layer),
       ),

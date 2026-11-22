@@ -541,7 +541,7 @@ const cancelBackgroundOnlyTask = (
           requestNamespace: "provider-session:task-cancel",
           thread: {
             threadId: parentThreadId,
-            providerSessionId: "provider-session:task-cancel",
+            credentialId: "provider-session:task-cancel",
             providerInstanceId: instanceId,
           },
           client: undefined,

@@ -5506,7 +5506,7 @@ it.layer(McpProviderSessions.layer)("OpenCode2 adapter", (it) => {
       yield* mcpSessions.set({
         environmentId: EnvironmentId.make("environment:opencode2-adapter"),
         threadId,
-        providerSessionId: "mcp:opencode2-adapter",
+        credentialId: "mcp:opencode2-adapter",
         providerInstanceId: instanceId,
         endpoint: "http://127.0.0.1:3773/mcp",
         authorizationHeader: "Bearer thread-credential",
@@ -5575,7 +5575,7 @@ it.layer(McpProviderSessions.layer)("OpenCode2 adapter", (it) => {
       yield* mcpSessions.set({
         environmentId: EnvironmentId.make("environment:opencode2-adapter"),
         threadId: child,
-        providerSessionId: "mcp:opencode2-adapter",
+        credentialId: "mcp:opencode2-adapter",
         providerInstanceId: instanceId,
         endpoint: "http://127.0.0.1:3773/mcp",
         authorizationHeader: "Bearer thread-credential",

@@ -56,7 +56,7 @@ const invocation = (
   requestNamespace: "provider-session-1",
   thread: {
     threadId: THREAD_ID,
-    providerSessionId: "provider-session-1",
+    credentialId: "provider-session-1",
     providerInstanceId: ProviderInstanceId.make("codex"),
   },
   client: undefined,

@@ -1497,7 +1497,7 @@ describe("AcpRegistryAdapterV2", () => {
         const mcpSession = {
           environmentId: EnvironmentId.make("environment-acp-registry-mcp-transport"),
           threadId,
-          providerSessionId: "mcp-session-acp-registry-mcp-transport",
+          credentialId: "mcp-session-acp-registry-mcp-transport",
           providerInstanceId: instanceId,
           endpoint,
           browserToolsAvailable: false,
@@ -1656,7 +1656,7 @@ describe("AcpRegistryAdapterV2", () => {
       yield* (yield* McpProviderSessions.McpProviderSessions).set({
         environmentId: EnvironmentId.make("environment-acp-registry-thread-env"),
         threadId,
-        providerSessionId: "mcp-session-acp-registry-thread-env",
+        credentialId: "mcp-session-acp-registry-thread-env",
         providerInstanceId: instanceId,
         endpoint,
         authorizationHeader: "Bearer thread-env-token",

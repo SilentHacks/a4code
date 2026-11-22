@@ -145,9 +145,7 @@ const make = Effect.gen(function* () {
     random.uuidV4().pipe(
       Effect.map((uuid) => {
         const part = (kind: string, operation: string) =>
-          [kind, "mcp", encodeURIComponent(scope.thread.providerSessionId), operation, uuid].join(
-            ":",
-          );
+          [kind, "mcp", encodeURIComponent(scope.thread.credentialId), operation, uuid].join(":");
         return {
           commandId: CommandId.make(part("command", "worktree-handoff")),
           continuationMessageId: MessageId.make(part("message", "worktree-continuation")),

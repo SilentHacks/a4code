@@ -19,7 +19,7 @@ import {
   ProjectId,
   ProviderDriverKind,
   ProviderInstanceId,
-  type ProviderSessionId,
+  ProviderSessionId,
   RunId,
   ThreadId,
   TurnItemId,
@@ -2601,11 +2601,36 @@ it.effect(
           new Set(["preview", "orchestration", "worktree", "pull-requests", "issues"]),
         );
 
+        const caller = {
+          threadId,
+          providerInstanceId: modelSelection.instanceId,
+          providerSessionId,
+          credentialId: resolved!.thread.credentialId,
+        };
+        assert.notEqual(caller.credentialId, providerSessionId);
+        assert.isTrue(yield* manager.ownsMcpCredential(caller));
+        assert.isFalse(yield* manager.ownsMcpCredential({ ...caller, credentialId: "stale" }));
+        assert.isFalse(
+          yield* manager.ownsMcpCredential({
+            ...caller,
+            providerSessionId: ProviderSessionId.make("other-runtime"),
+          }),
+        );
+        assert.isFalse(
+          yield* manager.ownsMcpCredential({ ...caller, threadId: ThreadId.make("other-thread") }),
+        );
+        assert.isFalse(
+          yield* manager.ownsMcpCredential({
+            ...caller,
+            providerInstanceId: ProviderInstanceId.make("other-provider"),
+          }),
+        );
         assert.isFalse(yield* captured!.hasPendingWake!);
 
         yield* manager.close(providerSessionId);
         assert.isUndefined(yield* mcpSessions.read(threadId));
         assert.isUndefined(yield* registry.resolve(token!));
+        assert.isFalse(yield* manager.ownsMcpCredential(caller));
       });
 
       yield* effect.pipe(
@@ -2929,10 +2954,7 @@ it.effect(
 
         yield* Fiber.interrupt(stale);
 
-        assert.equal(
-          (yield* mcpSessions.read(threadId))?.providerSessionId,
-          config!.providerSessionId,
-        );
+        assert.equal((yield* mcpSessions.read(threadId))?.credentialId, config!.credentialId);
         const token = config!.authorizationHeader.replace(/^Bearer\s+/, "");
         assert.equal((yield* registry.resolve(token))?.thread.threadId, threadId);
         const attachedEvents = eventStore
@@ -3068,17 +3090,11 @@ it.effect("ProviderSessionManagerV2 duplicate detach preserves replacement MCP c
       assert.isDefined(replacement);
       const replacementToken = replacement?.authorizationHeader.replace(/^Bearer\s+/, "");
       assert.isDefined(replacementToken);
-      assert.equal(
-        (yield* mcpSessions.read(threadId))?.providerSessionId,
-        replacement?.providerSessionId,
-      );
+      assert.equal((yield* mcpSessions.read(threadId))?.credentialId, replacement?.credentialId);
 
       yield* manager.detach({ providerSessionId: oldSessionId, threadId });
 
-      assert.equal(
-        (yield* mcpSessions.read(threadId))?.providerSessionId,
-        replacement?.providerSessionId,
-      );
+      assert.equal((yield* mcpSessions.read(threadId))?.credentialId, replacement?.credentialId);
       assert.equal((yield* registry.resolve(replacementToken!))?.thread.threadId, threadId);
     });
 
@@ -3145,8 +3161,8 @@ it.effect(
           runtimePolicy,
         });
         assert.equal(
-          (yield* mcpSessions.read(threadId))?.providerSessionId,
-          original?.providerSessionId,
+          (yield* mcpSessions.read(threadId))?.credentialId,
+          original?.credentialId,
           "re-attach must reuse the existing credential, not rotate it",
         );
         assert.equal((yield* registry.resolve(originalToken!))?.thread.threadId, threadId);
@@ -3208,8 +3224,8 @@ it.effect(
 
         const slot = yield* mcpSessions.read(threadId);
         assert.equal(
-          slot?.providerSessionId,
-          original?.providerSessionId,
+          slot?.credentialId,
+          original?.credentialId,
           "the credential the adapter was configured with must remain current",
         );
         assert.equal(

@@ -76,7 +76,7 @@ const invocation = {
   requestNamespace: "provider-session-mcp-test",
   thread: {
     threadId,
-    providerSessionId: "provider-session-mcp-test",
+    credentialId: "provider-session-mcp-test",
     providerInstanceId: ProviderInstanceId.make("codex"),
   },
   client: undefined,
@@ -997,7 +997,7 @@ it.effect("terminates HTTP MCP sessions with DELETE", () =>
         requestNamespace: "provider-session",
         thread: {
           threadId: ThreadId.make("thread-provider"),
-          providerSessionId: "provider-session",
+          credentialId: "provider-session",
           providerInstanceId: ProviderInstanceId.make("codex"),
         },
         client: undefined,
@@ -1073,7 +1073,7 @@ it.effect("answers 2026-07-28 discovery and keeps 2025-06-18 as the initialize f
         requestNamespace: "provider-session",
         thread: {
           threadId: ThreadId.make("thread-provider"),
-          providerSessionId: "provider-session",
+          credentialId: "provider-session",
           providerInstanceId: ProviderInstanceId.make("codex"),
         },
         client: undefined,
@@ -1223,7 +1223,7 @@ it.effect("admits provider and OAuth client credentials and points only clients 
         requestNamespace: "provider-session",
         thread: {
           threadId: ThreadId.make("thread-provider"),
-          providerSessionId: "provider-session",
+          credentialId: "provider-session",
           providerInstanceId: ProviderInstanceId.make("codex"),
         },
         client: undefined,
@@ -1606,7 +1606,7 @@ it.effect("hides tools for links and refuses another environment while the beta 
         requestNamespace: token,
         thread: {
           threadId: ThreadId.make("thread-links"),
-          providerSessionId: token,
+          credentialId: token,
           providerInstanceId: ProviderInstanceId.make("codex"),
         },
         client: undefined,
@@ -1732,7 +1732,7 @@ it.effect(
           requestNamespace: token,
           thread: {
             threadId: ThreadId.make(`thread-${token}`),
-            providerSessionId: token,
+            credentialId: token,
             providerInstanceId: ProviderInstanceId.make("codex"),
             subagent,
           },
@@ -1994,7 +1994,7 @@ it.effect("lists optional tools to a deferring client only after tool_search loa
         requestNamespace: token,
         thread: {
           threadId: ThreadId.make(`thread-${token}`),
-          providerSessionId: token,
+          credentialId: token,
           providerInstanceId: ProviderInstanceId.make("copilot"),
         },
         client: undefined,

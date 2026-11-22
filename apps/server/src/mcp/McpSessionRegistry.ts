@@ -32,7 +32,7 @@ export interface McpSessionRegistryShape {
     rawToken: string,
   ) => Effect.Effect<McpInvocationContext.McpThreadInvocationScope | undefined>;
   readonly touch: (threadId: ThreadId) => Effect.Effect<void>;
-  readonly revokeProviderSession: (providerSessionId: string) => Effect.Effect<void>;
+  readonly revokeCredential: (credentialId: string) => Effect.Effect<void>;
   readonly revokeThread: (threadId: ThreadId) => Effect.Effect<void>;
   readonly revokeAll: Effect.Effect<void>;
 }
@@ -121,16 +121,16 @@ const makeWithOptions = Effect.fn("McpSessionRegistry.make")(function* (
   const issue: McpSessionRegistryShape["issue"] = Effect.fn("McpSessionRegistry.issue")(
     function* (request) {
       const issuedAlive = yield* currentAliveMark;
-      const providerSessionId = yield* random.uuidV4();
+      const credentialId = yield* random.uuidV4();
       const rawToken = yield* random.randomBytes(32).pipe(Effect.map(tokenFromBytes), Effect.orDie);
       const tokenHash = yield* hashToken(rawToken);
       const browserToolsAvailable = request.browserToolsAvailable ?? true;
       const scope: McpInvocationContext.McpThreadInvocationScope = {
         environmentId,
-        requestNamespace: providerSessionId,
+        requestNamespace: credentialId,
         thread: {
           threadId: ThreadId.make(request.threadId),
-          providerSessionId,
+          credentialId,
           providerInstanceId: ProviderInstanceId.make(request.providerInstanceId),
           subagent: request.subagent === true,
         },
@@ -153,7 +153,7 @@ const makeWithOptions = Effect.fn("McpSessionRegistry.make")(function* (
         config: {
           environmentId,
           threadId: scope.thread.threadId,
-          providerSessionId,
+          credentialId,
           providerInstanceId: scope.thread.providerInstanceId,
           endpoint,
           authorizationHeader: `Bearer ${rawToken}`,
@@ -208,9 +208,9 @@ const makeWithOptions = Effect.fn("McpSessionRegistry.make")(function* (
     issue,
     resolve,
     touch,
-    revokeProviderSession: Effect.fn("McpSessionRegistry.revokeProviderSession")(
-      function* (providerSessionId) {
-        yield* revokeWhere((record) => record.scope.thread.providerSessionId === providerSessionId);
+    revokeCredential: Effect.fn("McpSessionRegistry.revokeProviderSession")(
+      function* (credentialId) {
+        yield* revokeWhere((record) => record.scope.thread.credentialId === credentialId);
       },
     ),
     revokeThread: Effect.fn("McpSessionRegistry.revokeThread")(function* (threadId) {

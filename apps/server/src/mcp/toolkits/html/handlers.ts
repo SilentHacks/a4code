@@ -24,7 +24,12 @@ const encodeSource = Schema.encodeEffect(Schema.fromJsonString(Schema.Unknown));
 
 const toFailure = (error: { readonly _tag: string; readonly message: string }) =>
   new OrchestratorMcpFailure({
-    code: INVALID_PAGE_ERRORS.has(error._tag) ? "invalid_request" : "orchestration_error",
+    code:
+      error._tag === "OrchestratorHtmlPublicationOwnerError"
+        ? "parent_not_active"
+        : INVALID_PAGE_ERRORS.has(error._tag)
+          ? "invalid_request"
+          : "orchestration_error",
     message: error.message,
   });
 
@@ -136,12 +141,11 @@ const handlers = {
         // The receipt and its projection commit before dispatch resolves. An ambiguous failure
         // deliberately leaves an orphan for reconciliation instead of deleting published bytes.
         yield* threads
-          .dispatch({
-            type: "html-render.publish",
+          .publishHtml({
             commandId,
             threadId: thread.threadId,
             providerInstanceId: thread.providerInstanceId,
-            providerSessionId: thread.providerSessionId,
+            credentialId: thread.credentialId,
             itemId,
             requestHash,
             reference: staged,

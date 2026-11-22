@@ -118,7 +118,7 @@ const scope: McpInvocationContext.McpInvocationScope = {
   requestNamespace: "provider-session:laptop",
   thread: {
     threadId,
-    providerSessionId: "provider-session:laptop",
+    credentialId: "provider-session:laptop",
     providerInstanceId: instanceId,
   },
   client: undefined,
@@ -663,7 +663,7 @@ it.live("a new MCP credential reusing a clientRequestId gets a card of its own",
         {
           ...scope,
           requestNamespace: "provider-session:laptop-2",
-          thread: { ...scope.thread!, providerSessionId: "provider-session:laptop-2" },
+          thread: { ...scope.thread!, credentialId: "provider-session:laptop-2" },
         },
       );
       expect(later.structuredContent).toMatchObject({ status: "pending" });

@@ -481,7 +481,7 @@ it.layer(layerTest)("AntigravityDriver", (it) => {
         yield* (yield* McpProviderSessions.McpProviderSessions).set({
           environmentId: EnvironmentId.make("environment-antigravity-process-environment"),
           threadId,
-          providerSessionId: "mcp-session-antigravity-process-environment",
+          credentialId: "mcp-session-antigravity-process-environment",
           providerInstanceId: h.instance.instanceId,
           endpoint,
           authorizationHeader: "Bearer antigravity-thread-token",
