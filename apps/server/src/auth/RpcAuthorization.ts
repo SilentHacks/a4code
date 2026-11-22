@@ -181,6 +181,9 @@ export const RPC_REQUIRED_SCOPES = {
   [WS_METHODS.projectsCreateNew]: AuthOrchestrationOperateScope,
   [WS_METHODS.shellOpenInEditor]: AuthOrchestrationOperateScope,
   [WS_METHODS.filesystemBrowse]: AuthFilesystemReadScope,
+  [WS_METHODS.workspaceListFolders]: AuthFilesystemReadScope,
+  [WS_METHODS.workspaceScanFolders]: AuthFilesystemReadScope,
+  [WS_METHODS.workspaceTaskFolder]: AuthFilesystemReadScope,
   [WS_METHODS.filesystemGetMetadata]: AuthFilesystemReadScope,
   // Whole-host reach equals a shell on the host, so it needs the terminal grant.
   [WS_METHODS.hostFilesList]: AuthTerminalOperateScope,
