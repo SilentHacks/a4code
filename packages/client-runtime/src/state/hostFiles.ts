@@ -1,3 +1,5 @@
+import { mFallback, msg } from "gt-i18n";
+import type { MFunctionType } from "gt-i18n/types";
 import { WS_METHODS, type HostFileEntry } from "@t3tools/contracts";
 import type { Atom } from "effect/reactivity";
 
@@ -79,7 +81,11 @@ export function isHiddenHostEntry(entry: Pick<HostFileEntry, "name">): boolean {
   return entry.name.startsWith(".");
 }
 
-export function hostFilesFailureMessage(error: unknown, fallback: string): string {
+export function hostFilesFailureMessage(
+  error: unknown,
+  fallback: string,
+  resolve: MFunctionType = mFallback,
+): string {
   if (
     typeof error === "object" &&
     error !== null &&
@@ -92,7 +98,7 @@ export function hostFilesFailureMessage(error: unknown, fallback: string): strin
   }
   if (typeof error === "object" && error !== null && "_tag" in error) {
     if (error._tag === "EnvironmentAuthorizationError") {
-      return "This connection is not allowed to manage server files.";
+      return resolve(msg("This connection is not allowed to manage server files."));
     }
   }
   return fallback;

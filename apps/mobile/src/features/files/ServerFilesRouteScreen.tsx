@@ -1,3 +1,5 @@
+import { m } from "../../i18n/messages";
+import { T, useGT } from "gt-react-native";
 import { resolveAssetUrl } from "@t3tools/client-runtime/state/assets";
 import {
   displayHostPath,
@@ -33,6 +35,9 @@ import { useEnvironmentScope, usePreparedConnection } from "../../state/session"
 import { useAtomCommand } from "../../state/use-atom-command";
 import { SettingsScreen } from "../settings/components/SettingsScreen";
 
+const loadDocumentPicker = () => import("expo-document-picker");
+const loadFileSystem = () => import("expo-file-system");
+
 const COMMAND_OPTIONS = { reportFailure: false, reportDefect: false } as const;
 
 export function ServerFilesRouteScreen({
@@ -51,6 +56,7 @@ function ServerFiles(props: {
   readonly environmentId: EnvironmentId;
   readonly initialPath: string;
 }) {
+  const gt = useGT();
   const { environmentId } = props;
   const connection = usePreparedConnection(environmentId);
   const httpBaseUrl = Option.isSome(connection) ? connection.value.httpBaseUrl : null;
@@ -80,7 +86,7 @@ function ServerFiles(props: {
         setError(null);
       } else {
         setError(
-          hostFilesFailureMessage(squashAtomCommandFailure(result), "Could not open folder."),
+          hostFilesFailureMessage(squashAtomCommandFailure(result), "Could not open folder.", m),
         );
       }
     },
@@ -104,22 +110,25 @@ function ServerFiles(props: {
   );
 
   const reportFailure = (title: string, result: Parameters<typeof squashAtomCommandFailure>[0]) =>
-    Dialog.alert(title, hostFilesFailureMessage(squashAtomCommandFailure(result), "Try again."));
+    Dialog.alert(title, hostFilesFailureMessage(squashAtomCommandFailure(result), "Try again.", m));
 
   const share = async (entry: HostFileEntry) => {
     if (httpBaseUrl === null) {
-      Dialog.alert("Not connected", "Reconnect to the environment and try again.");
+      Dialog.alert(gt("Not connected"), gt("Reconnect to the environment and try again."));
       return;
     }
     setBusy(entry.path);
-    try {
+    const download = async () => {
       const result = await createDownloadUrl({ environmentId, input: { path: entry.path } });
       if (result._tag !== "Success") {
-        reportFailure("Could not download", result);
+        reportFailure(gt("Could not download"), result);
         return;
       }
       const url = resolveAssetUrl(httpBaseUrl, result.value.relativeUrl);
-      if (url === null) throw new Error("Reconnect to the environment and try again.");
+      if (url === null) {
+        Dialog.alert(gt("Not connected"), gt("Reconnect to the environment and try again."));
+        return;
+      }
       await downloadAndShareAttachment({
         url,
         attachment: {
@@ -128,25 +137,29 @@ function ServerFiles(props: {
         },
         signal: new AbortController().signal,
       });
-    } catch (cause) {
-      Dialog.alert("Could not download", cause instanceof Error ? cause.message : "Try again.");
-    } finally {
-      setBusy(null);
-    }
+    };
+    await download()
+      .catch((cause: unknown) => {
+        Dialog.alert(
+          gt("Could not download"),
+          cause instanceof Error ? cause.message : gt("Try again."),
+        );
+      })
+      .finally(() => setBusy(null));
   };
 
   const promptRename = (entry: HostFileEntry) =>
     Dialog.prompt({
-      title: "Rename or move",
+      title: gt("Rename or move"),
       initialValue: entry.name,
-      confirmText: "Rename",
+      confirmText: gt("Rename"),
       onConfirm: (value) => {
         const name = value.trim();
         if (!currentPath || name.length === 0 || name === entry.name) return;
         const to =
           name.startsWith("/") || name.startsWith("~") ? name : joinHostPath(currentPath, name);
         void rename({ environmentId, input: { from: entry.path, to } }).then((result) => {
-          if (result._tag !== "Success") reportFailure("Could not rename", result);
+          if (result._tag !== "Success") reportFailure(gt("Could not rename"), result);
           refresh();
         });
       },
@@ -154,16 +167,16 @@ function ServerFiles(props: {
 
   const promptDelete = (entry: HostFileEntry) =>
     Dialog.confirm({
-      title: `Delete "${entry.name}" permanently?`,
+      title: gt('Delete "{name}" permanently?', { name: entry.name }),
       message:
         entry.kind === "directory"
-          ? "The folder and everything inside it will be deleted. This cannot be undone."
-          : "This cannot be undone.",
+          ? gt("The folder and everything inside it will be deleted. This cannot be undone.")
+          : gt("This cannot be undone."),
       confirmText: "Delete",
       destructive: true,
       onConfirm: () => {
         void remove({ environmentId, input: { paths: [entry.path] } }).then((result) => {
-          if (result._tag !== "Success") reportFailure("Could not delete", result);
+          if (result._tag !== "Success") reportFailure(gt("Could not delete"), result);
           refresh();
         });
       },
@@ -176,15 +189,18 @@ function ServerFiles(props: {
       entry.name,
       displayHostPath(entry.path, listing?.homePath ?? null),
       [
-        { text: directory ? "Download .tar.gz" : "Share", onPress: () => void share(entry) },
-        { text: "Copy path", onPress: () => copyTextWithHaptic(entry.path) },
         {
-          text: "More…",
+          text: directory ? gt("Download .tar.gz") : gt("Share"),
+          onPress: () => void share(entry),
+        },
+        { text: gt("Copy path"), onPress: () => copyTextWithHaptic(entry.path) },
+        {
+          text: gt("More…"),
           onPress: () =>
             Dialog.alert(entry.name, undefined, [
-              { text: "Rename or move", onPress: () => promptRename(entry) },
+              { text: gt("Rename or move"), onPress: () => promptRename(entry) },
               { text: "Delete", style: "destructive", onPress: () => promptDelete(entry) },
-              { text: "Cancel", style: "cancel" },
+              { text: gt("Cancel"), style: "cancel" },
             ]),
         },
       ],
@@ -194,15 +210,15 @@ function ServerFiles(props: {
 
   const promptNewFolder = () =>
     Dialog.prompt({
-      title: "New folder",
+      title: gt("New folder"),
       initialValue: "",
-      confirmText: "Create",
+      confirmText: gt("Create"),
       onConfirm: (value) => {
         const name = value.trim();
         if (!currentPath || name.length === 0) return;
         void mkdir({ environmentId, input: { path: joinHostPath(currentPath, name) } }).then(
           (result) => {
-            if (result._tag !== "Success") reportFailure("Could not create folder", result);
+            if (result._tag !== "Success") reportFailure(gt("Could not create folder"), result);
             refresh();
           },
         );
@@ -211,21 +227,23 @@ function ServerFiles(props: {
 
   const promptGoTo = () =>
     Dialog.prompt({
-      title: "Go to path",
+      title: gt("Go to path"),
       initialValue: displayHostPath(currentPath ?? "~", listing?.homePath ?? null),
-      confirmText: "Open",
+      confirmText: gt("Open"),
       onConfirm: (value) => void navigate(value.trim() || "~"),
     });
 
   const askConflict = (names: ReadonlyArray<string>) =>
     new Promise<HostFilesUploadConflict | null>((resolve) =>
       Dialog.alert(
-        names.length === 1 ? `"${names[0]}" already exists` : `${names.length} files already exist`,
-        "Replace them, or keep both with a numbered name.",
+        names.length === 1
+          ? gt('"{value}" already exists', { value: names[0] })
+          : gt("{count} files already exist", { count: names.length }),
+        gt("Replace them, or keep both with a numbered name."),
         [
-          { text: "Cancel", style: "cancel", onPress: () => resolve(null) },
-          { text: "Keep both", onPress: () => resolve("keep-both") },
-          { text: "Replace", style: "destructive", onPress: () => resolve("replace") },
+          { text: gt("Cancel"), style: "cancel", onPress: () => resolve(null) },
+          { text: gt("Keep both"), onPress: () => resolve("keep-both") },
+          { text: gt("Replace"), style: "destructive", onPress: () => resolve("replace") },
         ],
         { cancelable: true, onDismiss: () => resolve(null) },
       ),
@@ -234,7 +252,7 @@ function ServerFiles(props: {
   const upload = async () => {
     if (!currentPath || httpBaseUrl === null) return;
     const directory = currentPath;
-    const { getDocumentAsync } = await import("expo-document-picker");
+    const { getDocumentAsync } = await loadDocumentPicker();
     const picked = await getDocumentAsync({ multiple: true, copyToCacheDirectory: true });
     if (picked.canceled || picked.assets.length === 0) return;
     const existing = new Set(listing?.entries.map((entry) => entry.name) ?? []);
@@ -245,7 +263,7 @@ function ServerFiles(props: {
       if (choice === null) return;
       conflict = choice;
     }
-    const { File, UploadType } = await import("expo-file-system");
+    const { File, UploadType } = await loadFileSystem();
     for (const [index, asset] of picked.assets.entries()) {
       setBusy(`Uploading ${index + 1} of ${picked.assets.length}…`);
       const file = new File(asset.uri);
@@ -254,23 +272,31 @@ function ServerFiles(props: {
         input: { directory, name: asset.name, sizeBytes: asset.size ?? file.size, conflict },
       });
       if (issued._tag !== "Success") {
-        reportFailure(`Could not upload ${asset.name}`, issued);
+        reportFailure(gt("Could not upload {name}", { name: asset.name }), issued);
         continue;
       }
       const uploadUrl = resolveAssetUrl(httpBaseUrl, issued.value.relativeUrl);
       if (uploadUrl === null) continue;
-      try {
-        const result = await file.upload(uploadUrl, {
+      await file
+        .upload(uploadUrl, {
           httpMethod: "POST",
           uploadType: UploadType.BINARY_CONTENT,
           headers: { "Content-Type": "application/octet-stream" },
+        })
+        .then((result) => {
+          if (result.status < 200 || result.status >= 300) {
+            Dialog.alert(
+              gt("Could not upload {name}", { name: asset.name }),
+              result.body || gt("Status {status}", { status: result.status }),
+            );
+          }
+        })
+        .catch((cause: unknown) => {
+          Dialog.alert(
+            gt("Could not upload {name}", { name: asset.name }),
+            cause instanceof Error ? cause.message : "",
+          );
         });
-        if (result.status < 200 || result.status >= 300) {
-          Dialog.alert(`Could not upload ${asset.name}`, result.body || `Status ${result.status}`);
-        }
-      } catch (cause) {
-        Dialog.alert(`Could not upload ${asset.name}`, cause instanceof Error ? cause.message : "");
-      }
     }
     setBusy(null);
     refresh();
@@ -286,25 +312,29 @@ function ServerFiles(props: {
         allowed
           ? [
               {
-                accessibilityLabel: "Up one folder",
+                accessibilityLabel: gt("Up one folder"),
                 icon: "arrow.up",
                 disabled: !listing?.parentPath,
                 onPress: () => listing?.parentPath && void navigate(listing.parentPath),
               },
-              { accessibilityLabel: "Go to path", icon: "magnifyingglass", onPress: promptGoTo },
               {
-                accessibilityLabel: showHidden ? "Hide hidden files" : "Show hidden files",
+                accessibilityLabel: gt("Go to path"),
+                icon: "magnifyingglass",
+                onPress: promptGoTo,
+              },
+              {
+                accessibilityLabel: showHidden ? gt("Hide hidden files") : gt("Show hidden files"),
                 icon: showHidden ? "eye" : "eye.slash",
                 onPress: () => setShowHidden((value) => !value),
               },
               {
-                accessibilityLabel: "New folder",
+                accessibilityLabel: gt("New folder"),
                 icon: "folder.badge.plus",
                 disabled: !currentPath,
                 onPress: promptNewFolder,
               },
               {
-                accessibilityLabel: "Upload files",
+                accessibilityLabel: gt("Upload files"),
                 icon: "tray.and.arrow.up",
                 disabled: !currentPath || busy !== null,
                 loading: busy !== null,
@@ -321,8 +351,10 @@ function ServerFiles(props: {
       >
         {!allowed ? (
           <EmptyState
-            title="Server files unavailable"
-            detail="This connection needs terminal access on the environment to browse its files."
+            title={gt("Server files unavailable")}
+            detail={gt(
+              "This connection needs terminal access on the environment to browse its files.",
+            )}
           />
         ) : (
           <ListSection
@@ -335,7 +367,7 @@ function ServerFiles(props: {
             {loading && listing === null ? <ActivityIndicator /> : null}
             {listing && entries.length === 0 && !error ? (
               <Text className="px-2 py-4 text-center text-sm text-foreground-muted">
-                This folder is empty.
+                <T>This folder is empty.</T>
               </Text>
             ) : null}
             {entries.map((entry) => {
@@ -345,7 +377,7 @@ function ServerFiles(props: {
                   key={entry.path}
                   accessibilityRole="button"
                   accessibilityLabel={entry.name}
-                  accessibilityHint={directory ? "Opens the folder" : "Shows file actions"}
+                  accessibilityHint={directory ? gt("Opens the folder") : gt("Shows file actions")}
                   onPress={() => (directory ? void navigate(entry.path) : showActions(entry))}
                   onLongPress={() => showActions(entry)}
                 >

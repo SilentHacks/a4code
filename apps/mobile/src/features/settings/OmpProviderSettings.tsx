@@ -1,3 +1,4 @@
+import { T, Var, useGT } from "gt-react-native";
 import { useRef, useState } from "react";
 import { TextInput, View } from "react-native";
 import type { OmpSettings, ProviderInstanceId } from "@t3tools/contracts";
@@ -14,6 +15,7 @@ import {
 } from "./omp-settings";
 
 export function OmpProviderSettings({ environment }: { readonly environment: SettingsTarget }) {
+  const gt = useGT();
   const settings = environment.serverConfig.settings;
   const update = useAtomCommand(serverEnvironment.updateSettings, {
     reportFailure: true,
@@ -37,15 +39,17 @@ export function OmpProviderSettings({ environment }: { readonly environment: Set
   return (
     <View>
       <Text className="p-4 text-sm text-foreground-muted">
-        Install and sign in to OMP on {environment.label}. Profiles and executable paths refer to
-        that environment, not this phone.
+        <T>
+          Install and sign in to OMP on <Var>{environment.label}</Var>. Profiles and executable
+          paths refer to that environment, not this phone.
+        </T>
       </Text>
       {instances.map((instance) => (
         <View key={instance.id} className="border-b border-border-subtle">
           <SettingsSwitchRow
             icon="terminal"
             label={`${instance.displayName} (${instance.id})`}
-            subtitle="Enable Oh My Pi for new threads"
+            subtitle={gt("Enable Oh My Pi for new threads")}
             value={instance.enabled}
             disabled={pending}
             onValueChange={(enabled) => save(instance.id, { enabled })}
@@ -53,7 +57,7 @@ export function OmpProviderSettings({ environment }: { readonly environment: Set
           <View className="gap-3 p-4">
             <OmpSettingField
               key={`${instance.id}:binary:${instance.config.binaryPath}`}
-              label="OMP executable"
+              label={gt("OMP executable")}
               value={instance.config.binaryPath}
               placeholder="omp"
               disabled={pending}
@@ -61,9 +65,9 @@ export function OmpProviderSettings({ environment }: { readonly environment: Set
             />
             <OmpSettingField
               key={`${instance.id}:profile:${instance.config.profile}`}
-              label="OMP profile"
+              label={gt("OMP profile")}
               value={instance.config.profile}
-              placeholder="Default profile"
+              placeholder={gt("Default profile")}
               disabled={pending}
               save={(profile) => save(instance.id, { profile })}
             />
@@ -72,7 +76,7 @@ export function OmpProviderSettings({ environment }: { readonly environment: Set
       ))}
       <SettingsActionRow
         icon="plus"
-        label="Add Oh My Pi provider"
+        label={gt("Add Oh My Pi provider")}
         disabled={pending}
         onPress={() => save(nextMobileOmpInstanceId(settings), { enabled: true })}
       />

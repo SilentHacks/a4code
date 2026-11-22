@@ -1,3 +1,5 @@
+import { m } from "~/i18n/messages";
+import { T, useGT } from "gt-react";
 import {
   displayHostPath,
   formatHostFileSize,
@@ -178,6 +180,7 @@ function ToolbarButton(props: {
 }
 
 export function HostFilesBrowser(props: HostFilesBrowserProps) {
+  const gt = useGT();
   const { environmentId, onOpenFile } = props;
   const canManage = useHostFilesAccess(environmentId);
   const [showHidden, setShowHidden] = useLocalStorage(
@@ -226,7 +229,9 @@ export function HostFilesBrowser(props: HostFilesBrowserProps) {
       }
       return true;
     }
-    setError(hostFilesFailureMessage(squashAtomCommandFailure(result), "Could not open folder."));
+    setError(
+      hostFilesFailureMessage(squashAtomCommandFailure(result), "Could not open folder.", m),
+    );
     return false;
   };
 
@@ -258,7 +263,11 @@ export function HostFilesBrowser(props: HostFilesBrowserProps) {
   const openEntry = (entry: HostFileEntry) => {
     if (isHostDirectoryEntry(entry)) void navigate(entry.path);
     else if (entry.kind === "symlink" && entry.targetKind === null) {
-      toastManager.add({ type: "error", title: "Broken link", description: entry.symlinkTarget });
+      toastManager.add({
+        type: "error",
+        title: gt("Broken link"),
+        description: entry.symlinkTarget,
+      });
     } else onOpenFile(entry.path);
   };
 
@@ -270,8 +279,8 @@ export function HostFilesBrowser(props: HostFilesBrowserProps) {
     if (result._tag !== "Success") {
       toastManager.add({
         type: "error",
-        title: "Download failed",
-        description: hostFilesFailureMessage(squashAtomCommandFailure(result), entry.path),
+        title: gt("Download failed"),
+        description: hostFilesFailureMessage(squashAtomCommandFailure(result), entry.path, m),
       });
       return;
     }
@@ -288,7 +297,7 @@ export function HostFilesBrowser(props: HostFilesBrowserProps) {
 
   const copyPath = async (path: string) => {
     await writeTextToClipboard(path);
-    toastManager.add({ type: "success", title: "Path copied", description: path });
+    toastManager.add({ type: "success", title: gt("Path copied"), description: path });
   };
 
   const confirmDelete = async () => {
@@ -302,8 +311,8 @@ export function HostFilesBrowser(props: HostFilesBrowserProps) {
     if (result._tag !== "Success") {
       toastManager.add({
         type: "error",
-        title: "Delete failed",
-        description: hostFilesFailureMessage(squashAtomCommandFailure(result), "Delete failed."),
+        title: gt("Delete failed"),
+        description: hostFilesFailureMessage(squashAtomCommandFailure(result), "Delete failed.", m),
       });
     }
     void refresh();
@@ -323,8 +332,8 @@ export function HostFilesBrowser(props: HostFilesBrowserProps) {
     if (result._tag !== "Success") {
       toastManager.add({
         type: "error",
-        title: "Rename failed",
-        description: hostFilesFailureMessage(squashAtomCommandFailure(result), "Rename failed."),
+        title: gt("Rename failed"),
+        description: hostFilesFailureMessage(squashAtomCommandFailure(result), "Rename failed.", m),
       });
       return;
     }
@@ -344,8 +353,8 @@ export function HostFilesBrowser(props: HostFilesBrowserProps) {
     if (result._tag !== "Success") {
       toastManager.add({
         type: "error",
-        title: "Could not create folder",
-        description: hostFilesFailureMessage(squashAtomCommandFailure(result), name),
+        title: gt("Could not create folder"),
+        description: hostFilesFailureMessage(squashAtomCommandFailure(result), name, m),
       });
       return;
     }
@@ -377,11 +386,11 @@ export function HostFilesBrowser(props: HostFilesBrowserProps) {
           const failure = squashAtomCommandFailure(issued);
           toastManager.add({
             type: "error",
-            title: `Could not upload ${file.name}`,
+            title: gt("Could not upload {name}", { name: file.name }),
             description:
               hostFilesFailureKind(failure) === "already_exists"
-                ? "A file with that name already exists."
-                : hostFilesFailureMessage(failure, "Upload failed."),
+                ? gt("A file with that name already exists.")
+                : hostFilesFailureMessage(failure, "Upload failed.", m),
           });
           return;
         }
@@ -402,7 +411,7 @@ export function HostFilesBrowser(props: HostFilesBrowserProps) {
         if (uploadError !== null) {
           toastManager.add({
             type: "error",
-            title: `Could not upload ${file.name}`,
+            title: gt("Could not upload {name}", { name: file.name }),
             description: uploadError,
           });
         }
@@ -485,8 +494,10 @@ export function HostFilesBrowser(props: HostFilesBrowserProps) {
   if (!canManage) {
     return (
       <div className="p-4 text-xs leading-relaxed text-muted-foreground">
-        This connection cannot browse server files. Server files need terminal access on this
-        environment.
+        <T>
+          This connection cannot browse server files. Server files need terminal access on this
+          environment.
+        </T>
       </div>
     );
   }
@@ -518,34 +529,34 @@ export function HostFilesBrowser(props: HostFilesBrowserProps) {
     >
       <div className="flex h-10 min-h-10 shrink-0 items-center gap-0.5 border-b border-border/60 px-2">
         <ToolbarButton
-          label="Up one folder"
+          label={gt("Up one folder")}
           disabled={!listing?.parentPath}
           onClick={() => listing?.parentPath && void navigate(listing.parentPath)}
         >
           <ArrowUp />
         </ToolbarButton>
-        <ToolbarButton label="Home folder" onClick={() => void navigate("~")}>
+        <ToolbarButton label={gt("Home folder")} onClick={() => void navigate("~")}>
           <Home />
         </ToolbarButton>
-        <ToolbarButton label="Refresh" onClick={() => void refresh()}>
+        <ToolbarButton label={gt("Refresh")} onClick={() => void refresh()}>
           <RefreshCw className={cn(loading && "animate-spin")} />
         </ToolbarButton>
         <div className="min-w-0 flex-1" />
         <ToolbarButton
-          label={showHidden ? "Hide hidden files" : "Show hidden files"}
+          label={showHidden ? gt("Hide hidden files") : gt("Show hidden files")}
           onClick={() => setShowHidden(!showHidden)}
         >
           {showHidden ? <Eye /> : <EyeOff />}
         </ToolbarButton>
         <ToolbarButton
-          label="New folder"
+          label={gt("New folder")}
           disabled={!currentPath}
           onClick={() => setCreatingFolder(true)}
         >
           <FolderPlus />
         </ToolbarButton>
         <ToolbarButton
-          label="Upload files"
+          label={gt("Upload files")}
           disabled={!currentPath}
           onClick={() => fileInputRef.current?.click()}
         >
@@ -568,7 +579,7 @@ export function HostFilesBrowser(props: HostFilesBrowserProps) {
           <button
             type="button"
             className="flex min-w-0 flex-1 items-center overflow-x-auto rounded-md px-1 py-0.5 text-left font-mono text-xs text-muted-foreground hover:bg-accent/60"
-            aria-label="Edit path"
+            aria-label={gt("Edit path")}
             onClick={(event) => {
               if (event.target === event.currentTarget)
                 setPathDraft(displayHostPath(currentPath ?? "~", homePath));
@@ -613,7 +624,7 @@ export function HostFilesBrowser(props: HostFilesBrowserProps) {
             <Input
               autoFocus
               size="sm"
-              aria-label="Go to path"
+              aria-label={gt("Go to path")}
               value={pathDraft}
               placeholder="/path/to/folder or ~/folder"
               onChange={(event) => setPathDraft(event.currentTarget.value)}
@@ -632,13 +643,15 @@ export function HostFilesBrowser(props: HostFilesBrowserProps) {
       ) : null}
       {listing?.truncated ? (
         <div className="px-3 py-1 text-xs text-muted-foreground">
-          Showing the first {listing.entries.length.toLocaleString()} entries.
+          {gt("Showing the first {count} entries.", {
+            count: listing.entries.length.toLocaleString(),
+          })}
         </div>
       ) : null}
       <div
         ref={listRef}
         role="listbox"
-        aria-label="Server files"
+        aria-label={gt("Server files")}
         aria-multiselectable
         tabIndex={0}
         className="min-h-0 flex-1 overflow-y-auto py-1 outline-none"
@@ -649,8 +662,12 @@ export function HostFilesBrowser(props: HostFilesBrowserProps) {
       >
         {listing && visibleEntries.length === 0 && !error ? (
           <div className="px-3 py-6 text-center text-xs text-muted-foreground">
-            {listing.entries.length > 0 ? "Only hidden files here." : "This folder is empty."}
-            <div className="mt-1">Drop files here to upload.</div>
+            {listing.entries.length > 0
+              ? gt("Only hidden files here.")
+              : gt("This folder is empty.")}
+            <div className="mt-1">
+              <T>Drop files here to upload.</T>
+            </div>
           </div>
         ) : null}
         {visibleEntries.map((entry) => {
@@ -716,7 +733,7 @@ export function HostFilesBrowser(props: HostFilesBrowserProps) {
                         type="button"
                         variant="ghost"
                         size="icon-micro"
-                        aria-label={`Actions for ${entry.name}`}
+                        aria-label={gt("Actions for {name}", { name: entry.name })}
                         onClick={(event) => event.stopPropagation()}
                       />
                     }
@@ -726,15 +743,15 @@ export function HostFilesBrowser(props: HostFilesBrowserProps) {
                   <MenuPopup align="end">
                     <MenuItem onClick={() => openEntry(entry)}>
                       {directory ? <Folder /> : <File />}
-                      Open
+                      <T>Open</T>
                     </MenuItem>
                     <MenuItem onClick={() => void download(entry)}>
                       <Download />
-                      {directory ? "Download as .tar.gz" : "Download"}
+                      {directory ? gt("Download as .tar.gz") : gt("Download")}
                     </MenuItem>
                     <MenuItem onClick={() => void copyPath(entry.path)}>
                       <Copy />
-                      Copy path
+                      <T>Copy path</T>
                     </MenuItem>
                     <MenuSeparator />
                     <MenuItem
@@ -744,7 +761,7 @@ export function HostFilesBrowser(props: HostFilesBrowserProps) {
                       }}
                     >
                       <Pencil />
-                      Rename or move…
+                      <T>Rename or move…</T>
                     </MenuItem>
                     <MenuItem
                       variant="destructive"
@@ -758,8 +775,8 @@ export function HostFilesBrowser(props: HostFilesBrowserProps) {
                     >
                       <Trash2 />
                       {selection.has(entry.path) && selectedEntries.length > 1
-                        ? `Delete ${selectedEntries.length} items…`
-                        : "Delete…"}
+                        ? gt("Delete {count} items…", { count: selectedEntries.length })
+                        : gt("Delete…")}
                     </MenuItem>
                   </MenuPopup>
                 </Menu>
@@ -784,7 +801,7 @@ export function HostFilesBrowser(props: HostFilesBrowserProps) {
                 type="button"
                 variant="ghost"
                 size="icon-micro"
-                aria-label={`Cancel ${upload.name}`}
+                aria-label={gt("Cancel {name}", { name: upload.name })}
                 onClick={upload.abort}
               >
                 <X />
@@ -801,15 +818,15 @@ export function HostFilesBrowser(props: HostFilesBrowserProps) {
         <AlertDialogPopup>
           <AlertDialogHeader>
             <AlertDialogTitle>
-              Delete{" "}
               {pendingDelete?.length === 1
-                ? `"${pendingDelete[0]?.name}"`
-                : `${pendingDelete?.length ?? 0} items`}{" "}
-              permanently?
+                ? gt('Delete "{name}" permanently?', { name: pendingDelete[0]?.name ?? "" })
+                : gt("Delete {count} items permanently?", { count: pendingDelete?.length ?? 0 })}
             </AlertDialogTitle>
             <AlertDialogDescription>
-              This cannot be undone. Folders are deleted with everything inside them; links are
-              removed without touching what they point to.
+              <T>
+                This cannot be undone. Folders are deleted with everything inside them; links are
+                removed without touching what they point to.
+              </T>
             </AlertDialogDescription>
             <ul className="max-h-40 overflow-y-auto rounded-md border border-border/60 px-2 py-1 font-mono text-xs">
               {pendingDelete?.map((entry) => (
@@ -821,7 +838,9 @@ export function HostFilesBrowser(props: HostFilesBrowserProps) {
             </ul>
           </AlertDialogHeader>
           <AlertDialogFooter>
-            <AlertDialogClose render={<Button variant="outline" />}>Cancel</AlertDialogClose>
+            <AlertDialogClose render={<Button variant="outline" />}>
+              <T>Cancel</T>
+            </AlertDialogClose>
             <Button variant="destructive" onClick={() => void confirmDelete()}>
               Delete
             </Button>
@@ -838,23 +857,30 @@ export function HostFilesBrowser(props: HostFilesBrowserProps) {
             }}
           >
             <AlertDialogHeader>
-              <AlertDialogTitle>Rename or move</AlertDialogTitle>
+              <AlertDialogTitle>
+                <T>Rename or move</T>
+              </AlertDialogTitle>
               <AlertDialogDescription>
-                Enter a new name, or an absolute path to move it. Existing files are never replaced.
+                <T>
+                  Enter a new name, or an absolute path to move it. Existing files are never
+                  replaced.
+                </T>
               </AlertDialogDescription>
               <Input
                 autoFocus
                 ref={renameInputRef}
-                aria-label="New name"
+                aria-label={gt("New name")}
                 value={renameDraft}
                 onChange={(event) => setRenameDraft(event.currentTarget.value)}
               />
             </AlertDialogHeader>
             <AlertDialogFooter>
               <AlertDialogClose render={<Button type="button" variant="outline" />}>
-                Cancel
+                <T>Cancel</T>
               </AlertDialogClose>
-              <Button type="submit">Rename</Button>
+              <Button type="submit">
+                <T>Rename</T>
+              </Button>
             </AlertDialogFooter>
           </form>
         </AlertDialogPopup>
@@ -869,24 +895,28 @@ export function HostFilesBrowser(props: HostFilesBrowserProps) {
             }}
           >
             <AlertDialogHeader>
-              <AlertDialogTitle>New folder</AlertDialogTitle>
+              <AlertDialogTitle>
+                <T>New folder</T>
+              </AlertDialogTitle>
               <AlertDialogDescription>
-                In {displayHostPath(currentPath ?? "~", homePath)}
+                {gt("In {path}", { path: displayHostPath(currentPath ?? "~", homePath) })}
               </AlertDialogDescription>
               <Input
                 autoFocus
                 ref={folderInputRef}
-                aria-label="Folder name"
+                aria-label={gt("Folder name")}
                 value={folderDraft}
-                placeholder="untitled folder"
+                placeholder={gt("untitled folder")}
                 onChange={(event) => setFolderDraft(event.currentTarget.value)}
               />
             </AlertDialogHeader>
             <AlertDialogFooter>
               <AlertDialogClose render={<Button type="button" variant="outline" />}>
-                Cancel
+                <T>Cancel</T>
               </AlertDialogClose>
-              <Button type="submit">Create</Button>
+              <Button type="submit">
+                <T>Create</T>
+              </Button>
             </AlertDialogFooter>
           </form>
         </AlertDialogPopup>
@@ -905,16 +935,19 @@ export function HostFilesBrowser(props: HostFilesBrowserProps) {
           <AlertDialogHeader>
             <AlertDialogTitle>
               {conflict?.names.length === 1
-                ? `"${conflict.names[0]}" already exists`
-                : `${conflict?.names.length ?? 0} files already exist`}
+                ? gt('"{value}" already exists', { value: conflict.names[0] })
+                : gt("{count} files already exist", { count: conflict?.names.length ?? 0 })}
             </AlertDialogTitle>
             <AlertDialogDescription>
-              Replace the existing {conflict?.names.length === 1 ? "file" : "files"}, or keep both
-              by saving the upload with a numbered name.
+              {gt(
+                "Replace the existing files, or keep both by saving the upload with a numbered name.",
+              )}
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
-            <AlertDialogClose render={<Button variant="outline" />}>Cancel</AlertDialogClose>
+            <AlertDialogClose render={<Button variant="outline" />}>
+              <T>Cancel</T>
+            </AlertDialogClose>
             <Button
               variant="outline"
               onClick={() => {
@@ -922,7 +955,7 @@ export function HostFilesBrowser(props: HostFilesBrowserProps) {
                 setConflict(null);
               }}
             >
-              Keep both
+              <T>Keep both</T>
             </Button>
             <Button
               onClick={() => {
@@ -930,7 +963,7 @@ export function HostFilesBrowser(props: HostFilesBrowserProps) {
                 setConflict(null);
               }}
             >
-              Replace
+              <T>Replace</T>
             </Button>
           </AlertDialogFooter>
         </AlertDialogPopup>

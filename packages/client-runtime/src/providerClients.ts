@@ -56,6 +56,7 @@ export const providerClients = makeProviderClientRegistry([
   },
   kiroClient,
   museClient,
+  // oxlint-disable-next-line t3code/no-untranslated-copy -- Provider names stay in English.
   { driverKind: ProviderDriverKind.make("omp"), label: "Oh My Pi", settingsSchema: OmpSettings },
   piClient,
   acpRegistryClient,

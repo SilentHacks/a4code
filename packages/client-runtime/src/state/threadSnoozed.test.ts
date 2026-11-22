@@ -159,6 +159,22 @@ describe("settle and start new thread", () => {
     expect(canSettleAndStartNewThread({ ...shell, hasPendingUserInput: true }, { now: NOW })).toBe(
       false,
     );
+    expect(
+      canSettleAndStartNewThread(
+        {
+          ...shell,
+          source: {
+            pendingRuntimeRequest: {
+              id: RuntimeRequestId.make("question"),
+              kind: "user_input",
+              blocking: false,
+              createdAt: DateTime.makeUnsafe(NOW),
+            },
+          },
+        },
+        { now: NOW },
+      ),
+    ).toBe(false);
   });
 });
 

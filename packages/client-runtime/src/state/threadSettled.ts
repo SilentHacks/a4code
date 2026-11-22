@@ -213,6 +213,8 @@ export function canSettleAndStartNewThread(
   ]);
   return (
     canSnooze(shell, options) &&
+    !shell.hasPendingUserInput &&
+    shell.source?.pendingRuntimeRequest?.kind !== "user_input" &&
     !activeStatuses.has(runtime?.status ?? "") &&
     !activeStatuses.has(run?.status ?? run?.state ?? "")
   );

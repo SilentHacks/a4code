@@ -38,6 +38,7 @@ export const PROVIDER_PRESENTATION = {
     driverKind: ProviderDriverKind.make("antigravity"),
   },
   omp: {
+    // oxlint-disable-next-line t3code/no-untranslated-copy -- Provider names stay in English.
     label: "Oh My Pi",
     color: "#7c9a62",
     driverKind: ProviderDriverKind.make("omp"),
