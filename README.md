@@ -32,8 +32,8 @@ The [Ubuntu server installer](scripts/install-fork-server.sh) installs a separat
 `t3-omp` launcher and state directory without replacing a stock T3 installation.
 
 To build a Mac ARM64 DMG from source, install the repository's pinned Node/Vite+
-toolchain, Rust, and Xcode command-line tools, copy `.env.example` to `.env` for
-public Connect configuration, then run:
+toolchain, Rust, and Xcode 26 or newer command-line tools (for Apple Speech), copy
+`.env.example` to `.env` for public Connect configuration, then run:
 
 ```bash
 vp env on pnpm

@@ -36,6 +36,7 @@ import { usePromptStashStore } from "~/promptStashStore";
 import { useRightPanelStore } from "~/rightPanelStore";
 import { getRouter } from "~/router";
 import { appAtomRegistry } from "~/rpc/atomRegistry";
+import { serverEnvironment } from "~/state/server";
 import { environmentThreadDetails } from "~/state/threads";
 import {
   ENVIRONMENT_ID,
@@ -855,12 +856,19 @@ it("a shortcut conditioned on rightPanelOpen sees the thread's open right panel"
     // AppRoot brings its own router.
     router: false,
   });
+  // Scenarios replace config on the same fake server while its config stream stays cached.
+  await act(() =>
+    appAtomRegistry.refresh(
+      serverEnvironment.configProjection({ environmentId: ENVIRONMENT_ID, input: {} }),
+    ),
+  );
   const composer = page.getByTestId("composer-editor");
   const toggle = page.getByRole("button", { name: "Toggle right panel", exact: true });
   await expect.element(toggle).toHaveAttribute("aria-pressed", "false");
   await toggle.click();
   await page.getByRole("button", { name: /^Files/ }).click();
-  await composer.click();
+  await expect.element(composer).toBeVisible();
+  await act(() => (composer.element() as HTMLElement).focus());
   await userEvent.keyboard("{Control>}t{/Control}");
   await expect.element(page.getByRole("menuitem", { name: /Files/ })).toBeVisible();
   await expect.element(toggle).toHaveAttribute("aria-pressed", "true");

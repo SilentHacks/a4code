@@ -6,6 +6,21 @@ import { render } from "../../../test/render";
 import { compileResolvedKeybindingsConfig } from "@t3tools/shared/keybindings";
 import * as atomCommands from "../../state/use-atom-command";
 
+function environmentFixture() {
+  return {
+    environmentId: "env",
+    label: "Build workstation",
+    connection: { phase: "connected" },
+    serverConfig: {
+      keybindings: compileResolvedKeybindingsConfig([
+        { command: "composer.sendBackground", key: "mod+alt+enter", when: "false" },
+      ]),
+      keybindingsConfigPath: null,
+      availableEditors: [],
+    },
+  };
+}
+
 vi.mock(import("../../state/session"), async (original) => ({
   ...(await original()),
   useEnvironmentScope: () => true,
@@ -13,6 +28,12 @@ vi.mock(import("../../state/session"), async (original) => ({
     new Set(environments.map(({ environmentId }) => environmentId))) as never,
   readEnvironmentScope: () => true,
 }));
+vi.mock(import("../../state/environments"), async (original) => {
+  return {
+    ...(await original()),
+    useApplicationKeybindingsEnvironment: (() => environmentFixture()) as never,
+  };
+});
 vi.mock(import("../../state/use-atom-command"), async (original) => ({
   ...(await original()),
   useAtomCommand: vi.fn(() => vi.fn()) as never,
@@ -20,17 +41,7 @@ vi.mock(import("../../state/use-atom-command"), async (original) => ({
 vi.mock(import("./SettingsScopeContext"), async (original) => ({
   ...(await original()),
   useSettingsScope: (() => {
-    const environment = {
-      environmentId: "env",
-      label: "Build workstation",
-      serverConfig: {
-        keybindings: compileResolvedKeybindingsConfig([
-          { command: "composer.sendBackground", key: "mod+alt+enter", when: "false" },
-        ]),
-        keybindingsConfigPath: null,
-        availableEditors: [],
-      },
-    };
+    const environment = environmentFixture();
     return {
       scope: { kind: "environment" },
       environment,
