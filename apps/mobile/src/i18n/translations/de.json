@@ -5617,7 +5617,6 @@
   "99d51127f573296b": "Weiteres Konto",
   "8ec2c57414669b79": "Verbinde einen zweiten {tracker}-Workspace oder -Nutzer.",
   "892f08d21b8e48a9": "{layers} per {kind, select, squash {Squash} merge {Merge} rebase {Rebase} fastForward {Fast-Forward} other {{method}}} in {base} mergen, sobald die Anforderungen erfüllt sind. Das kann sofort passieren.",
-  "0bda0cac7f5acc20": "Die verbundene Umgebung {actual} stimmt nicht mit {expected} überein.",
   "ec698ea1794416c5": "Diese Verbindung darf keine Serverdateien verwalten.",
   "17326e7ea0f08a48": "Richte Oh My Pi in dieser Umgebung ein oder wähle ein anderes Modell.",
   "3b2380abbe503f4d": "Download nicht möglich",
@@ -5666,15 +5665,10 @@
     ". installieren und anmelden. Profile und Programmpfade beziehen sich auf diese Umgebung, nicht auf dieses Telefon."
   ],
   "2a9631831566ff31": "Serverdateien durchsuchen",
-  "868ed4fea1a3273c": "{count} Repos",
-  "c887abfd190d8b40": "diesem Ordner",
-  "275b5fe6040f2c1c": "{files, plural, one {{files} geänderte Datei prüfen, {additions} Hinzufügungen, {deletions} Löschungen} other {{files} geänderte Dateien prüfen, {additions} Hinzufügungen, {deletions} Löschungen}}",
-  "c4a35456c7bdc3a1": "{files, plural, one {{files} geänderte Datei in {folders} prüfen, {additions} Hinzufügungen, {deletions} Löschungen} other {{files} geänderte Dateien in {folders} prüfen, {additions} Hinzufügungen, {deletions} Löschungen}}",
   "0c361770fe512f2c": "Thread-Aktionen",
   "44bd1f0c7d5c2c70": "Erledigen und neuen Thread starten",
   "dbe05d103a24e450": "Thread erledigt, aber ein neuer Thread konnte nicht geöffnet werden",
   "80d4d91154233ce2": "Thread konnte nicht erledigt und ein neuer Thread nicht gestartet werden",
   "c77e5a27e82c3338": "Aktualisiere den Server dieser Umgebung, um Threads erledigen zu können.",
-  "93ca60b5d5367f2c": "Beende den aktiven Lauf und bearbeite ausstehende Anfragen, bevor du den Thread erledigst.",
-  "4314e052a3524c51": "Favoriten"
+  "93ca60b5d5367f2c": "Beende den aktiven Lauf und bearbeite ausstehende Anfragen, bevor du den Thread erledigst."
 }

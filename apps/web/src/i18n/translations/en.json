@@ -5722,7 +5722,6 @@
   "ccf4621d99866627": "Replace the existing files, or keep both by saving the upload with a numbered name.",
   "83bb19d90e845e2c": "This connection cannot browse server files. Server files need terminal access on this environment.",
   "5701ba82daf40582": "Drop files here to upload.",
-  "115c69de3202f664": "Open",
   "afb8bba375e0ff0e": "Copy path",
   "cf738b4dc5bad633": "Rename or move…",
   "ef1006befad03eeb": "This cannot be undone. Folders are deleted with everything inside them; links are removed without touching what they point to.",
