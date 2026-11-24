@@ -1,4 +1,5 @@
 import { msg, T, useGT, useMessages } from "gt-react";
+import { contextMenuSourceOf, openContextMenuFromKeyboard } from "../contextMenuSource";
 import { m, type MessageResolver } from "../i18n/messages";
 import { sourceControlClients } from "@t3tools/client-runtime/source-control-clients";
 import { scopeThreadRef } from "@t3tools/client-runtime/environment";
@@ -934,10 +935,7 @@ interface RightPanelTabHandlers {
   onActivate: (surface: RightPanelSurface) => void;
   onClose: (surface: RightPanelSurface) => void;
   onAuxClick: (event: ReactMouseEvent, surface: RightPanelSurface) => void;
-  onContextMenu: (
-    event: Pick<ReactMouseEvent, "preventDefault" | "stopPropagation" | "clientX" | "clientY">,
-    surface: RightPanelSurface,
-  ) => void;
+  onContextMenu: (event: ReactMouseEvent, surface: RightPanelSurface) => void;
   onStartRename: (surfaceId: string) => void;
   onFinishRename: (surfaceId: string, title: string) => void;
 }
@@ -1087,20 +1085,7 @@ function RightPanelTab(
                   event.dataTransfer.effectAllowed = "copy";
                   writeComposerMentionDrag(event.dataTransfer, [mention], props.composerSourceKey);
                 }}
-                onKeyDown={(event) => {
-                  if (event.key !== "ContextMenu" && !(event.shiftKey && event.key === "F10"))
-                    return;
-                  const bounds = event.currentTarget.getBoundingClientRect();
-                  onContextMenu(
-                    {
-                      preventDefault: () => event.preventDefault(),
-                      stopPropagation: () => event.stopPropagation(),
-                      clientX: bounds.left,
-                      clientY: bounds.bottom,
-                    },
-                    surface,
-                  );
-                }}
+                onKeyDown={openContextMenuFromKeyboard}
                 onDoubleClick={() => {
                   if (surface.kind === "device" && props.canRename) onStartRename(surface.id);
                 }}
@@ -1320,10 +1305,7 @@ export function RightPanelTabs(props: RightPanelTabsProps) {
     action.onClick();
   };
 
-  const handleTabContextMenu = async (
-    event: Pick<ReactMouseEvent, "preventDefault" | "stopPropagation" | "clientX" | "clientY">,
-    surface: RightPanelSurface,
-  ) => {
+  const handleTabContextMenu = async (event: ReactMouseEvent, surface: RightPanelSurface) => {
     event.preventDefault();
     event.stopPropagation();
 
@@ -1384,7 +1366,11 @@ export function RightPanelTabs(props: RightPanelTabsProps) {
       },
     );
 
-    const action = await api.contextMenu.show(items, { x: event.clientX, y: event.clientY });
+    const action = await api.contextMenu.show(
+      items,
+      { x: event.clientX, y: event.clientY },
+      contextMenuSourceOf(event),
+    );
     switch (action) {
       case "add-reference":
         if (surface.kind === "file" && surface.attachment === undefined) {
@@ -1443,10 +1429,7 @@ export function RightPanelTabs(props: RightPanelTabsProps) {
   const onCloseTab = useStableCallback(props.onCloseSurface);
   const onTabAuxClick = useStableCallback(handleTabAuxClick);
   const onTabContextMenu = useStableCallback(
-    (
-      event: Pick<ReactMouseEvent, "preventDefault" | "stopPropagation" | "clientX" | "clientY">,
-      surface: RightPanelSurface,
-    ) => {
+    (event: ReactMouseEvent, surface: RightPanelSurface) => {
       void handleTabContextMenu(event, surface);
     },
   );

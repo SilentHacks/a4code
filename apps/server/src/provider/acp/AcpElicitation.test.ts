@@ -191,7 +191,6 @@ describe("ACP elicitation forms", () => {
         ["fraction", "0"],
         ["note", "a"],
         ["note", "abcde"],
-        ["features", []],
         ["features", ["a", "a"]],
         ["features", ["a", 1]],
       ] as const) {

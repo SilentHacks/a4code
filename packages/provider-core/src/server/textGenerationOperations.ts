@@ -31,7 +31,14 @@ export interface Request<S extends Schema.Top> {
   readonly modelSelection: ModelSelection;
   readonly attachments?: ReadonlyArray<ChatAttachment> | undefined;
   /** Investigate cwd with read-only tools across turns; fail if the runner cannot guarantee read-only access. */
-  readonly investigate?: { readonly timeoutMs: number; readonly baseCommit: string } | undefined;
+  readonly investigate?:
+    | {
+        readonly timeoutMs: number;
+        readonly baseCommit: string;
+        /** cwd holds the content under review; paths the user configured resolve here instead. */
+        readonly projectCwd: string;
+      }
+    | undefined;
 }
 
 const INVESTIGATION_TIMEOUT_MS = 15 * 60_000;
@@ -125,6 +132,7 @@ export function fromRunner(name: string, run: Runner): ProviderTextGeneration {
         policy: input.policy,
         changeRequestTemplate: input.changeRequestTemplate,
         threadContext: input.threadContext,
+        producedBy: input.producedBy,
       }),
     });
     return { title: sanitizePrTitle(generated.title), body: generated.body.trim() };
@@ -189,7 +197,11 @@ export function fromRunner(name: string, run: Runner): ProviderTextGeneration {
       operation: "generateReviewGuide",
       cwd: input.cwd,
       modelSelection: input.modelSelection,
-      investigate: { timeoutMs: INVESTIGATION_TIMEOUT_MS, baseCommit: input.baseCommit },
+      investigate: {
+        timeoutMs: INVESTIGATION_TIMEOUT_MS,
+        projectCwd: input.projectCwd,
+        baseCommit: input.baseCommit,
+      },
       ...buildReviewGuidePrompt(input),
     });
   });

@@ -215,7 +215,8 @@ export function projectAcpElicitationForm(
         properties[id] = { anyOf: [record, { type: "string", minLength: 1 }] };
       }
       const accepts = validator(unknownRecord(properties[id])!);
-      fields.push({ id, type, choices, required: required.has(id), accepts });
+      const isRequired = required.has(id);
+      fields.push({ id, type, choices, required: isRequired, accepts });
       if (folded.has(id)) continue;
       questions.push({
         id,
@@ -230,7 +231,7 @@ export function projectAcpElicitationForm(
         })),
         ...(type === "array" ? { multiSelect: true } : {}),
         allowCustomAnswer: !choices || companions.has(id) || (allowOther && type !== "array"),
-        required: required.has(id),
+        required: isRequired && (type !== "array" || !accepts([])),
       });
     }
     const acceptsForm = validator(schema);
@@ -273,6 +274,14 @@ export function projectAcpElicitationForm(
             value = Number(value);
           }
         }
+        if (
+          field.type === "array" &&
+          !field.required &&
+          Array.isArray(value) &&
+          value.length === 0 &&
+          !field.accepts(value)
+        )
+          continue;
         if (!field.accepts(value) || !(scalar(value) || stringArray(value))) {
           return yield* new AcpElicitationAnswerError({ field: field.id, reason: "invalid" });
         }

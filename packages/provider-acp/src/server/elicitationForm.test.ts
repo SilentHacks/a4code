@@ -138,4 +138,34 @@ describe("projectAcpElicitationForm", () => {
       );
     }),
   );
+  it.effect("requires a selection only for a required multi-select with a minimum", () =>
+    Effect.gen(function* () {
+      const items = { type: "string", enum: ["web", "mobile"] };
+      const form = projectAcpElicitationForm(
+        {
+          type: "object",
+          properties: {
+            targets: { type: "array", minItems: 1, items },
+            extras: { type: "array", items },
+            platforms: { type: "array", minItems: 1, items },
+          },
+          required: ["targets", "extras"],
+        },
+        "Choose",
+      );
+      assert(form !== undefined);
+      assert.deepStrictEqual(
+        form.questions.map(({ id, required }) => [id, required]),
+        [
+          ["targets", true],
+          ["extras", false],
+          ["platforms", false],
+        ],
+      );
+      assert.deepStrictEqual(
+        yield* form.convertAnswers({ targets: ["web"], extras: [], platforms: [] }),
+        { targets: ["web"], extras: [] },
+      );
+    }),
+  );
 });
