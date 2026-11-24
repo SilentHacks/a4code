@@ -38,7 +38,7 @@ const reviewCheckout = Effect.fn("reviewCheckout")(function* () {
     prompt: "Investigate the change.",
     outputSchema: Schema.Struct({ stops: Schema.Array(Schema.String) }),
     modelSelection: { instanceId: ProviderInstanceId.make("omp"), model: "default" },
-    investigate: { baseCommit, timeoutMs: 60_000 },
+    investigate: { baseCommit, projectCwd: cwd, timeoutMs: 60_000 },
   };
   return { request, fs, cwd };
 });

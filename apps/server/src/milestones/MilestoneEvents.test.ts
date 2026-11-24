@@ -55,7 +55,7 @@ const scopes: Record<string, McpInvocationContext.McpInvocationScope> = {
     requestNamespace: "provider-session",
     thread: {
       threadId: ThreadId.make("thread-agent"),
-      providerSessionId: "provider-session",
+      credentialId: "provider-session",
       providerInstanceId: ProviderInstanceId.make("codex"),
     },
     client: undefined,

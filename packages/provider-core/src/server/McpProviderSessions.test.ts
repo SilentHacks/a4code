@@ -110,7 +110,7 @@ describe("McpProviderSessions tool results", () => {
       yield* sessions.set({
         environmentId: EnvironmentId.make("env-tool-results"),
         threadId,
-        providerSessionId: "session-2",
+        credentialId: "session-2",
         providerInstanceId: ProviderInstanceId.make("codex"),
         endpoint: "http://127.0.0.1/mcp",
         authorizationHeader: "Bearer token",
@@ -122,7 +122,7 @@ describe("McpProviderSessions tool results", () => {
         "send_to_user",
         { message: "Old" },
         { sentMessage: "Old" },
-        { providerSessionId: "session-1" },
+        { credentialId: "session-1" },
       );
       assert.strictEqual(
         yield* sessions.takeToolResult(threadId, "send_to_user", { message: "Old" }),
@@ -134,7 +134,7 @@ describe("McpProviderSessions tool results", () => {
         "send_to_user",
         { message: "Current" },
         { sentMessage: "Current" },
-        { providerSessionId: "session-2" },
+        { credentialId: "session-2" },
       );
       const turn1Epoch = yield* sessions.toolResultEpoch(threadId);
       yield* sessions.clearToolResults(threadId);
@@ -150,7 +150,7 @@ describe("McpProviderSessions tool results", () => {
         "send_to_user",
         { message: "Late from turn 1" },
         { sentMessage: "Late from turn 1" },
-        { providerSessionId: "session-2", epoch: turn1Epoch },
+        { credentialId: "session-2", epoch: turn1Epoch },
       );
       assert.strictEqual(
         yield* sessions.takeToolResult(threadId, "send_to_user", { message: "Late from turn 1" }),

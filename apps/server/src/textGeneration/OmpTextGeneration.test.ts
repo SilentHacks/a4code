@@ -54,6 +54,7 @@ const reviewInput = Effect.fn("ompReviewInput")(function* () {
   git(["commit", "-qam", "Change"]);
   return {
     cwd,
+    projectCwd: cwd,
     modelSelection: selection,
     number: 42,
     title: "Feature",
@@ -380,6 +381,7 @@ it.layer(Layer.mergeAll(NodeServices.layer, NodeCrypto.layer))("OmpTextGeneratio
       const result = yield* service
         .generateReviewGuide({
           cwd: "/checkout",
+          projectCwd: "/project",
           modelSelection: selection,
           number: 42,
           title: "Feature",

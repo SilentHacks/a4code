@@ -1731,7 +1731,7 @@ it.effect("offers agent feedback tools only while the setting is on, to every cl
         requestNamespace: "agentToken",
         thread: {
           threadId: ThreadId.make("thread-feedback"),
-          providerSessionId: "agentToken",
+          credentialId: "agentToken",
           providerInstanceId: ProviderInstanceId.make("codex"),
         },
         client: undefined,

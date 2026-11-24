@@ -1270,7 +1270,7 @@ const withToolResultCapture = Effect.fn("McpHttpServer.withToolResultCapture")(f
               return output === undefined
                 ? Effect.void
                 : mcpSessions.value.recordToolResult(thread.threadId, toolName, payload, output, {
-                    providerSessionId: thread.providerSessionId,
+                    credentialId: thread.credentialId,
                     epoch,
                   });
             }),

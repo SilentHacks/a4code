@@ -79,7 +79,7 @@ export class McpProviderSessions extends Context.Service<
       input: unknown,
       output: Record<string, unknown>,
       options?: {
-        readonly providerSessionId?: string | undefined;
+        readonly credentialId?: string | undefined;
         readonly epoch?: number | undefined;
       },
     ) => Effect.Effect<void>;
@@ -273,14 +273,11 @@ const make = Effect.gen(function* () {
     }),
     recordToolResult: Effect.fn("McpProviderSessions.recordToolResult")(
       function* (threadId, toolName, input, output, options) {
-        const providerSessionId = options?.providerSessionId;
-        if (providerSessionId !== undefined) {
+        const credentialId = options?.credentialId;
+        if (credentialId !== undefined) {
           const activeSession = (yield* Ref.get(sessions)).get(threadId);
           // A handler finishing after session replacement must not populate the new session.
-          if (
-            activeSession !== undefined &&
-            activeSession.providerSessionId !== providerSessionId
-          ) {
+          if (activeSession !== undefined && activeSession.credentialId !== credentialId) {
             return;
           }
         }
