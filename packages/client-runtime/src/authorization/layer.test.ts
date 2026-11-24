@@ -207,6 +207,9 @@ const makeHarness = Effect.fn("TestRemoteAuthorization.makeHarness")(function* (
     unregisterDevice: unexpected,
     registerLiveActivity: unexpected,
     getAgentActivitySnapshot: unexpected,
+    listPromptStash: () => Effect.die("Unexpected prompt stash request"),
+    savePromptStash: () => Effect.die("Unexpected prompt stash request"),
+    deletePromptStash: () => Effect.die("Unexpected prompt stash request"),
     resetTokenCache: Effect.void,
   });
   const layer = RemoteEnvironmentAuthorization.layer.pipe(

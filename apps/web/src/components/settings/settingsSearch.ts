@@ -469,6 +469,11 @@ export const SETTINGS_SEARCH_ITEMS = [
     to: "/settings/appearance",
   },
   {
+    id: "sync-prompt-stash",
+    title: msg("Sync stashed prompts"),
+    to: "/settings/chat",
+  },
+  {
     id: "project-grouping",
     title: msg("Project grouping"),
     to: "/settings/general",

@@ -12863,5 +12863,14 @@
     ")"
   ],
   "33d18dda74f6d7b3": "Annuler la fusion automatique de la pile",
-  "012c67c7f1a99e33": "Fusion automatique de la pile"
+  "012c67c7f1a99e33": "Fusion automatique de la pile",
+  "23582093d8e9a809": "Chargement des prompts synchronisés…",
+  "83e93ae1498d60c8": "Prompts synchronisés indisponibles",
+  "84e15ff251d91b00": "Impossible d’enregistrer le brouillon. Le prompt synchronisé reste dans la liste.",
+  "f6500211bdc595fe": "La liste synchronisée est pleine",
+  "3b21b285e5c8a8bf": "Ce prompt est trop volumineux pour être synchronisé",
+  "ec380c2437189eae": "Impossible de synchroniser le prompt",
+  "c36dea77e28008d7": "Impossible de supprimer le prompt synchronisé",
+  "8a6be1adc12e3a2f": "Synchroniser les prompts mis de côté",
+  "1422857d8f69d79f": "Enregistre les prompts en texte brut dans votre compte T3 Connect lorsque vous êtes connecté."
 }

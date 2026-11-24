@@ -12870,5 +12870,14 @@
     ")"
   ],
   "33d18dda74f6d7b3": "Avbryt automatisk merge för stacken",
-  "012c67c7f1a99e33": "Merga stacken automatiskt"
+  "012c67c7f1a99e33": "Merga stacken automatiskt",
+  "23582093d8e9a809": "Läser in synkroniserade prompter…",
+  "83e93ae1498d60c8": "Synkroniserade prompter är inte tillgängliga",
+  "84e15ff251d91b00": "Det gick inte att spara utkastet. Den synkroniserade prompten finns kvar i listan.",
+  "f6500211bdc595fe": "Listan över synkroniserade prompter är full",
+  "3b21b285e5c8a8bf": "Prompten är för stor för att synkroniseras",
+  "ec380c2437189eae": "Det gick inte att synkronisera prompten",
+  "c36dea77e28008d7": "Det gick inte att ta bort den synkroniserade prompten",
+  "8a6be1adc12e3a2f": "Synkronisera sparade prompter",
+  "1422857d8f69d79f": "Sparar prompter i klartext i ditt T3 Connect-konto när du är inloggad."
 }

@@ -655,6 +655,7 @@ export class RelayClientPrincipal extends Context.Service<
   {
     readonly userId: string;
     readonly token: string;
+    readonly clerkSession?: boolean;
     readonly proofKeyThumbprint?: string;
     readonly dpopScopes?: ReadonlyArray<RelayDpopAccessTokenScope>;
   }
@@ -1082,6 +1083,49 @@ const RelayMobileGroup = HttpApiGroup.make("mobile")
   .annotate(OpenApi.Description, "Mobile push-notification and Live Activity registration.")
   .middleware(RelayDpopClientAuth);
 
+export const RELAY_PROMPT_STASH_MAX_BYTES = 32_768;
+export const RELAY_PROMPT_STASH_MAX_ENTRIES = 20;
+
+const RelayPromptStashId = Schema.String.check(
+  Schema.isPattern(/^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i),
+);
+const RelayPromptStashText = Schema.String.check(Schema.isMaxLength(RELAY_PROMPT_STASH_MAX_BYTES));
+export const RelayPromptStashEntry = Schema.Struct({
+  id: RelayPromptStashId,
+  prompt: RelayPromptStashText,
+  createdAt: Schema.String,
+});
+export type RelayPromptStashEntry = typeof RelayPromptStashEntry.Type;
+export const RelayPromptStashCreate = Schema.Struct({
+  id: RelayPromptStashId,
+  prompt: RelayPromptStashText,
+});
+export type RelayPromptStashCreate = typeof RelayPromptStashCreate.Type;
+export const RelayPromptStashSaveResult = Schema.Literals(["saved", "full", "invalid"]);
+export type RelayPromptStashSaveResult = typeof RelayPromptStashSaveResult.Type;
+
+const RelayPromptStashGroup = HttpApiGroup.make("promptStash")
+  .add(
+    HttpApiEndpoint.get("listPromptStash", "/v1/client/prompt-stash", {
+      headers: RelayBearerRequestHeaders,
+      success: Schema.Struct({ entries: Schema.Array(RelayPromptStashEntry) }),
+      error: RelayAuthAndInternalErrors,
+    }),
+    HttpApiEndpoint.post("savePromptStash", "/v1/client/prompt-stash", {
+      headers: RelayBearerRequestHeaders,
+      payload: RelayPromptStashCreate,
+      success: Schema.Struct({ result: RelayPromptStashSaveResult }),
+      error: RelayAuthAndInternalErrors,
+    }),
+    HttpApiEndpoint.delete("deletePromptStash", "/v1/client/prompt-stash/:id", {
+      headers: RelayBearerRequestHeaders,
+      params: Schema.Struct({ id: RelayPromptStashId }),
+      success: RelayOkResponse,
+      error: RelayAuthAndInternalErrors,
+    }),
+  )
+  .middleware(RelayClientAuth);
+
 const RelayClientGroup = HttpApiGroup.make("client")
   .add(
     HttpApiEndpoint.get("listEnvironments", "/v1/environments", {
@@ -1328,6 +1372,7 @@ export const RelayApi = HttpApi.make("RelayApi")
     RelayMetadataGroup,
     RelayMobileGroup,
     RelayClientGroup,
+    RelayPromptStashGroup,
     RelayTokenGroup,
     RelayDpopClientGroup,
     RelayServerGroup,

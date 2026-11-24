@@ -27,7 +27,7 @@ const StashEntrySchema = Schema.Struct({
   pendingImageCount: Schema.optionalKey(Schema.Number),
   records: Schema.optionalKey(ForwardCompatibleArray(ComposerContextRecord)),
 });
-export type PromptStashEntry = typeof StashEntrySchema.Type;
+export type PromptStashEntry = typeof StashEntrySchema.Type & { readonly synced?: true };
 
 const PersistedPromptStashState = Schema.Struct({
   entries: Schema.Array(StashEntrySchema),

@@ -18,6 +18,7 @@ import {
   composerFileNeedsReattach,
   composerTargetKey,
   hydrateImagesFromPersisted,
+  verifyPersistedComposerPrompt,
   useComposerDraftStore,
 } from "../../composerDraftStore";
 import { type ComposerPromptEditorHandle } from "../ComposerPromptEditorTiptap";
@@ -70,6 +71,8 @@ import {
 import { BackgroundThreadContext } from "./backgroundThread";
 import { isInSideChatPane } from "../../lib/sideChatPane";
 import { useStableCallback } from "../../hooks/useStableCallback";
+import { useClientSettings } from "../../hooks/useSettings";
+import { useSyncedPromptStash } from "./useSyncedPromptStash";
 
 /**
  * The prompt stash: saving the draft aside, restoring or deleting an entry, the badge pulse,
@@ -157,7 +160,11 @@ export function useComposerStash(input: {
   const [stashPulseKey, setStashPulseKey] = useState(0);
   const stashInFlightRef = useRef<Set<string>>(new Set());
 
-  const stashQueue = usePromptStashStore((state) => state.entries);
+  const localEntries = usePromptStashStore((state) => state.entries);
+  const syncPromptStash = useClientSettings((settings) => settings.syncPromptStash);
+  const cloud = useSyncedPromptStash(isStashMenuOpen);
+  const stashQueue = [...cloud.entries, ...localEntries];
+  const cloudInFlight = useRef(new Set<string>());
   const stashEntryToQueue = usePromptStashStore((state) => state.stashEntry);
   const takeStashEntry = usePromptStashStore((state) => state.takeEntry);
   const finalizeStashEntryImages = usePromptStashStore((state) => state.finalizeEntryImages);
@@ -183,7 +190,55 @@ export function useComposerStash(input: {
     return false;
   });
 
+  const hasPendingAnswer = useStableCallback(
+    () => pendingUserInputs.length > 0 || activePendingProgress !== null,
+  );
+
   const restoreStashEntry = async (menuEntry: PromptStashEntry) => {
+    if (menuEntry.synced) {
+      if (cloudInFlight.current.has(menuEntry.id)) return;
+      cloudInFlight.current.add(menuEntry.id);
+      const restore = async () => {
+        const entries = await cloud.load();
+        const entry = entries?.find((candidate) => candidate.id === menuEntry.id);
+        if (hasPendingAnswer()) {
+          toastManager.add({
+            type: "info",
+            title: m(msg("Restore this prompt after the agent's question is answered.")),
+          });
+          return;
+        }
+        if (
+          !entry ||
+          !cloud.isCurrent() ||
+          isRevertingCheckpoint() ||
+          !isComposerDraftTargetOpen(composerTargetKey(composerDraftTarget))
+        )
+          return;
+        const current = promptRef.current;
+        const next = current.trim()
+          ? `${current.trimEnd()}
+
+${entry.prompt}`
+          : entry.prompt;
+        promptRef.current = next;
+        setComposerDraftPrompt(composerDraftTarget, next);
+        setComposerCursor(collapseExpandedComposerCursor(next, next.length));
+        setComposerTrigger(null);
+        setIsStashMenuOpen(false);
+        window.requestAnimationFrame(() => composerEditorRef.current?.focusAtEnd());
+        if (!verifyPersistedComposerPrompt(composerDraftTarget, next)) {
+          toastManager.add({
+            type: "warning",
+            title: m(msg("Draft could not be saved. The synced prompt is still in the stash.")),
+          });
+          return;
+        }
+        await cloud.remove(menuEntry.id);
+      };
+      await restore().finally(() => cloudInFlight.current.delete(menuEntry.id));
+      return;
+    }
     const filesToVerify = menuEntry.files ?? [];
     if (filesToVerify.some((file) => file.environmentId !== environmentId)) {
       toastManager.add({
@@ -478,6 +533,10 @@ export function useComposerStash(input: {
   const restoreStashEntryStable = useStableCallback(restoreStashEntry);
 
   const deleteStashEntry = (entry: PromptStashEntry) => {
+    if (entry.synced) {
+      if (!cloudInFlight.current.has(entry.id)) void cloud.remove(entry.id);
+      return;
+    }
     const { entry: removed, durable } = takeStashEntry(entry.id);
     if (!stashQueue.some((candidate) => candidate.id !== entry.id)) {
       setIsStashMenuOpen(false);
@@ -515,7 +574,9 @@ export function useComposerStash(input: {
       });
       return;
     }
-    const replyTo = getComposerDraft(composerDraftTarget)?.replyTo;
+    const draftSnapshot = getComposerDraft(composerDraftTarget);
+    const originalPrompt = promptRef.current;
+    const replyTo = draftSnapshot?.replyTo;
     const trimmedPrompt = promptRef.current.trim();
     // A trailing chip only parses with whitespace after it, so keep one space to restore it.
     const endsWithChip =
@@ -542,7 +603,7 @@ export function useComposerStash(input: {
     if (prompt.length === 0 && images.length === 0 && files.length === 0) {
       const entries = usePromptStashStore.getState().entries;
       const entry = entries.length === 1 ? entries[0] : undefined;
-      if (entry && !entry.pendingImageCount) {
+      if (!cloud.available && entry && !entry.pendingImageCount) {
         await restoreStashEntry(entry);
       } else {
         setIsStashMenuOpen((open) => !open);
@@ -599,6 +660,35 @@ export function useComposerStash(input: {
     const stashTarget = composerDraftTarget;
     const entryId = randomUUID();
     const stashAndEncode = async () => {
+      if (
+        syncPromptStash &&
+        cloud.available &&
+        prompt &&
+        images.length === 0 &&
+        files.length === 0 &&
+        stashedRecords.length === 0 &&
+        collectComposerPromptInlineTokens(originalPrompt).length === 0
+      ) {
+        const saved = await cloud.save({ id: entryId, prompt: originalPrompt });
+        if (
+          saved &&
+          cloud.isCurrent() &&
+          !hasPendingAnswer() &&
+          !isRevertingCheckpoint() &&
+          isComposerDraftTargetOpen(composerTargetKey(stashTarget)) &&
+          promptRef.current === originalPrompt &&
+          getComposerDraft(stashTarget) === draftSnapshot &&
+          !pendingDraftWork.has(attachmentTargetKey) &&
+          countPreparingComposerImages(attachmentTargetKey) === 0
+        ) {
+          promptRef.current = "";
+          setComposerDraftPrompt(stashTarget, "");
+          setComposerCursor(0);
+          setComposerTrigger(null);
+          pulseStashBadge();
+        }
+        return;
+      }
       // Ordering matters in both directions: writing before clearing means a
       // crash or closed tab mid-encode still leaves the prompt recoverable,
       // while clearing before the async image work means edits typed during
@@ -808,6 +898,8 @@ export function useComposerStash(input: {
 
   return {
     stashQueue,
+    cloudStashAvailable: cloud.available,
+    cloudStashStatus: cloud.status,
     isStashMenuOpen,
     setIsStashMenuOpen,
     stashPulseKey,

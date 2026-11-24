@@ -12872,5 +12872,14 @@
     ")"
   ],
   "33d18dda74f6d7b3": "Cancel stack auto-merge",
-  "012c67c7f1a99e33": "Auto-merge stack"
+  "012c67c7f1a99e33": "Auto-merge stack",
+  "23582093d8e9a809": "Loading synced prompts…",
+  "83e93ae1498d60c8": "Synced prompts unavailable",
+  "84e15ff251d91b00": "Draft could not be saved. The synced prompt is still in the stash.",
+  "f6500211bdc595fe": "Synced stash is full",
+  "3b21b285e5c8a8bf": "This prompt is too large to sync",
+  "ec380c2437189eae": "Could not sync prompt",
+  "c36dea77e28008d7": "Could not remove synced prompt",
+  "8a6be1adc12e3a2f": "Sync stashed prompts",
+  "1422857d8f69d79f": "Save plain-text stashes to your T3 Connect account when signed in."
 }

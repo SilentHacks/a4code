@@ -2612,6 +2612,8 @@ export const ChatComposer = memo(function ChatComposer(props: ChatComposerProps)
 
   const {
     stashQueue,
+    cloudStashAvailable,
+    cloudStashStatus,
     isStashMenuOpen,
     setIsStashMenuOpen,
     stashPulseKey,
@@ -2638,7 +2640,8 @@ export const ChatComposer = memo(function ChatComposer(props: ChatComposerProps)
     composerReviewComments,
     composerThreadContexts,
     attachmentTargetKey,
-    isComposerDraftTargetOpen: (key) => composerDraftTargetKeyRef.current === key,
+    isComposerDraftTargetOpen: (key) =>
+      composerMountedRef.current && composerDraftTargetKeyRef.current === key,
     composerEditorRef,
     isRevertingCheckpoint: () => isRevertingCheckpointRef.current,
     pendingThreadImportsRef,
@@ -3723,6 +3726,7 @@ export const ChatComposer = memo(function ChatComposer(props: ChatComposerProps)
         </ComposerBanner.Column>
         <ComposerStashBadge
           count={stashQueue.length}
+          available={cloudStashAvailable}
           menuOpen={isStashMenuOpen}
           pulseKey={stashPulseKey}
           onToggleMenu={toggleStashMenuStable}
@@ -3852,6 +3856,7 @@ export const ChatComposer = memo(function ChatComposer(props: ChatComposerProps)
                   <ComposerStashMenu
                     composerFormRef={composerFormRef}
                     entries={stashQueue}
+                    cloudStatus={cloudStashStatus}
                     stashShortcutLabel={shortcutLabelForCommand(keybindings, "composer.stash", {
                       context: {
                         terminalFocus: false,

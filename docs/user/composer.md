@@ -209,8 +209,14 @@ memory. The action is available only when the provider supports rewind.
 
 On web and desktop, press `Cmd+S` on macOS or `Ctrl+S` on Windows and Linux to save
 the current prompt and its attachments for later. Wait for uploads to finish first.
-With an empty composer, the same shortcut restores a single stash or opens the
-stash menu when there are several.
+With an empty composer, the same shortcut opens the stash. If you are signed
+out and have a single stash, it restores that prompt directly.
+
+To save plain-text stashes to your T3 Connect account, sign in and turn on **Sync
+stashed prompts** in **Settings → Chat → Composer**. Use the same shortcut to
+stash, then open the stash on another device signed in to the same account.
+Sync needs an internet connection. Prompts with attachments or composer
+context are saved on the current device.
 
 Stashes containing uploaded files must be restored in their original environment.
 Those files are retained for 24 hours. After an upload expires, restore the prompt

@@ -12858,5 +12858,14 @@
     ")"
   ],
   "33d18dda74f6d7b3": "Cancelar la fusión automática de la pila",
-  "012c67c7f1a99e33": "Fusión automática de la pila"
+  "012c67c7f1a99e33": "Fusión automática de la pila",
+  "23582093d8e9a809": "Cargando prompts sincronizados…",
+  "83e93ae1498d60c8": "Prompts sincronizados no disponibles",
+  "84e15ff251d91b00": "No se pudo guardar el borrador. El prompt sincronizado sigue en la lista.",
+  "f6500211bdc595fe": "La lista sincronizada está llena",
+  "3b21b285e5c8a8bf": "Este prompt es demasiado grande para sincronizarlo",
+  "ec380c2437189eae": "No se pudo sincronizar el prompt",
+  "c36dea77e28008d7": "No se pudo eliminar el prompt sincronizado",
+  "8a6be1adc12e3a2f": "Sincronizar prompts guardados",
+  "1422857d8f69d79f": "Guarda los prompts de texto sin formato en tu cuenta de T3 Connect cuando hayas iniciado sesión."
 }

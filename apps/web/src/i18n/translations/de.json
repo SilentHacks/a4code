@@ -12863,5 +12863,14 @@
     ")"
   ],
   "33d18dda74f6d7b3": "Auto-Merge für Stack abbrechen",
-  "012c67c7f1a99e33": "Auto-Merge für Stack"
+  "012c67c7f1a99e33": "Auto-Merge für Stack",
+  "23582093d8e9a809": "Synchronisierte Prompts werden geladen…",
+  "83e93ae1498d60c8": "Synchronisierte Prompts sind nicht verfügbar",
+  "84e15ff251d91b00": "Der Entwurf konnte nicht gespeichert werden. Der synchronisierte Prompt bleibt in der Ablage.",
+  "f6500211bdc595fe": "Die synchronisierte Ablage ist voll",
+  "3b21b285e5c8a8bf": "Dieser Prompt ist zu groß für die Synchronisierung",
+  "ec380c2437189eae": "Prompt konnte nicht synchronisiert werden",
+  "c36dea77e28008d7": "Synchronisierter Prompt konnte nicht entfernt werden",
+  "8a6be1adc12e3a2f": "Abgelegte Prompts synchronisieren",
+  "1422857d8f69d79f": "Speichert abgelegte Klartext-Prompts in deinem T3 Connect-Konto, wenn du angemeldet bist."
 }

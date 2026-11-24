@@ -124,6 +124,9 @@ const makeHarness = Effect.fn("RelayDiscoveryTest.makeHarness")(function* () {
     unregisterDevice: () => Effect.die("unused"),
     registerLiveActivity: () => Effect.die("unused"),
     getAgentActivitySnapshot: () => Effect.die("unused"),
+    listPromptStash: () => Effect.die("Unexpected prompt stash request"),
+    savePromptStash: () => Effect.die("Unexpected prompt stash request"),
+    deletePromptStash: () => Effect.die("Unexpected prompt stash request"),
     resetTokenCache: Effect.void,
   } satisfies ManagedRelay.ManagedRelayClient["Service"]);
   const connectivity = Connectivity.Connectivity.of({
@@ -376,6 +379,9 @@ describe("RelayEnvironmentDiscovery", () => {
         unregisterDevice: () => Effect.die("unused"),
         registerLiveActivity: () => Effect.die("unused"),
         getAgentActivitySnapshot: () => Effect.die("unused"),
+        listPromptStash: () => Effect.die("Unexpected prompt stash request"),
+        savePromptStash: () => Effect.die("Unexpected prompt stash request"),
+        deletePromptStash: () => Effect.die("Unexpected prompt stash request"),
         resetTokenCache: Effect.void,
       } satisfies ManagedRelay.ManagedRelayClient["Service"]);
       const layer = RelayEnvironmentDiscovery.layer.pipe(

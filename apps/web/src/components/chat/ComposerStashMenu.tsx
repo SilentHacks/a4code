@@ -61,13 +61,22 @@ export function stashEntrySnippet(entry: PromptStashEntry, resolve: MessageResol
 /** Window capture gives the open menu priority over composer key handlers. */
 export const ComposerStashMenu = memo(function ComposerStashMenu(props: {
   entries: ReadonlyArray<PromptStashEntry>;
+  cloudStatus?: "loading" | "unavailable" | undefined;
   stashShortcutLabel: string | null;
   composerFormRef: RefObject<HTMLFormElement | null>;
   onRestore: (entry: PromptStashEntry) => void;
   onDelete: (entry: PromptStashEntry) => void;
   onClose: () => void;
 }) {
-  const { entries, stashShortcutLabel, composerFormRef, onRestore, onDelete, onClose } = props;
+  const {
+    entries,
+    cloudStatus,
+    stashShortcutLabel,
+    composerFormRef,
+    onRestore,
+    onDelete,
+    onClose,
+  } = props;
   const gt = useGT();
   const m = useMessages();
   const [highlightedId, setHighlightedId] = useState<string | null>(entries[0]?.id ?? null);
@@ -182,22 +191,34 @@ export const ComposerStashMenu = memo(function ComposerStashMenu(props: {
       </ComposerBanner.Row>
       <ComposerBanner.Scroll className="flex flex-col">
         <ComposerBanner.Children render={<ul role="list" />} aria-label={gt("Stashed prompts")}>
-          {entries.length === 0 ? (
+          {cloudStatus && (
             <ComposerBanner.Row render={<li />}>
               <ComposerBanner.Icon />
-              <ComposerBanner.Content className="text-muted-foreground">
-                <T>Nothing stashed yet.</T>
-                {stashShortcutLabel ? (
-                  <>
-                    {" "}
-                    <T>
-                      Press <Var>{stashShortcutLabel}</Var> with a prompt in the composer to stash
-                      it.
-                    </T>
-                  </>
-                ) : null}
+              <ComposerBanner.Content>
+                {cloudStatus === "loading"
+                  ? gt("Loading synced prompts…")
+                  : gt("Synced prompts unavailable")}
               </ComposerBanner.Content>
             </ComposerBanner.Row>
+          )}
+          {entries.length === 0 ? (
+            cloudStatus ? null : (
+              <ComposerBanner.Row render={<li />}>
+                <ComposerBanner.Icon />
+                <ComposerBanner.Content className="text-muted-foreground">
+                  <T>Nothing stashed yet.</T>
+                  {stashShortcutLabel ? (
+                    <>
+                      {" "}
+                      <T>
+                        Press <Var>{stashShortcutLabel}</Var> with a prompt in the composer to stash
+                        it.
+                      </T>
+                    </>
+                  ) : null}
+                </ComposerBanner.Content>
+              </ComposerBanner.Row>
+            )
           ) : (
             entries.map((entry) => (
               <ComposerBanner.Row

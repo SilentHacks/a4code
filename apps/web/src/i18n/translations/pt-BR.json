@@ -12863,5 +12863,14 @@
     ")"
   ],
   "33d18dda74f6d7b3": "Cancelar merge automático da pilha",
-  "012c67c7f1a99e33": "Merge automático da pilha"
+  "012c67c7f1a99e33": "Merge automático da pilha",
+  "23582093d8e9a809": "Carregando prompts sincronizados…",
+  "83e93ae1498d60c8": "Prompts sincronizados indisponíveis",
+  "84e15ff251d91b00": "Não foi possível salvar o rascunho. O prompt sincronizado continua na lista.",
+  "f6500211bdc595fe": "A lista sincronizada está cheia",
+  "3b21b285e5c8a8bf": "Este prompt é grande demais para sincronizar",
+  "ec380c2437189eae": "Não foi possível sincronizar o prompt",
+  "c36dea77e28008d7": "Não foi possível remover o prompt sincronizado",
+  "8a6be1adc12e3a2f": "Sincronizar prompts guardados",
+  "1422857d8f69d79f": "Salva prompts de texto simples na sua conta T3 Connect quando você está conectado."
 }
