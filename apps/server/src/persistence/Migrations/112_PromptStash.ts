@@ -8,7 +8,9 @@ export default Effect.gen(function* () {
     CREATE TABLE prompt_stash (
       position INTEGER PRIMARY KEY,
       id TEXT NOT NULL UNIQUE,
-      entry_json TEXT NOT NULL
+      entry_json TEXT NOT NULL,
+      claim_id TEXT,
+      claim_expires_at INTEGER
     )
   `;
 });

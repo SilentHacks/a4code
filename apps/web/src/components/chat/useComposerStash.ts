@@ -7,10 +7,12 @@ import {
   type EnvironmentId,
   PROVIDER_SEND_TURN_MAX_ATTACHMENTS,
   type PreviewAnnotationPayload,
+  type PromptStashTakeInput,
   type ThreadContextRecord,
 } from "@t3tools/contracts";
 import {
   type ComposerFileAttachment,
+  type ComposerImageAttachment,
   type ComposerThreadDraftState,
   type PersistedComposerFileAttachment,
   type PersistedComposerImageAttachment,
@@ -18,6 +20,7 @@ import {
   composerFileMatchesReattachMarker,
   composerFileNeedsReattach,
   composerTargetKey,
+  flushAndVerifyRestoredComposerDraft,
   hydrateImagesFromPersisted,
   useComposerDraftStore,
 } from "../../composerDraftStore";
@@ -56,7 +59,6 @@ import { randomUUID } from "~/lib/utils";
 import {
   readAttachmentUpload,
   releaseAttachmentUpload,
-  releasePersistedAttachmentUpload,
   verifyStashedAttachmentUpload,
 } from "../../lib/attachmentUploadQueue";
 import { remainingComposerAttachmentSlots } from "./composerThreadImport";
@@ -88,33 +90,9 @@ export interface ComposerStashRow {
   readonly environmentLabel?: string;
 }
 
-function releaseStashFiles(entry: PromptStashEntry) {
-  if (!entry.files?.length) return;
-  const drafts = Object.values(useComposerDraftStore.getState().draftsByThreadKey);
-  for (const file of entry.files) {
-    // An edit before the save acknowledgement may have kept this upload in the draft.
-    if (
-      drafts.some((draft) =>
-        draft.files.some(
-          (attached) =>
-            attached.uploadEnvironmentId === file.environmentId &&
-            attached.uploadedAttachmentId === file.attachmentId,
-        ),
-      )
-    ) {
-      continue;
-    }
-    releasePersistedAttachmentUpload({
-      id: file.id,
-      environmentId: file.environmentId,
-      attachmentId: file.attachmentId,
-    });
-  }
-}
-
-function reportEvicted(entry: PromptStashEntry | null, durable: boolean) {
+// Stashes may share pending uploads with another stash or draft. Server expiry reclaims them.
+function reportEvicted(entry: PromptStashEntry | null) {
   if (!entry) return;
-  if (durable) releaseStashFiles(entry);
   toastManager.add({
     type: "warning",
     title: m(msg("Oldest stashed prompt discarded")),
@@ -298,45 +276,27 @@ export function useComposerStash(input: {
       isComposerDraftTargetOpen(expectedTargetKey),
   );
 
-  const takeRemoteEntry = async (
-    id: string,
-    owner: EnvironmentId,
-    action: "restore" | "delete",
-  ) => {
-    const unavailable = () =>
-      toastManager.add({
-        type: "error",
-        title:
-          action === "restore"
-            ? m(msg("Could not restore this stashed prompt"))
-            : m(msg("Could not delete this stashed prompt")),
-      });
-    if (!registry.get(promptStashTakeAvailableAtom(owner))) {
-      unavailable();
-      return null;
-    }
-    const result = await takeRemote({ environmentId: owner, input: { id } });
-    if (result._tag === "Success") return result.value.entry;
-    unavailable();
-    return null;
-  };
-
-  const preserveTakenEntry = async (entry: PromptStashEntry, owner: EnvironmentId) => {
-    if (registry.get(promptStashSaveAvailableAtom(owner))) {
-      const result = await saveRemote({ environmentId: owner, input: { entry } });
-      if (result._tag === "Success") {
-        reportEvicted(result.value.evicted, true);
-        return;
-      }
-    }
-    const { evicted, durable } = stashEntryToQueue(entry, { recover: true });
-    reportEvicted(evicted, durable);
+  const restoreFailed = (description?: string) =>
     toastManager.add({
-      type: durable ? "info" : "warning",
-      title: durable
-        ? m(msg("Prompt was kept in this device's stash"))
-        : m(msg("Prompt was kept in the stash for this session only")),
+      type: "error",
+      title: m(msg("Could not restore this stashed prompt")),
+      ...(description ? { description } : {}),
     });
+
+  const takeRemoteEntry = async (owner: EnvironmentId, input: PromptStashTakeInput) => {
+    const result = registry.get(promptStashTakeAvailableAtom(owner))
+      ? await takeRemote({ environmentId: owner, input })
+      : null;
+    if (input._tag === "release") return null;
+    if (result?._tag === "Success" && (result.value.entry || input._tag === "delete")) {
+      return result.value.entry;
+    }
+    if (input._tag === "claim") {
+      restoreFailed();
+    } else {
+      toastManager.add({ type: "error", title: m(msg("Could not delete this stashed prompt")) });
+    }
+    return null;
   };
 
   const hasWrongFileEnvironment = (entry: PromptStashEntry) => {
@@ -349,81 +309,13 @@ export function useComposerStash(input: {
     return true;
   };
 
-  const restoreStashRow = async ({ entry: menuEntry, environmentId: owner }: ComposerStashRow) => {
-    if (hasWrongFileEnvironment(menuEntry) || refuseMachinesInAnswer(menuEntry)) return;
-    setIsStashMenuOpen(false);
-    const filesToVerify = menuEntry.files ?? [];
-    const targetKey = composerTargetKey(composerDraftTarget);
-
-    // An expired upload restores as a needs-reattach row instead of a reference
-    // the next send would fail to verify. Verify BEFORE taking: the take
-    // removes the entry from durable storage, and a tab closed during this
-    // await must still find it there after reload.
-    const verificationFailed = () =>
-      toastManager.add({ type: "error", title: m(msg("Could not verify stashed files")) });
-    const verifications = await Promise.all(
-      filesToVerify.map((file) =>
-        verifyStashedAttachmentUpload({ environmentId, attachmentId: file.attachmentId }),
-      ),
-    );
-    const expiredAttachmentIds = new Set(
-      filesToVerify
-        .filter((_, index) => verifications[index]?.status === "missing")
-        .map((file) => file.attachmentId),
-    );
-
-    // A thread switch during the verify await would mix the new thread's
-    // prompt with this invocation's captured target. Nothing was taken yet,
-    // so abort and leave the entry restorable where the user now is.
-    if (!isCurrentDraft(environmentId, targetKey) || refuseMachinesInAnswer(menuEntry)) {
-      return;
-    }
-
-    let entry: PromptStashEntry | null;
-    let durable = true;
-    if (owner === null) {
-      ({ entry, durable } = takeStashEntry(menuEntry.id));
-      if (!entry) return;
-    } else {
-      if (verifications.some(({ status }) => status === "failed")) {
-        verificationFailed();
-        return;
-      }
-      entry = await takeRemoteEntry(menuEntry.id, owner, "restore");
-      if (!entry) return;
-      if (
-        !isCurrentDraft(environmentId, targetKey) ||
-        hasWrongFileEnvironment(entry) ||
-        refuseMachinesInAnswer(entry)
-      ) {
-        await preserveTakenEntry(entry, owner);
-        return;
-      }
-      // The atomic take returns the authoritative payload, not the drawer's snapshot.
-      const checkedIds = new Set(filesToVerify.map((file) => file.attachmentId));
-      const uncheckedFiles = entry.files?.filter((file) => !checkedIds.has(file.attachmentId));
-      if (uncheckedFiles?.length) {
-        const verifications = await Promise.all(
-          uncheckedFiles.map((file) =>
-            verifyStashedAttachmentUpload({ environmentId, attachmentId: file.attachmentId }),
-          ),
-        );
-        uncheckedFiles.forEach((file, index) => {
-          if (verifications[index]?.status === "missing") {
-            expiredAttachmentIds.add(file.attachmentId);
-          }
-        });
-        if (verifications.some(({ status }) => status === "failed")) {
-          verificationFailed();
-          await preserveTakenEntry(entry, owner);
-          return;
-        }
-        if (!isCurrentDraft(environmentId, targetKey) || refuseMachinesInAnswer(entry)) {
-          await preserveTakenEntry(entry, owner);
-          return;
-        }
-      }
-    }
+  const applyStashEntry = (
+    entry: PromptStashEntry,
+    owner: EnvironmentId | null,
+    targetKey: string,
+    expiredAttachmentIds: ReadonlySet<string>,
+    durable: boolean,
+  ) => {
     if (!durable) {
       toastManager.add({
         type: "warning",
@@ -483,15 +375,9 @@ export function useComposerStash(input: {
     if (stashedFiles.length > 0) {
       const composerFilesNow = readAttachmentDraft().files;
       const existingFileIds = new Set(composerFilesNow.map((file) => file.id));
-      const retainedUploadIds = new Set(
-        composerFilesNow.flatMap((file) =>
-          file.uploadedAttachmentId ? [file.uploadedAttachmentId] : [],
-        ),
-      );
       const existingFileKeys = new Set(composerFilesNow.map(composerFileDedupKey));
       const reattachMarkers = composerFilesNow.filter(composerFileNeedsReattach);
       const restoredMarkerIds = new Set<string>();
-      const duplicateFiles: PersistedComposerFileAttachment[] = [];
       const markerReplacements: ComposerFileAttachment[] = [];
       const appendedFiles: ComposerFileAttachment[] = [];
       for (const file of stashedFiles) {
@@ -509,12 +395,7 @@ export function useComposerStash(input: {
             ? {}
             : { uploadedAttachmentId: file.attachmentId, uploadEnvironmentId: environmentId }),
         };
-        if (existingFileIds.has(file.id)) {
-          if (!expired && !retainedUploadIds.has(file.attachmentId)) {
-            duplicateFiles.push(file);
-          }
-          continue;
-        }
+        if (existingFileIds.has(file.id)) continue;
         const reattachMarker = reattachMarkers.find(
           (marker) =>
             !restoredMarkerIds.has(marker.id) && composerFileMatchesReattachMarker(marker, file),
@@ -526,24 +407,14 @@ export function useComposerStash(input: {
           if (expired) {
             expiredFileNames.push(file.name);
           } else {
-            retainedUploadIds.add(file.attachmentId);
             markerReplacements.push(restored);
           }
           continue;
         }
-        if (existingFileKeys.has(key)) {
-          if (!expired && !retainedUploadIds.has(file.attachmentId)) {
-            duplicateFiles.push(file);
-          }
-          continue;
-        }
+        if (existingFileKeys.has(key)) continue;
         existingFileIds.add(file.id);
         existingFileKeys.add(key);
-        if (expired) {
-          expiredFileNames.push(file.name);
-        } else {
-          retainedUploadIds.add(file.attachmentId);
-        }
+        if (expired) expiredFileNames.push(file.name);
         appendedFiles.push(restored);
       }
       const capacity = remainingComposerAttachmentSlots(
@@ -553,26 +424,6 @@ export function useComposerStash(input: {
       const filesToAppend = appendedFiles.slice(0, capacity);
       const skippedFiles = appendedFiles.slice(capacity);
       unrestoredFileNames = skippedFiles.map((file) => file.name);
-      // A non-durable take can resurrect the stash entry after a reload;
-      // deleting these uploads would leave it pointing at nothing.
-      if (durable) {
-        for (const file of duplicateFiles) {
-          releasePersistedAttachmentUpload({
-            id: file.id,
-            environmentId,
-            attachmentId: file.attachmentId,
-          });
-        }
-        for (const file of skippedFiles) {
-          if (file.uploadedAttachmentId) {
-            releasePersistedAttachmentUpload({
-              id: file.id,
-              environmentId,
-              attachmentId: file.uploadedAttachmentId,
-            });
-          }
-        }
-      }
       const restoredFiles = [...markerReplacements, ...filesToAppend];
       if (restoredFiles.length > 0) {
         addComposerDraftFiles(composerDraftTarget, restoredFiles, { appendReference: true });
@@ -590,6 +441,7 @@ export function useComposerStash(input: {
     }
 
     let unrestoredImageNames: string[] = [];
+    let addedImages: ComposerImageAttachment[] = [];
     if (entry.attachments.length > 0) {
       const attachmentDraft = readAttachmentDraft();
       const existingIds = new Set(attachmentDraft.images.map((image) => image.id));
@@ -608,7 +460,8 @@ export function useComposerStash(input: {
       unrestoredImageNames = pending.slice(capacity).map((image) => image.name);
       const restoredImages = pending.slice(0, capacity);
       if (restoredImages.length > 0) {
-        addComposerDraftImages(composerDraftTarget, restoredImages);
+        const addedIds = new Set(addComposerDraftImages(composerDraftTarget, restoredImages));
+        addedImages = restoredImages.filter((image) => addedIds.has(image.id));
       }
     }
 
@@ -674,7 +527,111 @@ export function useComposerStash(input: {
         if (isCurrentDraft(environmentId, targetKey)) composerEditorRef.current?.focusAtEnd();
       });
     }
+    return addedImages;
   };
+
+  const restoreStashRow = async ({ entry: menuEntry, environmentId: owner }: ComposerStashRow) => {
+    const targetKey = composerTargetKey(composerDraftTarget);
+    const canRestoreRemote = (entry: PromptStashEntry) => {
+      if (!isCurrentDraft(environmentId, targetKey) || hasWrongFileEnvironment(entry)) return false;
+      if (!hasPendingAnswer()) return true;
+      restoreFailed(m(msg("Restore this prompt after the agent's question is answered.")));
+      return false;
+    };
+    if (
+      owner === null
+        ? hasWrongFileEnvironment(menuEntry) || refuseMachinesInAnswer(menuEntry)
+        : !canRestoreRemote(menuEntry)
+    ) {
+      return;
+    }
+    setIsStashMenuOpen(false);
+
+    const expiredAttachmentIds = new Set<string>();
+    const verifyFiles = async (files: ReadonlyArray<PersistedComposerFileAttachment>) => {
+      const verifications = await Promise.all(
+        files.map((file) =>
+          verifyStashedAttachmentUpload({ environmentId, attachmentId: file.attachmentId }),
+        ),
+      ).catch(() => null);
+      if (
+        !verifications ||
+        (owner !== null && verifications.some(({ status }) => status === "failed"))
+      ) {
+        toastManager.add({ type: "error", title: m(msg("Could not verify stashed files")) });
+        return false;
+      }
+      // A missing upload restores as a needs-reattach row.
+      files.forEach((file, index) => {
+        if (verifications[index]?.status === "missing") expiredAttachmentIds.add(file.attachmentId);
+      });
+      return true;
+    };
+    const filesToVerify = menuEntry.files ?? [];
+    if (filesToVerify.length > 0) {
+      if (!(await verifyFiles(filesToVerify))) return;
+      if (owner !== null && !canRestoreRemote(menuEntry)) return;
+    }
+
+    if (owner === null) {
+      if (!isCurrentDraft(environmentId, targetKey) || refuseMachinesInAnswer(menuEntry)) return;
+      const { entry, durable } = takeStashEntry(menuEntry.id);
+      if (entry) applyStashEntry(entry, owner, targetKey, expiredAttachmentIds, durable);
+      return;
+    }
+
+    const claim = { id: menuEntry.id, claimId: randomUUID() };
+    const entry = await takeRemoteEntry(owner, { ...claim, _tag: "claim" });
+    const restoreClaimed = async (entry: PromptStashEntry) => {
+      if (!canRestoreRemote(entry)) return false;
+      // The claim returns the authoritative payload, not the drawer's snapshot.
+      const checkedIds = new Set(filesToVerify.map((file) => file.attachmentId));
+      const uncheckedFiles = entry.files?.filter((file) => !checkedIds.has(file.attachmentId));
+      if (
+        uncheckedFiles?.length &&
+        (!(await verifyFiles(uncheckedFiles)) || !canRestoreRemote(entry))
+      ) {
+        return false;
+      }
+      const restoredImages = applyStashEntry(entry, owner, targetKey, expiredAttachmentIds, true);
+      const restoredDraft = getComposerDraft(composerDraftTarget);
+      if (restoredImages.length > 0) {
+        await useComposerDraftStore
+          .getState()
+          .appendPersistedAttachments(composerDraftTarget, restoredImages, entry.attachments);
+        if (!canRestoreRemote(entry)) return false;
+      }
+      if (restoredDraft && restoredDraft.prompt !== promptRef.current) {
+        restoreFailed();
+        return false;
+      }
+      if (
+        !restoredDraft ||
+        !flushAndVerifyRestoredComposerDraft(composerDraftTarget, restoredDraft, restoredImages)
+      ) {
+        restoreFailed(
+          m(
+            msg(
+              "Browser storage could not save the restored draft. The prompt is still in the stash.",
+            ),
+          ),
+        );
+        return false;
+      }
+      return (await takeRemoteEntry(owner, { ...claim, _tag: "complete" })) !== null;
+    };
+    if (
+      !entry ||
+      !(await restoreClaimed(entry).catch(() => {
+        restoreFailed();
+        return false;
+      }))
+    ) {
+      // Also try release after a lost claim response, using the same token.
+      await takeRemoteEntry(owner, { ...claim, _tag: "release" });
+    }
+  };
+
   const restoreStashEntry = async (row: ComposerStashRow) => {
     const inFlight = takeInFlight.current;
     if (inFlight.has(row.key)) return;
@@ -688,14 +645,12 @@ export function useComposerStash(input: {
     if (inFlight.has(row.key)) return;
     if (row.environmentId !== null) {
       inFlight.add(row.key);
-      const removed = await takeRemoteEntry(row.entry.id, row.environmentId, "delete").finally(() =>
+      await takeRemoteEntry(row.environmentId, { _tag: "delete", id: row.entry.id }).finally(() =>
         inFlight.delete(row.key),
       );
-      if (removed) releaseStashFiles(removed);
       return;
     }
-    const { entry: removed, durable } = takeStashEntry(row.entry.id);
-    if (durable && removed) releaseStashFiles(removed);
+    const { durable } = takeStashEntry(row.entry.id);
     if (!durable) {
       toastManager.add({
         type: "warning",
@@ -878,7 +833,7 @@ export function useComposerStash(input: {
             clearDraft();
           }
           pulseStashBadge();
-          reportEvicted(saved.value.evicted, true);
+          reportEvicted(saved.value.evicted);
           return;
         }
       }
@@ -930,7 +885,7 @@ export function useComposerStash(input: {
 
       clearDraft();
       pulseStashBadge();
-      reportEvicted(evicted, durable);
+      reportEvicted(evicted);
 
       const encoded = remoteImages ?? (await encodeStashImages(images));
       const { attached, durable: imagesDurable } = finalizeStashEntryImages(entryId, encoded);

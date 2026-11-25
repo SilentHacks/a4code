@@ -2422,8 +2422,8 @@ export const layerWsRpc = (
           promptStash.subscribe().pipe(Stream.mapError(toPromptStashRpcError)),
         [WS_METHODS.promptStashSave]: ({ entry }) =>
           promptStash.save(entry).pipe(Effect.mapError(toPromptStashRpcError)),
-        [WS_METHODS.promptStashTake]: ({ id }) =>
-          promptStash.take(id).pipe(Effect.mapError(toPromptStashRpcError)),
+        [WS_METHODS.promptStashTake]: (input) =>
+          promptStash.take(input).pipe(Effect.mapError(toPromptStashRpcError)),
         [WS_METHODS.scheduledTasksSubscribe]: (_input) =>
           scheduledTasks.subscribeList().pipe(Stream.map(withVisibleWebhookUrls)),
         [WS_METHODS.scheduledTasksUpsert]: (input) => scheduledTasks.upsert(input),

@@ -1,11 +1,21 @@
 import { RegistryContext } from "@effect/atom-react";
-import { EnvironmentId, ThreadId, type PromptStashEntry } from "@t3tools/contracts";
+import {
+  EnvironmentId,
+  RuntimeRequestId,
+  ThreadId,
+  type PromptStashEntry,
+} from "@t3tools/contracts";
 import { Atom, AtomRegistry } from "effect/reactivity";
 import { expect, it, vi } from "vite-plus/test";
 
 import { act, render } from "../../../test/render";
-import { DraftId, useComposerDraftStore } from "../../composerDraftStore";
+import {
+  COMPOSER_DRAFT_STORAGE_KEY,
+  DraftId,
+  useComposerDraftStore,
+} from "../../composerDraftStore";
 import { removeLocalStorageItem } from "../../hooks/useLocalStorage";
+import { environmentContextRecord } from "../../lib/composerContextRecords";
 import { isMacPlatform } from "../../lib/utils";
 import {
   PROMPT_STASH_STORAGE_KEY,
@@ -18,7 +28,7 @@ import {
   removePreparingComposerImages,
 } from "./preparingComposerImages";
 import { ComposerStashBadge } from "./ComposerStashBadge";
-import { useComposerStash } from "./useComposerStash";
+import { type ComposerStashRow, useComposerStash } from "./useComposerStash";
 
 type StashInput = Parameters<typeof useComposerStash>[0];
 
@@ -205,12 +215,13 @@ it.each(["cleared", "edited", "failure"] as const)(
   },
 );
 
-it.each(["restore", "put-back", "recover-locally"] as const)(
-  "takes the server payload from its owner and handles a changed draft target (%s)",
+it.each(["restore", "target-changed", "question-opened", "storage-failure", "claim-lost"] as const)(
+  "completes the remote claim only after the destination draft is saved (%s)",
   async (outcome) => {
-    const target = DraftId.make("stash-environment-restore");
+    const target = DraftId.make(`stash-environment-restore-${outcome}`);
     const input = stashInput(target, "Current");
     const store = useComposerDraftStore.getState();
+    store.setPrompt(target, "Current");
     const owner = EnvironmentId.make("stash-owner");
     const entry: PromptStashEntry = {
       id: "remote",
@@ -219,56 +230,119 @@ it.each(["restore", "put-back", "recover-locally"] as const)(
       attachments: [],
       droppedImageNames: [],
     };
-    const taken = { ...entry, prompt: "From another device" };
-    const { promise, resolve } = Promise.withResolvers<{
-      _tag: "Success";
-      value: { entry: PromptStashEntry };
-    }>();
-    using connection = remoteRegistry();
-    remote.take.mockReturnValue(promise);
-    remote.save.mockResolvedValue(
-      outcome === "recover-locally"
-        ? { _tag: "Failure" }
-        : { _tag: "Success", value: { evicted: null } },
-    );
-    using _reset = {
-      [Symbol.dispose]: () => {
-        store.clearComposerContent(target);
-        writePromptStashStorageForTest("");
-        removeLocalStorageItem(PROMPT_STASH_STORAGE_KEY);
-      },
+    const image = {
+      id: "screenshot",
+      name: "shot.png",
+      mimeType: "image/png",
+      sizeBytes: 1,
+      dataUrl: "data:image/png;base64,AQ==",
     };
+    const context = environmentContextRecord(owner, "Home");
+    const taken = {
+      ...entry,
+      prompt: "From another device",
+      ...(outcome === "restore" ? { attachments: [image], records: [context] } : {}),
+    };
+    const { promise, resolve } = Promise.withResolvers<
+      { _tag: "Success"; value: { entry: PromptStashEntry } } | { _tag: "Failure" }
+    >();
+    using connection = remoteRegistry();
+    let persistedOnSettlement: string | null = null;
+    remote.take.mockReturnValueOnce(promise).mockImplementationOnce(() => {
+      persistedOnSettlement = localStorage.getItem(COMPOSER_DRAFT_STORAGE_KEY);
+      return Promise.resolve({
+        _tag: "Success",
+        value: { entry: outcome === "restore" ? taken : null },
+      });
+    });
+    using _draft = { [Symbol.dispose]: () => store.clearComposerContent(target) };
     let active = true;
-    let stash!: ReturnType<typeof useComposerStash>;
-    await using _screen = await render(
+    let restoreStashEntry!: (row: ComposerStashRow) => Promise<void>;
+    const view = (pendingUserInputs: StashInput["pendingUserInputs"] = []) => (
       <RegistryContext value={connection.registry}>
         <Harness
-          input={{ ...input, isComposerDraftTargetOpen: () => active }}
-          onStash={(next) => (stash = next)}
+          input={{
+            ...input,
+            pendingUserInputs,
+            isComposerDraftTargetOpen: () => active,
+            importContextRecords: () => {
+              store.addEnvironmentContexts(target, [context], { appendReference: false });
+              return new Map();
+            },
+          }}
+          onStash={(next) => (restoreStashEntry = next.restoreStashEntryStable)}
         />
-      </RegistryContext>,
+      </RegistryContext>
     );
+    await using screen = await render(view());
     let restoring: Promise<void> | undefined;
     await act(() => {
-      restoring = stash.restoreStashEntryStable({ entry, key: "owner-row", environmentId: owner });
+      restoring = restoreStashEntry({ entry, key: "owner-row", environmentId: owner });
     });
-    expect(remote.take).toHaveBeenCalledWith({ environmentId: owner, input: { id: entry.id } });
-    if (outcome !== "restore") active = false;
+    const claim = remote.take.mock.calls[0]?.[0];
+    expect(claim).toEqual({
+      environmentId: owner,
+      input: { _tag: "claim", id: entry.id, claimId: expect.any(String) },
+    });
+    if (outcome === "target-changed") active = false;
+    if (outcome === "question-opened") {
+      input.promptRef.current = "Typed answer";
+      await screen.rerender(
+        view([
+          {
+            requestId: RuntimeRequestId.make("question-during-stash-restore"),
+            createdAt: entry.createdAt,
+            responseCapability: "live",
+            dismissible: false,
+            questions: [],
+          },
+        ]),
+      );
+    }
+    const setItem = Storage.prototype.setItem;
+    using _storage = vi.spyOn(Storage.prototype, "setItem").mockImplementation(function (
+      this: Storage,
+      key,
+      value,
+    ) {
+      if (outcome === "storage-failure" && key === COMPOSER_DRAFT_STORAGE_KEY) {
+        throw new DOMException("The quota has been exceeded.", "QuotaExceededError");
+      }
+      setItem.call(this, key, value);
+    });
     await act(async () => {
-      resolve({ _tag: "Success", value: { entry: taken } });
+      resolve(
+        outcome === "claim-lost"
+          ? { _tag: "Failure" }
+          : { _tag: "Success", value: { entry: taken } },
+      );
       await restoring;
     });
-    expect(input.promptRef.current).toBe(
-      outcome === "restore" ? "Current\n\nFrom another device" : "Current",
-    );
+    expect(remote.take).toHaveBeenCalledTimes(2);
+    expect(remote.take).toHaveBeenNthCalledWith(2, {
+      environmentId: owner,
+      input: { ...claim.input, _tag: outcome === "restore" ? "complete" : "release" },
+    });
+    expect(remote.save).not.toHaveBeenCalled();
+    expect(usePromptStashStore.getState().entries).toEqual([]);
     if (outcome === "restore") {
-      expect(remote.save).not.toHaveBeenCalled();
+      expect(input.promptRef.current).toBe("Current\n\nFrom another device");
+      expect(
+        JSON.parse(persistedOnSettlement ?? "{}").state?.draftsByThreadKey[target],
+      ).toMatchObject({
+        prompt: "Current\n\nFrom another device",
+        attachments: [image],
+        environmentContexts: [context],
+      });
+    } else if (outcome === "question-opened") {
+      expect(input.promptRef.current).toBe("Typed answer");
+      expect(store.getComposerDraft(target)?.prompt).toBe("Current");
+    } else if (outcome === "storage-failure") {
+      expect(store.getComposerDraft(target)?.prompt).toBe("Current\n\nFrom another device");
     } else {
-      expect(remote.save).toHaveBeenCalledWith({ environmentId: owner, input: { entry: taken } });
+      expect(input.promptRef.current).toBe("Current");
+      expect(store.getComposerDraft(target)?.prompt).toBe("Current");
     }
-    expect(usePromptStashStore.getState().entries).toEqual(
-      outcome === "recover-locally" ? [taken] : [],
-    );
   },
 );
 

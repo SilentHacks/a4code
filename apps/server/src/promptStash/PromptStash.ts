@@ -3,7 +3,9 @@ import {
   PromptStashEntry,
   PromptStashError,
   type PromptStashEvent,
+  type PromptStashTakeInput,
 } from "@t3tools/contracts";
+import * as Clock from "effect/Clock";
 import * as Context from "effect/Context";
 import * as DateTime from "effect/DateTime";
 import * as Effect from "effect/Effect";
@@ -18,6 +20,7 @@ import type * as SqlError from "effect/sql/SqlError";
 import * as ServerEnvironment from "../environment/ServerEnvironment.ts";
 
 const MAX_ENTRY_JSON_BYTES = 4 * 1024 * 1024;
+const CLAIM_TTL_MS = 60_000;
 const EntryJson = Schema.fromJsonString(PromptStashEntry);
 const encodeEntry = Schema.encodeEffect(EntryJson);
 const decodeEntry = Schema.decodeEffect(EntryJson);
@@ -36,7 +39,7 @@ export class PromptStash extends Context.Service<
       StoreFailure | PromptStashError
     >;
     readonly take: (
-      id: string,
+      input: PromptStashTakeInput,
     ) => Effect.Effect<{ readonly entry: PromptStashEntry | null }, StoreFailure>;
   }
 >()("t3/promptStash/PromptStash") {}
@@ -69,13 +72,22 @@ const make = Effect.gen(function* () {
           if (Buffer.byteLength(json, "utf8") > MAX_ENTRY_JSON_BYTES) {
             return yield* new PromptStashError({ reason: "too-large" });
           }
+          const full =
+            yield* sql`SELECT 1 FROM prompt_stash LIMIT 1 OFFSET ${MAX_STASH_ENTRIES - 1}`;
+          let evicted = null;
+          if (full.length > 0) {
+            const now = yield* Clock.currentTimeMillis;
+            const [row] = yield* sql<EntryRow>`
+              DELETE FROM prompt_stash WHERE position = (
+                SELECT position FROM prompt_stash
+                WHERE claim_expires_at IS NULL OR claim_expires_at <= ${now}
+                ORDER BY position LIMIT 1
+              ) RETURNING entry_json
+            `;
+            if (!row) return yield* new PromptStashError({ reason: "storage" });
+            evicted = yield* decodeEntry(row.entry_json);
+          }
           yield* sql`INSERT INTO prompt_stash (id, entry_json) VALUES (${entry.id}, ${json})`;
-          const [evictedRow] = yield* sql<EntryRow>`
-            DELETE FROM prompt_stash WHERE position = (
-              SELECT position FROM prompt_stash ORDER BY position DESC LIMIT 1 OFFSET ${MAX_STASH_ENTRIES}
-            ) RETURNING entry_json
-          `;
-          const evicted = evictedRow ? yield* decodeEntry(evictedRow.entry_json) : null;
           return { entry, evicted };
         }),
       );
@@ -96,16 +108,51 @@ const make = Effect.gen(function* () {
   );
 
   const take = Effect.fn("PromptStash.take")(
-    function* (id: string) {
+    function* (input: PromptStashTakeInput) {
+      const { id, _tag } = input;
       const entry = yield* sql.withTransaction(
         Effect.gen(function* () {
-          const [row] = yield* sql<EntryRow>`
-            DELETE FROM prompt_stash WHERE id = ${id} RETURNING entry_json
-          `;
+          if (_tag === "release") {
+            yield* sql`
+              UPDATE prompt_stash SET claim_id = NULL, claim_expires_at = NULL
+              WHERE id = ${id} AND claim_id = ${input.claimId}
+            `;
+            return null;
+          }
+          const now = yield* Clock.currentTimeMillis;
+          let rows: ReadonlyArray<EntryRow>;
+          switch (_tag) {
+            case "claim":
+              rows = yield* sql<EntryRow>`
+                UPDATE prompt_stash SET
+                  claim_id = ${input.claimId},
+                  claim_expires_at = CASE WHEN claim_expires_at > ${now}
+                    THEN claim_expires_at ELSE ${now + CLAIM_TTL_MS} END
+                WHERE id = ${id} AND (
+                  claim_expires_at IS NULL OR claim_expires_at <= ${now} OR claim_id = ${input.claimId}
+                ) RETURNING entry_json
+              `;
+              break;
+            case "complete":
+              rows = yield* sql<EntryRow>`
+                DELETE FROM prompt_stash
+                WHERE id = ${id} AND claim_id = ${input.claimId} AND claim_expires_at > ${now}
+                RETURNING entry_json
+              `;
+              break;
+            case "delete":
+              rows = yield* sql<EntryRow>`
+                DELETE FROM prompt_stash
+                WHERE id = ${id} AND (claim_expires_at IS NULL OR claim_expires_at <= ${now})
+                RETURNING entry_json
+              `;
+              break;
+          }
+          const [row] = rows;
           return row ? yield* decodeEntry(row.entry_json) : null;
         }),
       );
-      if (entry) {
+      if (entry && (_tag === "complete" || _tag === "delete")) {
         yield* PubSub.publish(changes, { sequence: ++sequence, event: { _tag: "remove", id } });
       }
       return { entry };

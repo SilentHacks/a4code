@@ -449,7 +449,12 @@ import {
   WorkflowRunsSnapshot,
   WorkflowRunsSubscribeInput,
 } from "./workflow.ts";
-import { PromptStashEntry, PromptStashError, PromptStashEvent } from "./promptStash.ts";
+import {
+  PromptStashEntry,
+  PromptStashError,
+  PromptStashEvent,
+  PromptStashTakeInput,
+} from "./promptStash.ts";
 import {
   ScheduledTaskDeleteInput,
   ScheduledTaskDeleteResult,
@@ -2446,7 +2451,7 @@ const WsPromptStashSaveRpc = Rpc.make(WS_METHODS.promptStashSave, {
   error: PromptStashRpcError,
 });
 const WsPromptStashTakeRpc = Rpc.make(WS_METHODS.promptStashTake, {
-  payload: Schema.Struct({ id: PromptStashEntry.fields.id }),
+  payload: PromptStashTakeInput,
   success: Schema.Struct({ entry: Schema.NullOr(PromptStashEntry) }),
   error: PromptStashRpcError,
 });

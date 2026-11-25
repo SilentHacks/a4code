@@ -35,7 +35,7 @@ const draft = (id: string): PromptStashEntry => ({
 });
 
 it.effect(
-  "streams a prompt stash snapshot and committed saves, eviction, and a single atomic take",
+  "streams stash saves, evictions, and a single removal after completing a recoverable claim",
   () =>
     Effect.gen(function* () {
       const stash = yield* PromptStash.PromptStash;
@@ -125,17 +125,75 @@ it.effect(
       assert.deepEqual(yield* pull, [{ _tag: "ready" }]);
       const replacement = { ...draft("replacement"), createdAt: now };
       assert.deepEqual(yield* pull, [{ _tag: "upsert", entry: replacement, evictedId: stored.id }]);
-      assert.deepEqual(yield* stash.take(stored.id), { entry: null });
+      assert.deepEqual(yield* stash.take({ _tag: "delete", id: stored.id }), { entry: null });
 
-      const takes = yield* Effect.all([stash.take(replacement.id), stash.take(replacement.id)], {
-        concurrency: "unbounded",
-      });
+      const claimA = { id: replacement.id, claimId: "claim-a" };
+      const claimB = { id: replacement.id, claimId: "claim-b" };
+      const claims = [claimA, claimB] as const;
+      const [a, b] = yield* Effect.all(
+        [stash.take({ _tag: "claim", ...claimA }), stash.take({ _tag: "claim", ...claimB })],
+        { concurrency: "unbounded" },
+      );
+      assert.deepEqual(a.entry ? [a.entry, b.entry] : [b.entry, a.entry], [replacement, null]);
+      const winner = claims[a.entry ? 0 : 1];
+      const loser = claims[a.entry ? 1 : 0];
+      assert.deepEqual(yield* stash.take({ _tag: "delete", id: replacement.id }), { entry: null });
+      assert.deepEqual(yield* stash.take({ _tag: "complete", ...loser }), { entry: null });
+      assert.deepEqual(yield* stash.take({ _tag: "release", ...loser }), { entry: null });
+      yield* TestClock.adjust("59 seconds");
+      assert.deepEqual(yield* stash.take({ _tag: "claim", ...winner }), { entry: replacement });
+      assert.deepEqual(yield* stash.take({ _tag: "claim", ...loser }), { entry: null });
+      yield* TestClock.adjust("1 second");
+      assert.deepEqual(yield* stash.take({ _tag: "complete", ...winner }), { entry: null });
+      assert.deepEqual(yield* stash.take({ _tag: "claim", ...loser }), { entry: replacement });
+      assert.deepEqual(yield* stash.take({ _tag: "release", ...winner }), { entry: null });
+      assert.deepEqual(yield* stash.take({ _tag: "claim", ...winner }), { entry: null });
+      assert.deepEqual(yield* stash.take({ _tag: "release", ...loser }), { entry: null });
+
+      const retry = { id: replacement.id, claimId: "retry" };
+      assert.deepEqual(yield* stash.take({ _tag: "claim", ...retry }), { entry: replacement });
+      const completes = yield* Effect.all(
+        [stash.take({ _tag: "complete", ...retry }), stash.take({ _tag: "complete", ...retry })],
+        { concurrency: "unbounded" },
+      );
       assert.deepEqual(
-        takes.flatMap(({ entry }) => (entry ? [entry] : [])),
+        completes.flatMap(({ entry }) => (entry ? [entry] : [])),
         [replacement],
       );
       assert.deepEqual(yield* pull, [{ _tag: "remove", id: replacement.id }]);
+      const afterRemoval = draft("after-removal");
+      yield* stash.save(afterRemoval);
+      assert.deepEqual(yield* pull, [
+        { _tag: "upsert", entry: { ...afterRemoval, createdAt: "2026-01-01T00:01:00.000Z" } },
+      ]);
     }).pipe(Effect.scoped, Effect.provide(layer)),
+);
+
+it.effect(
+  "evicts the oldest available entry and rejects a save while all entries are claimed",
+  () =>
+    Effect.gen(function* () {
+      const stash = yield* PromptStash.PromptStash;
+      const ids = Array.from({ length: MAX_STASH_ENTRIES }, (_, index) => `entry-${index}`);
+      const oldest = "entry-0";
+      const nextOldest = "entry-1";
+      for (const id of ids) {
+        yield* stash.save(draft(id));
+      }
+      const claim = { _tag: "claim", claimId: "restore" } as const;
+      assert.equal((yield* stash.take({ ...claim, id: oldest })).entry?.id, oldest);
+      assert.equal((yield* stash.save(draft("replacement"))).evicted?.id, nextOldest);
+      for (const id of [...ids.slice(2), "replacement"]) {
+        assert.equal((yield* stash.take({ ...claim, id })).entry?.id, id);
+      }
+      assert.propertyVal(
+        yield* stash.save(draft("overflow")).pipe(Effect.flip),
+        "reason",
+        "storage",
+      );
+      yield* TestClock.adjust("60 seconds");
+      assert.equal((yield* stash.save(draft("overflow"))).evicted?.id, oldest);
+    }).pipe(Effect.provide(layer)),
 );
 
 it.effect("rebases a subscriber that falls behind the bounded live backlog", () =>
@@ -154,7 +212,7 @@ it.effect("rebases a subscriber that falls behind the bounded live backlog", () 
       assert.equal(event._tag === "upsert" ? event.entry.id : null, `entry-${i}`);
     }
     assert.deepEqual(yield* pull, [{ _tag: "ready" }]);
-    yield* stash.take("entry-0");
+    yield* stash.take({ _tag: "delete", id: "entry-0" });
     assert.deepEqual(yield* pull, [{ _tag: "remove", id: "entry-0" }]);
   }).pipe(Effect.scoped, Effect.provide(layer)),
 );

@@ -41,6 +41,14 @@ export const PromptStashEntry = Schema.Struct({
 });
 export type PromptStashEntry = typeof PromptStashEntry.Type;
 
+export const PromptStashTakeInput = Schema.Union([
+  Schema.TaggedStruct("delete", { id: StashId }),
+  Schema.TaggedStruct("claim", { id: StashId, claimId: StashId }),
+  Schema.TaggedStruct("complete", { id: StashId, claimId: StashId }),
+  Schema.TaggedStruct("release", { id: StashId, claimId: StashId }),
+]);
+export type PromptStashTakeInput = typeof PromptStashTakeInput.Type;
+
 export const PromptStashEvent = Schema.Union([
   Schema.TaggedStruct("reset", {}),
   Schema.TaggedStruct("ready", {}),

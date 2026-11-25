@@ -15,28 +15,35 @@ function entry(id: string): PromptStashEntry {
   };
 }
 
-it.effect("publishes complete snapshots and replaces them on reconnect", () =>
+it.effect("keeps equal-timestamp entries in the same order after live updates and reconnect", () =>
   Effect.gen(function* () {
+    const a = entry("a");
+    const b = entry("b");
+    const c = entry("c");
+    const updatedC = { ...c, prompt: "updated" };
     const snapshots = yield* projectPromptStashEntries(
       Stream.make<ReadonlyArray<PromptStashEvent>>(
         { _tag: "reset" },
-        { _tag: "upsert", entry: entry("a") },
-        { _tag: "upsert", entry: entry("b") },
+        { _tag: "upsert", entry: a },
+        { _tag: "upsert", entry: b },
         { _tag: "ready" },
-        { _tag: "upsert", entry: entry("c"), evictedId: "a" },
-        { _tag: "remove", id: "b" },
+        { _tag: "upsert", entry: c, evictedId: b.id },
+        { _tag: "upsert", entry: updatedC },
         { _tag: "reset" },
-        { _tag: "upsert", entry: entry("d") },
+        { _tag: "upsert", entry: updatedC },
+        { _tag: "upsert", entry: a },
         { _tag: "ready" },
+        { _tag: "remove", id: a.id },
       ),
     ).pipe(Stream.runCollect);
-    expect(snapshots.map((entries) => entries?.map(({ id }) => id) ?? null)).toEqual([
+    expect(snapshots).toEqual([
       null,
-      ["a", "b"],
-      ["b", "c"],
-      ["c"],
+      [a, b],
+      [c, a],
+      [updatedC, a],
       null,
-      ["d"],
+      [updatedC, a],
+      [updatedC],
     ]);
   }),
 );

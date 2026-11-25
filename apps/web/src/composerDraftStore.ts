@@ -143,10 +143,12 @@ let composerDraftLoadedState: PersistedComposerDraftStoreState | null = null;
 let composerDraftLastWrite: ComposerDraftWrite | null = null;
 let composerDraftPendingWrite: ComposerDraftWrite | null = null;
 
-function readStoredComposerDraftState(): PersistedComposerDraftStoreState | null {
+function readStoredComposerDraftState(
+  useWriteCache = true,
+): PersistedComposerDraftStoreState | null {
   const text = composerDraftBaseStorage.getItem(COMPOSER_DRAFT_STORAGE_KEY);
   if (typeof text !== "string") return null;
-  if (text === composerDraftLastWrite?.text) return composerDraftLastWrite.merged;
+  if (useWriteCache && text === composerDraftLastWrite?.text) return composerDraftLastWrite.merged;
   try {
     const parsed = JSON.parse(text) as StorageValue<PersistedComposerDraftStoreState>;
     return parsed.version === COMPOSER_DRAFT_STORAGE_VERSION ? parsed.state : null;
@@ -2390,6 +2392,59 @@ function migratePersistedComposerDraftStoreState(
   };
 }
 
+function persistComposerDraftContent(draft: ComposerThreadDraftState) {
+  return {
+    prompt: draft.prompt,
+    ...(draft.files.length > 0
+      ? {
+          files: draft.files.map((file) => ({
+            id: file.id,
+            name: file.name,
+            mimeType: file.mimeType,
+            sizeBytes: file.sizeBytes,
+            ...(file.source ? { source: file.source } : {}),
+            ...(file.uploadedAttachmentId && file.uploadEnvironmentId
+              ? { attachmentId: file.uploadedAttachmentId, environmentId: file.uploadEnvironmentId }
+              : {}),
+          })),
+        }
+      : {}),
+    ...(draft.terminalContexts.length > 0
+      ? {
+          terminalContexts: draft.terminalContexts.map((context) => ({
+            id: context.id,
+            threadId: context.threadId,
+            createdAt: context.createdAt,
+            terminalId: context.terminalId,
+            terminalLabel: context.terminalLabel,
+            lineStart: context.lineStart,
+            lineEnd: context.lineEnd,
+            text: context.text,
+          })),
+        }
+      : {}),
+    ...(draft.previewAnnotations.length > 0
+      ? {
+          previewAnnotations: draft.previewAnnotations.map(
+            (annotation) => ({ ...annotation }) as DeepMutable<PreviewAnnotationPayload>,
+          ),
+        }
+      : {}),
+    ...(draft.reviewComments.length > 0
+      ? { reviewComments: draft.reviewComments.map((comment) => ({ ...comment })) }
+      : {}),
+    ...(draft.threadContexts.length > 0
+      ? { threadContexts: draft.threadContexts.map((record) => ({ ...record })) }
+      : {}),
+    ...(draft.environmentContexts.length > 0
+      ? { environmentContexts: draft.environmentContexts.map((record) => ({ ...record })) }
+      : {}),
+    ...(draft.replyTo
+      ? { replyTo: { ...draft.replyTo } as DeepMutable<ResponseContextRecord> }
+      : {}),
+  };
+}
+
 export function partializeComposerDraftStoreState(
   state: ComposerDraftStoreState,
 ): PersistedComposerDraftStoreState {
@@ -2436,60 +2491,8 @@ export function partializeComposerDraftStoreState(
       continue;
     }
     const persistedDraft: DeepMutable<PersistedComposerThreadDraftState> = {
-      prompt: draft.prompt,
+      ...persistComposerDraftContent(draft),
       attachments: draft.persistedAttachments,
-      ...(draft.files.length > 0
-        ? {
-            files: draft.files.map((file) => ({
-              id: file.id,
-              name: file.name,
-              mimeType: file.mimeType,
-              sizeBytes: file.sizeBytes,
-              ...(file.source ? { source: file.source } : {}),
-              ...(file.uploadedAttachmentId && file.uploadEnvironmentId
-                ? {
-                    attachmentId: file.uploadedAttachmentId,
-                    environmentId: file.uploadEnvironmentId,
-                  }
-                : {}),
-            })),
-          }
-        : {}),
-      ...(draft.terminalContexts.length > 0
-        ? {
-            terminalContexts: draft.terminalContexts.map((context) => ({
-              id: context.id,
-              threadId: context.threadId,
-              createdAt: context.createdAt,
-              terminalId: context.terminalId,
-              terminalLabel: context.terminalLabel,
-              lineStart: context.lineStart,
-              lineEnd: context.lineEnd,
-              text: context.text,
-            })),
-          }
-        : {}),
-      ...(draft.previewAnnotations.length > 0
-        ? {
-            previewAnnotations: draft.previewAnnotations.map(
-              (annotation) => ({ ...annotation }) as DeepMutable<PreviewAnnotationPayload>,
-            ),
-          }
-        : {}),
-      ...(draft.reviewComments.length > 0
-        ? {
-            reviewComments: draft.reviewComments.map((comment) => ({ ...comment })),
-          }
-        : {}),
-      ...(draft.threadContexts.length > 0
-        ? { threadContexts: draft.threadContexts.map((record) => ({ ...record })) }
-        : {}),
-      ...(draft.environmentContexts.length > 0
-        ? { environmentContexts: draft.environmentContexts.map((record) => ({ ...record })) }
-        : {}),
-      ...(draft.replyTo
-        ? { replyTo: { ...draft.replyTo } as DeepMutable<ResponseContextRecord> }
-        : {}),
       ...(hasModelData
         ? {
             modelSelectionByProvider: compactModelSelectionByProvider(
@@ -2601,6 +2604,34 @@ function normalizeCurrentPersistedComposerDraftStoreState(
         : compactStickyOptionsByModel(normalizedPersistedState.stickyOptionsByModelByProvider),
     stickyActiveProvider,
   };
+}
+
+/** The source stash must survive until the draft's content can be read back from browser storage. */
+export function flushAndVerifyRestoredComposerDraft(
+  target: ComposerThreadTarget,
+  draft: ComposerThreadDraftState,
+  restoredImages: ReadonlyArray<ComposerImageAttachment>,
+): boolean {
+  try {
+    if (typeof localStorage === "undefined") return false;
+    const threadKey = resolveComposerDraftKey(useComposerDraftStore.getState(), target);
+    if (!threadKey) return false;
+    composerDebouncedStorage.flush();
+    const persisted = readStoredComposerDraftState(false)?.draftsByThreadKey[threadKey];
+    if (!persisted) return false;
+    const expected = persistComposerDraftContent(draft);
+    return (
+      Object.entries(expected).every(
+        ([field, value]) =>
+          JSON.stringify(persisted[field as keyof typeof expected]) === JSON.stringify(value),
+      ) &&
+      restoredImages.every(({ id }) =>
+        persisted.attachments.some((attachment) => attachment.id === id),
+      )
+    );
+  } catch {
+    return false;
+  }
 }
 
 function readPersistedAttachmentIdsFromStorage(threadKey: string): string[] {
