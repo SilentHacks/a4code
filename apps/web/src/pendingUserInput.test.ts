@@ -226,7 +226,7 @@ describe("optional ACP questions", () => {
     allowCustomAnswer: false,
   } as const;
 
-  it("omits blank optional text and multi-select answers without weakening legacy requirements", () => {
+  it("omits blank optional text and submits empty multi-select without weakening legacy requirements", () => {
     const questions = [singleSelectQuestion, optionalOther, optionalMulti];
     expect(buildPendingUserInputAnswers(questions, {})).toBeNull();
     const drafts = {
@@ -235,6 +235,7 @@ describe("optional ACP questions", () => {
     };
     expect(buildPendingUserInputAnswers(questions, drafts)).toEqual({
       scope: "Orchestration-first",
+      areas: [],
     });
     expect(derivePendingUserInputProgress(questions, drafts, 1)).toMatchObject({
       resolvedAnswer: null,
@@ -259,7 +260,9 @@ describe("optional ACP questions", () => {
     ).toEqual({ q0__other: "Custom answer", areas: ["Server", "Web"] });
     const draft = togglePendingUserInputOptionSelection(optionalMulti, undefined, "Server");
     const cleared = togglePendingUserInputOptionSelection(optionalMulti, draft, "Server");
-    expect(buildPendingUserInputAnswers([optionalMulti], { areas: cleared })).toEqual({});
+    expect(buildPendingUserInputAnswers([optionalMulti], { areas: cleared })).toEqual({
+      areas: [],
+    });
   });
 
   it("does not silently skip an optional answer with blocked attachments", () => {

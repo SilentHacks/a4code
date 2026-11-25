@@ -1905,7 +1905,7 @@ describe("optional ACP answers on mobile", () => {
     allowCustomAnswer: false,
   } as const;
 
-  it("omits blank optional text and multi-select while preserving legacy required answers", () => {
+  it("omits blank optional text and submits empty multi-select while preserving legacy required answers", () => {
     const questions = [singleSelectQuestion, optionalOther, optionalMulti];
     expect(buildPendingUserInputAnswers(questions, {})).toBeNull();
     expect(
@@ -1913,7 +1913,7 @@ describe("optional ACP answers on mobile", () => {
         runtime: { selectedOptionValues: ["Go"] },
         q0__other: { customAnswer: "   " },
       }),
-    ).toEqual({ runtime: "Go" });
+    ).toEqual({ runtime: "Go", scope: [] });
   });
 
   it("includes provided optional text and multi-select answers and allows clearing the last selection", () => {
@@ -1925,7 +1925,9 @@ describe("optional ACP answers on mobile", () => {
     ).toEqual({ q0__other: "Custom target", scope: ["Orders", "Listings"] });
     const draft = togglePendingUserInputOptionSelection(optionalMulti, undefined, "Orders");
     const cleared = togglePendingUserInputOptionSelection(optionalMulti, draft, "Orders");
-    expect(buildPendingUserInputAnswers([optionalMulti], { scope: cleared })).toEqual({});
+    expect(buildPendingUserInputAnswers([optionalMulti], { scope: cleared })).toEqual({
+      scope: [],
+    });
   });
 
   it("does not discard blocked optional attachments", () => {
