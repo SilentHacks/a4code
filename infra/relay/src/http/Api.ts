@@ -1,7 +1,6 @@
 import { createClerkClient, verifyToken } from "@clerk/backend";
 import { sql as drizzleSql } from "drizzle-orm";
 import * as SecureRandom from "effect/crypto/SecureRandom";
-import * as ByteSize from "effect/ByteSize";
 import * as Context from "effect/Context";
 import * as DateTime from "effect/DateTime";
 import * as Duration from "effect/Duration";
@@ -14,7 +13,6 @@ import * as Schema from "effect/Schema";
 import * as Tracer from "effect/Tracer";
 import * as Headers from "effect/http/Headers";
 import * as HttpEffect from "effect/http/HttpEffect";
-import * as HttpIncomingMessage from "effect/http/HttpIncomingMessage";
 import * as HttpMiddleware from "effect/http/HttpMiddleware";
 import * as HttpRouter from "effect/http/HttpRouter";
 import * as HttpServerRequest from "effect/http/HttpServerRequest";
@@ -27,7 +25,6 @@ import * as HttpObservability from "@t3tools/shared/httpObservability";
 
 import {
   RelayApi,
-  RELAY_PROMPT_STASH_MAX_BYTES,
   RelayAgentActivityPublishProofExpiredError,
   RelayAgentActivityPublishProofInvalidError,
   RelayClientAuth,
@@ -85,7 +82,6 @@ import * as T3ChatAccounts from "../t3chat/T3ChatAccounts.ts";
 import { withSpanAttributes } from "../observability.ts";
 import { isRelayHookPath, redactRelayHookUrl } from "../hooks/HookForwarder.ts";
 import * as RelayDb from "../db.ts";
-import * as PromptStash from "../promptStash.ts";
 
 // Delegated IDs exceed the router's default 100-character limit; match the environment server.
 export const RELAY_HTTP_ROUTER_CONFIG = {
@@ -154,22 +150,7 @@ export const layerCors = HttpRouter.middleware(
     if (isRelayHookPath(request.url)) {
       return yield* httpEffect;
     }
-    const isStashSave =
-      request.method === "POST" &&
-      Option.exists(
-        HttpServerRequest.toURL(request),
-        (url) => url.pathname === "/v1/client/prompt-stash",
-      );
-    return yield* relayCorsMiddleware(
-      isStashSave
-        ? httpEffect.pipe(
-            Effect.provideService(
-              HttpIncomingMessage.MaxBodySize,
-              ByteSize.bytes(6 * RELAY_PROMPT_STASH_MAX_BYTES + 1024),
-            ),
-          )
-        : httpEffect,
-    );
+    return yield* relayCorsMiddleware(httpEffect);
   }),
   { global: true },
 );
@@ -360,7 +341,6 @@ export const layerClientAuth = Layer.effect(
           Effect.provideService(RelayClientPrincipal, {
             userId: verified.sub,
             token,
-            clerkSession: verified.mode === "clerk_session_bearer",
           }),
         );
       }),
@@ -818,56 +798,6 @@ export const layerMobileApi = HttpApiBuilder.group(
           }).pipe(Effect.provideService(DpopProofs.DpopProofReplay, dpopProofs));
           return yield* registrations.unregisterDevice({ userId, deviceId: params.deviceId });
         }, mapRelayCommonApiErrors("invalid_dpop")),
-      );
-  }),
-);
-
-const promptStashUser = Effect.gen(function* () {
-  yield* appendRelayCredentialResponseHeaders;
-  const principal = yield* RelayClientPrincipal;
-  if (!principal.clerkSession) return yield* new HttpApiError.Unauthorized({});
-  return principal.userId;
-});
-
-export const layerPromptStashApi = HttpApiBuilder.group(
-  RelayApi,
-  "promptStash",
-  Effect.fnUntraced(function* (handlers) {
-    const db = yield* RelayDb.RelayDb;
-    const provideDb = Effect.provideService(RelayDb.RelayDb, db);
-    return handlers
-      .handle(
-        "listPromptStash",
-        Effect.fnUntraced(function* () {
-          const userId = yield* promptStashUser;
-          const entries = yield* PromptStash.list(userId).pipe(
-            provideDb,
-            Effect.catch(() => relayInternalErrorResponse("persistence_failed")),
-          );
-          return { entries };
-        }, mapRelayCommonApiErrors("not_authorized")),
-      )
-      .handle(
-        "savePromptStash",
-        Effect.fnUntraced(function* ({ payload }) {
-          const userId = yield* promptStashUser;
-          const result = yield* PromptStash.save(userId, payload).pipe(
-            provideDb,
-            Effect.catch(() => relayInternalErrorResponse("persistence_failed")),
-          );
-          return { result };
-        }, mapRelayCommonApiErrors("not_authorized")),
-      )
-      .handle(
-        "deletePromptStash",
-        Effect.fnUntraced(function* ({ params }) {
-          const userId = yield* promptStashUser;
-          yield* PromptStash.remove(userId, params.id).pipe(
-            provideDb,
-            Effect.catch(() => relayInternalErrorResponse("persistence_failed")),
-          );
-          return { ok: true as const };
-        }, mapRelayCommonApiErrors("not_authorized")),
       );
   }),
 );

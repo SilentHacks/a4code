@@ -331,6 +331,10 @@
       "types": "./src/state/preview.ts",
       "default": "./src/state/preview.ts"
     },
+    "./state/promptStash": {
+      "types": "./src/state/promptStash.ts",
+      "default": "./src/state/promptStash.ts"
+    },
     "./state/projects": {
       "types": "./src/state/projects.ts",
       "default": "./src/state/projects.ts"

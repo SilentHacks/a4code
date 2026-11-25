@@ -449,6 +449,7 @@ import {
   WorkflowRunsSnapshot,
   WorkflowRunsSubscribeInput,
 } from "./workflow.ts";
+import { PromptStashEntry, PromptStashError, PromptStashEvent } from "./promptStash.ts";
 import {
   ScheduledTaskDeleteInput,
   ScheduledTaskDeleteResult,
@@ -664,6 +665,10 @@ export const WS_METHODS = {
   workflowsGetDefinition: "workflows.getDefinition",
   workflowsSaveDefinition: "workflows.saveDefinition",
   workflowsDeleteDefinition: "workflows.deleteDefinition",
+
+  promptStashSubscribe: "promptStash.subscribe",
+  promptStashSave: "promptStash.save",
+  promptStashTake: "promptStash.take",
 
   scheduledTasksSubscribe: "scheduledTasks.subscribe",
   scheduledTasksUpsert: "scheduledTasks.upsert",
@@ -2428,6 +2433,24 @@ const WsWorkflowsDeleteDefinitionRpc = Rpc.make(WS_METHODS.workflowsDeleteDefini
   error: EnvironmentAuthorizationError,
 });
 
+const PromptStashRpcError = Schema.Union([PromptStashError, EnvironmentAuthorizationError]);
+const WsPromptStashSubscribeRpc = Rpc.make(WS_METHODS.promptStashSubscribe, {
+  payload: Schema.Struct({}),
+  success: PromptStashEvent,
+  error: PromptStashRpcError,
+  stream: true,
+});
+const WsPromptStashSaveRpc = Rpc.make(WS_METHODS.promptStashSave, {
+  payload: Schema.Struct({ entry: PromptStashEntry }),
+  success: Schema.Struct({ evicted: Schema.NullOr(PromptStashEntry) }),
+  error: PromptStashRpcError,
+});
+const WsPromptStashTakeRpc = Rpc.make(WS_METHODS.promptStashTake, {
+  payload: Schema.Struct({ id: PromptStashEntry.fields.id }),
+  success: Schema.Struct({ entry: Schema.NullOr(PromptStashEntry) }),
+  error: PromptStashRpcError,
+});
+
 const WsScheduledTasksSubscribeRpc = Rpc.make(WS_METHODS.scheduledTasksSubscribe, {
   payload: ScheduledTaskListInput,
   success: ScheduledTaskListResult,
@@ -2612,6 +2635,9 @@ export const WsRpcGroup = RpcGroup.make(
   WsWorkflowsGetDefinitionRpc,
   WsWorkflowsSaveDefinitionRpc,
   WsWorkflowsDeleteDefinitionRpc,
+  WsPromptStashSubscribeRpc,
+  WsPromptStashSaveRpc,
+  WsPromptStashTakeRpc,
   WsScheduledTasksSubscribeRpc,
   WsScheduledTasksUpsertRpc,
   WsScheduledTasksSetEnabledRpc,

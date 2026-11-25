@@ -101,7 +101,6 @@ const layerRelayApi = Layer.mergeAll(
   RelayHttpApi.layerMetadataApi,
   RelayHttpApi.layerMobileApi,
   RelayHttpApi.layerClientApi,
-  RelayHttpApi.layerPromptStashApi,
   RelayHttpApi.layerTokenApi,
   RelayHttpApi.layerDpopClientApi,
   RelayHttpApi.layerServerApi,

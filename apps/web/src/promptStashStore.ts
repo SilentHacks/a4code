@@ -7,6 +7,7 @@ import {
   PersistedComposerImageAttachment,
 } from "./composerDraftStore";
 import { createMemoryStorage, type StateStorage } from "./lib/storage";
+import { randomUUID } from "./lib/utils";
 
 export const PROMPT_STASH_STORAGE_KEY = "t3code:prompt-stash:v2";
 const LEGACY_PROMPT_STASH_STORAGE_KEY = "t3code:prompt-stash:v1";
@@ -27,7 +28,7 @@ const StashEntrySchema = Schema.Struct({
   pendingImageCount: Schema.optionalKey(Schema.Number),
   records: Schema.optionalKey(ForwardCompatibleArray(ComposerContextRecord)),
 });
-export type PromptStashEntry = typeof StashEntrySchema.Type & { readonly synced?: true };
+export type PromptStashEntry = typeof StashEntrySchema.Type;
 
 const PersistedPromptStashState = Schema.Struct({
   entries: Schema.Array(StashEntrySchema),
@@ -85,6 +86,7 @@ function resolveBaseStorage(): { storage: StateStorage; durable: boolean } {
 const { storage: baseStashStorage, durable: storageIsDurable } = resolveBaseStorage();
 
 const unpersistedFinalizedEntryIds = new Set<string>();
+const unpersistedRecoveryEntryIds = new Set<string>();
 
 // Clear the composer only after a durable write; debounce cannot confirm durability.
 function persistEntries(entries: ReadonlyArray<PromptStashEntry>): {
@@ -100,6 +102,7 @@ function persistEntries(entries: ReadonlyArray<PromptStashEntry>): {
       }),
     );
     unpersistedFinalizedEntryIds.clear();
+    unpersistedRecoveryEntryIds.clear();
     return { written: true, durable: storageIsDurable };
   } catch (error) {
     console.error("[PROMPT-STASH] Could not persist stash (storage quota?).", error);
@@ -136,25 +139,33 @@ function latestEntries(memory: ReadonlyArray<PromptStashEntry>): ReadonlyArray<P
     if (!storedIds.has(id)) unpersistedFinalizedEntryIds.delete(id);
   }
   const memoryById = new Map(memory.map((entry) => [entry.id, entry]));
-  return stored.map((entry) => {
-    const local = memoryById.get(entry.id);
-    if (
-      local &&
-      (local.pendingImageCount ||
-        entry.pendingImageCount ||
-        unpersistedFinalizedEntryIds.has(entry.id))
-    ) {
-      return local;
-    }
-    return clearOrphanedPendingImages(entry);
-  });
+  return [
+    ...memory.filter(
+      (entry) => unpersistedRecoveryEntryIds.has(entry.id) && !storedIds.has(entry.id),
+    ),
+    ...stored.map((entry) => {
+      const local = memoryById.get(entry.id);
+      if (
+        local &&
+        (local.pendingImageCount ||
+          entry.pendingImageCount ||
+          unpersistedFinalizedEntryIds.has(entry.id))
+      ) {
+        return local;
+      }
+      return clearOrphanedPendingImages(entry);
+    }),
+  ];
 }
 
 interface PromptStashStoreState {
   entries: ReadonlyArray<PromptStashEntry>;
-  stashEntry: (entry: PromptStashEntry) => {
+  stashEntry: (
+    entry: PromptStashEntry,
+    options?: { recover: true },
+  ) => {
     evicted: PromptStashEntry | null;
-    /** False when the write failed outright (e.g. quota); nothing was kept. */
+    /** False when the write failed outright, unless keeping a recovered entry in memory. */
     written: boolean;
     /** False for failed writes or in-memory fallback; the entry will not survive reload. */
     durable: boolean;
@@ -174,12 +185,25 @@ interface PromptStashStoreState {
 
 export const usePromptStashStore = create<PromptStashStoreState>()((set, get) => ({
   entries: [],
-  stashEntry: (entry) => {
-    const nextEntries = [entry, ...latestEntries(get().entries)];
+  stashEntry: (entry, options) => {
+    const entries = latestEntries(get().entries);
+    // A remote entry's ID is unchanged on its server; recovery must not replace a local entry.
+    const localEntry =
+      options?.recover && entries.some((candidate) => candidate.id === entry.id)
+        ? { ...entry, id: randomUUID() }
+        : entry;
+    const nextEntries = [localEntry, ...entries];
     const evicted = nextEntries.length > MAX_STASH_ENTRIES ? (nextEntries.pop() ?? null) : null;
     const { written, durable } = persistEntries(nextEntries);
     // Failed writes must not duplicate the intact composer; eviction also commits only on success.
     if (!written) {
+      // An already-taken entry no longer has a durable source or an intact composer draft.
+      // Keep it in memory without evicting another entry when storage rejects the recovery.
+      if (options?.recover) {
+        unpersistedRecoveryEntryIds.add(localEntry.id);
+        set({ entries: [localEntry, ...entries] });
+        return { evicted: null, written: true, durable: false };
+      }
       return { evicted: null, written: false, durable: false };
     }
     set(() => ({ entries: nextEntries }));
@@ -192,6 +216,7 @@ export const usePromptStashStore = create<PromptStashStoreState>()((set, get) =>
     const nextEntries = entries.filter((candidate) => candidate.id !== entryId);
     const { durable } = persistEntries(nextEntries);
     unpersistedFinalizedEntryIds.delete(entryId);
+    unpersistedRecoveryEntryIds.delete(entryId);
     set(() => ({ entries: nextEntries }));
     return { entry, durable };
   },
@@ -226,6 +251,7 @@ export const usePromptStashStore = create<PromptStashStoreState>()((set, get) =>
 }
 
 export function writePromptStashStorageForTest(raw: string): void {
+  unpersistedRecoveryEntryIds.clear();
   baseStashStorage.setItem(PROMPT_STASH_STORAGE_KEY, raw);
   usePromptStashStore.setState({ entries: readPersistedEntries() ?? [] });
 }

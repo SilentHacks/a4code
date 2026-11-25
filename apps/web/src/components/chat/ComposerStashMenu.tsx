@@ -1,4 +1,4 @@
-import { msg, T, useGT, useMessages, Var } from "gt-react";
+import { msg, useGT, useMessages } from "gt-react";
 import { BookmarkIcon, FileIcon, FileTextIcon } from "lucide-react";
 import { memo, useEffect, useEffectEvent, useRef, useState, type RefObject } from "react";
 import { assistantCitationsToPlainText } from "@t3tools/shared/assistantCitations";
@@ -10,6 +10,7 @@ import { m, type MessageResolver } from "~/i18n/messages";
 import { cn } from "~/lib/utils";
 import { type PromptStashEntry } from "../../promptStashStore";
 import { ComposerBanner } from "./ComposerBanner";
+import type { ComposerStashRow } from "./useComposerStash";
 
 const SNIPPET_MAX_CHARS = 90;
 
@@ -60,28 +61,18 @@ export function stashEntrySnippet(entry: PromptStashEntry, resolve: MessageResol
 
 /** Window capture gives the open menu priority over composer key handlers. */
 export const ComposerStashMenu = memo(function ComposerStashMenu(props: {
-  entries: ReadonlyArray<PromptStashEntry>;
-  cloudStatus?: "loading" | "unavailable" | undefined;
-  stashShortcutLabel: string | null;
+  entries: ReadonlyArray<ComposerStashRow>;
   composerFormRef: RefObject<HTMLFormElement | null>;
-  onRestore: (entry: PromptStashEntry) => void;
-  onDelete: (entry: PromptStashEntry) => void;
+  onRestore: (row: ComposerStashRow) => void;
+  onDelete: (row: ComposerStashRow) => void;
   onClose: () => void;
 }) {
-  const {
-    entries,
-    cloudStatus,
-    stashShortcutLabel,
-    composerFormRef,
-    onRestore,
-    onDelete,
-    onClose,
-  } = props;
+  const { entries, composerFormRef, onRestore, onDelete, onClose } = props;
   const gt = useGT();
   const m = useMessages();
-  const [highlightedId, setHighlightedId] = useState<string | null>(entries[0]?.id ?? null);
+  const [highlightedKey, setHighlightedKey] = useState<string | null>(entries[0]?.key ?? null);
 
-  const highlightedEntry = entries.find((entry) => entry.id === highlightedId) ?? entries[0];
+  const highlightedEntry = entries.find(({ key }) => key === highlightedKey) ?? entries[0];
   const drawerRef = useRef<HTMLDivElement>(null);
 
   // Both listeners read entries, highlight and callbacks at event time, so they subscribe
@@ -121,11 +112,11 @@ export const ComposerStashMenu = memo(function ComposerStashMenu(props: {
       if (entries.length === 0) return;
       event.preventDefault();
       event.stopPropagation();
-      const currentIndex = entries.findIndex((entry) => entry.id === highlightedEntry?.id);
+      const currentIndex = entries.findIndex(({ key }) => key === highlightedEntry?.key);
       const offset = event.key === "ArrowDown" ? 1 : -1;
       const normalizedIndex = currentIndex >= 0 ? currentIndex : offset === 1 ? -1 : 0;
       const nextIndex = (normalizedIndex + offset + entries.length) % entries.length;
-      setHighlightedId(entries[nextIndex]?.id ?? null);
+      setHighlightedKey(entries[nextIndex]?.key ?? null);
       const nextButton =
         drawer.querySelectorAll<HTMLButtonElement>("[data-stash-restore]")[nextIndex];
       nextButton?.scrollIntoView({ block: "nearest" });
@@ -191,49 +182,22 @@ export const ComposerStashMenu = memo(function ComposerStashMenu(props: {
       </ComposerBanner.Row>
       <ComposerBanner.Scroll className="flex flex-col">
         <ComposerBanner.Children render={<ul role="list" />} aria-label={gt("Stashed prompts")}>
-          {cloudStatus && (
-            <ComposerBanner.Row render={<li />}>
-              <ComposerBanner.Icon />
-              <ComposerBanner.Content>
-                {cloudStatus === "loading"
-                  ? gt("Loading synced prompts…")
-                  : gt("Synced prompts unavailable")}
-              </ComposerBanner.Content>
-            </ComposerBanner.Row>
-          )}
-          {entries.length === 0 ? (
-            cloudStatus ? null : (
-              <ComposerBanner.Row render={<li />}>
-                <ComposerBanner.Icon />
-                <ComposerBanner.Content className="text-muted-foreground">
-                  <T>Nothing stashed yet.</T>
-                  {stashShortcutLabel ? (
-                    <>
-                      {" "}
-                      <T>
-                        Press <Var>{stashShortcutLabel}</Var> with a prompt in the composer to stash
-                        it.
-                      </T>
-                    </>
-                  ) : null}
-                </ComposerBanner.Content>
-              </ComposerBanner.Row>
-            )
-          ) : (
-            entries.map((entry) => (
+          {entries.map((row) => {
+            const { entry, key, environmentLabel } = row;
+            return (
               <ComposerBanner.Row
                 render={<li />}
-                key={entry.id}
-                data-stash-entry={entry.id}
-                data-highlighted={highlightedEntry?.id === entry.id || undefined}
+                key={key}
+                data-stash-entry={key}
+                data-highlighted={highlightedEntry?.key === key || undefined}
                 className={cn(
                   "relative rounded-sm",
-                  highlightedEntry?.id === entry.id && "bg-accent text-accent-foreground",
+                  highlightedEntry?.key === key && "bg-accent text-accent-foreground",
                 )}
                 onMouseMove={() => {
-                  if (highlightedId !== entry.id) setHighlightedId(entry.id);
+                  if (highlightedKey !== key) setHighlightedKey(key);
                 }}
-                onFocus={() => setHighlightedId(entry.id)}
+                onFocus={() => setHighlightedKey(key)}
               >
                 <ComposerBanner.Icon>
                   <FileTextIcon />
@@ -242,17 +206,22 @@ export const ComposerStashMenu = memo(function ComposerStashMenu(props: {
                   <button
                     type="button"
                     className="min-w-0 flex-1 cursor-pointer truncate text-left text-foreground/80 outline-none before:absolute before:inset-0 before:rounded-sm focus-visible:before:ring-2 focus-visible:before:ring-inset focus-visible:before:ring-ring"
-                    data-stash-restore={entry.id}
+                    data-stash-restore={key}
                     aria-label={gt("Restore stashed prompt: {snippet}", {
                       snippet: stashEntrySnippet(entry, m),
                     })}
                     onPointerDown={(event) => event.preventDefault()}
-                    onClick={() => onRestore(entry)}
+                    onClick={() => onRestore(row)}
                   >
                     {stashEntrySnippet(entry, m)}
                   </button>
                 </ComposerBanner.Content>
                 <ComposerBanner.Actions>
+                  {environmentLabel && (
+                    <span className="max-w-24 truncate text-muted-foreground">
+                      {environmentLabel}
+                    </span>
+                  )}
                   {entry.pendingImageCount ? (
                     <span className="shrink-0 text-muted-foreground">
                       {gt(
@@ -297,12 +266,12 @@ export const ComposerStashMenu = memo(function ComposerStashMenu(props: {
                     className="z-10"
                     aria-label={gt("Delete stashed prompt")}
                     onPointerDown={(event) => event.preventDefault()}
-                    onClick={() => onDelete(entry)}
+                    onClick={() => onDelete(row)}
                   />
                 </ComposerBanner.Actions>
               </ComposerBanner.Row>
-            ))
-          )}
+            );
+          })}
         </ComposerBanner.Children>
       </ComposerBanner.Scroll>
     </ComposerBanner.Root>

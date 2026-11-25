@@ -200,14 +200,3 @@ export const relayDpopProofs = pgTable(
     primaryKey({ columns: [table.thumbprint, table.jti] }),
   ],
 );
-
-export const relayPromptStash = pgTable(
-  "relay_prompt_stash",
-  {
-    userId: varchar("user_id", { length: 255 }).notNull(),
-    id: varchar("id", { length: 36 }).notNull(),
-    prompt: text("prompt").notNull(),
-    createdAt: varchar("created_at", { length: 64 }).notNull(),
-  },
-  (table) => [primaryKey({ columns: [table.userId, table.id] })],
-);

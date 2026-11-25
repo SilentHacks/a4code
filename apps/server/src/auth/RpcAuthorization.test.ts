@@ -44,6 +44,15 @@ describe("RPC authorization scopes", () => {
     expect(new Set(Object.keys(RPC_REQUIRED_SCOPES))).toEqual(new Set(WsRpcGroup.requests.keys()));
   });
 
+  it("separates reading the prompt stash from mutating it", () => {
+    expect(requiredScopeForRpcMethod(WS_METHODS.promptStashSubscribe)).toBe(
+      AuthOrchestrationReadScope,
+    );
+    for (const method of [WS_METHODS.promptStashSave, WS_METHODS.promptStashTake]) {
+      expect(requiredScopeForRpcMethod(method)).toBe(AuthOrchestrationOperateScope);
+    }
+  });
+
   it("keeps webhook delivery logs, which hold request bodies, behind operate scope", () => {
     for (const method of [
       WS_METHODS.scheduledTasksListWebhookDeliveries,

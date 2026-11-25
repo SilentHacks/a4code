@@ -101,11 +101,6 @@ vp run --filter t3code-relay deploy -- --stage prod
 vp run --filter t3code-relay deploy -- --env-file .env.local
 ```
 
-The prompt stash table holds user-authored text. Remove its rows by Clerk user ID
-when processing a T3 Connect account deletion. Keep production backups that
-contain these rows in production under the relay database's backup retention
-policy. Use synthetic stash data on development and preview branches.
-
 Alchemy defaults personal deployments to the `dev_$USER` stage. Relay custom domains apply the same
 DNS-safe sanitization as Alchemy physical resource names, so `prod` uses
 `relay.<RELAY_API_ZONE_NAME>` and `dev_julius` uses

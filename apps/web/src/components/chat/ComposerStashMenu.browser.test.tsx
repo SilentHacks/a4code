@@ -1,3 +1,4 @@
+import { EnvironmentId } from "@t3tools/contracts";
 import { useRef, useState } from "react";
 import { expect, it } from "vite-plus/test";
 import { page, userEvent } from "vite-plus/test/browser";
@@ -9,12 +10,17 @@ import { ComposerStashMenu } from "./ComposerStashMenu";
 function Composer({ dialog = false }: { dialog?: boolean }) {
   const composerFormRef = useRef<HTMLFormElement>(null);
   const [entries, setEntries] = useState(
-    ["first", "second"].map((id) => ({
-      id,
-      createdAt: "2026-10-01T00:00:00.000Z",
-      prompt: `${id} prompt`,
-      attachments: [],
-      droppedImageNames: [],
+    ["first", "second"].map((host) => ({
+      key: host,
+      environmentId: EnvironmentId.make(host),
+      environmentLabel: host,
+      entry: {
+        id: "same-id",
+        createdAt: "2026-10-01T00:00:00.000Z",
+        prompt: `${host} prompt`,
+        attachments: [],
+        droppedImageNames: [],
+      },
     })),
   );
   const [draft, setDraft] = useState("Unsent draft");
@@ -40,14 +46,13 @@ function Composer({ dialog = false }: { dialog?: boolean }) {
         <ComposerStashMenu
           composerFormRef={composerFormRef}
           entries={entries}
-          stashShortcutLabel="Ctrl+S"
           onRestore={(entry) => {
-            setDraft(entry.prompt);
-            setEntries((current) => current.filter(({ id }) => id !== entry.id));
+            setDraft(entry.entry.prompt);
+            setEntries((current) => current.filter(({ key }) => key !== entry.key));
             setOpen(false);
           }}
           onDelete={(entry) => {
-            setEntries((current) => current.filter(({ id }) => id !== entry.id));
+            setEntries((current) => current.filter(({ key }) => key !== entry.key));
             if (entries.length === 1) setOpen(false);
           }}
           onClose={() => setOpen(false)}
@@ -134,4 +139,11 @@ it("leaves IME composition keys in the composer alone while the stash is open", 
   await focus(editor().element());
   await press("{Enter}");
   await expect.element(editor()).toHaveValue("first prompt");
+});
+
+it("moves the highlight and restores the right host when stash IDs match", async () => {
+  await using _screen = await render(<Composer />);
+  await focus(editor().element());
+  await press("{ArrowDown}{Enter}");
+  await expect.element(editor()).toHaveValue("second prompt");
 });

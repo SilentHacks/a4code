@@ -291,6 +291,8 @@ it("a machine chip stashed in one thread restores with its machine in another", 
     router: false,
   });
   const editor = page.getByTestId("composer-editor");
+  const stashBadge = page.getByRole("button", { name: /^Stashed prompts/ });
+  const stashDrawer = page.getByRole("list", { name: "Stashed prompts" });
   const pressStashShortcut = async () => {
     await userEvent.click(editor);
     await userEvent.keyboard("{ControlOrMeta>}s{/ControlOrMeta}");
@@ -298,13 +300,17 @@ it("a machine chip stashed in one thread restores with its machine in another", 
   await vi.waitFor(() => expect(editor.element().textContent).toContain("Deploy on"));
   // A draft can't stash until the shell snapshot lists its project.
   await expect.element(page.getByText("render", { exact: true }).first()).toBeVisible();
+  await expect.element(stashBadge).not.toBeInTheDocument();
+  await expect.element(stashDrawer).not.toBeInTheDocument();
   await pressStashShortcut();
   await vi.waitFor(() => expect(usePromptStashStore.getState().entries).toHaveLength(1));
+  await expect.element(stashBadge).toBeVisible();
+  await expect.element(stashDrawer).not.toBeInTheDocument();
 
   // An answer carries no machines, so an open question refuses the restore and keeps the entry.
   await router.navigate({ to: `/${ENVIRONMENT_ID}/${asking.id}` });
   await expect.element(page.getByText("Which file should change?")).toBeVisible();
-  await userEvent.click(page.getByRole("button", { name: /^Stashed prompts/ }));
+  await userEvent.click(stashBadge);
   await userEvent.click(page.getByRole("button", { name: /^Restore stashed prompt/ }));
   await vi.waitFor(() =>
     expect(document.body.textContent).toContain("Stashed machines can't go in an answer"),
@@ -316,6 +322,8 @@ it("a machine chip stashed in one thread restores with its machine in another", 
   await pressStashShortcut();
 
   await vi.waitFor(() => expect(editor.element().textContent).toContain("Deploy on"));
+  await expect.element(stashBadge).not.toBeInTheDocument();
+  await expect.element(stashDrawer).not.toBeInTheDocument();
   expect(
     useComposerDraftStore.getState().getComposerDraft(scopeThreadRef(ENVIRONMENT_ID, other.id))
       ?.environmentContexts,

@@ -1073,9 +1073,6 @@ describe("makeRelayDeviceRegistrationRequest", () => {
           unregisterDevice: unexpected,
           registerLiveActivity: unexpected,
           getAgentActivitySnapshot,
-          listPromptStash: () => Effect.die("Unexpected prompt stash request"),
-          savePromptStash: () => Effect.die("Unexpected prompt stash request"),
-          deletePromptStash: () => Effect.die("Unexpected prompt stash request"),
           resetTokenCache: Effect.void,
         }),
       ).pipe(Layer.merge(layerPersistenceTest));

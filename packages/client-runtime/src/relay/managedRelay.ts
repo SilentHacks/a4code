@@ -21,9 +21,6 @@ import {
   type RelayLiveActivityRegistrationRequest,
   RelayMobileRegistrationScope,
   type RelayOkResponse,
-  type RelayPromptStashCreate,
-  type RelayPromptStashEntry,
-  type RelayPromptStashSaveResult,
   type RelayPublicClientId,
   type RelayT3ChatLinkRequestResponse,
   type RelayT3ChatLinkResponse,
@@ -435,17 +432,6 @@ export class ManagedRelayClient extends Context.Service<
     readonly getAgentActivitySnapshot: (input: {
       readonly clerkToken: string;
     }) => Effect.Effect<RelayAgentActivitySnapshotResponse, ManagedRelayClientError>;
-    readonly listPromptStash: (input: {
-      readonly clerkToken: string;
-    }) => Effect.Effect<ReadonlyArray<RelayPromptStashEntry> | undefined, ManagedRelayClientError>;
-    readonly savePromptStash: (input: {
-      readonly clerkToken: string;
-      readonly payload: RelayPromptStashCreate;
-    }) => Effect.Effect<RelayPromptStashSaveResult | undefined, ManagedRelayClientError>;
-    readonly deletePromptStash: (input: {
-      readonly clerkToken: string;
-      readonly id: string;
-    }) => Effect.Effect<RelayOkResponse | undefined, ManagedRelayClientError>;
     readonly resetTokenCache: Effect.Effect<void>;
   }
 >()("@t3tools/client-runtime/relay/managedRelay/ManagedRelayClient") {}
@@ -487,14 +473,6 @@ function isRejectedDpopAccessToken(error: ManagedRelayClientError): boolean {
     error._tag === "ManagedRelayRequestFailedError" &&
     error.relayError?._tag === "RelayAuthInvalidError" &&
     error.relayError.reason === "invalid_bearer"
-  );
-}
-
-function settlePromptStashRequest<A, E>(request: Effect.Effect<A, E>) {
-  return request.pipe(
-    Effect.timeoutOption(Duration.millis(MANAGED_RELAY_REQUEST_TIMEOUT_MS)),
-    Effect.map(Option.getOrUndefined),
-    Effect.orElseSucceed(() => undefined),
   );
 }
 
@@ -573,9 +551,6 @@ function disabledManagedRelayClient(relayUrl: string): ManagedRelayClient["Servi
     });
   return ManagedRelayClient.of({
     relayUrl,
-    listPromptStash: unavailable("clientRuntime.managedRelay.listPromptStash"),
-    savePromptStash: unavailable("clientRuntime.managedRelay.savePromptStash"),
-    deletePromptStash: unavailable("clientRuntime.managedRelay.deletePromptStash"),
     listEnvironments: unavailable("clientRuntime.managedRelay.listEnvironments"),
     listDevices: unavailable("clientRuntime.managedRelay.listDevices"),
     createEnvironmentLinkChallenge: unavailable(
@@ -878,35 +853,6 @@ export const make = Effect.fn("ManagedRelayClient.make")(function* (
 
   return ManagedRelayClient.of({
     relayUrl,
-    listPromptStash: Effect.fnUntraced(function* ({ clerkToken }) {
-      return yield* client.promptStash
-        .listPromptStash({
-          headers: bearerHeaders(clerkToken),
-        })
-        .pipe(
-          Effect.map((response) => response.entries),
-          settlePromptStashRequest,
-        );
-    }),
-    savePromptStash: Effect.fnUntraced(function* ({ clerkToken, payload }) {
-      return yield* client.promptStash
-        .savePromptStash({
-          headers: bearerHeaders(clerkToken),
-          payload,
-        })
-        .pipe(
-          Effect.map((response) => response.result),
-          settlePromptStashRequest,
-        );
-    }),
-    deletePromptStash: Effect.fnUntraced(function* ({ clerkToken, id }) {
-      return yield* client.promptStash
-        .deletePromptStash({
-          headers: bearerHeaders(clerkToken),
-          params: { id },
-        })
-        .pipe(settlePromptStashRequest);
-    }),
     listEnvironments: Effect.fnUntraced(
       function* (input) {
         return yield* client.client

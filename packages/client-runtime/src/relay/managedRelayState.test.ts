@@ -82,9 +82,6 @@ function createClient(overrides?: Partial<ManagedRelay.ManagedRelayClient["Servi
     unregisterDevice: () => Effect.die("unused"),
     registerLiveActivity: () => Effect.die("unused"),
     getAgentActivitySnapshot: () => Effect.die("unused"),
-    listPromptStash: () => Effect.die("Unexpected prompt stash request"),
-    savePromptStash: () => Effect.die("Unexpected prompt stash request"),
-    deletePromptStash: () => Effect.die("Unexpected prompt stash request"),
     resetTokenCache: Effect.void,
     ...overrides,
   });

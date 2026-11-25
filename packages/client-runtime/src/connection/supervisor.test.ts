@@ -2028,9 +2028,6 @@ describe("EnvironmentSupervisor", () => {
         unregisterDevice: unused,
         registerLiveActivity: unused,
         getAgentActivitySnapshot: unused,
-        listPromptStash: () => Effect.die("Unexpected prompt stash request"),
-        savePromptStash: () => Effect.die("Unexpected prompt stash request"),
-        deletePromptStash: () => Effect.die("Unexpected prompt stash request"),
         resetTokenCache: Effect.void,
       });
       const layerHttp = RpcHttp.layerRemoteHttpClient(fetchFn);

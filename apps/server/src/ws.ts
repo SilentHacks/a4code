@@ -87,6 +87,7 @@ import {
   ProjectWriteFileError,
   ProjectMutationError,
   ProviderUploadFeedbackError,
+  PromptStashError,
   ProviderSetupError,
   RelayClientInstallFailedError,
   type RelayClientInstallProgressEvent,
@@ -134,6 +135,7 @@ import * as ThreadLaunchService from "./orchestration-v2/ThreadLaunchService.ts"
 import * as ThreadMessageIntake from "./orchestration-v2/ThreadMessageIntake.ts";
 import * as DocumentText from "./provider/DocumentText.ts";
 import * as ScheduledTasks from "./scheduledTasks/ScheduledTaskService.ts";
+import * as PromptStash from "./promptStash/PromptStash.ts";
 import * as Workflows from "./workflows/Workflows.ts";
 import * as WorkflowRuntime from "./workflows/WorkflowRuntime.ts";
 import * as SecretRequests from "./secrets/SecretRequests.ts";
@@ -1505,6 +1507,10 @@ export const layerWsRpc = (
       const threadViewers = yield* ThreadViewers.ThreadViewers;
       const providerSessionManager = yield* ProviderSessionManager.ProviderSessionManagerV2;
       const scheduledTasks = yield* ScheduledTasks.ScheduledTaskService;
+      const promptStash = yield* PromptStash.PromptStash;
+      const isPromptStashError = Schema.is(PromptStashError);
+      const toPromptStashRpcError = (error: unknown) =>
+        isPromptStashError(error) ? error : new PromptStashError({ reason: "storage" });
       const workflows = yield* Workflows.Workflows;
       const workflowDefinitions = yield* WorkflowRuntime.WorkflowDefinitions;
       // The service's messages are built from its own attributes, so they are safe to send.
@@ -1945,6 +1951,7 @@ export const layerWsRpc = (
             ? {}
             : { managedPolicy: serverSettings.managedPolicy }),
           shellResumeCompletionMarker: true,
+          promptStashSupported: true,
           shellThreadFamilies: true,
           threadLinkMetadata: true,
           shellOlderSettled: true,
@@ -2411,6 +2418,12 @@ export const layerWsRpc = (
         [WS_METHODS.workflowsSaveDefinition]: (input) =>
           workflowDefinitions.save(input.name, input.source),
         [WS_METHODS.workflowsDeleteDefinition]: (input) => workflowDefinitions.remove(input.name),
+        [WS_METHODS.promptStashSubscribe]: () =>
+          promptStash.subscribe().pipe(Stream.mapError(toPromptStashRpcError)),
+        [WS_METHODS.promptStashSave]: ({ entry }) =>
+          promptStash.save(entry).pipe(Effect.mapError(toPromptStashRpcError)),
+        [WS_METHODS.promptStashTake]: ({ id }) =>
+          promptStash.take(id).pipe(Effect.mapError(toPromptStashRpcError)),
         [WS_METHODS.scheduledTasksSubscribe]: (_input) =>
           scheduledTasks.subscribeList().pipe(Stream.map(withVisibleWebhookUrls)),
         [WS_METHODS.scheduledTasksUpsert]: (input) => scheduledTasks.upsert(input),

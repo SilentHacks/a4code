@@ -4740,24 +4740,6 @@ export function clearComposerDraftsEnvironment(environmentId: EnvironmentId): vo
   composerDebouncedStorage.flush();
 }
 
-export function verifyPersistedComposerPrompt(target: ComposerThreadTarget, prompt: string) {
-  try {
-    composerDebouncedStorage.flush();
-    const persisted = getLocalStorageItem(
-      COMPOSER_DRAFT_STORAGE_KEY,
-      PersistedComposerDraftStoreStorage,
-    );
-    const key = resolveComposerDraftKey(useComposerDraftStore.getState(), target);
-    return (
-      key !== null &&
-      persisted?.version === COMPOSER_DRAFT_STORAGE_VERSION &&
-      persisted.state.draftsByThreadKey[key]?.prompt === prompt
-    );
-  } catch {
-    return false;
-  }
-}
-
 export function useComposerThreadDraft(threadRef: ComposerThreadTarget): ComposerThreadDraftState {
   return useComposerDraftStore((state) => {
     return getComposerDraftState(state, threadRef) ?? EMPTY_THREAD_DRAFT;

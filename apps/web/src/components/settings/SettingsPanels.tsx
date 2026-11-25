@@ -567,9 +567,6 @@ export function useSettingsRestore(onRestored?: () => void) {
       ? [gt("Snooze options")]
       : []),
     ...(settings.wordWrap !== DEFAULT_UNIFIED_SETTINGS.wordWrap ? [gt("Word wrap")] : []),
-    ...(settings.syncPromptStash !== DEFAULT_UNIFIED_SETTINGS.syncPromptStash
-      ? [gt("Sync stashed prompts")]
-      : []),
     ...(settings.persistComposerContextStrip !==
     DEFAULT_UNIFIED_SETTINGS.persistComposerContextStrip
       ? [gt("Composer context")]
@@ -723,7 +720,6 @@ export function useSettingsRestore(onRestored?: () => void) {
       notificationMode: DEFAULT_UNIFIED_SETTINGS.notificationMode,
       inAppNotificationsEnabled: DEFAULT_UNIFIED_SETTINGS.inAppNotificationsEnabled,
       wordWrap: DEFAULT_UNIFIED_SETTINGS.wordWrap,
-      syncPromptStash: DEFAULT_UNIFIED_SETTINGS.syncPromptStash,
       persistComposerContextStrip: DEFAULT_UNIFIED_SETTINGS.persistComposerContextStrip,
       diffFilesCollapsed: DEFAULT_UNIFIED_SETTINGS.diffFilesCollapsed,
       diffIgnoreWhitespace: DEFAULT_UNIFIED_SETTINGS.diffIgnoreWhitespace,
@@ -1252,17 +1248,6 @@ export function ChatSettingsPanel() {
   return (
     <SettingsPageContainer>
       <SettingsSection id="composer" title={gt("Composer")}>
-        <SettingsRow
-          {...setting("sync-prompt-stash")}
-          description={gt("Save plain-text stashes to your T3 Connect account when signed in.")}
-          control={
-            <Switch
-              checked={settings.syncPromptStash}
-              onCheckedChange={(checked) => updateSettings({ syncPromptStash: checked })}
-              aria-label={gt("Sync stashed prompts")}
-            />
-          }
-        />
         <SettingsRow
           {...setting("composer-rich-text")}
           description={gt("Show formatted Markdown as you type.")}
