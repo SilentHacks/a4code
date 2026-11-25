@@ -27,6 +27,7 @@ import {
   countPreparingComposerImages,
   removePreparingComposerImages,
 } from "./preparingComposerImages";
+import { BackgroundThreadContext } from "./backgroundThread";
 import { ComposerStashBadge } from "./ComposerStashBadge";
 import { type ComposerStashRow, useComposerStash } from "./useComposerStash";
 
@@ -378,4 +379,69 @@ it("closes the drawer when the last remote entry is removed without reopening on
   await expect.element(badge).not.toBeInTheDocument();
   await act(() => connection.registry.set(remote.entries, [published]));
   await expect.element(badge).toHaveAttribute("aria-expanded", "false");
+});
+
+it("stashes a side chat's prompt when Mod+S is pressed inside its pane", async () => {
+  const target = DraftId.make("stash-side-chat");
+  using _draft = {
+    [Symbol.dispose]: () => useComposerDraftStore.getState().clearComposerContent(target),
+  };
+  using _stash = {
+    [Symbol.dispose]: () => {
+      writePromptStashStorageForTest("");
+      removeLocalStorageItem(PROMPT_STASH_STORAGE_KEY);
+    },
+  };
+  const environmentId = EnvironmentId.make("stash-env");
+  const promptRef = { current: "Side chat question" };
+  const input = {
+    environmentId,
+    composerDraftTarget: target,
+    promptRef,
+    readAttachmentDraft: () => ({ images: [], files: [] }),
+    readTerminalContexts: () => [],
+    routeThreadRef: { environmentId, threadId: ThreadId.make("stash-side-thread") },
+    projectSelectionRequired: false,
+    pendingUserInputs: [],
+    activePendingProgress: null,
+    prompt: promptRef.current,
+    composerMenuOpen: false,
+    isComposerCollapsedMobile: false,
+    composerPreviewAnnotations: [],
+    composerReviewComments: [],
+    composerThreadContexts: [],
+    attachmentTargetKey: target,
+    isComposerDraftTargetOpen: () => true,
+    composerEditorRef: { current: null },
+    isRevertingCheckpoint: () => false,
+    pendingThreadImportsRef: { current: new Map() },
+    setComposerCursor: vi.fn(),
+    setComposerTrigger: vi.fn(),
+    importContextRecords: () => new Map(),
+    expandMobileComposer: vi.fn(),
+  } satisfies StashInput;
+  // SideThreadPane renders an on-screen side chat this way.
+  await using screen = await render(
+    <BackgroundThreadContext value>
+      <div data-side-chat-pane="stash-side-thread">
+        <textarea aria-label="Side chat composer" />
+        <Harness input={input} />
+      </div>
+    </BackgroundThreadContext>,
+  );
+
+  const composer = screen.container.querySelector("textarea")!;
+  composer.focus();
+  const mod = isMacPlatform(navigator.platform) ? { metaKey: true } : { ctrlKey: true };
+  const event = new KeyboardEvent("keydown", { key: "s", ...mod, bubbles: true, cancelable: true });
+  await act(() => {
+    composer.dispatchEvent(event);
+  });
+
+  expect(event.defaultPrevented).toBe(true);
+  await vi.waitFor(() => {
+    expect(usePromptStashStore.getState().entries.map((entry) => entry.prompt)).toEqual([
+      "Side chat question",
+    ]);
+  });
 });
