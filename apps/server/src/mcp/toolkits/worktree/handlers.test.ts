@@ -86,10 +86,10 @@ const handoffFrom = <A, E>(
   const state: TaskFoldersTestState = { workspaceRoot: "/unset", trackedFolders: [], thread: null };
   const scope: McpInvocationContext.McpInvocationScope = {
     environmentId: EnvironmentId.make("environment:handoff"),
-    requestNamespace: "provider-session:handoff",
+    requestNamespace: "test:handoff",
     thread: {
       threadId,
-      providerSessionId: "provider-session:handoff",
+      credentialId: "handoff",
       providerInstanceId: ProviderInstanceId.make("codex"),
     },
     client: undefined,
