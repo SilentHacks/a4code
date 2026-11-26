@@ -436,6 +436,62 @@ it.effect(
           },
         ],
       });
+      const runId = RunId.make("run:html-publication");
+      yield* sink.write({
+        events: [
+          {
+            id: EventId.make("event:html-publication:run"),
+            type: "run.created",
+            threadId,
+            runId,
+            occurredAt: now,
+            payload: {
+              id: runId,
+              threadId,
+              ordinal: 1,
+              providerInstanceId: modelSelection.instanceId,
+              modelSelection,
+              providerThreadId: null,
+              userMessageId: MessageId.make("message:html-publication"),
+              rootNodeId: null,
+              activeAttemptId: null,
+              status: "completed",
+              requestedAt: now,
+              startedAt: now,
+              completedAt: now,
+              checkpointId: null,
+              contextHandoffId: null,
+            },
+          },
+          {
+            id: EventId.make("event:html-publication:run-item"),
+            type: "turn-item.updated",
+            threadId,
+            runId,
+            occurredAt: now,
+            payload: {
+              id: TurnItemId.make("item:html-publication:run-item"),
+              type: "dynamic_tool",
+              threadId,
+              runId,
+              nodeId: null,
+              providerThreadId: null,
+              providerTurnId: null,
+              nativeItemRef: null,
+              parentItemId: null,
+              ordinal: 0,
+              status: "completed",
+              title: null,
+              startedAt: now,
+              completedAt: now,
+              updatedAt: now,
+              toolName: "Read",
+              input: {},
+              output: [],
+            },
+          },
+        ],
+      });
       const command = {
         type: "html-render.publish" as const,
         commandId: CommandId.make("publish:html-publication"),
@@ -463,6 +519,12 @@ it.effect(
         providerTurnId: null,
         nativeItemRef: null,
       });
+      const runItemOrdinals = projection.turnItems
+        .filter((candidate) => candidate.runId === runId)
+        .map((candidate) => candidate.ordinal);
+      assert.isNotEmpty(runItemOrdinals);
+      assert.isAbove(item!.ordinal, Math.max(...runItemOrdinals));
+      assert.deepEqual(projection.visibleTurnItems.at(-1)?.item.id, command.itemId);
       const replayed = yield* Effect.gen(function* () {
         const fresh = yield* ProjectionStore.ProjectionStoreV2;
         for (const stored of [...created.storedEvents, ...attached, ...receipts[0]!.storedEvents]) {

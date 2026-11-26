@@ -172,6 +172,7 @@ import {
   type GuestShareCommand,
 } from "./GuestShareDecider.ts";
 import * as EffectOutbox from "./EffectOutbox.ts";
+import * as TurnItemPositionStore from "./TurnItemPositionStore.ts";
 import { withCommandMetrics } from "../observability/Metrics.ts";
 import type { OrchestrationEffectRequestV2, PendingOrchestrationEffectV2 } from "./EffectOutbox.ts";
 import * as IdAllocator from "@t3tools/provider-core/server/IdAllocator";
@@ -1676,6 +1677,7 @@ const makeOrchestrator = Effect.fn("orchestrationV2.Orchestrator.layer")(functio
   const worktreeSetupTracker = yield* WorktreeSetupTracker.WorktreeSetupTracker;
   const projectionStore = yield* ProjectionStoreV2;
   const effectOutbox = yield* EffectOutbox.EffectOutboxV2;
+  const turnItemPositions = yield* TurnItemPositionStore.TurnItemPositionStoreV2;
   const nextTurnItemOrdinal = (
     projection: Pick<OrchestrationV2ThreadProjection, "thread"> &
       Partial<Pick<OrchestrationV2ThreadProjection, "turnItems">>,
@@ -16097,6 +16099,23 @@ const makeOrchestrator = Effect.fn("orchestrationV2.Orchestrator.layer")(functio
           return yield* new OrchestratorHtmlPublicationOwnerError({ threadId: command.threadId });
         }
         const lastRun = projection.runs.at(-1);
+        // A runless item would otherwise be placed ahead of every run, at the top of the thread.
+        const ordinal =
+          lastRun === undefined
+            ? yield* nextTurnItemOrdinal(projection)
+            : yield* turnItemPositions
+                .allocate({
+                  threadId: command.threadId,
+                  turnItemId: command.itemId,
+                  runId: lastRun.id,
+                  runOrdinal: lastRun.ordinal,
+                })
+                .pipe(
+                  Effect.mapError(
+                    (cause) =>
+                      new OrchestratorProjectionError({ threadId: command.threadId, cause }),
+                  ),
+                );
         const now = yield* DateTime.now;
         yield* emit(
           events,
@@ -16115,7 +16134,7 @@ const makeOrchestrator = Effect.fn("orchestrationV2.Orchestrator.layer")(functio
             providerTurnId: null,
             nativeItemRef: null,
             parentItemId: null,
-            ordinal: yield* nextTurnItemOrdinal(projection),
+            ordinal,
             status: "completed",
             title: command.reference.title,
             startedAt: now,
@@ -17781,6 +17800,7 @@ export const layer: Layer.Layer<
   | EffectOutbox.EffectOutboxV2
   | EventSinkV2
   | IdAllocator.IdAllocatorV2
+  | TurnItemPositionStore.TurnItemPositionStoreV2
   | ProjectStore.ProjectStoreV2
   | ProviderAdapterRegistryV2
   | ProviderSessionManagerV2
