@@ -294,11 +294,7 @@ export function projectAcpElicitationForm(
         }
       }
       for (const field of fields) {
-        let value = Object.hasOwn(answers, field.id)
-          ? answers[field.id]
-          : field.required && field.type === "array" && field.accepts([])
-            ? []
-            : undefined;
+        let value = Object.hasOwn(answers, field.id) ? answers[field.id] : undefined;
         // Older callers wrap scalar selections in an array (or { answers: [...] }).
         const nested = unknownRecord(value);
         if (nested && Object.hasOwn(nested, "answers")) value = nested.answers;
