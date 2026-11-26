@@ -290,7 +290,7 @@ it.effect(
       };
       const thread = {
         threadId: ThreadId.make("thread:triage"),
-        providerSessionId: "provider:triage",
+        credentialId: "provider:triage",
         providerInstanceId: ProviderInstanceId.make("codex"),
       };
       const result = yield* Effect.gen(function* () {

@@ -163,10 +163,10 @@ describe("McpProviderSessions tool results", () => {
 describe("McpProviderSessions approval requests", () => {
   const threadId = ThreadId.make("thread-approval-requests");
   const pushHooks = { branch: "tools", files: [".husky/pre-push"], commands: [] };
-  const makeSession = (providerSessionId: string) => ({
+  const makeSession = (credentialId: string) => ({
     environmentId: EnvironmentId.make("env-approval-requests"),
     threadId,
-    providerSessionId,
+    credentialId,
     providerInstanceId: ProviderInstanceId.make("codex"),
     endpoint: "http://127.0.0.1/mcp",
     authorizationHeader: "Bearer token",

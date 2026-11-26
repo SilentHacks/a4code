@@ -1081,7 +1081,7 @@ it.effect(
           requestNamespace: "provider-session",
           thread: {
             threadId: ThreadId.make("thread-provider"),
-            providerSessionId: "provider-session",
+            credentialId: "provider-session",
             providerInstanceId: ProviderInstanceId.make("claudeAgent"),
           },
           client: undefined,
