@@ -1,5 +1,5 @@
-import type { ProjectGroupingSettings } from "@a4code/client-runtime/state/project-grouping";
-import type { SidebarProjectGroupingMode } from "@a4code/contracts";
+import type { ProjectGroupingSettings } from "@t3tools/client-runtime/state/project-grouping";
+import type { SidebarProjectGroupingMode } from "@t3tools/contracts";
 
 import type { Preferences } from "../persistence/mobile-preferences";
 

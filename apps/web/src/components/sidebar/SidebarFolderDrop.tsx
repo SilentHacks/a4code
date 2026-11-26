@@ -1,7 +1,7 @@
 import {
   DESKTOP_APP_ACTIVATION_PROTOCOL_VERSION,
   DesktopAppActivationPlatform,
-} from "@a4code/contracts";
+} from "@t3tools/contracts";
 import * as Schema from "effect/Schema";
 import { FolderPlusIcon } from "lucide-react";
 import { useGT } from "gt-react";

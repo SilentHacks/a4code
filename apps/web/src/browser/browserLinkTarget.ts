@@ -2,7 +2,7 @@ import {
   AuthPreviewOperateScope,
   type BrowserLinkTarget,
   type ScopedThreadRef,
-} from "@a4code/contracts";
+} from "@t3tools/contracts";
 
 import { ensureClientSettingsHydrated, getClientSettings } from "~/hooks/useSettings";
 import { readEnvironmentScope } from "~/state/session";

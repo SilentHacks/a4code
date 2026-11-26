@@ -1,7 +1,7 @@
-import { ExecutionEnvironmentDescriptor } from "@a4code/contracts";
-import * as HostProcess from "@a4code/shared/HostProcess";
-import * as NetService from "@a4code/shared/Net";
-import { isLocalLoopbackHost, normalizeHostname } from "@a4code/shared/hostClassification";
+import { ExecutionEnvironmentDescriptor } from "@t3tools/contracts";
+import * as HostProcess from "@t3tools/shared/HostProcess";
+import * as NetService from "@t3tools/shared/Net";
+import { isLocalLoopbackHost, normalizeHostname } from "@t3tools/shared/hostClassification";
 import * as Duration from "effect/Duration";
 import * as Effect from "effect/Effect";
 import * as Option from "effect/Option";
@@ -771,7 +771,7 @@ export const probeTailscaleHttpsEndpoint = Effect.fn("tailscale.probeTailscaleHt
       const response = yield* client
         .execute(HttpClientRequest.get(url.toString()))
         .pipe(Effect.flatMap(HttpClientResponse.filterStatusOk));
-      // Another app or another A4 Code server can hold the Serve port; only our own descriptor counts.
+      // Another app or another T3 server can hold the Serve port; only our own descriptor counts.
       return yield* HttpClientResponse.schemaBodyJson(ExecutionEnvironmentDescriptor)(response);
     }).pipe(Effect.timeoutOption(input.timeout ?? TAILSCALE_PROBE_TIMEOUT));
 

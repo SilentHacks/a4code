@@ -1,11 +1,11 @@
-import { AuthFilesystemReadScope } from "@a4code/contracts";
+import { AuthFilesystemReadScope } from "@t3tools/contracts";
 import { readEnvironmentScope } from "../../state/session";
-import { executeAtomQuery } from "@a4code/client-runtime/state/runtime";
-import type { EnvironmentId } from "@a4code/contracts";
+import { executeAtomQuery } from "@t3tools/client-runtime/state/runtime";
+import type { EnvironmentId } from "@t3tools/contracts";
 import {
   isWorkspaceBrowserPreviewPath,
   isWorkspaceImagePreviewPath,
-} from "@a4code/shared/filePreview";
+} from "@t3tools/shared/filePreview";
 
 import { appAtomRegistry } from "../../state/atom-registry";
 import { projectEnvironment } from "../../state/projects";

@@ -1,10 +1,10 @@
 import { useAtomValue } from "@effect/atom-react";
-import type { EnvironmentThreadShell } from "@a4code/client-runtime/state/shell";
+import type { EnvironmentThreadShell } from "@t3tools/client-runtime/state/shell";
 import {
   createLinkedPullRequestSummaryAtomFamily,
   pullRequestDetailToVcsStatus,
-} from "@a4code/client-runtime/state/pull-requests";
-import type { EnvironmentId, PullRequestSummary } from "@a4code/contracts";
+} from "@t3tools/client-runtime/state/pull-requests";
+import type { EnvironmentId, PullRequestSummary } from "@t3tools/contracts";
 import * as Effect from "effect/Effect";
 import { Atom } from "effect/reactivity";
 import { useMessages } from "gt-react-native";

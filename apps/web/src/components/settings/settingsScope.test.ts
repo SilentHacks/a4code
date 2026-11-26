@@ -1,4 +1,4 @@
-import { EnvironmentId, ProjectId } from "@a4code/contracts";
+import { EnvironmentId, ProjectId } from "@t3tools/contracts";
 import { describe, expect, it } from "vite-plus/test";
 
 import type {
@@ -59,7 +59,7 @@ function group(
   };
 }
 
-const groups = [group("a4code", [first, second, third]), group("other", [other])];
+const groups = [group("t3code", [first, second, third]), group("other", [other])];
 
 describe("settings scope search", () => {
   it("retains an orphan checkout so it cannot turn into all environments", () => {
@@ -76,7 +76,7 @@ describe("settings scope search", () => {
 
 describe("settings scope resolution", () => {
   it("keeps all physical members in a project aggregate, including several on one environment", () => {
-    expect(resolveSettingsScope({ project: "a4code" }, groups, environments)).toMatchObject({
+    expect(resolveSettingsScope({ project: "t3code" }, groups, environments)).toMatchObject({
       kind: "project",
       environmentId: null,
       members: [first, second, third],
@@ -87,7 +87,7 @@ describe("settings scope resolution", () => {
   it("narrows a checkout target to exactly one member, deriving its environment when omitted", () => {
     expect(
       resolveSettingsScope(
-        { project: "a4code", checkout: second.physicalProjectKey },
+        { project: "t3code", checkout: second.physicalProjectKey },
         groups,
         environments,
       ),
@@ -95,7 +95,7 @@ describe("settings scope resolution", () => {
       kind: "checkout",
       checkout: second,
       environmentId: laptopId,
-      label: "a4code / Laptop · /repos/second",
+      label: "t3code / Laptop · /repos/second",
       members: [second],
       environmentIds: [laptopId],
     });
@@ -104,11 +104,11 @@ describe("settings scope resolution", () => {
   it.each([
     { project: "missing" },
     { machine: "removed" },
-    { project: "a4code", machine: "removed" },
-    { project: "a4code", checkout: "deleted" },
+    { project: "t3code", machine: "removed" },
+    { project: "t3code", checkout: "deleted" },
     { project: "other", machine: laptopId },
     { project: "other", checkout: first.physicalProjectKey },
-    { project: "a4code", machine: serverId, checkout: first.physicalProjectKey },
+    { project: "t3code", machine: serverId, checkout: first.physicalProjectKey },
   ])("never widens an invalid or stale target: %j", (search) => {
     expect(resolveSettingsScope(search, groups, environments)).toMatchObject({
       kind: "unavailable",
@@ -119,7 +119,7 @@ describe("settings scope resolution", () => {
 
   it("leaves a removed checkout unavailable while sibling checkouts remain", () => {
     const search = {
-      project: "a4code",
+      project: "t3code",
       machine: laptopId,
       checkout: first.physicalProjectKey,
     };
@@ -128,17 +128,17 @@ describe("settings scope resolution", () => {
       members: [first],
     });
     expect(
-      resolveSettingsScope(search, [group("a4code", [second, third])], environments),
+      resolveSettingsScope(search, [group("t3code", [second, third])], environments),
     ).toMatchObject({ kind: "unavailable", members: [], environmentIds: [] });
   });
 
   it("does not select another environment after removing a project's last local checkout", () => {
-    const search = { project: "a4code", machine: laptopId };
+    const search = { project: "t3code", machine: laptopId };
     expect(resolveSettingsScope(search, groups, environments)).toMatchObject({
       kind: "project",
       members: [first, second],
     });
-    expect(resolveSettingsScope(search, [group("a4code", [third])], environments)).toMatchObject({
+    expect(resolveSettingsScope(search, [group("t3code", [third])], environments)).toMatchObject({
       kind: "unavailable",
       members: [],
       environmentIds: [],
@@ -148,7 +148,7 @@ describe("settings scope resolution", () => {
   it("rejects a cached checkout whose environment was removed", () => {
     expect(
       resolveSettingsScope(
-        { project: "a4code", checkout: third.physicalProjectKey },
+        { project: "t3code", checkout: third.physicalProjectKey },
         groups,
         environments.slice(0, 1),
       ),

@@ -38,8 +38,8 @@ import {
 
 const REPO_ROOT = NodePath.resolve(NodePath.dirname(NodeURL.fileURLToPath(import.meta.url)), "..");
 const MOBILE_ROOT = NodePath.join(REPO_ROOT, "apps/mobile");
-const ANDROID_PACKAGE = "io.github.silenthacks.a4code";
-const APP_SCHEME = "a4code";
+const ANDROID_PACKAGE = "com.t3tools.t3code";
+const APP_SCHEME = "t3code";
 // Manifest flags update expo-dev-launcher preferences before loading, hiding dev chrome in captures.
 const DEV_CLIENT_LAUNCH_FLAGS = "disableOnboarding=1&disableFab=1&disableAutoLaunch=1";
 const IOS_READY_FILENAME = "T3ShowcaseReadyScene";
@@ -47,7 +47,7 @@ const SERVER_HOST = "0.0.0.0";
 const IOS_SIMULATOR_ARCH = NodeProcess.arch === "arm64" ? "arm64" : "x86_64";
 const IOS_APP_PATH = NodePath.join(
   MOBILE_ROOT,
-  ".showcase/ios-derived-data/Build/Products/Debug-iphonesimulator/A4Code.app",
+  ".showcase/ios-derived-data/Build/Products/Debug-iphonesimulator/T3Code.app",
 );
 const ANDROID_APK_PATH = NodePath.join(
   MOBILE_ROOT,
@@ -423,7 +423,7 @@ function printUsage(config: ShowcaseConfig): void {
   NodeProcess.stdout.write(`App screenshot showcase
 
 Usage:
-  pnpm --filter @a4code/mobile screenshots [options]
+  pnpm --filter @t3tools/mobile screenshots [options]
 
 Options:
   --platform ios|android|all  Capture one platform (repeatable)
@@ -774,9 +774,9 @@ async function buildIos(): Promise<string> {
     "xcodebuild",
     [
       "-workspace",
-      NodePath.join(MOBILE_ROOT, "ios/A4Code.xcworkspace"),
+      NodePath.join(MOBILE_ROOT, "ios/T3Code.xcworkspace"),
       "-scheme",
-      "A4Code",
+      "T3Code",
       "-configuration",
       "Debug",
       "-sdk",

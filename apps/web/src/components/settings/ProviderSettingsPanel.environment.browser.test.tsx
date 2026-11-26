@@ -7,7 +7,7 @@ import {
   type ProviderAuthState,
   type ServerProvider,
   type UnifiedSettings,
-} from "@a4code/contracts";
+} from "@t3tools/contracts";
 import * as Cause from "effect/Cause";
 import * as Duration from "effect/Duration";
 import { AsyncResult, type Atom } from "effect/reactivity";

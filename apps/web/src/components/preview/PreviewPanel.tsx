@@ -3,7 +3,7 @@ import {
   AuthPreviewOperateScope,
   type PreviewAnnotationPayload,
   type ScopedThreadRef,
-} from "@a4code/contracts";
+} from "@t3tools/contracts";
 
 import type { ComposerImageAttachment } from "~/composerDraftStore";
 import { usePreviewAvailable } from "~/browser/previewRuntime";

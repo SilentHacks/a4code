@@ -6,8 +6,8 @@ import {
   type PullRequestSummary,
   type ThreadId,
   type ThreadLinkedPullRequest,
-} from "@a4code/contracts";
-import { makeDrainableWorker } from "@a4code/shared/DrainableWorker";
+} from "@t3tools/contracts";
+import { makeDrainableWorker } from "@t3tools/shared/DrainableWorker";
 import * as Cause from "effect/Cause";
 import * as Context from "effect/Context";
 import * as SecureRandom from "effect/crypto/SecureRandom";
@@ -43,7 +43,7 @@ class ThreadPullRequestServiceV2 extends Context.Service<
     readonly start: () => Effect.Effect<void, never, Scope.Scope>;
     readonly drain: Effect.Effect<void>;
   }
->()("a4code/orchestration-v2/ThreadPullRequestService/ThreadPullRequestServiceV2") {}
+>()("t3/orchestration-v2/ThreadPullRequestService/ThreadPullRequestServiceV2") {}
 
 function samePullRequest(
   left: ThreadLinkedPullRequest | null | undefined,

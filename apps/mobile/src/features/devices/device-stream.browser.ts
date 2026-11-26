@@ -1,7 +1,7 @@
 import {
   createDeviceStreamClient,
   type DeviceScreenSize,
-} from "@a4code/client-runtime/device/stream";
+} from "@t3tools/client-runtime/device/stream";
 
 import type { DeviceStreamConfiguration } from "./device-stream-document";
 

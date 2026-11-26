@@ -1,8 +1,8 @@
 import {
   nextThreadAnnouncement,
   type ThreadAnnouncementMemory,
-} from "@a4code/client-runtime/state/thread-activity-announcement";
-import { RunId } from "@a4code/contracts";
+} from "@t3tools/client-runtime/state/thread-activity-announcement";
+import { RunId } from "@t3tools/contracts";
 import { describe, expect, it } from "vite-plus/test";
 
 import {

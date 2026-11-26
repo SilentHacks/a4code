@@ -4,7 +4,7 @@ import {
   type EnvironmentMachineKind,
   type ServerConfig,
   type ServerProvider,
-} from "@a4code/contracts";
+} from "@t3tools/contracts";
 import { Atom } from "effect/reactivity";
 
 export type ThreadListProvider = Pick<

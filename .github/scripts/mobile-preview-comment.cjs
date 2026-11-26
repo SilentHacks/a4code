@@ -1,4 +1,5 @@
-const APP_SCHEME = "a4code-preview";
+const PROJECT_ID = "d763fcb8-d37c-41ea-a773-b54a0ab4a454";
+const APP_SCHEME = "t3-code";
 
 function readState(body) {
   const match = /^<!-- mobile-preview(?:-(android|ios))? (\{.*\}) -->/.exec(body ?? "");
@@ -49,7 +50,7 @@ function mergeState(previous, next) {
   };
 }
 
-function render(state, runUrl, projectId = process.env.A4CODE_EAS_PROJECT_ID) {
+function render(state, runUrl) {
   const platforms = ["android", "ios"];
   const cells = (value) => platforms.map((platform) => value(state[platform]));
   const rows = [
@@ -60,10 +61,10 @@ function render(state, runUrl, projectId = process.env.A4CODE_EAS_PROJECT_ID) {
     "--- | --- | ---",
     `Fingerprint | ${cells((entry) => entry?.fingerprint || "n/a").join(" | ")}`,
     `Dev client | ${cells((entry) => (entry?.client ? `[Install](${entry.client})` : entry?.fingerprint ? `Client unavailable ([build run](${runUrl}))` : "n/a")).join(" | ")}`,
-    `Update Details | ${cells((entry) => (entry?.group && projectId ? `[Update Permalink](https://expo.dev/projects/${projectId}/updates/${entry.group})` : "n/a")).join(" | ")}`,
+    `Update Details | ${cells((entry) => (entry?.group ? `[Update Permalink](https://expo.dev/projects/${PROJECT_ID}/updates/${entry.group})` : "n/a")).join(" | ")}`,
     `Update QR | ${cells((entry) => {
-      if (!entry?.group || !projectId) return "n/a";
-      const qr = `https://qr.expo.dev/eas-update?appScheme=${APP_SCHEME}&projectId=${projectId}&groupId=${entry.group}`;
+      if (!entry?.group) return "n/a";
+      const qr = `https://qr.expo.dev/eas-update?appScheme=${APP_SCHEME}&projectId=${PROJECT_ID}&groupId=${entry.group}`;
       return `<a href="${qr}"><img src="${qr}" width="250px" height="250px" /></a>`;
     }).join(" | ")}`,
   ];
@@ -110,10 +111,9 @@ async function main({ env = process.env, request = github } = {}) {
         (comment) =>
           comment.user?.login === "github-actions[bot]" &&
           (readState(comment.body) !== null ||
-            (env.A4CODE_EAS_PROJECT_ID &&
-              comment.body?.startsWith(
-                `<!-- continuous-deploy-fingerprint-projectId:${env.A4CODE_EAS_PROJECT_ID} -->`,
-              ))),
+            comment.body?.startsWith(
+              `<!-- continuous-deploy-fingerprint-projectId:${PROJECT_ID} -->`,
+            )),
       ),
     );
     if (comments.length < 100) break;
@@ -134,7 +134,7 @@ async function main({ env = process.env, request = github } = {}) {
     };
     if (next.fingerprint) state[platform] = mergeState(state[platform], next);
   }
-  const body = JSON.stringify({ body: render(state, runUrl, env.A4CODE_EAS_PROJECT_ID) });
+  const body = JSON.stringify({ body: render(state, runUrl) });
   if (existing) {
     await request(`/repos/${repository}/issues/comments/${existing.id}`, { method: "PATCH", body });
   } else {

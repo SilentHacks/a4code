@@ -1,11 +1,11 @@
-import { ThreadId, TurnItemId } from "@a4code/contracts";
+import { ThreadId, TurnItemId } from "@t3tools/contracts";
 import * as DateTime from "effect/DateTime";
 import { describe, expect, it } from "vite-plus/test";
 import {
   MAX_TOOL_OUTPUT_IMAGES,
   MAX_TOOL_OUTPUT_IMAGE_BASE64_LENGTH,
   toolOutputImages,
-} from "@a4code/shared/toolOutput";
+} from "@t3tools/shared/toolOutput";
 
 import { openCodeToolOutput, openCodeToolTurnItem } from "./toolItems.ts";
 

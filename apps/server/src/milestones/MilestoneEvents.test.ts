@@ -8,7 +8,7 @@ import {
   ProviderInstanceId,
   RunId,
   ThreadId,
-} from "@a4code/contracts";
+} from "@t3tools/contracts";
 import * as ConfigProvider from "effect/ConfigProvider";
 import * as Mac from "effect/crypto/Mac";
 import * as SecureRandom from "effect/crypto/SecureRandom";

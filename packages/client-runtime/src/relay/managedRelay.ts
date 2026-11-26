@@ -30,11 +30,11 @@ import {
   RelayProtectedError,
   type RelayProtectedError as RelayProtectedErrorType,
   RelayUnregisterDeviceEndpoint,
-} from "@a4code/contracts/relay";
-import { encodeOAuthScope, oauthScopeSetEquals } from "@a4code/shared/oauthScope";
-import { decodeRelayJwt } from "@a4code/shared/relayJwt";
-import { withRelayClientTracing } from "@a4code/shared/relayTracing";
-import { normalizeSecureRelayUrl } from "@a4code/shared/relayUrl";
+} from "@t3tools/contracts/relay";
+import { encodeOAuthScope, oauthScopeSetEquals } from "@t3tools/shared/oauthScope";
+import { decodeRelayJwt } from "@t3tools/shared/relayJwt";
+import { withRelayClientTracing } from "@t3tools/shared/relayTracing";
+import { normalizeSecureRelayUrl } from "@t3tools/shared/relayUrl";
 import * as Clock from "effect/Clock";
 import * as Context from "effect/Context";
 import * as Duration from "effect/Duration";
@@ -86,7 +86,13 @@ export class ManagedRelayDpopProofCreationError extends Schema.TaggedError<Manag
   }
 }
 
-const ManagedRelayRequestAction = Schema.Literals([
+export const ManagedRelayDpopSignerError = Schema.Union([
+  ManagedRelayDpopKeyLoadError,
+  ManagedRelayDpopProofCreationError,
+]);
+export type ManagedRelayDpopSignerError = typeof ManagedRelayDpopSignerError.Type;
+
+export const ManagedRelayRequestAction = Schema.Literals([
   "exchange relay DPoP access token",
   "list relay-managed environments",
   "list relay client devices",
@@ -103,9 +109,9 @@ const ManagedRelayRequestAction = Schema.Literals([
   "start T3 Chat linking",
   "unlink T3 Chat account",
 ]);
-type ManagedRelayRequestAction = typeof ManagedRelayRequestAction.Type;
+export type ManagedRelayRequestAction = typeof ManagedRelayRequestAction.Type;
 
-const ManagedRelayRequestActivity = Schema.Literals([
+export const ManagedRelayRequestActivity = Schema.Literals([
   "Relay DPoP access token exchange",
   "Relay environment listing",
   "Relay client device listing",
@@ -122,7 +128,7 @@ const ManagedRelayRequestActivity = Schema.Literals([
   "Relay T3 Chat link request",
   "Relay T3 Chat unlinking",
 ]);
-type ManagedRelayRequestActivity = typeof ManagedRelayRequestActivity.Type;
+export type ManagedRelayRequestActivity = typeof ManagedRelayRequestActivity.Type;
 
 const REQUEST_TIMED_OUT_TEXT: Record<ManagedRelayRequestActivity, string> = {
   "Relay DPoP access token exchange": msg("Relay DPoP access token exchange timed out."),
@@ -159,7 +165,7 @@ export class ManagedRelayRequestTimeoutError extends Schema.TaggedError<ManagedR
   }
 }
 
-class ManagedRelayUrlInvalidError extends Schema.TaggedError<ManagedRelayUrlInvalidError>()(
+export class ManagedRelayUrlInvalidError extends Schema.TaggedError<ManagedRelayUrlInvalidError>()(
   "ManagedRelayUrlInvalidError",
   {
     relayUrl: Schema.String,
@@ -263,7 +269,7 @@ export class ManagedRelayRequestFailedError extends Schema.TaggedError<ManagedRe
   }
 }
 
-class ManagedRelayAccessTokenScopesUnexpectedError extends Schema.TaggedError<ManagedRelayAccessTokenScopesUnexpectedError>()(
+export class ManagedRelayAccessTokenScopesUnexpectedError extends Schema.TaggedError<ManagedRelayAccessTokenScopesUnexpectedError>()(
   "ManagedRelayAccessTokenScopesUnexpectedError",
   {
     requestedScopes: Schema.Array(RelayDpopAccessTokenScope),
@@ -279,7 +285,7 @@ class ManagedRelayAccessTokenScopesUnexpectedError extends Schema.TaggedError<Ma
   }
 }
 
-class ManagedRelayTokenProofCreationError extends Schema.TaggedError<ManagedRelayTokenProofCreationError>()(
+export class ManagedRelayTokenProofCreationError extends Schema.TaggedError<ManagedRelayTokenProofCreationError>()(
   "ManagedRelayTokenProofCreationError",
   {
     method: Schema.String,
@@ -296,7 +302,7 @@ class ManagedRelayTokenProofCreationError extends Schema.TaggedError<ManagedRela
   }
 }
 
-class ManagedRelayRequestProofCreationError extends Schema.TaggedError<ManagedRelayRequestProofCreationError>()(
+export class ManagedRelayRequestProofCreationError extends Schema.TaggedError<ManagedRelayRequestProofCreationError>()(
   "ManagedRelayRequestProofCreationError",
   {
     method: Schema.String,
@@ -337,7 +343,7 @@ export class ManagedRelayDpopSigner extends Context.Service<
       input: ManagedRelayDpopProofInput,
     ) => Effect.Effect<string, ManagedRelayDpopProofCreationError>;
   }
->()("@a4code/client-runtime/relay/managedRelay/ManagedRelayDpopSigner") {}
+>()("@t3tools/client-runtime/relay/managedRelay/ManagedRelayDpopSigner") {}
 
 export const MANAGED_RELAY_REQUEST_TIMEOUT_MS = 10_000;
 
@@ -428,7 +434,7 @@ export class ManagedRelayClient extends Context.Service<
     }) => Effect.Effect<RelayAgentActivitySnapshotResponse, ManagedRelayClientError>;
     readonly resetTokenCache: Effect.Effect<void>;
   }
->()("@a4code/client-runtime/relay/managedRelay/ManagedRelayClient") {}
+>()("@t3tools/client-runtime/relay/managedRelay/ManagedRelayClient") {}
 
 const isRelayProtectedError = Schema.is(RelayProtectedError);
 

@@ -8,7 +8,7 @@ import {
   resolveProjectProviderInstanceEnabled,
   type ServerProvider,
   type ServerSettings,
-} from "@a4code/contracts";
+} from "@t3tools/contracts";
 
 import { getOnboardingProviderState } from "./providerReadiness.logic";
 

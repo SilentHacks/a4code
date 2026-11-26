@@ -11,8 +11,8 @@ import {
   PeerLinkError,
   type PeerLinkName,
   type PeerLinkSummary,
-} from "@a4code/contracts";
-import * as NodeSqliteClient from "@a4code/shared/nodeSqliteClient";
+} from "@t3tools/contracts";
+import * as NodeSqliteClient from "@t3tools/shared/nodeSqliteClient";
 import * as Cause from "effect/Cause";
 import * as Context from "effect/Context";
 import * as Digest from "effect/crypto/Digest";
@@ -35,7 +35,7 @@ import * as HttpClient from "effect/http/HttpClient";
 import * as HttpClientError from "effect/http/HttpClientError";
 import * as HttpApi from "effect/http-api/HttpApi";
 import * as HttpApiClient from "effect/http-api/HttpApiClient";
-import { isLocalLoopbackHost, isTailnetHost } from "@a4code/shared/hostClassification";
+import { isLocalLoopbackHost, isTailnetHost } from "@t3tools/shared/hostClassification";
 
 import * as ServerSecretStore from "../auth/ServerSecretStore.ts";
 import * as ServerEnvironment from "../environment/ServerEnvironment.ts";
@@ -85,7 +85,7 @@ export interface ResolvedPeerLink {
 }
 
 /** What a link's session is called in the peer's Connections, before this environment's label. */
-export const LINK_CLIENT_NAME_PREFIX = "A4 Code · ";
+export const LINK_CLIENT_NAME_PREFIX = "T3 Code · ";
 
 export const LINKED_ENVIRONMENTS_OFF =
   "Linked environments is off on this machine. Turn it on in Settings → Labs.";
@@ -135,7 +135,7 @@ export class PeerLinks extends Context.Service<
       expiresAt: DateTime.Utc,
     ) => Effect.Effect<void>;
   }
->()("a4code/peer/PeerLinks") {}
+>()("t3/peer/PeerLinks") {}
 
 interface PeerLinkRow {
   readonly environment_id: string;
@@ -234,7 +234,7 @@ const probeFailure = (
 
 /** Whether a host is this machine's own loopback. Tests serve their peers there, so they narrow it. */
 export const LoopbackHost = Context.Reference<(host: string) => boolean>(
-  "a4code/peer/PeerLinks/LoopbackHost",
+  "t3/peer/PeerLinks/LoopbackHost",
   { defaultValue: () => isLocalLoopbackHost },
 );
 

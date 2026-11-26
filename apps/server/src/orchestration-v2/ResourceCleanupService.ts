@@ -1,4 +1,4 @@
-import { ThreadId } from "@a4code/contracts";
+import { ThreadId } from "@t3tools/contracts";
 import * as Context from "effect/Context";
 import * as Effect from "effect/Effect";
 import * as FileSystem from "effect/FileSystem";
@@ -71,7 +71,7 @@ export class ResourceCleanupService extends Context.Reference<{
   readonly cleanupAttachments: (
     attachmentIds: ReadonlyArray<string>,
   ) => Effect.Effect<void, ResourceCleanupError>;
-}>("a4code/orchestration-v2/ResourceCleanupService", {
+}>("t3/orchestration-v2/ResourceCleanupService", {
   defaultValue: () => ({
     cleanupScheduledTasks: () => Effect.void,
     cleanupTerminals: () => Effect.void,

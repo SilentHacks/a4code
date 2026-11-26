@@ -1,15 +1,15 @@
-import { scopeProjectRef, scopeThreadRef } from "@a4code/client-runtime/environment";
+import { scopeProjectRef, scopeThreadRef } from "@t3tools/client-runtime/environment";
 import {
   normalizeProviderAccentColor,
   resolveProviderInstanceDisplayName,
   shouldShowInstanceBadge,
-} from "@a4code/client-runtime/state/provider-instance-display";
+} from "@t3tools/client-runtime/state/provider-instance-display";
 import {
   resolveSubagentMetadata,
   subagentCardDetail,
-} from "@a4code/client-runtime/state/subagent-display";
-import { formatSubagentEffort } from "@a4code/client-runtime/state/thread-execution";
-import type { EnvironmentId, OrchestrationV2Subagent } from "@a4code/contracts";
+} from "@t3tools/client-runtime/state/subagent-display";
+import { formatSubagentEffort } from "@t3tools/client-runtime/state/thread-execution";
+import type { EnvironmentId, OrchestrationV2Subagent } from "@t3tools/contracts";
 import { msg, T, useMessages, Var } from "gt-react-native";
 import type { ReactNode } from "react";
 import { View } from "react-native";

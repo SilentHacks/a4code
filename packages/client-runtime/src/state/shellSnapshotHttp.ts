@@ -1,4 +1,4 @@
-import { EnvironmentHttpCommonError, OrchestrationV2ShellResumable } from "@a4code/contracts";
+import { EnvironmentHttpCommonError, OrchestrationV2ShellResumable } from "@t3tools/contracts";
 import * as Cause from "effect/Cause";
 import * as Context from "effect/Context";
 import * as Effect from "effect/Effect";
@@ -123,7 +123,7 @@ export class ShellSnapshotLoader extends Context.Service<
       options?: ShellSnapshotOptions,
     ) => Effect.Effect<Option.Option<ShellHttpAnswer>>;
   }
->()("@a4code/client-runtime/state/shellSnapshotHttp/ShellSnapshotLoader") {}
+>()("@t3tools/client-runtime/state/shellSnapshotHttp/ShellSnapshotLoader") {}
 
 export const layer: Layer.Layer<ShellSnapshotLoader, never, HttpClient.HttpClient> = Layer.effect(
   ShellSnapshotLoader,

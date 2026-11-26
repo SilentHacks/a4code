@@ -2,7 +2,7 @@ import {
   type ProviderApprovalDecision,
   type ProviderApprovalOption,
   type RuntimeRequestId,
-} from "@a4code/contracts";
+} from "@t3tools/contracts";
 import { msg, useGT, useMessages } from "gt-react";
 import { memo } from "react";
 import { EllipsisIcon, TriangleAlertIcon } from "lucide-react";

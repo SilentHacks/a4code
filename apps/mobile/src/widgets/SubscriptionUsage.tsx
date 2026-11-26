@@ -73,9 +73,9 @@ function SubscriptionUsage(
     moreInApp: {} as Record<string, string>,
   };
   const providers = props.providers ?? [
-    // oxlint-disable-next-line a4code/no-untranslated-copy -- widget fallback until the app publishes translated text
+    // oxlint-disable-next-line t3code/no-untranslated-copy -- widget fallback until the app publishes translated text
     { name: "Codex", detail: "Open A4 Code to connect", windows: [], expiresAt: 0 },
-    // oxlint-disable-next-line a4code/no-untranslated-copy -- widget fallback until the app publishes translated text
+    // oxlint-disable-next-line t3code/no-untranslated-copy -- widget fallback until the app publishes translated text
     { name: "Claude", detail: "Open A4 Code to connect", windows: [], expiresAt: 0 },
   ];
   const columns = providers.map((provider) => {
@@ -262,8 +262,8 @@ function SubscriptionUsage(
           <Text
             modifiers={[font({ textStyle: "caption2" }), foregroundStyle(secondary), lineLimit(1)]}
           >
-            {/* oxlint-disable-next-line a4code/no-untranslated-copy -- widget fallback until the app publishes translated text */}
-            {text.moreInApp[String(hiddenCount)] ?? `${hiddenCount} more in A4 Code`}
+            {/* oxlint-disable-next-line t3code/no-untranslated-copy -- widget fallback until the app publishes translated text */}
+            {text.moreInApp[String(hiddenCount)] ?? `${hiddenCount} more in T3`}
           </Text>
         ) : null}
       </VStack>

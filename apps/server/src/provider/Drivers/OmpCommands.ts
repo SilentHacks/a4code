@@ -1,4 +1,4 @@
-import type { ServerProviderSkill, ServerProviderSlashCommand } from "@a4code/contracts";
+import type { ServerProviderSkill, ServerProviderSlashCommand } from "@t3tools/contracts";
 import * as Option from "effect/Option";
 import * as Schema from "effect/Schema";
 

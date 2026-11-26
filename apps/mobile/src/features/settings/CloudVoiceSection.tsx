@@ -1,12 +1,12 @@
 import { T, useGT, useMessages } from "gt-react-native";
 import { useAtomRefresh, useAtomValue } from "@effect/atom-react";
-import { cloudSpeechDisclosure } from "@a4code/shared/speechCopy";
-import { setCloudSpeechKey } from "@a4code/client-runtime/voice-input";
-import { hasFeatureFlag } from "@a4code/client-runtime/state/server";
+import { cloudSpeechDisclosure } from "@t3tools/shared/speechCopy";
+import { setCloudSpeechKey } from "@t3tools/client-runtime/voice-input";
+import { hasFeatureFlag } from "@t3tools/client-runtime/state/server";
 import {
   configuredSecretSources,
   secretRequestReference,
-} from "@a4code/client-runtime/secret-request";
+} from "@t3tools/client-runtime/secret-request";
 import {
   AuthProvidersManageScope,
   AuthSettingsWriteScope,
@@ -20,7 +20,7 @@ import {
   type SecretProviderId,
   type SettingsSecretValue,
   type VoiceTranscriptionDestination,
-} from "@a4code/contracts";
+} from "@t3tools/contracts";
 import * as Schema from "effect/Schema";
 import { AsyncResult } from "effect/reactivity";
 import { type ReactNode, useState } from "react";

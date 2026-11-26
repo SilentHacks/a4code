@@ -1,6 +1,6 @@
 import { copySnapshot as copySnapshotToClipboard } from "./copySnapshot";
 import { InlineAudioPreview } from "../files/InlineAudioPreview";
-import { filePreviewKind } from "@a4code/shared/filePreview";
+import { filePreviewKind } from "@t3tools/shared/filePreview";
 import type { MarkdownExtensions } from "~/markdown/wordsHast";
 import { T, useGT, useMessages, Var } from "gt-react";
 import { findRevealRef } from "./markdownFindContext";
@@ -10,15 +10,15 @@ import {
   type ScheduledTaskId,
   type ServerProviderSkill,
   ThreadId,
-} from "@a4code/contracts";
-import { scopeThreadRef } from "@a4code/client-runtime/environment";
-import { resolveUserMessagePresentation } from "@a4code/client-runtime/user-message";
+} from "@t3tools/contracts";
+import { scopeThreadRef } from "@t3tools/client-runtime/environment";
+import { resolveUserMessagePresentation } from "@t3tools/client-runtime/user-message";
 import { Link } from "@tanstack/react-router";
 import { useQuietThreadShell } from "../../state/entities";
 import { useEnvironment } from "../../state/environments";
 import { useEnvironmentQuery } from "../../state/query";
 import { serverEnvironment } from "../../state/server";
-import { replaceComposerContextReferences } from "@a4code/shared/composerContextReferences";
+import { replaceComposerContextReferences } from "@t3tools/shared/composerContextReferences";
 import { memo, use, useState, type ReactNode } from "react";
 import {
   createMessageAttachmentPreviewProjector,
@@ -69,12 +69,12 @@ import {
 import {
   collectComposerContextReferences,
   formatComposerContextReference,
-} from "@a4code/shared/composerContextReferences";
+} from "@t3tools/shared/composerContextReferences";
 import {
   COMPOSER_CONTEXT_CLIPBOARD_MIME,
   encodeComposerContextClipboardHtml,
   encodeComposerContextFragment,
-} from "@a4code/shared/composerContextClipboard";
+} from "@t3tools/shared/composerContextClipboard";
 import { chatMarkdownClipboardPayload } from "../../markdown-clipboard";
 import type { ChatMarkdownContextReference } from "../ChatMarkdown";
 import { cn } from "~/lib/utils";
@@ -903,10 +903,10 @@ function UserTimelineRow({ row }: { row: Extract<TimelineRow, { kind: "message" 
       className="group @container flex flex-col items-end gap-1"
       data-user-message-attribution={folded ? "agent" : undefined}
     >
-      {userMessage.attribution === "a4code" ? (
+      {userMessage.attribution === "t3code" ? (
         <p
           className="me-1 text-2xs text-muted-foreground/70"
-          data-user-message-attribution="a4code"
+          data-user-message-attribution="t3code"
         >
           <T>Sent by A4 Code</T>
         </p>

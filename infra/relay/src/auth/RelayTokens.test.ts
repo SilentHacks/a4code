@@ -2,7 +2,7 @@
 import * as NodeCrypto from "node:crypto";
 
 import { describe, expect, it } from "@effect/vitest";
-import { signRelayJwt } from "@a4code/shared/relayJwt";
+import { signRelayJwt } from "@t3tools/shared/relayJwt";
 import * as SecureRandom from "effect/crypto/SecureRandom";
 import * as Signature from "effect/crypto/Signature";
 import * as Effect from "effect/Effect";
@@ -26,12 +26,12 @@ const config = RelayConfiguration.RelayConfiguration.of({
     teamId: "team-id",
     keyId: "key-id",
     privateKey: Redacted.make("private-key"),
-    bundleId: "io.github.silenthacks.a4code.dev",
+    bundleId: "com.t3tools.t3code.dev",
   },
   apnsDeliveryJobSigningSecret: Redacted.make("job-secret"),
   clerkSecretKey: Redacted.make("clerk-secret"),
   clerkPublishableKey: "pk_test_test",
-  clerkJwtAudience: "a4-code-relay",
+  clerkJwtAudience: "t3-code-relay",
   cloudMintPrivateKey: Redacted.make(keyPair.privateKey),
   cloudMintPublicKey: keyPair.publicKey,
   managedEndpointBaseDomain: undefined,

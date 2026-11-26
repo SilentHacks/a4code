@@ -7,8 +7,8 @@ import {
   type ProviderInstanceId,
   ProviderSetupError,
   type ProviderSetupInput,
-} from "@a4code/contracts";
-import { resolveCommandPath } from "@a4code/shared/shell";
+} from "@t3tools/contracts";
+import { resolveCommandPath } from "@t3tools/shared/shell";
 import * as Context from "effect/Context";
 import * as Effect from "effect/Effect";
 import * as Layer from "effect/Layer";
@@ -24,7 +24,7 @@ import * as AntigravityInstallation from "./AntigravityInstallation.ts";
 import { deriveProviderInstanceConfigMap } from "./ProviderInstanceRegistryHydration.ts";
 import * as ProviderInstanceRegistry from "./ProviderInstanceRegistry.ts";
 import * as ProviderRegistry from "./ProviderRegistry.ts";
-import { mergeProviderInstanceEnvironment } from "@a4code/provider-core/server/instanceEnvironment";
+import { mergeProviderInstanceEnvironment } from "@t3tools/provider-core/server/instanceEnvironment";
 
 const ANTIGRAVITY = ProviderDriverKind.make("antigravity");
 const hasBinaryPath = Schema.is(Schema.Struct({ binaryPath: Schema.String }));
@@ -47,7 +47,7 @@ export class ProviderInstallation extends Context.Service<
       input: ProviderSetupInput,
     ) => Effect.Effect<ProviderInstallState, ProviderSetupError>;
   }
->()("a4code/provider/providerInstallation") {}
+>()("t3/provider/providerInstallation") {}
 
 const make = Effect.fn("makeProviderInstallation")(function* () {
   const antigravityInstallation = yield* AntigravityInstallation.AntigravityInstallation;

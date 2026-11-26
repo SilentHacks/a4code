@@ -7,8 +7,8 @@ import {
   ProviderDriverKind,
   ProviderInstanceId,
   type ServerProvider,
-} from "@a4code/contracts";
-import { createModelCapabilities } from "@a4code/shared/model";
+} from "@t3tools/contracts";
+import { createModelCapabilities } from "@t3tools/shared/model";
 import { assert, it } from "@effect/vitest";
 
 import {

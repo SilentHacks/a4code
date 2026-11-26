@@ -1,17 +1,17 @@
 import { useAtomValue } from "@effect/atom-react";
-import { errorDisplayMessage } from "@a4code/client-runtime/errors";
+import { errorDisplayMessage } from "@t3tools/client-runtime/errors";
 import {
   type AtomCommandResult,
   isAtomCommandInterrupted,
   squashAtomCommandFailure,
-} from "@a4code/client-runtime/state/runtime";
+} from "@t3tools/client-runtime/state/runtime";
 import {
   AuthOrchestrationOperateScope,
   type ChatAttachment,
   type ScopedThreadRef,
   type ThreadGuestMessage,
   type ThreadGuestShare,
-} from "@a4code/contracts";
+} from "@t3tools/contracts";
 import { Atom } from "effect/reactivity";
 import { msg, useGT } from "gt-react-native";
 import { type ReactNode, useEffect, useMemo, useState } from "react";
@@ -74,7 +74,7 @@ export function ThreadGuestShareBar(props: {
   // Keyed by the expiry, so a replaced link (even one already expired) gets its own timer.
   const [expiredAt, setExpiredAt] = useState<string | null>(null);
   const expiresAt = share?.expiresAt;
-  // oxlint-disable-next-line a4code/no-unreasoned-state-sync -- arms a timer that flips the share label when the guest link expires
+  // oxlint-disable-next-line t3code/no-unreasoned-state-sync -- arms a timer that flips the share label when the guest link expires
   useEffect(() => {
     if (expiresAt === undefined) return;
     const timer = setTimeout(

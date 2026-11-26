@@ -6,7 +6,7 @@ import * as Ref from "effect/Ref";
 import * as Schema from "effect/Schema";
 import * as Stream from "effect/Stream";
 
-import * as NetService from "@a4code/shared/Net";
+import * as NetService from "@t3tools/shared/Net";
 import * as SecureRandom from "effect/crypto/SecureRandom";
 import * as ElectronApp from "../electron/ElectronApp.ts";
 import * as ElectronDialog from "../electron/ElectronDialog.ts";
@@ -42,7 +42,7 @@ import * as DesktopUpdates from "../updates/DesktopUpdates.ts";
 import * as DesktopSnapShot from "../snapShot/DesktopSnapShot.ts";
 import * as DesktopWslBackend from "../wsl/DesktopWslBackend.ts";
 import * as DesktopRendererHistory from "../telemetry/DesktopRendererHistory.ts";
-import * as HostProcess from "@a4code/shared/HostProcess";
+import * as HostProcess from "@t3tools/shared/HostProcess";
 import { msg } from "gt-i18n";
 import { m } from "../i18n/messages.ts";
 
@@ -78,7 +78,7 @@ export class DesktopDevelopmentBackendPortRequiredError extends Schema.TaggedErr
   {},
 ) {
   override get message(): string {
-    return "A4CODE_PORT is required in desktop development.";
+    return "T3CODE_PORT is required in desktop development.";
   }
 }
 
@@ -175,7 +175,7 @@ const stopAllPoolInstances = Effect.fn("desktop.app.stopAllPoolInstances")(
 
 // Spawns the local backend as soon as the protocol, IPC, and legacy storage that every window needs exist.
 /**
- * The server reads A4CODE_FEATURE_FLAGS once at start, from the value cached at the last
+ * The server reads T3CODE_FEATURE_FLAGS once at start, from the value cached at the last
  * discovery. When the login shell now sets different flags, restart it so they apply.
  */
 const restartOnFeatureFlagChange = Effect.fn("desktop.restartOnFeatureFlagChange")(function* (
@@ -183,15 +183,15 @@ const restartOnFeatureFlagChange = Effect.fn("desktop.restartOnFeatureFlagChange
 ) {
   const state = yield* DesktopState.DesktopState;
   const shellEnvironment = yield* DesktopShellEnvironment.DesktopShellEnvironment;
-  let startedWith = (yield* HostProcess.Environment).A4CODE_FEATURE_FLAGS;
+  let startedWith = (yield* HostProcess.Environment).T3CODE_FEATURE_FLAGS;
   yield* shellEnvironment.updates.pipe(
     Stream.filter((snapshot) => snapshot.discovered),
     Stream.runForEach(
       Effect.fnUntraced(function* (snapshot) {
-        const flags = snapshot.environment.A4CODE_FEATURE_FLAGS ?? undefined;
+        const flags = snapshot.environment.T3CODE_FEATURE_FLAGS ?? undefined;
         if (flags === startedWith || (yield* Ref.get(state.quitting))) return;
         startedWith = flags;
-        yield* logBootstrapInfo("restarting backend for changed A4CODE_FEATURE_FLAGS");
+        yield* logBootstrapInfo("restarting backend for changed T3CODE_FEATURE_FLAGS");
         yield* backend.stop();
         yield* backend.start;
       }),
@@ -241,11 +241,11 @@ const startLocalBackend = Effect.gen(function* () {
     !(yield* DesktopHomeOwner.awaitHomeOwnershipRelease())
   ) {
     const owner = yield* DesktopHomeOwner.readLiveHomeOwner();
-    yield* logBootstrapWarning("bootstrap found another server owning the A4 Code data directory", {
+    yield* logBootstrapWarning("bootstrap found another server owning the T3 home", {
       owner: Option.getOrNull(owner),
     });
     yield* (yield* ElectronDialog.ElectronDialog).showErrorBox(
-      m(msg("This A4 Code data directory is unavailable")),
+      m(msg("This T3 home is unavailable")),
       DesktopHomeOwner.homeOwnedMessage(owner),
     );
     yield* (yield* ElectronApp.ElectronApp).quit;
@@ -330,7 +330,7 @@ const bootstrap = Effect.fn("desktop.bootstrap")(function* (backendStarted: bool
       Effect.flatMap((found) =>
         found || environment.platform === "win32"
           ? installCli
-          : logBootstrapInfo("skipped installing the a4code command without the shell PATH"),
+          : logBootstrapInfo("skipped installing the t3 command without the shell PATH"),
       ),
     ),
   );

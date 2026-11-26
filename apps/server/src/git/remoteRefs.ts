@@ -1,4 +1,4 @@
-import { trimAsciiWhitespace } from "@a4code/contracts";
+import { trimAsciiWhitespace } from "@t3tools/contracts";
 
 export function parseRemoteNamesInGitOrder(stdout: string): ReadonlyArray<string> {
   const remoteNames: Array<string> = [];

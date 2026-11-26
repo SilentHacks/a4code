@@ -27,7 +27,7 @@ import {
   type PreviewAutomationHostFocus,
   type PreviewAutomationResponse,
   type PreviewAutomationStreamEvent,
-} from "@a4code/contracts";
+} from "@t3tools/contracts";
 import * as Context from "effect/Context";
 import type * as Cause from "effect/Cause";
 import * as SecureRandom from "effect/crypto/SecureRandom";
@@ -74,7 +74,7 @@ export class PreviewAutomationBroker extends Context.Service<
       request: PreviewAutomationInvokeInput,
     ) => Effect.Effect<A, PreviewAutomationError>;
   }
->()("a4code/mcp/PreviewAutomationBroker") {}
+>()("t3/mcp/PreviewAutomationBroker") {}
 
 interface ClientConnection {
   readonly clientId: string;

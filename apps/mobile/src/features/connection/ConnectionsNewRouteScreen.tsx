@@ -1,4 +1,4 @@
-import { errorDisplayMessage } from "@a4code/client-runtime/errors";
+import { errorDisplayMessage } from "@t3tools/client-runtime/errors";
 import { T, useGT } from "gt-react-native";
 import { ListRow } from "../../components/ui/ListRow";
 import * as Dialog from "../../components/ui/Dialog";
@@ -12,7 +12,7 @@ import {
   useNavigation,
   type StaticScreenProps,
 } from "@react-navigation/native";
-import type { EnvironmentId } from "@a4code/contracts";
+import type { EnvironmentId } from "@t3tools/contracts";
 import { useAtomValue } from "@effect/atom-react";
 import { useState } from "react";
 import { Linking, Pressable, StyleSheet, View } from "react-native";
@@ -281,7 +281,7 @@ function PairingForm({
               {pairingConnectionError ??
                 (linked
                   ? gt(
-                      "Create a pairing code on {environment}, in its Settings → Sharing & access or with `a4code auth pairing create`, and enter it here.",
+                      "Create a pairing code on {environment}, in its Settings → Sharing & access or with `t3 auth pairing create`, and enter it here.",
                       { environment: linked.label },
                     )
                   : gt(
@@ -384,7 +384,7 @@ function PairingScanCard(props: {
         </View>
         <Text className={cn("text-center text-sm", light ? "text-black/70" : "text-white/80")}>
           {gt("Scan the code from {command} or desktop Connections settings", {
-            command: "a4code pair",
+            command: "t3 pair",
           })}
         </Text>
       </View>

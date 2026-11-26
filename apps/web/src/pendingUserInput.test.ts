@@ -1,14 +1,14 @@
-import { EnvironmentId, ThreadId } from "@a4code/contracts";
+import { EnvironmentId, ThreadId } from "@t3tools/contracts";
 import { describe, expect, it } from "vite-plus/test";
 import {
   buildPendingUserInputAnswers,
   resolvePendingUserInputAnswer,
   setPendingUserInputCustomAnswer,
   togglePendingUserInputOptionSelection,
-} from "@a4code/client-runtime/state/pending-user-input";
+} from "@t3tools/client-runtime/state/pending-user-input";
 import { formatInlineContextReference } from "./lib/composerContextReferences";
 import { threadContextReference } from "./lib/composerContextRecords";
-import { threadContextRecord } from "@a4code/shared/composerContextReferences";
+import { threadContextRecord } from "@t3tools/shared/composerContextReferences";
 
 import {
   answerContextRecords,

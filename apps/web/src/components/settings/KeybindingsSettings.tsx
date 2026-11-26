@@ -1,4 +1,4 @@
-import { thrownErrorMessage } from "@a4code/client-runtime/errors";
+import { thrownErrorMessage } from "@t3tools/client-runtime/errors";
 import { m as resolveMessage } from "~/i18n/messages";
 import { useEnvironmentScope } from "../../state/session";
 import { useEnvironmentsWithScope, readEnvironmentScope } from "../../state/session";
@@ -34,15 +34,15 @@ import {
   type ServerConfig,
   type ServerRemoveKeybindingInput,
   type ServerUpsertKeybindingInput,
-} from "@a4code/contracts";
+} from "@t3tools/contracts";
 import {
   mergeWithDefaultKeybindings,
   parseKeybindingWhenExpression,
-} from "@a4code/shared/keybindings";
+} from "@t3tools/shared/keybindings";
 import {
   isAtomCommandInterrupted,
   squashAtomCommandFailure,
-} from "@a4code/client-runtime/state/runtime";
+} from "@t3tools/client-runtime/state/runtime";
 
 import { isElectron } from "../../env";
 import { useOpenInPreferredEditor } from "../../editorPreferences";

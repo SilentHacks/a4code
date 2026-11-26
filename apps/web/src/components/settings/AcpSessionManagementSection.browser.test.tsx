@@ -6,7 +6,7 @@ import {
   ThreadId,
   type ServerProvider,
   type AcpRegistryConfigurableProvider,
-} from "@a4code/contracts";
+} from "@t3tools/contracts";
 import type { ComponentProps } from "react";
 import { expect, it, vi } from "vite-plus/test";
 import { userEvent } from "vite-plus/test/browser";

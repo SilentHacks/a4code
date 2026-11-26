@@ -1,5 +1,8 @@
 # Security policy
 
-For vulnerabilities affecting A4 Code, use [GitHub private vulnerability reporting](https://github.com/SilentHacks/a4code/security/advisories/new). Do not post credentials, customer data, or unpublished vulnerabilities in a public issue.
+Report security vulnerabilities affecting A4 Code or T3 Tools-operated infrastructure to
+[security@t3.codes](mailto:security@t3.codes). Please do not disclose them publicly until we have had
+a reasonable opportunity to investigate and remediate them.
 
-The [trust model](../SECURITY.md) describes what the application is designed to protect.
+See the [full security policy](https://t3.codes/security-policy) for reporting details, scope,
+and safe harbor terms for good-faith research.

@@ -6,7 +6,7 @@ import * as Option from "effect/Option";
 import * as Ref from "effect/Ref";
 import * as TestClock from "effect/testing/TestClock";
 
-import * as HostProcess from "@a4code/shared/HostProcess";
+import * as HostProcess from "@t3tools/shared/HostProcess";
 
 import type * as Electron from "electron";
 
@@ -260,16 +260,16 @@ describe("DesktopLifecycle", () => {
         return yield* Deferred.await(relaunched);
       }).pipe(
         Effect.provide(layer),
-        Effect.provideService(HostProcess.ExecutablePath, "/opt/A4 Code/a4code"),
+        Effect.provideService(HostProcess.ExecutablePath, "/opt/A4 Code/t3code"),
         Effect.provideService(HostProcess.Arguments, [
-          "/opt/A4 Code/a4code",
+          "/opt/A4 Code/t3code",
           "--no-sandbox",
-          "A4CODE://pair?token=spent",
-          "a4code://new?prompt=hello",
+          "T3CODE://pair?token=spent",
+          "t3code://new?prompt=hello",
         ]),
       );
 
-      assert.deepEqual(options, { execPath: "/opt/A4 Code/a4code", args: ["--no-sandbox"] });
+      assert.deepEqual(options, { execPath: "/opt/A4 Code/t3code", args: ["--no-sandbox"] });
     }),
   );
 

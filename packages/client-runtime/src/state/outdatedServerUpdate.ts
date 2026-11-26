@@ -1,4 +1,4 @@
-import type { EnvironmentId, ServerSelfUpdateInput } from "@a4code/contracts";
+import type { EnvironmentId, ServerSelfUpdateInput } from "@t3tools/contracts";
 import * as Cause from "effect/Cause";
 import * as Effect from "effect/Effect";
 import * as Exit from "effect/Exit";

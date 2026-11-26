@@ -3,7 +3,7 @@ import {
   ProjectId,
   SourceControlProviderKind,
   type PullRequestDetail,
-} from "@a4code/contracts";
+} from "@t3tools/contracts";
 import { expect, it, vi } from "vite-plus/test";
 import { page, userEvent } from "vite-plus/test/browser";
 

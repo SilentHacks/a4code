@@ -4,7 +4,7 @@ import {
   ProviderDriverKind,
   SettingsSecretValue,
   TrimmedString,
-} from "@a4code/contracts";
+} from "@t3tools/contracts";
 import * as Schema from "effect/Schema";
 
 import { providerClients } from "./providerDriverMeta";

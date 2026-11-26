@@ -1,6 +1,6 @@
 // No T3 imports inside the string; resolve Pi and typebox from the user's Pi install.
-import { A4_CODE_ORCHESTRATION_INSTRUCTIONS } from "@a4code/provider-core/server/orchestrationInstructions";
-import { PULL_REQUEST_LINKING_INSTRUCTIONS } from "@a4code/provider-core/server/runtimeInstructions";
+import { T3_CODE_ORCHESTRATION_INSTRUCTIONS } from "@t3tools/provider-core/server/orchestrationInstructions";
+import { PULL_REQUEST_LINKING_INSTRUCTIONS } from "@t3tools/provider-core/server/runtimeInstructions";
 
 export const PI_T3_MCP_EXTENSION_FILENAME = "pi-t3-mcp-extension.ts";
 
@@ -24,7 +24,7 @@ const URL_ENV = ${JSON.stringify(T3_MCP_URL_ENV)};
 const TOKEN_ENV = ${JSON.stringify(T3_MCP_BEARER_ENV)};
 const RUNTIME_MODE_ENV = ${JSON.stringify(T3_PI_RUNTIME_MODE_ENV)};
 const EXTENSION_PATH_ENV = ${JSON.stringify(T3_PI_MCP_EXTENSION_PATH_ENV)};
-const ORCHESTRATION_INSTRUCTIONS = ${JSON.stringify(A4_CODE_ORCHESTRATION_INSTRUCTIONS.trim())};
+const ORCHESTRATION_INSTRUCTIONS = ${JSON.stringify(T3_CODE_ORCHESTRATION_INSTRUCTIONS.trim())};
 const PULL_REQUEST_LINKING_INSTRUCTIONS = ${JSON.stringify(PULL_REQUEST_LINKING_INSTRUCTIONS)};
 const SERVICE_TIER_COMMAND = ${JSON.stringify(PI_T3_SERVICE_TIER_COMMAND)};
 const PROTOCOL = "2025-06-18";
@@ -262,7 +262,7 @@ export default async function t3McpExtension(pi: ExtensionAPI) {
     projectTrustChecked = true;
     if (ctx.isProjectTrusted() || process.argv.some((arg) => arg === "--no-approve" || arg === "-na")) return;
     ctx.ui.notify(
-      \`Pi did not load project settings, extensions, skills, prompts, MCP servers or system prompt files for \${ctx.cwd} because the folder is not trusted. To load them, run the configured Pi binary there with the same PI_CODING_AGENT_DIR (if set), trust the folder or its parent with /trust, then start a new thread in that same worktree. To trust every project, add --approve to Pi's launch arguments in A4 Code settings; to keep them off without this notice, add --no-approve.\`,
+      \`Pi did not load project settings, extensions, skills, prompts, MCP servers or system prompt files for \${ctx.cwd} because the folder is not trusted. To load them, run the configured Pi binary there with the same PI_CODING_AGENT_DIR (if set), trust the folder or its parent with /trust, then start a new thread in that same worktree. To trust every project, add --approve to Pi's launch arguments in T3 Code settings; to keep them off without this notice, add --no-approve.\`,
       "warning",
     );
   });
@@ -303,7 +303,7 @@ export default async function t3McpExtension(pi: ExtensionAPI) {
   // Only a tier the active model advertises is sent; Standard sends none.
   let serviceTier: string | undefined;
   pi.registerCommand(SERVICE_TIER_COMMAND, {
-    description: "Set the service tier A4 Code sends with provider requests",
+    description: "Set the service tier T3 Code sends with provider requests",
     handler: async (args) => {
       serviceTier = args.trim() || undefined;
     },
@@ -356,7 +356,7 @@ export default async function t3McpExtension(pi: ExtensionAPI) {
     const extensionPath = env(EXTENSION_PATH_ENV);
     if (extensionPath === undefined || !readOnlyMcpTools.has(name) || typeof pi.getAllTools !== "function") return false;
     // A user extension may own the same name. Only our registered HTTP bridge
-    // may inherit the canonical A4 Code server's read-only annotation.
+    // may inherit the canonical T3 server's read-only annotation.
     return pi.getAllTools().some((tool) => tool.name === name &&
       typeof tool.sourceInfo?.path === "string" &&
       NodePath.resolve(tool.sourceInfo.path) === NodePath.resolve(extensionPath));
@@ -377,7 +377,7 @@ export default async function t3McpExtension(pi: ExtensionAPI) {
       { signal: ctx.signal },
     );
     if (!approved) {
-      return { block: true, reason: \`\${event.toolName} was declined in A4 Code.\` };
+      return { block: true, reason: \`\${event.toolName} was declined in T3 Code.\` };
     }
   });
 

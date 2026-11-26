@@ -1,4 +1,4 @@
-import { SourceControlProviderKind } from "@a4code/contracts";
+import { SourceControlProviderKind } from "@t3tools/contracts";
 import {
   buildCommitUrl,
   changeRequestUrlBelow,
@@ -11,7 +11,7 @@ import {
   repositoryUrlFromPagePath,
   projectChangeRequestHost,
   remoteWebOrigin,
-} from "@a4code/source-control-core/shared/definition";
+} from "@t3tools/source-control-core/shared/definition";
 import { icon } from "./icon.ts";
 import { gitLabReferenceAutolinks } from "./referenceAutolinks.ts";
 

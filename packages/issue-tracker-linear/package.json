@@ -1,5 +1,5 @@
 {
-  "name": "@a4code/issue-tracker-linear",
+  "name": "@t3tools/issue-tracker-linear",
   "private": true,
   "type": "module",
   "exports": {
@@ -18,8 +18,8 @@
     "generate": "graphqlgen"
   },
   "dependencies": {
-    "@a4code/contracts": "workspace:*",
-    "@a4code/source-control-core": "workspace:*",
+    "@t3tools/contracts": "workspace:*",
+    "@t3tools/source-control-core": "workspace:*",
     "effect": "catalog:"
   },
   "devDependencies": {

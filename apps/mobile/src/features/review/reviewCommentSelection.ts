@@ -1,9 +1,9 @@
 import { useSyncExternalStore } from "react";
-import type { OrchestrationMessageContext } from "@a4code/contracts";
+import type { OrchestrationMessageContext } from "@t3tools/contracts";
 import {
   collectComposerContextReferences,
   replaceComposerContextReferences,
-} from "@a4code/shared/composerContextReferences";
+} from "@t3tools/shared/composerContextReferences";
 
 import type { ReviewRenderableLineRow } from "./reviewModel";
 import { msg } from "gt-react-native";

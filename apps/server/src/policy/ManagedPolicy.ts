@@ -6,7 +6,7 @@
  */
 import * as NodeModule from "node:module";
 
-import { ManagedPolicyDocument, type ManagedPolicySummary } from "@a4code/contracts";
+import { ManagedPolicyDocument, type ManagedPolicySummary } from "@t3tools/contracts";
 import * as Config from "effect/Config";
 import * as Context from "effect/Context";
 import * as Digest from "effect/crypto/Digest";
@@ -16,14 +16,14 @@ import * as Layer from "effect/Layer";
 import * as Option from "effect/Option";
 import * as Schema from "effect/Schema";
 
-import * as HostProcess from "@a4code/shared/HostProcess";
+import * as HostProcess from "@t3tools/shared/HostProcess";
 import {
   ManagedPolicyFileError,
   managedPolicyPath,
   layerWindowsRegistry,
   readManagedPolicy,
   readManagedPolicyFile,
-} from "@a4code/shared/managedPolicyFile";
+} from "@t3tools/shared/managedPolicyFile";
 
 import { telemetryChannel } from "../config.ts";
 import * as ManagedLimits from "./managedLimits.ts";
@@ -41,13 +41,13 @@ export class ManagedPolicy extends Context.Service<
     /** What clients are told; absent when no policy applies. */
     readonly summary: ManagedPolicySummary | undefined;
   }
->()("a4code/policy/ManagedPolicy") {}
+>()("t3/policy/ManagedPolicy") {}
 
 type LimitsSummary = NonNullable<ManagedPolicySummary["limits"]>;
 
 const encodeDocumentJson = Schema.encodeEffect(Schema.fromJsonString(ManagedPolicyDocument));
 
-/** What `a4code policy show` compares to tell whether a running server loaded the installed policy. */
+/** What `t3 policy show` compares to tell whether a running server loaded the installed policy. */
 export const loadedPolicy = Effect.fn("ManagedPolicy.loadedPolicy")(function* (
   policy: Pick<ManagedPolicy["Service"], "path" | "document">,
 ) {
@@ -181,7 +181,7 @@ const make = Effect.gen(function* () {
   // builds never do: any override a user can set is a way around the policy.
   const devPath =
     telemetryChannel === "dev"
-      ? yield* Config.option(Config.String("A4CODE_DEV_MANAGED_POLICY_PATH")).pipe(
+      ? yield* Config.option(Config.String("T3CODE_DEV_MANAGED_POLICY_PATH")).pipe(
           Effect.orElseSucceed(() => Option.none<string>()),
         )
       : Option.none<string>();

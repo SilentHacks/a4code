@@ -1,28 +1,28 @@
-import { thrownErrorMessage } from "@a4code/client-runtime/errors";
+import { thrownErrorMessage } from "@t3tools/client-runtime/errors";
 import { m } from "~/i18n/messages";
-import { scopeProjectRef, scopeThreadRef } from "@a4code/client-runtime/environment";
+import { scopeProjectRef, scopeThreadRef } from "@t3tools/client-runtime/environment";
 import {
   getAddProjectInitialQuery,
   getCloneDestinationPath,
   getCloneDirectoryPath,
-} from "@a4code/client-runtime/operations/projects";
+} from "@t3tools/client-runtime/operations/projects";
 import {
   findPromptLinkProjects,
   findPromptLinkPullRequestThread,
   pickPromptLinkPullRequestThread,
   resolvePromptLinkModelSelection,
-} from "@a4code/client-runtime/prompt-links";
+} from "@t3tools/client-runtime/prompt-links";
 import {
   isAtomCommandInterrupted,
   squashAtomCommandFailure,
-} from "@a4code/client-runtime/state/runtime";
-import type { EnvironmentProject } from "@a4code/client-runtime/state/shell";
-import type { EnvironmentId, ProjectId } from "@a4code/contracts";
+} from "@t3tools/client-runtime/state/runtime";
+import type { EnvironmentProject } from "@t3tools/client-runtime/state/shell";
+import type { EnvironmentId, ProjectId } from "@t3tools/contracts";
 import {
   type NewThreadLink,
   type PromptLinkRepository,
   promptLinkPullRequestUrl,
-} from "@a4code/shared/promptLinks";
+} from "@t3tools/shared/promptLinks";
 import { useAtomValue } from "@effect/atom-react";
 import { useLocation, useNavigate } from "@tanstack/react-router";
 import { Atom } from "effect/reactivity";
@@ -353,7 +353,7 @@ export function NewThreadLinkView({ link }: { readonly link: NewThreadLink }) {
     }
   });
 
-  // oxlint-disable-next-line a4code/no-unreasoned-state-sync -- runs each launch decision once: navigates to the thread or opens a draft
+  // oxlint-disable-next-line t3code/no-unreasoned-state-sync -- runs each launch decision once: navigates to the thread or opens a draft
   useEffect(() => {
     if (launch === null || launchedRef.current === launch) return;
     launchedRef.current = launch;
@@ -427,7 +427,7 @@ function PullRequestLinkCheckout({
   });
   const gt = useGT();
   const warnedRef = useRef(false);
-  // oxlint-disable-next-line a4code/no-unreasoned-state-sync -- shows the hidden-characters warning toast once per linked prompt
+  // oxlint-disable-next-line t3code/no-unreasoned-state-sync -- shows the hidden-characters warning toast once per linked prompt
   useEffect(() => {
     if (warnedRef.current || link.prompt === null) return;
     warnedRef.current = true;

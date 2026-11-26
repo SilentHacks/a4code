@@ -60,7 +60,7 @@ permissions:
 jobs:
   android:
     name: Android ${{ matrix.abi }}
-    if: github.repository == 'SilentHacks/a4code' && (github.event_name != 'workflow_dispatch' || inputs.platform == 'android')
+    if: github.repository == 'pingdotgg/t3code' && (github.event_name != 'workflow_dispatch' || inputs.platform == 'android')
     runs-on: blacksmith-32vcpu-ubuntu-2404
     timeout-minutes: 45
     strategy:
@@ -126,7 +126,7 @@ jobs:
 
       - name: Prepare build directories
         run: |
-          cache="$HOME/.cache/a4code-android-dev-client"
+          cache="$HOME/.cache/t3-android-dev-client"
           {
             echo "GRADLE_USER_HOME=$cache/gradle"
             echo "CCACHE_DIR=$cache/ccache"
@@ -147,7 +147,7 @@ jobs:
         uses: useblacksmith/stickydisk@3f6be1451e3cad893b778bc93495c80452a5da26 # v1.7.2
         with:
           key: ${{ github.repository }}-android-dev-client-${{ matrix.abi }}
-          path: ~/.cache/a4code-android-dev-client
+          path: ~/.cache/t3-android-dev-client
 
       - name: Configure Gradle and ccache
         run: |
@@ -161,8 +161,8 @@ jobs:
       - name: Setup dependencies
         uses: ./.github/actions/setup-ci-deps
         with:
-          task-cache-read-token: ${{ secrets.A4CODE_TASK_CACHE_READ_TOKEN }}
-          install-args: --filter=@a4code/mobile... --filter=@a4code/scripts...
+          task-cache-read-token: ${{ secrets.T3_TASK_CACHE_READ_TOKEN }}
+          install-args: --filter=@t3tools/mobile... --filter=@t3tools/scripts...
 
       - name: Setup Java
         uses: actions/setup-java@b6effb05e454b25005698d916606bdc6ffcbf961 # v5.7.0
@@ -176,19 +176,18 @@ jobs:
         name: Log in to the native client cache
         if: github.event_name != 'pull_request'
         env:
-          WRITE_TOKEN: ${{ secrets.A4CODE_NATIVE_CLIENT_WRITE_TOKEN }}
-          A4CODE_TASK_CACHE_ENDPOINT: ${{ vars.A4CODE_TASK_CACHE_ENDPOINT }}
+          WRITE_TOKEN: ${{ secrets.T3_NATIVE_CLIENT_WRITE_TOKEN }}
         run: |
-          if [ -z "$WRITE_TOKEN" ] || [ -z "$A4CODE_TASK_CACHE_ENDPOINT" ]; then
-            echo "::warning::A4CODE_NATIVE_CLIENT_WRITE_TOKEN is not set; nothing can be shared, so nothing is built."
+          if [ -z "$WRITE_TOKEN" ]; then
+            echo "::warning::T3_NATIVE_CLIENT_WRITE_TOKEN is not set; nothing can be shared, so nothing is built."
             exit 0
           fi
           node --input-type=module <<'NODE'
           import { mkdirSync, readFileSync, writeFileSync } from "node:fs";
           import { homedir } from "node:os";
           import { join } from "node:path";
-          const endpoint = process.env.A4CODE_TASK_CACHE_ENDPOINT;
-          const directory = join(homedir(), ".config/a4-task-cache");
+          const { endpoint } = JSON.parse(readFileSync(".task-cache.json", "utf8"));
+          const directory = join(homedir(), ".config/t3-task-cache");
           mkdirSync(directory, { recursive: true, mode: 0o700 });
           writeFileSync(
             join(directory, "credentials.json"),
@@ -219,7 +218,7 @@ jobs:
 
   ios:
     name: iOS simulator
-    if: github.repository == 'SilentHacks/a4code' && (github.event_name != 'workflow_dispatch' || inputs.platform == 'ios')
+    if: github.repository == 'pingdotgg/t3code' && (github.event_name != 'workflow_dispatch' || inputs.platform == 'ios')
     runs-on: blacksmith-12vcpu-macos-27
     timeout-minutes: 60
     concurrency:
@@ -277,27 +276,26 @@ jobs:
       - name: Setup dependencies
         uses: ./.github/actions/setup-ci-deps
         with:
-          task-cache-read-token: ${{ secrets.A4CODE_TASK_CACHE_READ_TOKEN }}
-          install-args: --filter=@a4code/mobile... --filter=@a4code/scripts...
+          task-cache-read-token: ${{ secrets.T3_TASK_CACHE_READ_TOKEN }}
+          install-args: --filter=@t3tools/mobile... --filter=@t3tools/scripts...
 
       # Only this login can write to the cache; pull requests never get it.
       - id: login
         name: Log in to the native client cache
         if: github.event_name != 'pull_request'
         env:
-          WRITE_TOKEN: ${{ secrets.A4CODE_NATIVE_CLIENT_WRITE_TOKEN }}
-          A4CODE_TASK_CACHE_ENDPOINT: ${{ vars.A4CODE_TASK_CACHE_ENDPOINT }}
+          WRITE_TOKEN: ${{ secrets.T3_NATIVE_CLIENT_WRITE_TOKEN }}
         run: |
-          if [ -z "$WRITE_TOKEN" ] || [ -z "$A4CODE_TASK_CACHE_ENDPOINT" ]; then
-            echo "::warning::A4CODE_NATIVE_CLIENT_WRITE_TOKEN is not set; nothing can be shared, so nothing is built."
+          if [ -z "$WRITE_TOKEN" ]; then
+            echo "::warning::T3_NATIVE_CLIENT_WRITE_TOKEN is not set; nothing can be shared, so nothing is built."
             exit 0
           fi
           node --input-type=module <<'NODE'
           import { mkdirSync, readFileSync, writeFileSync } from "node:fs";
           import { homedir } from "node:os";
           import { join } from "node:path";
-          const endpoint = process.env.A4CODE_TASK_CACHE_ENDPOINT;
-          const directory = join(homedir(), ".config/a4-task-cache");
+          const { endpoint } = JSON.parse(readFileSync(".task-cache.json", "utf8"));
+          const directory = join(homedir(), ".config/t3-task-cache");
           mkdirSync(directory, { recursive: true, mode: 0o700 });
           writeFileSync(
             join(directory, "credentials.json"),

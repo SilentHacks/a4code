@@ -27,13 +27,13 @@ export interface RelayClientTracingResource {
 }
 
 export class RelayClientTracer extends Context.Reference(
-  "@a4code/shared/relayTracing/RelayClientTracer",
+  "@t3tools/shared/relayTracing/RelayClientTracer",
   {
     defaultValue: () => Option.none<Tracer.Tracer>(),
   },
 ) {}
 
-class LocalTracer extends Context.Reference("@a4code/shared/relayTracing/LocalTracer", {
+class LocalTracer extends Context.Reference("@t3tools/shared/relayTracing/LocalTracer", {
   defaultValue: () => Option.none<Tracer.Tracer>(),
 }) {}
 
@@ -182,11 +182,11 @@ export function layer(
       serviceName: resource.serviceName,
       serviceVersion: resource.serviceVersion,
       attributes: {
-        "service.namespace": "a4code",
+        "service.namespace": "t3code",
         "service.instance.id": resource.serviceInstanceId,
         "service.runtime": resource.runtime,
-        "a4code.component": resource.component ?? "relay-client",
-        "a4code.client.surface": resource.client,
+        "t3code.component": resource.component ?? "relay-client",
+        "t3code.client.surface": resource.client,
         ...resource.attributes,
       },
     },

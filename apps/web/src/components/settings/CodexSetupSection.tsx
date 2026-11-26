@@ -1,24 +1,23 @@
-import { configuredHostedAppUrl } from "~/hostedPairing";
-import { thrownErrorMessage } from "@a4code/client-runtime/errors";
+import { thrownErrorMessage } from "@t3tools/client-runtime/errors";
 import { m as resolveMessage } from "~/i18n/messages";
 import { useAtomValue } from "@effect/atom-react";
-import { AuthProvidersManageScope, ProviderDriverKind } from "@a4code/contracts";
+import { AuthProvidersManageScope, ProviderDriverKind } from "@t3tools/contracts";
 import { readPreparedConnection, useEnvironmentScope } from "../../state/session";
 import {
   isAtomCommandInterrupted,
   squashAtomCommandFailure,
   type AtomCommandResult,
-} from "@a4code/client-runtime/state/runtime";
+} from "@t3tools/client-runtime/state/runtime";
 import type {
   ChatGptHandoffInput,
   ChatGptTransferredProfile,
   EnvironmentId,
   ProviderInstanceId,
   ServerProvider,
-} from "@a4code/contracts";
-import { codexAuthHandoffUrl } from "@a4code/shared/codexAuthHandoff";
-import { providerAuthReturnUrl } from "@a4code/shared/providerAuthReturnUrl";
-import { isLoopbackHost } from "@a4code/shared/preview";
+} from "@t3tools/contracts";
+import { codexAuthHandoffUrl } from "@t3tools/shared/codexAuthHandoff";
+import { providerAuthReturnUrl } from "@t3tools/shared/providerAuthReturnUrl";
+import { isLoopbackHost } from "@t3tools/shared/preview";
 import { CheckIcon, ChevronRightIcon, ExternalLinkIcon } from "lucide-react";
 import {
   Children,
@@ -353,7 +352,7 @@ function ManagedCodexSetup({
   };
   const abortOperation = () => operation.current?.abort();
   // Once the card unmounts, nothing may start a sign-in or open a page on its behalf.
-  // oxlint-disable-next-line a4code/no-unreasoned-state-sync -- aborts the in-flight setup or sign-in AbortController on unmount
+  // oxlint-disable-next-line t3code/no-unreasoned-state-sync -- aborts the in-flight setup or sign-in AbortController on unmount
   useEffect(() => () => operation.current?.abort(), []);
   const [autoStartHandled, setAutoStartHandled] = useState(false);
   const installed = installation?.installedVersion != null;
@@ -375,7 +374,7 @@ function ManagedCodexSetup({
   }
   // The server does not refresh the provider snapshot when a sign-in flow
   // succeeds, and the flow can finish elsewhere (callback, pasted redirect URL).
-  // oxlint-disable-next-line a4code/no-unreasoned-state-sync -- asks the server to refresh the provider snapshot once the sign-in flow succeeds
+  // oxlint-disable-next-line t3code/no-unreasoned-state-sync -- asks the server to refresh the provider snapshot once the sign-in flow succeeds
   useEffect(() => {
     if (awaitingProvider && auth?.phase === "succeeded") {
       void refreshProviders({ environmentId, input: { instanceId } });
@@ -449,7 +448,7 @@ function ManagedCodexSetup({
   const transferFinishedProfile = useEffectEvent((profile: ChatGptTransferredProfile) =>
     transferProfile(profile),
   );
-  // oxlint-disable-next-line a4code/no-unreasoned-state-sync -- imports the finished handoff profile to the server once per attempt when the handoff query completes
+  // oxlint-disable-next-line t3code/no-unreasoned-state-sync -- imports the finished handoff profile to the server once per attempt when the handoff query completes
   useEffect(() => {
     if (!handoff || handoffQuery.data?.phase !== "finished") return;
     const attemptId = handoff.input.attemptId;
@@ -614,13 +613,13 @@ function ManagedCodexSetup({
     onAutoStartConsumed();
     void setup();
   });
-  // oxlint-disable-next-line a4code/no-unreasoned-state-sync -- dispatches the automatic setup server command after the auto-start flag commits
+  // oxlint-disable-next-line t3code/no-unreasoned-state-sync -- dispatches the automatic setup server command after the auto-start flag commits
   useEffect(() => {
     // oxlint-disable-next-line react/set-state-in-effect -- Starting setup dispatches a server command, which marks itself pending before it awaits.
     if (autoStartHandled) startAutomatically();
   }, [autoStartHandled]);
 
-  // oxlint-disable-next-line a4code/no-unreasoned-state-sync -- cancels the desktop bridge provider auth callback when the URL changes or the card unmounts
+  // oxlint-disable-next-line t3code/no-unreasoned-state-sync -- cancels the desktop bridge provider auth callback when the URL changes or the card unmounts
   useEffect(() => {
     if (!clientCallback || !url || !window.desktopBridge) return;
     return () => {
@@ -686,10 +685,7 @@ function ManagedCodexSetup({
   );
 
   const handoffUrl =
-    needsManualCallback &&
-    url &&
-    auth?.flowId &&
-    providerAuthReturnUrl(returnUrl.toString(), configuredHostedAppUrl())
+    needsManualCallback && url && auth?.flowId && providerAuthReturnUrl(returnUrl.toString())
       ? codexAuthHandoffUrl(
           {
             authorizationUrl: url,
@@ -795,7 +791,7 @@ function ManagedCodexSetup({
               <T>Other ways to connect</T>
             </summary>
             <Button className="mt-2" size="sm" variant="outline" render={<a href={handoffUrl} />}>
-              <T>Use A4 Code desktop for automatic return</T>
+              <T>Use T3 desktop for automatic return</T>
             </Button>
           </details>
         ) : null}

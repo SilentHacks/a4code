@@ -2,12 +2,12 @@ import {
   AuthOrchestrationOperateScope,
   type EnvironmentId,
   type ThreadId,
-} from "@a4code/contracts";
+} from "@t3tools/contracts";
 import {
   isAtomCommandInterrupted,
   squashAtomCommandFailure,
-} from "@a4code/client-runtime/state/runtime";
-import { thrownErrorMessage } from "@a4code/client-runtime/errors";
+} from "@t3tools/client-runtime/state/runtime";
+import { thrownErrorMessage } from "@t3tools/client-runtime/errors";
 import { m } from "../i18n/messages";
 import { useDebouncedValue } from "@tanstack/react-pacer";
 import { useRef, useState } from "react";
@@ -20,7 +20,7 @@ import {
   usePullRequestResolutionState,
 } from "~/state/sourceControlActions";
 import { cn } from "~/lib/utils";
-import { parsePullRequestReference } from "@a4code/client-runtime/pull-request-link-input";
+import { parsePullRequestReference } from "@t3tools/client-runtime/pull-request-link-input";
 import { getSourceControlPresentation } from "~/sourceControlPresentation";
 import { useEnvironmentQuery } from "~/state/query";
 import { readEnvironmentScope, useEnvironmentScope } from "~/state/session";

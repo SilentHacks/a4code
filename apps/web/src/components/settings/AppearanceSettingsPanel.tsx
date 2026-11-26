@@ -14,7 +14,7 @@ import {
   MIN_APPEARANCE_CONTRAST,
   MIN_GLASS_OPACITY,
   MIN_PANEL_ANIMATION_DURATION_MS,
-} from "@a4code/contracts/settings";
+} from "@t3tools/contracts/settings";
 import {
   resolveSidebarStageBackdropVariant,
   type SidebarStageBackdropVariant,

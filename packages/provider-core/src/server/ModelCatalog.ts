@@ -1,4 +1,8 @@
-import type { ModelCapabilities, ProviderDriverKind, ServerProviderModel } from "@a4code/contracts";
+import type {
+  ModelCapabilities,
+  ProviderDriverKind,
+  ServerProviderModel,
+} from "@t3tools/contracts";
 import * as Context from "effect/Context";
 import type * as Effect from "effect/Effect";
 
@@ -31,7 +35,7 @@ export class ModelCatalog extends Context.Service<
     readonly bundled: (driverKind: ProviderDriverKind) => ProviderCatalog | undefined;
     readonly refreshInBackground: Effect.Effect<void>;
   }
->()("@a4code/provider-core/server/ModelCatalog") {}
+>()("@t3tools/provider-core/server/ModelCatalog") {}
 
 export const catalogServerModel = (
   catalog: ProviderCatalog,

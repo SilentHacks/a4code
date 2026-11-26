@@ -1,4 +1,4 @@
-import { threadPullRequestKeyOf } from "@a4code/client-runtime/thread-pull-requests";
+import { threadPullRequestKeyOf } from "@t3tools/client-runtime/thread-pull-requests";
 import * as Dialog from "../../components/ui/Dialog";
 import type {
   EnvironmentId,
@@ -6,22 +6,22 @@ import type {
   ServerProvider,
   ThreadId,
   ThreadPullRequestLink,
-} from "@a4code/contracts";
+} from "@t3tools/contracts";
 import {
   type ComposerEnvironmentCandidate,
   matchComposerEnvironmentItems,
   matchComposerThreadItems,
-} from "@a4code/client-runtime/composerThreadItems";
-import type { EnvironmentThreadShell } from "@a4code/client-runtime/state/models";
+} from "@t3tools/client-runtime/composerThreadItems";
+import type { EnvironmentThreadShell } from "@t3tools/client-runtime/state/models";
 
 const EMPTY_THREAD_SHELLS: ReadonlyArray<EnvironmentThreadShell> = [];
 const EMPTY_ENVIRONMENTS: ReadonlyArray<ComposerEnvironmentCandidate> = [];
 const NO_LINKED_ENVIRONMENTS: ReadonlyMap<EnvironmentId, string> = new Map();
-import { COMPOSER_CONTEXT_MAX_RECORDS } from "@a4code/contracts";
+import { COMPOSER_CONTEXT_MAX_RECORDS } from "@t3tools/contracts";
 import {
   formatComposerContextReference,
   threadContextRecord,
-} from "@a4code/shared/composerContextReferences";
+} from "@t3tools/shared/composerContextReferences";
 import { environmentComposerContext, pullRequestComposerContext } from "../../lib/composerContext";
 import { uuidv4 } from "../../lib/uuid";
 import {
@@ -29,18 +29,18 @@ import {
   setComposerDraftContext,
   useComposerDraftSelection,
 } from "../../state/use-composer-drafts";
-import { USAGE_LIMITS_COMMAND } from "@a4code/shared/usageLimits";
+import { USAGE_LIMITS_COMMAND } from "@t3tools/shared/usageLimits";
 import {
   detectComposerTrigger,
   replaceTextRange,
   serializeComposerFileLink,
   type ComposerTrigger,
-} from "@a4code/shared/composerTrigger";
+} from "@t3tools/shared/composerTrigger";
 import {
   insertRankedSearchResult,
   normalizeSearchQuery,
   scoreQueryMatch,
-} from "@a4code/shared/searchRanking";
+} from "@t3tools/shared/searchRanking";
 import {
   dedupeProviderSkillsByName,
   getProviderSkillsForSlashMenu,
@@ -48,11 +48,11 @@ import {
   isProviderSkillUserInvocable,
   resolveProviderSkillsForCwd,
   resolveProviderSlashCommandsForCwd,
-} from "@a4code/client-runtime/providerSkills";
+} from "@t3tools/client-runtime/providerSkills";
 import {
   formatComposerModelMention,
   rankComposerModelMentions,
-} from "@a4code/client-runtime/composer-model-mentions";
+} from "@t3tools/client-runtime/composer-model-mentions";
 import { useAtomRefresh } from "@effect/atom-react";
 import { Atom } from "effect/reactivity";
 import { msg, useGT, useMessages } from "gt-react-native";
@@ -333,7 +333,7 @@ export function useComposerCommandMenu({
   );
   // Every draft change rechecks a stale snapshot, including drafts written by
   // another surface (a prompt link) that never move the editor selection.
-  // oxlint-disable-next-line a4code/no-unreasoned-state-sync -- refreshes the provider workspace snapshot atom whenever the draft text changes from any surface
+  // oxlint-disable-next-line t3code/no-unreasoned-state-sync -- refreshes the provider workspace snapshot atom whenever the draft text changes from any surface
   useEffect(() => {
     refreshWorkspaceSnapshot();
   }, [

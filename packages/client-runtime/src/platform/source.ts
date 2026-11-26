@@ -11,4 +11,4 @@ export class PlatformConnectionSource extends Context.Service<
     // alongside it).
     readonly registrations: Stream.Stream<ReadonlyArray<PlatformConnectionRegistration>>;
   }
->()("@a4code/client-runtime/platform/source/PlatformConnectionSource") {}
+>()("@t3tools/client-runtime/platform/source/PlatformConnectionSource") {}

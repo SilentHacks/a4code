@@ -4,14 +4,14 @@ import type {
   WorktreeSetupStage,
   WorktreeSetupStageId,
   WorktreeSetupStageStatus,
-} from "@a4code/contracts";
+} from "@t3tools/contracts";
 import {
   WORKTREE_SETUP_DETAIL_MAX_LENGTH,
   WORKTREE_SETUP_ERROR_MAX_LENGTH,
   WORKTREE_SETUP_STAGE_ORDER,
   WORKTREE_SETUP_TAIL_LINE_MAX_LENGTH,
-} from "@a4code/contracts";
-import { splitsSurrogatePair } from "@a4code/shared/assistantCitations";
+} from "@t3tools/contracts";
+import { splitsSurrogatePair } from "@t3tools/shared/assistantCitations";
 import * as Context from "effect/Context";
 import * as DateTime from "effect/DateTime";
 import * as Effect from "effect/Effect";
@@ -66,7 +66,7 @@ export class WorktreeSetupTracker extends Context.Service<
     readonly get: (threadId: ThreadId) => Effect.Effect<WorktreeSetupSnapshot | null>;
     readonly stream: (threadId: ThreadId) => Stream.Stream<WorktreeSetupSnapshot | null>;
   }
->()("a4code/project/WorktreeSetupTracker") {}
+>()("t3/project/WorktreeSetupTracker") {}
 
 const TAIL_LINE_LIMIT = 4;
 

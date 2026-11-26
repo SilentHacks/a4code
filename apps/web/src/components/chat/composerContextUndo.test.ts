@@ -2,7 +2,7 @@ import {
   ChatAttachmentId,
   ComposerContextId,
   type PreviewAnnotationPayload,
-} from "@a4code/contracts";
+} from "@t3tools/contracts";
 import { describe, expect, it } from "vite-plus/test";
 
 import type { ComposerImageAttachment } from "../../composerDraftStore";

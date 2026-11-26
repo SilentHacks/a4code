@@ -11,7 +11,7 @@ import * as Schema from "effect/Schema";
 import * as Semaphore from "effect/Semaphore";
 
 import * as ServerConfig from "../config.ts";
-import { routineSpan } from "@a4code/shared/observability";
+import { routineSpan } from "@t3tools/shared/observability";
 
 const secretStoreErrorContext = {
   resource: Schema.String,
@@ -162,7 +162,7 @@ export class ServerSecretStore extends Context.Service<
     ) => Effect.Effect<Uint8Array, SecretStoreError>;
     readonly remove: (name: string) => Effect.Effect<void, SecretStoreError>;
   }
->()("a4code/auth/ServerSecretStore") {}
+>()("t3/auth/ServerSecretStore") {}
 
 /** @public */
 export const make = Effect.gen(function* () {

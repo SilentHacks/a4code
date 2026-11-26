@@ -4,7 +4,7 @@ import {
   PREVIEW_STREAM_HOST_SETUP_CLOSE_CODE,
   type PreviewStreamHostSetup,
   type PreviewViewportSetting,
-} from "@a4code/contracts";
+} from "@t3tools/contracts";
 import { mFallback, msg } from "gt-i18n";
 import type { MFunctionType } from "gt-i18n/types";
 

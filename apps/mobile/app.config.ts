@@ -11,18 +11,18 @@ Object.assign(process.env, repoEnv);
 process.env.EXPO_NO_TYPESCRIPT_SETUP = "1";
 
 const APP_VARIANT = resolveAppVariant(repoEnv.APP_VARIANT);
-const isIosPersonalTeamBuild = repoEnv.A4CODE_IOS_PERSONAL_TEAM === "1";
+const isIosPersonalTeamBuild = repoEnv.T3CODE_IOS_PERSONAL_TEAM === "1";
 const runtimeVersionPolicy =
   process.env.MOBILE_VERSION_POLICY ??
   (APP_VARIANT === "development" ? "appVersion" : "fingerprint");
 
-const personalTeamBundleIdentifier = repoEnv.A4CODE_IOS_PERSONAL_TEAM_BUNDLE_ID?.trim();
+const personalTeamBundleIdentifier = repoEnv.T3CODE_IOS_PERSONAL_TEAM_BUNDLE_ID?.trim();
 const IOS_BUNDLE_IDENTIFIER_PATTERN = /^[A-Za-z0-9-]+(?:\.[A-Za-z0-9-]+)+$/;
 
 // Compiled into the native project. Without a relay, Observe's native side could dispatch to
 // Expo's own ingest before observe.ts turns it off; `.invalid` never resolves (RFC 6761).
-const observeEndpointUrl = repoEnv.A4CODE_RELAY_URL?.trim()
-  ? new URL("/v1/mobile/observe", repoEnv.A4CODE_RELAY_URL.trim()).toString()
+const observeEndpointUrl = repoEnv.T3CODE_RELAY_URL?.trim()
+  ? new URL("/v1/mobile/observe", repoEnv.T3CODE_RELAY_URL.trim()).toString()
   : "https://observe.invalid";
 
 const fromRepoRoot = (relativePath: string) => `../../${relativePath}`;
@@ -34,7 +34,7 @@ if (
     !IOS_BUNDLE_IDENTIFIER_PATTERN.test(personalTeamBundleIdentifier))
 ) {
   throw new Error(
-    "A4CODE_IOS_PERSONAL_TEAM_BUNDLE_ID must be a reverse-DNS identifier such as com.example.a4code when A4CODE_IOS_PERSONAL_TEAM=1.",
+    "T3CODE_IOS_PERSONAL_TEAM_BUNDLE_ID must be a reverse-DNS identifier such as com.example.t3code when T3CODE_IOS_PERSONAL_TEAM=1.",
   );
 }
 
@@ -80,23 +80,26 @@ const RELEASE_ASSETS = {
 const VARIANT_CONFIG = {
   development: {
     appName: "A4 Code Dev",
-    scheme: "a4code-dev",
-    iosBundleIdentifier: "io.github.silenthacks.a4code.dev",
-    androidPackage: "io.github.silenthacks.a4code.dev",
+    scheme: "t3code-dev",
+    iosBundleIdentifier: "com.t3tools.t3code.dev",
+    androidPackage: "com.t3tools.t3code.dev",
+    relyingParty: "clerk.t3.codes",
     assets: DEVELOPMENT_ASSETS,
   },
   preview: {
     appName: "A4 Code Preview",
-    scheme: "a4code-preview",
-    iosBundleIdentifier: "io.github.silenthacks.a4code.preview",
-    androidPackage: "io.github.silenthacks.a4code.preview",
+    scheme: "t3code-preview",
+    iosBundleIdentifier: "com.t3tools.t3code.preview",
+    androidPackage: "com.t3tools.t3code.preview",
+    relyingParty: "clerk.t3.codes",
     assets: PREVIEW_ASSETS,
   },
   production: {
     appName: "A4 Code",
-    scheme: "a4code",
-    iosBundleIdentifier: "io.github.silenthacks.a4code",
-    androidPackage: "io.github.silenthacks.a4code",
+    scheme: "t3code",
+    iosBundleIdentifier: "com.t3tools.t3code",
+    androidPackage: "com.t3tools.t3code",
+    relyingParty: "clerk.t3.codes",
     assets: RELEASE_ASSETS,
   },
 } as const;
@@ -115,11 +118,8 @@ function resolveAppVariant(value: string | undefined): AppVariant {
 }
 
 const variant = VARIANT_CONFIG[APP_VARIANT];
-const hostedAppUrl = repoEnv.A4CODE_HOSTED_APP_URL?.trim();
-const hostedAppHost = hostedAppUrl ? new URL(hostedAppUrl).hostname : undefined;
-const clerkFrontendHost = repoEnv.A4CODE_CLERK_FRONTEND_API_HOST?.trim();
-const easProjectId = repoEnv.A4CODE_EAS_PROJECT_ID?.trim();
-const appleTeamId = repoEnv.A4CODE_APPLE_TEAM_ID?.trim();
+// Copied thread links open the app. app.t3.codes/.well-known lists every variant's identifiers.
+const HOSTED_APP_HOST = "app.t3.codes";
 const iosBundleIdentifier = isIosPersonalTeamBuild
   ? personalTeamBundleIdentifier!
   : variant.iosBundleIdentifier;
@@ -236,10 +236,10 @@ const sharingPlugin: NonNullable<ExpoConfig["plugins"]>[number] = [
 
 const config: ExpoConfig = {
   name: variant.appName,
-  slug: "a4code",
+  slug: "t3-code",
   platforms: ["ios", "android"],
   scheme: variant.scheme,
-  version: repoEnv.A4CODE_MOBILE_VERSION ?? "2.4.0",
+  version: repoEnv.T3CODE_MOBILE_VERSION ?? "2.4.0",
   runtimeVersion: {
     // Skip costly fingerprinting on dev launches; preview and production OTAs require matching native projects.
     policy: runtimeVersionPolicy,
@@ -248,8 +248,8 @@ const config: ExpoConfig = {
   icon: variant.assets.appIcon,
   userInterfaceStyle: "automatic",
   updates: {
-    enabled: Boolean(easProjectId) && repoEnv.A4CODE_MOBILE_UPDATES_ENABLED !== "0",
-    ...(easProjectId ? { url: `https://u.expo.dev/${easProjectId}` } : {}),
+    enabled: repoEnv.T3CODE_MOBILE_UPDATES_ENABLED !== "0",
+    url: "https://u.expo.dev/d763fcb8-d37c-41ea-a773-b54a0ab4a454",
     checkAutomatically: "ON_LOAD",
     fallbackToCacheTimeout: 0,
   },
@@ -258,12 +258,12 @@ const config: ExpoConfig = {
     supportsTablet: true,
     requireFullScreen: process.env.T3_SHOWCASE_CAPTURE_BUILD === "1",
     bundleIdentifier: iosBundleIdentifier,
-    ...(appleTeamId ? { appleTeamId } : {}),
+    // Avoid Personal Team fallback: it cannot sign App Groups, Apple sign-in or push entitlements.
+    appleTeamId: "ARK85ZXQ4Z",
     associatedDomains: [
-      ...(clerkFrontendHost
-        ? [`applinks:${clerkFrontendHost}`, `webcredentials:${clerkFrontendHost}`]
-        : []),
-      ...(hostedAppHost ? [`applinks:${hostedAppHost}`] : []),
+      `applinks:${variant.relyingParty}`,
+      `webcredentials:${variant.relyingParty}`,
+      `applinks:${HOSTED_APP_HOST}`,
     ],
     entitlements: {
       "keychain-access-groups": [`$(AppIdentifierPrefix)${variant.iosBundleIdentifier}`],
@@ -301,8 +301,8 @@ const config: ExpoConfig = {
   android: {
     icon: variant.assets.appIcon,
     package: variant.androidPackage,
-    ...(repoEnv.A4CODE_ANDROID_GOOGLE_SERVICES_FILE
-      ? { googleServicesFile: repoEnv.A4CODE_ANDROID_GOOGLE_SERVICES_FILE }
+    ...(repoEnv.T3CODE_ANDROID_GOOGLE_SERVICES_FILE
+      ? { googleServicesFile: repoEnv.T3CODE_ANDROID_GOOGLE_SERVICES_FILE }
       : {}),
     adaptiveIcon: {
       backgroundColor: variant.assets.androidAdaptiveBackgroundColor,
@@ -316,16 +316,14 @@ const config: ExpoConfig = {
     predictiveBackGestureEnabled: true,
     // expo-sensors declares this for its pedometer, which the app does not use.
     blockedPermissions: ["android.permission.ACTIVITY_RECOGNITION"],
-    intentFilters: hostedAppHost
-      ? [
-          {
-            action: "VIEW",
-            autoVerify: true,
-            data: [{ scheme: "https", host: hostedAppHost, pathPrefix: "/threads/" }],
-            category: ["BROWSABLE", "DEFAULT"],
-          },
-        ]
-      : [],
+    intentFilters: [
+      {
+        action: "VIEW",
+        autoVerify: true,
+        data: [{ scheme: "https", host: HOSTED_APP_HOST, pathPrefix: "/threads/" }],
+        category: ["BROWSABLE", "DEFAULT"],
+      },
+    ],
   },
   web: {
     favicon: variant.assets.appIcon,
@@ -475,10 +473,9 @@ const config: ExpoConfig = {
   ],
   extra: {
     appVariant: APP_VARIANT,
-    hostedAppUrl: hostedAppUrl ?? null,
     iosPersonalTeamBuild: isIosPersonalTeamBuild,
     relay: {
-      url: repoEnv.A4CODE_RELAY_URL ?? null,
+      url: repoEnv.T3CODE_RELAY_URL ?? null,
     },
     clerk: {
       publishableKey: repoEnv.EXPO_PUBLIC_CLERK_PUBLISHABLE_KEY ?? null,
@@ -495,11 +492,11 @@ const config: ExpoConfig = {
       tracesToken: repoEnv.EXPO_PUBLIC_OTLP_TRACES_TOKEN ?? null,
     },
     eas: {
-      ...(easProjectId ? { projectId: easProjectId } : {}),
+      projectId: "d763fcb8-d37c-41ea-a773-b54a0ab4a454",
       observe: { endpointUrl: observeEndpointUrl },
     },
   },
-  ...(repoEnv.A4CODE_EXPO_OWNER ? { owner: repoEnv.A4CODE_EXPO_OWNER } : {}),
+  owner: "pingdotgg",
   experiments: {
     // Metro only runs babel-plugin-react-compiler when this is set; see src/reactCompilerCoverage.test.ts.
     reactCompiler: true,

@@ -6,7 +6,7 @@ import {
   OrchestrationV2AppThreadJson,
   OrchestrationV2ProviderSessionJson,
   StorageCleanupReportEntry,
-} from "@a4code/contracts";
+} from "@t3tools/contracts";
 import * as Base64Url from "effect/encoding/Base64Url";
 import * as Schema from "effect/Schema";
 import * as SqlClient from "effect/sql/SqlClient";
@@ -19,11 +19,11 @@ import type {
   WorktreeCleanupRules,
   StorageCleanupReport,
   ThreadId,
-} from "@a4code/contracts";
-import { writeFileStringAtomically } from "@a4code/shared/atomicWrite";
-import { resolveWorktreeCleanup } from "@a4code/shared/projectSettings";
-import { resolveWorktreeT3Home } from "@a4code/shared/devHome";
-import { makeDrainableWorker } from "@a4code/shared/DrainableWorker";
+} from "@t3tools/contracts";
+import { writeFileStringAtomically } from "@t3tools/shared/atomicWrite";
+import { resolveWorktreeCleanup } from "@t3tools/shared/projectSettings";
+import { resolveWorktreeT3Home } from "@t3tools/shared/devHome";
+import { makeDrainableWorker } from "@t3tools/shared/DrainableWorker";
 import * as Context from "effect/Context";
 import * as Deferred from "effect/Deferred";
 import * as Layer from "effect/Layer";
@@ -64,9 +64,9 @@ import { isNonRepositoryGitStderr } from "./vcs/GitVcsDriverCore.ts";
 import { isLinkedWorktree, removeLinkedWorktree } from "./vcs/worktreeRemoval.ts";
 import * as TaskFolders from "./workspace/TaskFolders.ts";
 import { withWorkspaceLease } from "./workspace/workspaceLease.ts";
-import * as HostProcess from "@a4code/shared/HostProcess";
-import * as NodeSqliteClient from "@a4code/shared/nodeSqliteClient";
-import { isNetworkPath } from "@a4code/shared/path";
+import * as HostProcess from "@t3tools/shared/HostProcess";
+import * as NodeSqliteClient from "@t3tools/shared/nodeSqliteClient";
+import { isNetworkPath } from "@t3tools/shared/path";
 
 const decodeCleanupThread = Schema.decodeUnknownEffect(
   Schema.fromJsonString(OrchestrationV2AppThreadJson),
@@ -323,7 +323,7 @@ export class StorageCleanup extends Context.Service<
     readonly reports: Stream.Stream<StorageCleanupReport | null>;
     readonly drain: Effect.Effect<void>;
   }
->()("a4code/storageCleanup") {}
+>()("t3/storageCleanup") {}
 
 const make = Effect.gen(function* () {
   const config = yield* ServerConfig.ServerConfig;

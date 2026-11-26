@@ -1,13 +1,12 @@
-import { hostedAppOrigin } from "./mobileBranding";
-import { fileBasename } from "@a4code/shared/path";
-import { fileLinkLabel } from "@a4code/shared/fileLinks";
+import { fileBasename } from "@t3tools/shared/path";
+import { fileLinkLabel } from "@t3tools/shared/fileLinks";
 import {
   inlineCodeFilePathCandidate,
   normalizeMarkdownLinkDestination,
   parseMarkdownFileLink,
-} from "@a4code/shared/markdownLinks";
-import { parseThreadLinkHref } from "@a4code/shared/threadLinks";
-import { videoMimeType } from "@a4code/shared/video";
+} from "@t3tools/shared/markdownLinks";
+import { parseThreadLinkHref } from "@t3tools/shared/threadLinks";
+import { videoMimeType } from "@t3tools/shared/video";
 
 import type { MARKDOWN_FILE_ICON_SOURCES } from "./markdownFileIcons.generated";
 
@@ -327,8 +326,7 @@ export function resolveMarkdownLinkPresentation(href: string): MarkdownLinkPrese
   return {
     kind: "link",
     href:
-      /^(?:mailto|tel):/i.test(normalized) ||
-      parseThreadLinkHref(normalized, hostedAppOrigin) !== null
+      /^(?:mailto|tel):/i.test(normalized) || parseThreadLinkHref(normalized) !== null
         ? normalized
         : null,
   };

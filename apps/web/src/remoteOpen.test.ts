@@ -5,8 +5,8 @@ import {
   RelayConnectionTarget,
   SshConnectionProfile,
   SshConnectionTarget,
-} from "@a4code/client-runtime/connection";
-import { buildRemoteOpenUrl, EnvironmentId } from "@a4code/contracts";
+} from "@t3tools/client-runtime/connection";
+import { buildRemoteOpenUrl, EnvironmentId } from "@t3tools/contracts";
 import * as Option from "effect/Option";
 import { describe, expect, it } from "vite-plus/test";
 

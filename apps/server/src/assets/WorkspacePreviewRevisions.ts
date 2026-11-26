@@ -39,7 +39,7 @@ export class WorkspacePreviewRevisions extends Context.Service<
     /** Records a file the page requested, found or not, as part of the page. */
     readonly observe: (document: PreviewDocument, relativePath: string) => Effect.Effect<void>;
   }
->()("a4code/assets/WorkspacePreviewRevisions") {}
+>()("t3/assets/WorkspacePreviewRevisions") {}
 
 const make = Effect.gen(function* () {
   const path = yield* Path.Path;

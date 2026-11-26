@@ -1,10 +1,10 @@
-import { findErrorTraceId, thrownErrorMessage } from "@a4code/client-runtime/errors";
+import { findErrorTraceId, thrownErrorMessage } from "@t3tools/client-runtime/errors";
 import {
   isAtomCommandInterrupted,
   squashAtomCommandFailure,
-} from "@a4code/client-runtime/state/runtime";
-import type { EnvironmentId } from "@a4code/contracts";
-import type { RelayClientEnvironmentRecord } from "@a4code/contracts/relay";
+} from "@t3tools/client-runtime/state/runtime";
+import type { EnvironmentId } from "@t3tools/contracts";
+import type { RelayClientEnvironmentRecord } from "@t3tools/contracts/relay";
 import { ServerIcon } from "lucide-react";
 import { msg, T, useGT, useMessages, Var } from "gt-react";
 import { useRef, useState } from "react";
@@ -328,7 +328,7 @@ export function T3ConnectUserProfilePage() {
                 </EmptyTitle>
                 <EmptyDescription>
                   <T>
-                    Link an environment from its local Settings to make it available through A4
+                    Link an environment from its local Settings to make it available through T3
                     Connect.
                   </T>
                 </EmptyDescription>

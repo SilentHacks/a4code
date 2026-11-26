@@ -1,4 +1,4 @@
-import { thrownErrorMessage } from "@a4code/client-runtime/errors";
+import { thrownErrorMessage } from "@t3tools/client-runtime/errors";
 import { m } from "~/i18n/messages";
 import { RegistryContext, useAtomValue } from "@effect/atom-react";
 import {
@@ -7,9 +7,9 @@ import {
   type DesktopSnapShotShortcutAvailability,
   type DesktopSnapShotSetupAction,
   type SnapShotShortcut,
-} from "@a4code/contracts";
+} from "@t3tools/contracts";
 import { PlayIcon } from "lucide-react";
-import { settlePromise } from "@a4code/client-runtime/state/runtime";
+import { settlePromise } from "@t3tools/client-runtime/state/runtime";
 import * as Cause from "effect/Cause";
 import { useContext, useRef, useState } from "react";
 import { T, useGT, useMessages } from "gt-react";

@@ -3,7 +3,7 @@ import type {
   ServerProviderResetCredits,
   ServerProviderUsageLimits,
   ServerProviderUsageWindow,
-} from "@a4code/contracts";
+} from "@t3tools/contracts";
 import { mFallback, msg } from "gt-i18n";
 import type { MFunctionType } from "gt-i18n/types";
 

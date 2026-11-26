@@ -1,4 +1,4 @@
-import type { RelayManagedEndpointRuntimeConfig } from "@a4code/contracts/relay";
+import type { RelayManagedEndpointRuntimeConfig } from "@t3tools/contracts/relay";
 import * as Cause from "effect/Cause";
 import * as Clock from "effect/Clock";
 import * as Duration from "effect/Duration";

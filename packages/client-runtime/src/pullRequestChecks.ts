@@ -1,4 +1,4 @@
-import type { PullRequestCheck, PullRequestChecks, PullRequestDetail } from "@a4code/contracts";
+import type { PullRequestCheck, PullRequestChecks, PullRequestDetail } from "@t3tools/contracts";
 
 export function resolvePullRequestDetailChecks(
   detail: PullRequestDetail | null,

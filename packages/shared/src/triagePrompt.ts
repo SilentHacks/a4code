@@ -1,4 +1,4 @@
-import { TRIAGE_PROMPT_FILE_NAME } from "@a4code/contracts";
+import { TRIAGE_PROMPT_FILE_NAME } from "@t3tools/contracts";
 
 const PLAYBOOK_LINK_START = `[${TRIAGE_PROMPT_FILE_NAME}](`;
 

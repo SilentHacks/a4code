@@ -4,7 +4,7 @@ import type {
   ProviderAuthRespondInput,
   ProviderAuthState,
   ProviderSetupError,
-} from "@a4code/contracts";
+} from "@t3tools/contracts";
 import type * as Effect from "effect/Effect";
 import type * as Scope from "effect/Scope";
 import type * as Stream from "effect/Stream";

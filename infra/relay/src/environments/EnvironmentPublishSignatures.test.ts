@@ -6,9 +6,9 @@ import type {
   RelayAgentActivityPublishProofPayload,
   RelayAgentActivityPublishRequest,
   RelayAgentActivityState,
-} from "@a4code/contracts/relay";
-import { RELAY_ACTIVITY_PUBLISH_TYP } from "@a4code/shared/relayJwt";
-import { stableStringify } from "@a4code/shared/relaySigning";
+} from "@t3tools/contracts/relay";
+import { RELAY_ACTIVITY_PUBLISH_TYP } from "@t3tools/shared/relayJwt";
+import { stableStringify } from "@t3tools/shared/relaySigning";
 import { describe, expect, it } from "@effect/vitest";
 import * as DateTime from "effect/DateTime";
 import * as Effect from "effect/Effect";
@@ -32,12 +32,12 @@ const config = RelayConfiguration.RelayConfiguration.of({
     teamId: "team-id",
     keyId: "key-id",
     privateKey: Redacted.make("private-key"),
-    bundleId: "io.github.silenthacks.a4code.dev",
+    bundleId: "com.t3tools.t3code.dev",
   },
   apnsDeliveryJobSigningSecret: Redacted.make("job-secret"),
   clerkSecretKey: Redacted.make("clerk-secret"),
   clerkPublishableKey: "pk_test_test",
-  clerkJwtAudience: "a4-code-relay",
+  clerkJwtAudience: "t3-code-relay",
   cloudMintPrivateKey: Redacted.make(keyPair.privateKey),
   cloudMintPublicKey: keyPair.publicKey,
   managedEndpointBaseDomain: undefined,

@@ -1,8 +1,8 @@
 import {
   createFilesystemEnvironmentAtoms,
   resolveFilesystemReadAccess,
-} from "@a4code/client-runtime/state/filesystem";
-import type { EnvironmentId } from "@a4code/contracts";
+} from "@t3tools/client-runtime/state/filesystem";
+import type { EnvironmentId } from "@t3tools/contracts";
 
 import { connectionAtomRuntime } from "../connection/runtime";
 import { m, type MessageResolver } from "../i18n/messages";

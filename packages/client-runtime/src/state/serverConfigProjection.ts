@@ -2,7 +2,7 @@ import {
   applyServerProviderDeltas,
   type ServerConfig,
   type ServerConfigStreamEvent,
-} from "@a4code/contracts";
+} from "@t3tools/contracts";
 import * as Equal from "effect/Equal";
 import * as Option from "effect/Option";
 

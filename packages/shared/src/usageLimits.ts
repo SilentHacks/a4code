@@ -16,7 +16,7 @@ import {
   type UsageLimitSourceAccount,
   type UsageLimitSourceSnapshot,
   type UsageLimitSourceSnapshots,
-} from "@a4code/contracts";
+} from "@t3tools/contracts";
 
 import * as DateTime from "effect/DateTime";
 

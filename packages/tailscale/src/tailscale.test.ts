@@ -10,7 +10,7 @@ import * as Stream from "effect/Stream";
 import { HttpClient, HttpClientResponse } from "effect/http";
 import * as TestClock from "effect/testing/TestClock";
 import { ChildProcessSpawner } from "effect/process";
-import * as HostProcess from "@a4code/shared/HostProcess";
+import * as HostProcess from "@t3tools/shared/HostProcess";
 
 import {
   ensureTailscaleServe,
@@ -124,7 +124,7 @@ describe("tailscale", () => {
     }),
   );
 
-  it.effect("does not treat another A4 Code server behind the Serve URL as this server", () =>
+  it.effect("does not treat another T3 server behind the Serve URL as this server", () =>
     Effect.gen(function* () {
       const answer = (environmentId: string) =>
         HttpClient.make((request) =>
@@ -133,7 +133,7 @@ describe("tailscale", () => {
               request,
               Response.json({
                 environmentId,
-                label: "A4 Code server",
+                label: "T3 server",
                 platform: { os: "linux", arch: "x64" },
                 serverVersion: "0.1.9",
                 capabilities: { repositoryIdentity: true },

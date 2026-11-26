@@ -7,22 +7,22 @@ import {
   type Project,
   type RuntimeRequestId,
   type ThreadId,
-} from "@a4code/contracts";
+} from "@t3tools/contracts";
 import {
   RelayApi,
   type RelayAgentActivityPublishProofPayload,
   type RelayAgentActivityState,
-} from "@a4code/contracts/relay";
+} from "@t3tools/contracts/relay";
 import {
   type SubagentRequestAwareness,
   projectThreadAwarenessV2,
   subagentAwaitsUser,
   turnItemCanChangeUserWait,
-} from "@a4code/shared/agentAwareness";
-import { turnItemUpdateCanEndBackgroundWork } from "@a4code/shared/orchestrationV2PendingBackgroundWork";
-import { makeDrainableWorker } from "@a4code/shared/DrainableWorker";
-import { withRelayClientTracing } from "@a4code/shared/relayTracing";
-import { normalizeRelayIssuer, RELAY_ACTIVITY_PUBLISH_TYP } from "@a4code/shared/relayJwt";
+} from "@t3tools/shared/agentAwareness";
+import { turnItemUpdateCanEndBackgroundWork } from "@t3tools/shared/orchestrationV2PendingBackgroundWork";
+import { makeDrainableWorker } from "@t3tools/shared/DrainableWorker";
+import { withRelayClientTracing } from "@t3tools/shared/relayTracing";
+import { normalizeRelayIssuer, RELAY_ACTIVITY_PUBLISH_TYP } from "@t3tools/shared/relayJwt";
 import * as Cause from "effect/Cause";
 import * as Context from "effect/Context";
 import * as SecureRandom from "effect/crypto/SecureRandom";
@@ -63,7 +63,7 @@ export class AgentAwarenessRelay extends Context.Service<
     readonly requestCatchUp: () => Effect.Effect<void>;
     readonly start: () => Effect.Effect<void, never, Scope.Scope>;
   }
->()("a4code/relay/AgentAwarenessRelay") {}
+>()("t3/relay/AgentAwarenessRelay") {}
 
 function eventThreadId(event: OrchestrationV2DomainEvent): ThreadId {
   return event.threadId;
@@ -904,7 +904,7 @@ export const make = Effect.gen(function* () {
   });
 
   // Many environments never link, so while unlinked the retry backs off from 5
-  // s to 60 s. A linked environment keeps the 5 s retry, because `a4code connect
+  // s to 60 s. A linked environment keeps the 5 s retry, because `t3 connect
   // publish` can turn publishing on from another process. Keep this untraced:
   // an unlinked environment can retry for the lifetime of the process.
   const publishActiveThreadsWhenConfigured = Effect.fnUntraced(function* (

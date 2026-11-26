@@ -10,4 +10,4 @@ Choose **A4 Code** in **System Settings → Desktop & Dock → Default web brows
 
 - If the active thread has its browser panel open, the link opens as a new tab there; otherwise A4 Code opens a new no-project thread with the browser panel maximized so you can ask an agent about the page right away.
 - Pull request links for connected projects open in the PR view (when **Open pull requests in A4 Code** is enabled).
-- [Prompt links](./prompt-links.md) to the hosted web client open as a draft.
+- [Prompt links](./prompt-links.md) to `app.t3.codes` open as a draft.

@@ -2,7 +2,7 @@ import {
   delayedStatusDeadline,
   shownDelayedStatus,
   stepDelayedStatus,
-} from "@a4code/client-runtime/delayed-status";
+} from "@t3tools/client-runtime/delayed-status";
 import { useState } from "react";
 
 import { useDeadlinePassed } from "./clock";

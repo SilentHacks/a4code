@@ -6,7 +6,7 @@ import {
   ThreadId,
   type OrchestrationV2ShellSnapshot,
   type OrchestrationV2ThreadShell,
-} from "@a4code/contracts";
+} from "@t3tools/contracts";
 import * as DateTime from "effect/DateTime";
 import * as Option from "effect/Option";
 import { Atom, AtomRegistry } from "effect/reactivity";

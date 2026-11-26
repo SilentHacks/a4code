@@ -1,6 +1,6 @@
 import * as NodeServices from "@effect/platform-node/NodeServices";
 import { assert, describe, it } from "@effect/vitest";
-import * as HostProcess from "@a4code/shared/HostProcess";
+import * as HostProcess from "@t3tools/shared/HostProcess";
 import * as Cause from "effect/Cause";
 import * as Deferred from "effect/Deferred";
 import * as Effect from "effect/Effect";
@@ -37,10 +37,10 @@ const makeEnvironment = (path: Path.Path, overrides: Record<string, unknown> = {
     isPackaged: true,
     isDevelopment: false,
     displayName: "A4 Code (Alpha)",
-    linuxDesktopEntryName: "io.github.silenthacks.a4code.desktop",
+    linuxDesktopEntryName: "com.t3tools.T3Code.desktop",
     linuxApplicationsDir: "/home/alice/.local/share/applications",
     desktopLauncherPath: Option.none(),
-    appImagePath: Option.some("/home/alice/Applications/A4-Code.AppImage"),
+    appImagePath: Option.some("/home/alice/Applications/T3-Code.AppImage"),
     path,
     ...overrides,
   } as unknown as DesktopEnvironment.DesktopEnvironment["Service"]);
@@ -188,7 +188,7 @@ describe("DesktopLinuxUrlHandler", () => {
     const entry = DesktopLinuxUrlHandler.renderUrlHandlerDesktopEntry({
       displayName: "A4 Code (Nightly)",
       execTarget: '/home/al ice/Apps/T3 "100%" $HOME\\x.AppImage',
-      scheme: "a4code",
+      scheme: "t3code",
       iconPath: "/home/al ice/icons/T3\\x.png",
     });
 
@@ -200,28 +200,28 @@ describe("DesktopLinuxUrlHandler", () => {
     );
     assert.include(entry, "NoDisplay=true");
     assert.notInclude(entry, "StartupWMClass=");
-    assert.include(entry, "MimeType=x-scheme-handler/a4code;");
+    assert.include(entry, "MimeType=x-scheme-handler/t3code;");
     assert.include(entry, "Icon=/home/al ice/icons/T3\\\\x.png");
   });
 
   it.each([
-    { from: "A4-Code-0.1.8-x86_64.AppImage", to: "A4-Code-x86_64.AppImage", restored: true },
+    { from: "T3-Code-0.1.8-x86_64.AppImage", to: "T3-Code-x86_64.AppImage", restored: true },
     {
-      from: "A4-Code-0.1.9-nightly.20261110.4449-arm64.AppImage",
-      to: "A4-Code-Nightly-arm64.AppImage",
+      from: "T3-Code-0.1.9-nightly.20261110.4449-arm64.AppImage",
+      to: "T3-Code-Nightly-arm64.AppImage",
       restored: true,
     },
-    { from: "A4-Code-0.1.8-x86_64.AppImage", to: "A4-Code-0.1.9-x86_64.AppImage", restored: false },
-    { from: "a4code.AppImage", to: "A4-Code-x86_64.AppImage", restored: false },
-    { from: "A4-Code-x86_64.AppImage", to: "A4-Code-x86_64.AppImage", restored: false },
-    { from: "../A4-Code-0.1.8-x86_64.AppImage", to: "A4-Code-x86_64.AppImage", restored: false },
+    { from: "T3-Code-0.1.8-x86_64.AppImage", to: "T3-Code-0.1.9-x86_64.AppImage", restored: false },
+    { from: "t3code.AppImage", to: "T3-Code-x86_64.AppImage", restored: false },
+    { from: "T3-Code-x86_64.AppImage", to: "T3-Code-x86_64.AppImage", restored: false },
+    { from: "../T3-Code-0.1.8-x86_64.AppImage", to: "T3-Code-x86_64.AppImage", restored: false },
   ])("finds the launch path an update from $from to $to removed", ({ from, to, restored }) => {
     for (const dir of ["/home/alice/Applications", '/home/al ice/My "100%" $Apps\\x']) {
       const previous = dir + "/" + from;
       const previousEntry = DesktopLinuxUrlHandler.renderUrlHandlerDesktopEntry({
         displayName: "A4 Code (Beta)",
         execTarget: previous,
-        scheme: "a4code",
+        scheme: "t3code",
       });
       assert.equal(
         DesktopLinuxUrlHandler.replacedVersionedAppImagePath({
@@ -245,13 +245,13 @@ describe("DesktopLinuxUrlHandler", () => {
         assert.equal(recorded.files.length, 1);
         assert.equal(
           recorded.files[0]?.path,
-          "/home/alice/.local/share/applications/io.github.silenthacks.a4code.desktop",
+          "/home/alice/.local/share/applications/com.t3tools.T3Code.desktop",
         );
         assert.include(
           recorded.files[0]?.content,
-          "Exec=/home/alice/Applications/A4-Code.AppImage %U",
+          "Exec=/home/alice/Applications/T3-Code.AppImage %U",
         );
-        assert.include(recorded.files[0]?.content, "MimeType=x-scheme-handler/a4code;");
+        assert.include(recorded.files[0]?.content, "MimeType=x-scheme-handler/t3code;");
         assert.deepEqual(recorded.commands, [
           {
             command: "update-desktop-database",
@@ -259,7 +259,7 @@ describe("DesktopLinuxUrlHandler", () => {
           },
           {
             command: "xdg-mime",
-            args: ["default", "io.github.silenthacks.a4code.desktop", "x-scheme-handler/a4code"],
+            args: ["default", "com.t3tools.T3Code.desktop", "x-scheme-handler/t3code"],
           },
         ]);
       });
@@ -277,8 +277,8 @@ describe("DesktopLinuxUrlHandler", () => {
         DesktopLinuxUrlHandler.renderUrlHandlerDesktopEntry({
           displayName: "A4 Code (Alpha)",
           execTarget: process.execPath,
-          scheme: "a4code",
-          iconPath: "/home/alice/.local/share/icons/io.github.silenthacks.a4code.desktop.png",
+          scheme: "t3code",
+          iconPath: "/home/alice/.local/share/icons/com.t3tools.T3Code.desktop.png",
         }),
       );
     });
@@ -289,10 +289,10 @@ describe("DesktopLinuxUrlHandler", () => {
 
     return Effect.gen(function* () {
       yield* runRegister(recorded, {
-        environment: { desktopLauncherPath: Option.some("/opt/A4 Code/a4code") },
+        environment: { desktopLauncherPath: Option.some("/opt/A4 Code/t3code") },
       });
 
-      assert.include(recorded.files[0]?.content, 'Exec="/opt/A4 Code/a4code" %U');
+      assert.include(recorded.files[0]?.content, 'Exec="/opt/A4 Code/t3code" %U');
     });
   });
 
@@ -303,9 +303,9 @@ describe("DesktopLinuxUrlHandler", () => {
       yield* runRegister(recorded, {
         existingEntry: DesktopLinuxUrlHandler.renderUrlHandlerDesktopEntry({
           displayName: "A4 Code (Alpha)",
-          execTarget: "/home/alice/Applications/A4-Code.AppImage",
-          scheme: "a4code",
-          iconPath: "/home/alice/.local/share/icons/io.github.silenthacks.a4code.desktop.png",
+          execTarget: "/home/alice/Applications/T3-Code.AppImage",
+          scheme: "t3code",
+          iconPath: "/home/alice/.local/share/icons/com.t3tools.T3Code.desktop.png",
         }),
       });
 
@@ -318,7 +318,7 @@ describe("DesktopLinuxUrlHandler", () => {
         },
         {
           command: "xdg-mime",
-          args: ["default", "io.github.silenthacks.a4code.desktop", "x-scheme-handler/a4code"],
+          args: ["default", "com.t3tools.T3Code.desktop", "x-scheme-handler/t3code"],
         },
       ]);
     });
@@ -326,14 +326,14 @@ describe("DesktopLinuxUrlHandler", () => {
 
   it.effect("installs a persistent icon even when the desktop entry is already current", () => {
     const recorded = emptyRecording();
-    const iconPath = "/home/alice/.local/share/icons/io.github.silenthacks.a4code.desktop.png";
+    const iconPath = "/home/alice/.local/share/icons/com.t3tools.T3Code.desktop.png";
     return Effect.gen(function* () {
       yield* runRegister(recorded, {
         iconSource: "/tmp/.mount_T3/resources/icon.png",
         existingEntry: DesktopLinuxUrlHandler.renderUrlHandlerDesktopEntry({
           displayName: "A4 Code (Alpha)",
-          execTarget: "/home/alice/Applications/A4-Code.AppImage",
-          scheme: "a4code",
+          execTarget: "/home/alice/Applications/T3-Code.AppImage",
+          scheme: "t3code",
           iconPath,
         }),
       });
@@ -373,14 +373,14 @@ describe("DesktopLinuxUrlHandler", () => {
       yield* runRegister(unpackaged, {
         environment: {
           isPackaged: false,
-          linuxDesktopEntryName: "io.github.silenthacks.a4code.dev.desktop",
+          linuxDesktopEntryName: "com.t3tools.T3Code.Development.desktop",
         },
       });
 
       assert.deepEqual(nonLinux.files, []);
       assert.equal(
         unpackaged.files[0]?.path,
-        "/home/alice/.local/share/applications/io.github.silenthacks.a4code.dev.desktop",
+        "/home/alice/.local/share/applications/com.t3tools.T3Code.Development.desktop",
       );
       assert.deepEqual(unpackaged.commands, []);
     });
@@ -400,8 +400,7 @@ describe("DesktopLinuxUrlHandler", () => {
           module: "FileSystem",
           method: "writeFileString",
           description: "read-only filesystem",
-          pathOrDescriptor:
-            "/home/alice/.local/share/applications/io.github.silenthacks.a4code.desktop",
+          pathOrDescriptor: "/home/alice/.local/share/applications/com.t3tools.T3Code.desktop",
         }),
       });
 
@@ -606,7 +605,7 @@ const iconCacheRuns = (run: ThemeIconRun) =>
   run.commands.filter(({ command }) => command === "gtk-update-icon-cache").length;
 
 it.layer(NodeServices.layer)("DesktopLinuxUrlHandler theme icons", (it) => {
-  it.effect("installs the app icon without creating an icon cache", () =>
+  it.effect("installs both app id spellings without creating an icon cache", () =>
     Effect.gen(function* () {
       const fileSystem = yield* FileSystem.FileSystem;
       const path = yield* Path.Path;
@@ -615,16 +614,21 @@ it.layer(NodeServices.layer)("DesktopLinuxUrlHandler theme icons", (it) => {
       const run: ThemeIconRun = { root: fixture.root, commands: [] };
 
       yield* registerWithRealFileSystem(run);
-      assert.deepEqual(yield* fileSystem.readDirectory(fixture.appsDir), [
-        "io.github.silenthacks.a4code.png",
+      assert.deepEqual([...(yield* fileSystem.readDirectory(fixture.appsDir))].sort(), [
+        "com.t3tools.T3Code.png",
+        "com.t3tools.t3code.png",
       ]);
-      const target = path.join(fixture.appsDir, "io.github.silenthacks.a4code.png");
-      assert.deepEqual([...(yield* fileSystem.readFile(target))], [...icon]);
-      yield* fileSystem.utimes(target, fixture.pastSeconds, fixture.pastSeconds);
+      for (const name of ["com.t3tools.t3code", "com.t3tools.T3Code"]) {
+        const target = path.join(fixture.appsDir, `${name}.png`);
+        assert.deepEqual([...(yield* fileSystem.readFile(target))], [...icon]);
+        yield* fileSystem.utimes(target, fixture.pastSeconds, fixture.pastSeconds);
+      }
 
       yield* registerWithRealFileSystem(run);
-      const info = yield* fileSystem.stat(target);
-      assert.equal(Option.getOrThrow(info.mtime).getTime(), fixture.pastSeconds * 1000);
+      for (const name of ["com.t3tools.t3code", "com.t3tools.T3Code"]) {
+        const info = yield* fileSystem.stat(path.join(fixture.appsDir, `${name}.png`));
+        assert.equal(Option.getOrThrow(info.mtime).getTime(), fixture.pastSeconds * 1000);
+      }
       assert.isFalse(yield* fileSystem.exists(fixture.cachePath));
       assert.equal(iconCacheRuns(run), 0);
     }),
@@ -636,9 +640,13 @@ it.layer(NodeServices.layer)("DesktopLinuxUrlHandler theme icons", (it) => {
       const path = yield* Path.Path;
       const fixture = yield* themeIconFixture(new Uint8Array([1, 2, 3]));
       yield* fixture.seedCache;
-      const target = path.join(fixture.appsDir, "io.github.silenthacks.a4code.png");
-      yield* fileSystem.writeFile(target, new Uint8Array([3, 2, 1]));
-      yield* fileSystem.utimes(target, fixture.pastSeconds, fixture.pastSeconds);
+      const lower = path.join(fixture.appsDir, "com.t3tools.t3code.png");
+      const upper = path.join(fixture.appsDir, "com.t3tools.T3Code.png");
+      yield* fileSystem.writeFile(lower, new Uint8Array([3, 2, 1]));
+      yield* fileSystem.writeFile(upper, new Uint8Array([1, 2, 3]));
+      for (const target of [lower, upper]) {
+        yield* fileSystem.utimes(target, fixture.pastSeconds, fixture.pastSeconds);
+      }
       const run: ThemeIconRun = {
         root: fixture.root,
         commands: [],
@@ -648,7 +656,9 @@ it.layer(NodeServices.layer)("DesktopLinuxUrlHandler theme icons", (it) => {
       yield* registerWithRealFileSystem(run);
       yield* registerWithRealFileSystem(run);
 
-      assert.deepEqual([...(yield* fileSystem.readFile(target))], [1, 2, 3]);
+      assert.deepEqual([...(yield* fileSystem.readFile(lower))], [1, 2, 3]);
+      const upperInfo = yield* fileSystem.stat(upper);
+      assert.equal(Option.getOrThrow(upperInfo.mtime).getTime(), fixture.pastSeconds * 1000);
       assert.deepEqual(
         run.commands.filter(({ command }) => command === "gtk-update-icon-cache"),
         [{ command: "gtk-update-icon-cache", args: ["-f", "-t", fixture.hicolorDir] }],
@@ -672,9 +682,7 @@ it.layer(NodeServices.layer)("DesktopLinuxUrlHandler theme icons", (it) => {
 
       yield* registerWithRealFileSystem(run);
 
-      assert.isTrue(
-        yield* fileSystem.exists(path.join(fixture.appsDir, "io.github.silenthacks.a4code.png")),
-      );
+      assert.isTrue(yield* fileSystem.exists(path.join(fixture.appsDir, "com.t3tools.T3Code.png")));
       assert.equal(iconCacheRuns(run), 1);
     }),
   );

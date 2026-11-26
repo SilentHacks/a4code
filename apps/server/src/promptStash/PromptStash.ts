@@ -4,7 +4,7 @@ import {
   PromptStashError,
   type PromptStashEvent,
   type PromptStashTakeInput,
-} from "@a4code/contracts";
+} from "@t3tools/contracts";
 import * as Clock from "effect/Clock";
 import * as Context from "effect/Context";
 import * as DateTime from "effect/DateTime";
@@ -42,7 +42,7 @@ export class PromptStash extends Context.Service<
       input: PromptStashTakeInput,
     ) => Effect.Effect<{ readonly entry: PromptStashEntry | null }, StoreFailure>;
   }
->()("a4code/promptStash/PromptStash") {}
+>()("t3/promptStash/PromptStash") {}
 
 const make = Effect.gen(function* () {
   const sql = yield* SqlClient.SqlClient;

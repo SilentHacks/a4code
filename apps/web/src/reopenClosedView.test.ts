@@ -2,7 +2,7 @@ import {
   DEFAULT_CLIENT_SETTINGS,
   type PreviewSessionSnapshot,
   type ScopedThreadRef,
-} from "@a4code/contracts";
+} from "@t3tools/contracts";
 import * as Cause from "effect/Cause";
 import { AsyncResult } from "effect/reactivity";
 import { beforeEach, describe, expect, it, vi } from "vite-plus/test";

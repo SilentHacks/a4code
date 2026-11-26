@@ -3,8 +3,8 @@ import {
   ProviderDriverKind,
   ProviderInstanceId,
   type ServerProvider,
-} from "@a4code/contracts";
-import { CHATGPT_USAGE_URL } from "@a4code/shared/usageLimits";
+} from "@t3tools/contracts";
+import { CHATGPT_USAGE_URL } from "@t3tools/shared/usageLimits";
 import { describe, expect, it } from "vite-plus/test";
 
 import "~/index.css";

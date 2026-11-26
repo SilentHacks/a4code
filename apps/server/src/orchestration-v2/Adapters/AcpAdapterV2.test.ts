@@ -5,9 +5,9 @@ import {
   normalizeDevinToolCall,
   extractDevinSubagentUpdate,
   makeAcpRegistryAdapterV2,
-} from "@a4code/provider-acp-registry/testing";
-import { AcpRegistrySettings } from "@a4code/provider-acp-registry/settings";
-import { AcpRegistryCatalog } from "@a4code/provider-acp-registry/server/AcpRegistrySupport";
+} from "@t3tools/provider-acp-registry/testing";
+import { AcpRegistrySettings } from "@t3tools/provider-acp-registry/settings";
+import { AcpRegistryCatalog } from "@t3tools/provider-acp-registry/server/AcpRegistrySupport";
 import {
   decodeAcpReplayTranscript,
   makeAcpReplayCompletenessAssertion,
@@ -37,11 +37,11 @@ import {
   type OrchestrationV2UserInputQuestion,
   type ProviderOptionDescriptor,
   type ProviderUserInputAnswers,
-} from "@a4code/contracts";
-import { GrokSettings } from "@a4code/provider-grok/settings";
-import * as HostProcess from "@a4code/shared/HostProcess";
-import { deriveBlockedOnThreadWait } from "@a4code/shared/orchestrationV2PendingBackgroundWork";
-import { resolveSelfInvocation } from "@a4code/shared/nodeRuntime";
+} from "@t3tools/contracts";
+import { GrokSettings } from "@t3tools/provider-grok/settings";
+import * as HostProcess from "@t3tools/shared/HostProcess";
+import { deriveBlockedOnThreadWait } from "@t3tools/shared/orchestrationV2PendingBackgroundWork";
+import { resolveSelfInvocation } from "@t3tools/shared/nodeRuntime";
 import * as DateTime from "effect/DateTime";
 import * as Deferred from "effect/Deferred";
 import * as Duration from "effect/Duration";
@@ -66,27 +66,27 @@ import * as EffectAcpErrors from "effect-acp/errors";
 import type * as EffectAcpProtocol from "effect-acp/protocol";
 import type * as EffectAcpSchema from "effect-acp/compat";
 
-import { writeFakeCli } from "@a4code/provider-testing/fakeCli";
-import * as TestProviderHost from "@a4code/provider-testing/TestProviderHost";
-import * as McpProviderSessions from "@a4code/provider-core/server/McpProviderSessions";
-import * as ProviderHost from "@a4code/provider-core/server/ProviderHost";
-import * as AcpSessionRuntime from "@a4code/provider-acp/server/AcpSessionRuntime";
+import { writeFakeCli } from "@t3tools/provider-testing/fakeCli";
+import * as TestProviderHost from "@t3tools/provider-testing/TestProviderHost";
+import * as McpProviderSessions from "@t3tools/provider-core/server/McpProviderSessions";
+import * as ProviderHost from "@t3tools/provider-core/server/ProviderHost";
+import * as AcpSessionRuntime from "@t3tools/provider-acp/server/AcpSessionRuntime";
 import {
   ACP_EMPTY_OPTION_VALUE,
   ACP_SESSION_MODE_OPTION_ID,
   acpProviderOptionDescriptors,
-} from "@a4code/provider-acp/server/sessionConfig";
+} from "@t3tools/provider-acp/server/sessionConfig";
 import {
   extractXAiAcpSubagentUpdate,
   makeGrokAdapterV2,
   makeXAiPromptCompletionRuntime,
   normalizeXAiAcpToolCallState,
   registerXAiBackgroundTaskTracking,
-} from "@a4code/provider-grok/testing";
-import * as IdAllocator from "@a4code/provider-core/server/IdAllocator";
-import * as ProviderAdapter from "@a4code/provider-core/server/ProviderAdapter";
+} from "@t3tools/provider-grok/testing";
+import * as IdAllocator from "@t3tools/provider-core/server/IdAllocator";
+import * as ProviderAdapter from "@t3tools/provider-core/server/ProviderAdapter";
 import { makeTurnInput } from "./AcpAdapterV2.testkit.ts";
-import type * as ProviderContinuationRequests from "@a4code/provider-core/server/ProviderContinuationRequests";
+import type * as ProviderContinuationRequests from "@t3tools/provider-core/server/ProviderContinuationRequests";
 import {
   AcpProviderCapabilitiesV2,
   acpPerTurnPromptUsage,
@@ -100,15 +100,15 @@ import {
   type AcpAdapterV2Flavor,
   type AcpAdapterV2RuntimeInput,
   type AcpAdapterV2SubagentUpdate,
-} from "@a4code/provider-acp/server/adapter";
+} from "@t3tools/provider-acp/server/adapter";
 
 import { appendUserInputAttachmentPaths } from "../../provider/userInputAttachments.ts";
 
-import { makeGrokAcpAdapterFlavor } from "@a4code/provider-grok/testing";
+import { makeGrokAcpAdapterFlavor } from "@t3tools/provider-grok/testing";
 import {
   acpRegistryPromptFailure,
   registerMistralVibeAcpExtensions,
-} from "@a4code/provider-acp-registry/testing";
+} from "@t3tools/provider-acp-registry/testing";
 
 const DEFAULT_GROK_SETTINGS = Schema.decodeSync(GrokSettings)({});
 const DROID_SETTINGS = Schema.decodeSync(AcpRegistrySettings)({ agentId: "factory-droid" });
@@ -950,9 +950,9 @@ function assertReinjectedInstructions(
   request: string,
 ) {
   const text = blocks[0]?.text ?? "";
-  assert.include(text, "A4 Code interaction mode: Default");
-  assert.include(text, "## A4 Code browser");
-  assert.include(text, "A4 Code orchestration");
+  assert.include(text, "T3 Code interaction mode: Default");
+  assert.include(text, "## T3 Code browser");
+  assert.include(text, "T3 Code orchestration");
   assert.include(text, `<user_request>\n${request}\n</user_request>`);
   assert.include(blocks[1]?.text ?? "", "<runtime_info>");
 }
@@ -1495,7 +1495,7 @@ describe("AcpAdapterV2", () => {
       assert.deepEqual(promptRuntimes, [1, 2], "the next turn runs on a fresh runtime");
       // The fresh runtime has no record of what reached the agent, so it sends T3's notes again.
       assert.include(promptTexts[1] ?? "", "<runtime_info>");
-      assert.include(promptTexts[1] ?? "", "A4 Code interaction mode: Default");
+      assert.include(promptTexts[1] ?? "", "T3 Code interaction mode: Default");
       assert.equal(watchedSessions.length, 2);
       assert.equal(watchedSessions[0], watchedSessions[1]);
 
@@ -2941,9 +2941,9 @@ describe("AcpAdapterV2", () => {
         assert.notInclude(whitespaceCommand.prompt, "<t3_code_instructions>");
         const firstDefault = yield* runTurn(2, defaultPolicy, "First default request.");
         assert.equal(firstDefault.textBlockCount, 2);
-        assert.include(firstDefault.prompt, "A4 Code interaction mode: Default");
-        assert.include(firstDefault.prompt, "## A4 Code browser");
-        assert.include(firstDefault.prompt, "A4 Code orchestration");
+        assert.include(firstDefault.prompt, "T3 Code interaction mode: Default");
+        assert.include(firstDefault.prompt, "## T3 Code browser");
+        assert.include(firstDefault.prompt, "T3 Code orchestration");
         assert.include(firstDefault.prompt, "<runtime_info>");
         assert.notInclude(
           firstDefault.methods,
@@ -2956,14 +2956,14 @@ describe("AcpAdapterV2", () => {
 
         const planPolicy = policy("plan");
         const firstPlan = yield* runTurn(4, planPolicy, "Plan this change.");
-        assert.include(firstPlan.prompt, "A4 Code interaction mode: Plan");
+        assert.include(firstPlan.prompt, "T3 Code interaction mode: Plan");
         assert.deepEqual(firstPlan.modeSets, [planModeId]);
         assert.include(
           (yield* runTurn(5, planPolicy, "Continue planning.")).prompt,
           "Continue planning.",
         );
         const restoredBuild = yield* runTurn(6, defaultPolicy, "Implement the change.");
-        assert.include(restoredBuild.prompt, "A4 Code interaction mode: Default");
+        assert.include(restoredBuild.prompt, "T3 Code interaction mode: Default");
         assert.deepEqual(
           restoredBuild.modeSets,
           [buildModeId],
@@ -5460,7 +5460,7 @@ describe("AcpAdapterV2", () => {
       assert.deepEqual(webItem("grok-web-search", "completed"), {
         title: "Web search: t3 code",
         patterns: ["t3 code"],
-        results: [{ url: "https://t3.codes" }, { url: "https://github.com/SilentHacks/a4code" }],
+        results: [{ url: "https://t3.codes" }, { url: "https://github.com/pingdotgg/t3code" }],
       });
       assert.deepEqual(webItem("antigravity-web-search", "completed"), {
         title: "Web search: top story on Hacker News today",
@@ -5482,7 +5482,7 @@ describe("AcpAdapterV2", () => {
         results: [{ url: "https://example.com/streamed_(detail)" }],
       });
       assert.deepEqual(webItem("grok-web-fetch", "completed")?.results, [
-        { url: "https://t3.codes", snippet: "A4 Code page" },
+        { url: "https://t3.codes", snippet: "T3 Code page" },
       ]);
       const completedCompaction = items.find(
         (item) =>
@@ -6934,7 +6934,7 @@ describe("AcpAdapterV2", () => {
           command: process.execPath,
           args: [
             "-e",
-            "process.stdout.write(`${process.env.A4CODE_THREAD_ID ?? ''}\n${process.env.T3_ACP_MCP_AUTHORIZATION ?? ''}`)",
+            "process.stdout.write(`${process.env.T3CODE_THREAD_ID ?? ''}\n${process.env.T3_ACP_MCP_AUTHORIZATION ?? ''}`)",
           ],
         },
         { requestId: "test-terminal-create", method: "terminal/create" },
@@ -8133,7 +8133,7 @@ describe("AcpAdapterV2", () => {
         "Bearer rollback-target-token",
       );
       assert.equal(
-        runtimeInputs[1]?.processEnvironment?.A4CODE_THREAD_ID,
+        runtimeInputs[1]?.processEnvironment?.T3CODE_THREAD_ID,
         "thread-acp-rollback-session-target",
       );
       const replacementMcpServer = runtimeInputs[1]?.mcpServers[0];
@@ -8316,7 +8316,7 @@ describe("AcpAdapterV2", () => {
         }),
       );
       const replacementPrompt = yield* Deferred.await(replacementPromptText);
-      assert.include(replacementPrompt, "A4 Code interaction mode: Default");
+      assert.include(replacementPrompt, "T3 Code interaction mode: Default");
       assert.include(replacementPrompt, "<runtime_info>");
     }).pipe(Effect.provide(layerTest)),
   );

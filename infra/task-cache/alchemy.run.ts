@@ -10,7 +10,7 @@ import { WriterSecrets } from "./src/deploymentConfig.ts";
 import * as Worker from "./src/worker.ts";
 
 export default Alchemy.Stack(
-  "A4TaskCache",
+  "T3TaskCache",
   {
     providers: Axiom.providers().pipe(Layer.provideMerge(Cloudflare.providers())),
     state: Cloudflare.state(),

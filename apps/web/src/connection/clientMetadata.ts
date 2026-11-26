@@ -3,7 +3,7 @@ import type {
   AuthClientPresentationMetadata,
   ClientOs,
   DesktopBridge,
-} from "@a4code/contracts";
+} from "@t3tools/contracts";
 
 export interface BrowserIdentity {
   readonly userAgent: string;
@@ -77,7 +77,7 @@ export function clientPresentationMetadata(input: {
 }): AuthClientPresentationMetadata {
   if (input.desktopBridge !== undefined) {
     return {
-      // oxlint-disable-next-line a4code/no-untranslated-copy -- client label stored on the server
+      // oxlint-disable-next-line t3code/no-untranslated-copy -- client label stored on the server
       label: "A4 Code Desktop",
       deviceType: "desktop",
       os: clientOsFromElectronPlatform(input.desktopBridge.getClientPlatform()),
@@ -87,7 +87,7 @@ export function clientPresentationMetadata(input: {
   }
 
   return {
-    // oxlint-disable-next-line a4code/no-untranslated-copy -- client label stored on the server
+    // oxlint-disable-next-line t3code/no-untranslated-copy -- client label stored on the server
     label: "A4 Code Web",
     deviceType: browserDeviceType(input.identity),
     os: browserClientOs(input.identity),

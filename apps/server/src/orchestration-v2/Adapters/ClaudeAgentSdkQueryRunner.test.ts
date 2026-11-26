@@ -9,7 +9,7 @@ import * as NodeStream from "node:stream";
 import * as NodeCrypto from "@effect/platform-node/NodeCrypto";
 import * as NodeServices from "@effect/platform-node/NodeServices";
 import { assert, describe, it } from "@effect/vitest";
-import { ProviderSessionId, ThreadId } from "@a4code/contracts";
+import { ProviderSessionId, ThreadId } from "@t3tools/contracts";
 import * as Effect from "effect/Effect";
 import * as Exit from "effect/Exit";
 import * as Deferred from "effect/Deferred";
@@ -22,11 +22,11 @@ import * as ChildProcessSpawner from "effect/process/ChildProcessSpawner";
 import * as TestClock from "effect/testing/TestClock";
 import { vi } from "vite-plus/test";
 
-import * as HostProcess from "@a4code/shared/HostProcess";
-import { AgentScope } from "@a4code/shared/AgentScope";
-import { ProviderEventLoggers } from "@a4code/provider-core/server/ProviderEventLoggers";
-import { makeProviderFailure } from "@a4code/provider-core/server/failure";
-import { signalProcessGroup } from "@a4code/provider-core/server/processGroup";
+import * as HostProcess from "@t3tools/shared/HostProcess";
+import { AgentScope } from "@t3tools/shared/AgentScope";
+import { ProviderEventLoggers } from "@t3tools/provider-core/server/ProviderEventLoggers";
+import { makeProviderFailure } from "@t3tools/provider-core/server/failure";
+import { signalProcessGroup } from "@t3tools/provider-core/server/processGroup";
 import * as PortScanner from "../../preview/PortScanner.ts";
 import {
   ClaudeAgentSdkQueryRunner,
@@ -682,7 +682,7 @@ describe.skipIf(HostProcess.Platform.defaultValue() === "win32")("Claude CLI pro
               Layer.succeed(AgentScope, {
                 ...AgentScope.defaultValue(),
                 wrap: ({ command, args }) =>
-                  Effect.succeed({ command, args, unit: "a4code-claude-test.scope" }),
+                  Effect.succeed({ command, args, unit: "t3code-claude-test.scope" }),
                 stop: (unit) => Deferred.succeed(stopped, unit).pipe(Effect.asVoid),
               }),
             ),
@@ -692,7 +692,7 @@ describe.skipIf(HostProcess.Platform.defaultValue() === "win32")("Claude CLI pro
       yield* Effect.promise(() => leftoverStarted);
       yield* session.close;
       yield* Effect.promise(() => leftoverStopped);
-      assert.strictEqual(yield* Deferred.await(stopped), "a4code-claude-test.scope");
+      assert.strictEqual(yield* Deferred.await(stopped), "t3code-claude-test.scope");
     }),
   );
 

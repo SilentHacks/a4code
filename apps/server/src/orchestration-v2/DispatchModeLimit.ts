@@ -4,7 +4,7 @@ import {
   type ProviderInteractionMode,
   type RuntimeMode,
   type ThreadId,
-} from "@a4code/contracts";
+} from "@t3tools/contracts";
 import * as Context from "effect/Context";
 import type * as Ref from "effect/Ref";
 
@@ -24,7 +24,7 @@ export interface DispatchModeLimitValue extends DispatchModes {
 }
 
 export const DispatchModeLimit = Context.Reference<DispatchModeLimitValue | undefined>(
-  "a4code/orchestration-v2/DispatchModeLimit",
+  "t3/orchestration-v2/DispatchModeLimit",
   { defaultValue: () => undefined },
 );
 

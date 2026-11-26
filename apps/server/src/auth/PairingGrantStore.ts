@@ -12,11 +12,11 @@ import {
   parseMcpApprovalCode,
   type ServerAuthBootstrapMethod,
   connectDeviceVerificationCode,
-} from "@a4code/contracts";
+} from "@t3tools/contracts";
 import {
   DESKTOP_BOOTSTRAP_TOKEN_WINDOW_MS,
   isValidDesktopBootstrapToken,
-} from "@a4code/shared/desktopBootstrapToken";
+} from "@t3tools/shared/desktopBootstrapToken";
 import * as Context from "effect/Context";
 import * as SecureRandom from "effect/crypto/SecureRandom";
 import * as DateTime from "effect/DateTime";
@@ -306,7 +306,7 @@ export class PairingGrantStore extends Context.Service<
       },
     ) => Effect.Effect<BootstrapGrant, BootstrapCredentialError>;
   }
->()("a4code/auth/PairingGrantStore") {}
+>()("t3/auth/PairingGrantStore") {}
 
 interface StoredBootstrapGrant extends BootstrapGrant {
   readonly remainingUses: number | "unbounded";

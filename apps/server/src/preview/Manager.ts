@@ -12,12 +12,12 @@ import {
   FILL_PREVIEW_VIEWPORT,
   PreviewSessionLookupError,
   type PreviewSessionSnapshot,
-} from "@a4code/contracts";
+} from "@t3tools/contracts";
 import {
   isPreviewUrlNormalizationError,
   newPreviewTabId,
   normalizePreviewUrl,
-} from "@a4code/shared/preview";
+} from "@t3tools/shared/preview";
 import * as Context from "effect/Context";
 import * as SecureRandom from "effect/crypto/SecureRandom";
 import * as DateTime from "effect/DateTime";
@@ -27,7 +27,7 @@ import * as PubSub from "effect/PubSub";
 import * as Scope from "effect/Scope";
 import * as Stream from "effect/Stream";
 import * as SynchronizedRef from "effect/SynchronizedRef";
-import { PreviewControlRequiredError } from "@a4code/contracts";
+import { PreviewControlRequiredError } from "@t3tools/contracts";
 
 export class PreviewManager extends Context.Service<
   PreviewManager,
@@ -68,7 +68,7 @@ export class PreviewManager extends Context.Service<
     readonly events: Stream.Stream<PreviewEvent>;
     readonly subscribeEvents: Effect.Effect<PubSub.Subscription<PreviewEvent>, never, Scope.Scope>;
   }
->()("a4code/preview/Manager/PreviewManager") {}
+>()("t3/preview/Manager/PreviewManager") {}
 
 interface PreviewSessionState {
   readonly threadId: string;

@@ -7,7 +7,7 @@ import {
   RunId,
   ThreadId,
   type OrchestrationV2AppThread,
-} from "@a4code/contracts";
+} from "@t3tools/contracts";
 import * as DateTime from "effect/DateTime";
 import * as Effect from "effect/Effect";
 import * as Layer from "effect/Layer";

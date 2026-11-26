@@ -1,8 +1,8 @@
 import * as NodeServices from "@effect/platform-node/NodeServices";
 import * as NodeCrypto from "@effect/platform-node/NodeCrypto";
 import { assert, it } from "@effect/vitest";
-import * as NodeSqliteClient from "@a4code/shared/nodeSqliteClient";
-import { ProjectId } from "@a4code/contracts";
+import * as NodeSqliteClient from "@t3tools/shared/nodeSqliteClient";
+import { ProjectId } from "@t3tools/contracts";
 import * as Cause from "effect/Cause";
 import * as DateTime from "effect/DateTime";
 import * as Deferred from "effect/Deferred";
@@ -2940,7 +2940,7 @@ it.effect(
               answeredBySession: "someone-elses-session",
               answeredAt: "never",
             },
-            { id: "d0", answeredBy: "a4code workflow signal" },
+            { id: "d0", answeredBy: "t3 workflow signal" },
           );
           // Sampled before the wait for the run: the clock runs on while that waits.
           const after = yield* DateTime.now;
@@ -2949,7 +2949,7 @@ it.effect(
           assert.deepStrictEqual(answer, {
             choice: "No",
             reason: "Out of scope",
-            answeredBy: "a4code workflow signal",
+            answeredBy: "t3 workflow signal",
           });
           // The clock runs beside the test, so the stamp is some instant of the signal's call.
           assert.isTrue(stampedBetween(answeredAt, before, after), answeredAt);
@@ -2988,7 +2988,7 @@ it.effect(
               yield* workflows.signal(
                 { runId: named.runId, wait: "merge" },
                 { choice: "Merge", ...claimed },
-                { id: "early-named", answeredBy: "a4code workflow signal" },
+                { id: "early-named", answeredBy: "t3 workflow signal" },
               ),
               // A sender the server has no name for stays nameless, whatever it calls itself.
               yield* workflows.signal(
@@ -3012,7 +3012,7 @@ it.effect(
             answers.push(answer);
           }
           assert.deepStrictEqual(answers, [
-            { choice: "Merge", answeredBy: "a4code workflow signal" },
+            { choice: "Merge", answeredBy: "t3 workflow signal" },
             { choice: "Merge" },
           ]);
         }),
@@ -3062,7 +3062,7 @@ it.effect(
             workflows.signal(
               { runId, wait: "merge" },
               { choice: "Merge", ...claimed },
-              { id: "raced", answeredBy: "a4code workflow signal" },
+              { id: "raced", answeredBy: "t3 workflow signal" },
             ),
           );
           yield* Deferred.await(looked);
@@ -3074,7 +3074,7 @@ it.effect(
           yield* agents.started(runId, "land/0");
           const { steps } = yield* workflows.get(runId);
           const { answeredAt, ...answer } = mergeAnswer(steps);
-          assert.deepStrictEqual(answer, { choice: "Merge", answeredBy: "a4code workflow signal" });
+          assert.deepStrictEqual(answer, { choice: "Merge", answeredBy: "t3 workflow signal" });
           assert.notEqual(answeredAt, claimed.answeredAt);
         }),
       );

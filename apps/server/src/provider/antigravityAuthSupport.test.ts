@@ -6,8 +6,8 @@ import * as TestClock from "effect/testing/TestClock";
 import * as NodeCrypto from "@effect/platform-node/NodeCrypto";
 import * as NodePath from "@effect/platform-node/NodePath";
 import * as NodeServices from "@effect/platform-node/NodeServices";
-import { ProviderInstanceId } from "@a4code/contracts";
-import * as HostProcess from "@a4code/shared/HostProcess";
+import { ProviderInstanceId } from "@t3tools/contracts";
+import * as HostProcess from "@t3tools/shared/HostProcess";
 import { describe, expect, it } from "@effect/vitest";
 import * as Effect from "effect/Effect";
 import * as FileSystem from "effect/FileSystem";
@@ -18,7 +18,7 @@ import * as Schema from "effect/Schema";
 import * as Stream from "effect/Stream";
 import * as Ndjson from "effect/encoding/Ndjson";
 import * as AcpErrors from "effect-acp/errors";
-import { symlinksSupported } from "@a4code/shared/testing/symlinks";
+import { symlinksSupported } from "@t3tools/shared/testing/symlinks";
 
 import {
   ANTIGRAVITY_AUTH_BROWSER_MARKER,

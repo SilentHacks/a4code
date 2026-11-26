@@ -3,15 +3,10 @@ import * as NodeFSP from "node:fs/promises";
 import * as NodeOS from "node:os";
 import * as NodePath from "node:path";
 import * as NodeURL from "node:url";
-import { taskCacheEndpoint } from "../src/remoteCache.ts";
 
-if (process.env.GITHUB_REPOSITORY !== "SilentHacks/a4code" || process.env.GITHUB_ACTIONS !== "true")
+if (process.env.GITHUB_REPOSITORY !== "pingdotgg/t3code" || process.env.GITHUB_ACTIONS !== "true")
   throw new Error("This setup is only for the maintainer repository's GitHub Actions.");
 const root = NodePath.resolve(import.meta.dirname, "../../..");
-const endpoint = taskCacheEndpoint(root);
-if (!endpoint) throw new Error("Set A4CODE_TASK_CACHE_ENDPOINT to the deployed cache URL.");
-const token = process.env.A4CODE_TASK_CACHE_READ_TOKEN;
-if (!token || token.length < 32) throw new Error("Missing task-cache read credential");
 const hookConfig = NodePath.join(NodeOS.homedir(), ".config/vite-plus/run-hook.json");
 await NodeFSP.mkdir(NodePath.dirname(hookConfig), { recursive: true });
 await NodeFSP.writeFile(
@@ -21,7 +16,12 @@ await NodeFSP.writeFile(
     module: NodePath.join(root, "infra/task-cache/src/runHook.ts"),
   }),
 );
-const credentialFile = NodePath.join(NodeOS.homedir(), ".config/a4-task-cache/credentials.json");
+const { endpoint } = JSON.parse(
+  await NodeFSP.readFile(NodePath.join(root, ".task-cache.json"), "utf8"),
+);
+const token = process.env.T3_TASK_CACHE_READ_TOKEN;
+if (!token || token.length < 32) throw new Error("Missing task-cache read credential");
+const credentialFile = NodePath.join(NodeOS.homedir(), ".config/t3-task-cache/credentials.json");
 await NodeFSP.mkdir(NodePath.dirname(credentialFile), { recursive: true, mode: 0o700 });
 await NodeFSP.writeFile(
   credentialFile,
@@ -32,7 +32,7 @@ const githubEnv = process.env.GITHUB_ENV;
 if (!githubEnv) throw new Error("Missing GitHub Actions environment file");
 const directory = process.env.RUNNER_TEMP;
 if (!directory) throw new Error("Missing GitHub Actions temporary directory");
-const shellSetup = NodePath.join(directory, "a4-task-cache.sh");
+const shellSetup = NodePath.join(directory, "t3-task-cache.sh");
 const quote = (value: string) => "'" + value.replaceAll("'", "'\"'\"'") + "'";
 const preload = NodeURL.pathToFileURL(NodePath.join(root, "infra/task-cache/src/preload.mjs")).href;
 // GitHub prohibits NODE_OPTIONS in GITHUB_ENV; bash exports it to task subprocesses instead.

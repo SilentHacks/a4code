@@ -1,7 +1,7 @@
 import * as NodeServices from "@effect/platform-node/NodeServices";
 import { assert, describe, it } from "@effect/vitest";
-import { OmpSettings } from "@a4code/contracts";
-import * as HostProcess from "@a4code/shared/HostProcess";
+import { OmpSettings } from "@t3tools/contracts";
+import * as HostProcess from "@t3tools/shared/HostProcess";
 import * as Effect from "effect/Effect";
 import * as FileSystem from "effect/FileSystem";
 import * as Schema from "effect/Schema";
@@ -13,7 +13,7 @@ const decodeSettings = Schema.decodeEffect(OmpSettings);
 const encodeString = Schema.encodeSync(Schema.fromJsonString(Schema.String));
 const makeFixture = Effect.fnUntraced(function* (rpcFails: boolean, noModels = false) {
   const fs = yield* FileSystem.FileSystem;
-  const directory = yield* fs.makeTempDirectoryScoped({ prefix: "a4code-provider-" });
+  const directory = yield* fs.makeTempDirectoryScoped({ prefix: "t3-omp-provider-" });
   const binaryPath = `${directory}/omp`;
   yield* fs.writeFileString(
     binaryPath,
@@ -93,7 +93,7 @@ describe("OmpProvider", () => {
   it.live("does not attempt usage or RPC after a missing executable", () =>
     Effect.gen(function* () {
       const fs = yield* FileSystem.FileSystem;
-      const directory = yield* fs.makeTempDirectoryScoped({ prefix: "a4code-missing-" });
+      const directory = yield* fs.makeTempDirectoryScoped({ prefix: "t3-omp-missing-" });
       const settings = yield* decodeSettings({
         enabled: true,
         binaryPath: `${directory}/missing`,

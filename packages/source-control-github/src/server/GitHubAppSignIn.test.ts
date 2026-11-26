@@ -11,13 +11,13 @@ import { HttpClient, HttpClientResponse } from "effect/http";
 import { ChildProcessSpawner } from "effect/process";
 import * as TestClock from "effect/testing/TestClock";
 
-import { DEFAULT_SERVER_SETTINGS, ServerSettingsError } from "@a4code/contracts";
-import * as SourceControlHost from "@a4code/source-control-core/server/SourceControlHost";
-import * as SourceControlRateLimit from "@a4code/source-control-core/server/SourceControlRateLimit";
-import { readSourceControlHostSettings } from "@a4code/source-control-core/shared/definition";
-import * as FeatureFlags from "@a4code/shared/FeatureFlags";
-import { applyServerSettingsPatch } from "@a4code/shared/serverSettings";
-import * as TestSourceControlHost from "@a4code/source-control-testing/TestSourceControlHost";
+import { DEFAULT_SERVER_SETTINGS, ServerSettingsError } from "@t3tools/contracts";
+import * as SourceControlHost from "@t3tools/source-control-core/server/SourceControlHost";
+import * as SourceControlRateLimit from "@t3tools/source-control-core/server/SourceControlRateLimit";
+import { readSourceControlHostSettings } from "@t3tools/source-control-core/shared/definition";
+import * as FeatureFlags from "@t3tools/shared/FeatureFlags";
+import { applyServerSettingsPatch } from "@t3tools/shared/serverSettings";
+import * as TestSourceControlHost from "@t3tools/source-control-testing/TestSourceControlHost";
 
 import * as GitHubClient from "../shared/definition.ts";
 import * as GitHubAppAccess from "./GitHubAppAccess.ts";
@@ -537,7 +537,7 @@ describe("GitHubAppAccess", () => {
     });
     return Effect.gen(function* () {
       const access = yield* GitHubAppAccess.GitHubAppAccess;
-      expect(yield* access.reach("github.com", "SilentHacks/a4code")).toBe("covered");
+      expect(yield* access.reach("github.com", "pingdotgg/t3code")).toBe("covered");
       expect(yield* access.reach("github.com", "acme/one")).toBe("covered");
       expect(yield* access.reach("github.com", "acme/two")).toBe("not-covered");
       expect(yield* access.reach("github.com", "https://github.com/Acme/One.git")).toBe("covered");
@@ -580,7 +580,7 @@ describe("GitHubAppAccess", () => {
         access
           .credentialFor("github.com", repository)
           .pipe(Effect.map((held) => Redacted.value(held.token)));
-      expect(yield* tokenFor("SilentHacks/a4code")).toBe("ghu_current");
+      expect(yield* tokenFor("pingdotgg/t3code")).toBe("ghu_current");
       expect(yield* tokenFor("someone/else")).toBe("gh-token");
     }).pipe(Effect.provide(layer));
   });
@@ -596,7 +596,7 @@ describe("GitHubAppAccess", () => {
     });
     const tokenFor = Effect.flatMap(Effect.service(GitHubAppAccess.GitHubAppAccess), (access) =>
       access
-        .credentialFor("github.com", "SilentHacks/a4code")
+        .credentialFor("github.com", "pingdotgg/t3code")
         .pipe(Effect.map((held) => Redacted.value(held.token))),
     );
     return Effect.gen(function* () {

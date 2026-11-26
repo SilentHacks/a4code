@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vite-plus/test";
-import { AuthFilesystemReadScope, AuthOrchestrationReadScope } from "@a4code/contracts";
+import { AuthFilesystemReadScope, AuthOrchestrationReadScope } from "@t3tools/contracts";
 
 import {
   createBrowseNavigationCoordinator,
@@ -115,8 +115,8 @@ describe("filesystem browse model", () => {
     });
     expect(getFilesystemBrowseTabCompletion([], "x")).toBeNull();
     // The list also shows substring and fuzzy matches; Tab completes only the typed name.
-    expect(getFilesystemBrowseTabCompletion([entry("a4code"), entry("my-a4code")], "t3")).toEqual({
-      name: "a4code",
+    expect(getFilesystemBrowseTabCompletion([entry("t3code"), entry("my-t3code")], "t3")).toEqual({
+      name: "t3code",
       isComplete: true,
     });
     expect(
@@ -125,7 +125,7 @@ describe("filesystem browse model", () => {
         "op",
       ),
     ).toEqual({ name: "Open", isComplete: false });
-    expect(getFilesystemBrowseTabCompletion([entry("a4code")], "tcd")).toBeNull();
+    expect(getFilesystemBrowseTabCompletion([entry("t3code")], "tcd")).toBeNull();
   });
 
   it("matches folder names stored decomposed, as macOS Finder names them", () => {
@@ -177,23 +177,21 @@ describe("browse navigation", () => {
 });
 
 describe("browse entry filtering", () => {
-  const entries = ["my-a4code", "a4code", "cotton", "A4Code-old", ".a4code", "docs"].map(
-    (name) => ({
-      name,
-      fullPath: `~/code/${name}`,
-    }),
-  );
+  const entries = ["my-t3code", "t3code", "cotton", "T3Code-old", ".t3", "docs"].map((name) => ({
+    name,
+    fullPath: `~/code/${name}`,
+  }));
   const names = (query: string) =>
     filterFilesystemBrowseEntries(entries, query).visibleEntries.map((entry) => entry.name);
 
   it("keeps every visible entry in order for an empty query", () => {
-    expect(names("")).toEqual(["my-a4code", "a4code", "cotton", "A4Code-old", "docs"]);
+    expect(names("")).toEqual(["my-t3code", "t3code", "cotton", "T3Code-old", "docs"]);
   });
 
   it("matches substrings and subsequences, best match first", () => {
-    expect(names("code")).toEqual(["a4code", "A4Code-old", "my-a4code"]);
-    expect(names("t3c")).toEqual(["a4code", "A4Code-old", "my-a4code"]);
-    expect(names("tcd")).toEqual(["a4code", "A4Code-old", "my-a4code"]);
+    expect(names("code")).toEqual(["t3code", "T3Code-old", "my-t3code"]);
+    expect(names("t3c")).toEqual(["t3code", "T3Code-old", "my-t3code"]);
+    expect(names("tcd")).toEqual(["t3code", "T3Code-old", "my-t3code"]);
     expect(names("xyz")).toEqual([]);
   });
 
@@ -209,8 +207,8 @@ describe("browse entry filtering", () => {
   });
 
   it("shows dot folders only when the query starts with a dot", () => {
-    expect(names("t3")).not.toContain(".a4code");
-    expect(filterFilesystemBrowseEntries(entries, ".a4code")).toEqual({
+    expect(names("t3")).not.toContain(".t3");
+    expect(filterFilesystemBrowseEntries(entries, ".t3")).toEqual({
       visibleEntries: [entries[4]],
       exactEntry: entries[4],
     });

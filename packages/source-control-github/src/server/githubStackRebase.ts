@@ -5,7 +5,7 @@ import * as Schema from "effect/Schema";
 import * as Base64 from "effect/encoding/Base64";
 
 import * as GitHubAppAccess from "./GitHubAppAccess.ts";
-import * as SourceControlHost from "@a4code/source-control-core/server/SourceControlHost";
+import * as SourceControlHost from "@t3tools/source-control-core/server/SourceControlHost";
 
 export interface CascadeLayer {
   readonly number: number;
@@ -73,7 +73,7 @@ export const cascadeRebaseStack = Effect.fn("cascadeRebaseStack")(function* (inp
     GIT_CONFIG_KEY_1: "user.name",
     GIT_CONFIG_VALUE_1: "A4 Code",
     GIT_CONFIG_KEY_2: "user.email",
-    GIT_CONFIG_VALUE_2: "26593675+SilentHacks@users.noreply.github.com",
+    GIT_CONFIG_VALUE_2: "noreply@t3.codes",
   };
   const git = (args: ReadonlyArray<string>, allowNonZeroExit = false) =>
     process.run({

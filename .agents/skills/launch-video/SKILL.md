@@ -1,6 +1,6 @@
 ---
 name: launch-video
-description: Make a short launch video (1920x1080 MP4 plus an outro PNG) that demos a A4 Code feature, built from the real app with added motion, for an X/Twitter announcement or release thread. Use when asked for a launch video, demo video, feature teaser or announcement clip, a mobile app release video (iOS/Android), or to add a video to a release tweet.
+description: Make a short launch video (1920x1080 MP4 plus an outro PNG) that demos a T3 Code feature, built from the real app with added motion, for an X/Twitter announcement or release thread. Use when asked for a launch video, demo video, feature teaser or announcement clip, a mobile app release video (iOS/Android), or to add a video to a release tweet.
 ---
 
 # Launch videos
@@ -31,7 +31,7 @@ There are three ways to build one:
 2. **Write the story** before any code: who the user is, what they want, and two or three
    beats that get them there. Show it to the maintainer if the angle is a guess.
 3. **Stage it.** Copy `stagings/linked-environments/` to `stagings/<slug>/`.
-   - `serve.mjs` builds fresh homes under `.a4code/launch/<slug>/` with `scripts/stage-env.mjs`.
+   - `serve.mjs` builds fresh homes under `.t3/launch/<slug>/` with `scripts/stage-env.mjs`.
      Each home gets a fictional machine label, the replay agent, and no paid provider.
      It starts the servers, creates projects, writes `<out>/stage.json` and keeps running.
      Run it in the background.
@@ -67,7 +67,7 @@ There are three ways to build one:
    - Data a real flow can't produce cheaply goes into the app's own stores, never into pixels.
      `insertPeerLinks` writes link rows into a stopped server; `serveDescriptors` makes fake
      machines answer the reachability probe. The client's saved environments and routes live
-     in IndexedDB (`a4code:connection-runtime` / `catalog` / `document`): write the document
+     in IndexedDB (`t3code:connection-runtime` / `catalog` / `document`): write the document
      from the page after its first load, then reload. Route kinds come from hostnames
      (`*.localhost` is LAN, `*.ts.net` Tailscale); Chrome's
      `--host-resolver-rules=MAP *.tail-demo.ts.net 127.0.0.1` makes fake tailnet names work.
@@ -86,8 +86,8 @@ There are three ways to build one:
    `scripts/sheet.sh ~/launch-videos/<slug> 1,4.5,8,12,16,21,26` then Read `sheet.png`.
    The times are video seconds (after `Kit.timeline`), not animation seconds. Read the
    full-size frames in `probe/` to check small text. A probe takes about 2 s a frame.
-7. **Render:** `scripts/render.sh ~/launch-videos/<slug> a4code-<slug>` gives
-   `a4code-<slug>.mp4` and `outro.png`. A 30 s video takes 3–6 minutes.
+7. **Render:** `scripts/render.sh ~/launch-videos/<slug> t3code-<slug>` gives
+   `t3code-<slug>.mp4` and `outro.png`. A 30 s video takes 3–6 minutes.
 8. **Hand back** with the video and outro embedded (`![...](/abs/path.mp4)`), the caption
    copy, any `Kit.text` edits, and anything you assumed rather than verified.
 
@@ -97,7 +97,7 @@ harness's task stop; it ends its servers' process groups.
 
 ### Staging traps
 
-- **Machine names and icons.** `A4CODE_ENVIRONMENT_LABEL` and `A4CODE_ENVIRONMENT_MACHINE_KIND`
+- **Machine names and icons.** `T3CODE_ENVIRONMENT_LABEL` and `T3CODE_ENVIRONMENT_MACHINE_KIND`
   (laptop, desktop, cloud, linux, mac-mini, mac-studio) override what the server detects.
   `prepareHome({ label, machine })` records them and `startEnvironment` and `cli()` pass them
   on; the CLI needs them too, because a link introduces the machine by its label.
@@ -136,13 +136,13 @@ Steps:
    story for each beat first (see the corrections below).
 2. **Stage.** Copy `stagings/mobile-2.4/serve.mjs` and change the data and turns. It serves a
    fictional localhost page, a mock Linear that accepts state moves and comments
-   (`A4CODE_LINEAR_API_URL`), and scripted Claude turns, and writes `<out>/stage.json`. Run
+   (`T3CODE_LINEAR_API_URL`), and scripted Claude turns, and writes `<out>/stage.json`. Run
    it in the background. `--reuse` keeps the home and port so paired devices stay paired and
    only rewrites the agent script; without it the home is rebuilt.
 3. **Devices.** Use the device tools (`device_list`, `device_open`); the local iPhone 18 Pro
    simulator and the `Pixel_Tablet_T3` emulator fit the 3D model and tablet frame. Install
    and pair with the `test-t3-mobile` skill: `vp run mobile:install`, Metro from
-   `apps/mobile` (`APP_VARIANT=development npx expo start --dev-client --scheme a4code-dev
+   `apps/mobile` (`APP_VARIANT=development npx expo start --dev-client --scheme t3code-dev
    --port <p> --localhost`), then its `pair-client.sh` with `--base-dir <out>/home`. Android
    also needs `adb reverse tcp:<port> tcp:<port>` for the server and Metro. Seed threads the
    beat needs by sending their prompts from the device before you record.
@@ -159,7 +159,7 @@ Steps:
 6. **Render**: extract frames (`ffmpeg -i phone-live.mp4 -q:v 2 phone-frames/f%04d.jpg`), run
    `phone-3d.mjs <dir>` (`--probe` first), and render the story with `render.sh`; both run
    for minutes, so start them in parallel.
-7. **Composite** with `scripts/mobile-composite.sh <dir> a4code-<slug> <story.mp4>
+7. **Composite** with `scripts/mobile-composite.sh <dir> t3code-<slug> <story.mp4>
    <phone-end-s> [<tablet.mp4> <tablet-start-s>]`, read the contact sheet it writes, and
    check payoff frames at full size.
 
@@ -183,7 +183,7 @@ Steps:
 - **Retakes leave debris.** Each failed attempt adds threads and links. Archive them from the
   sidebar's long-press menu; archived threads drop out of an issue's Linked threads. Subagent
   children of a looping attempt can't be archived from the UI; in the staging home only
-  (never `~/.a4code`), set `deleted_at` on their `orchestration_v2_projection_threads` rows.
+  (never `~/.t3`), set `deleted_at` on their `orchestration_v2_projection_threads` rows.
 - **Keep `edit` steps idempotent.** A replayed turn finds its `edit` already applied and the
   turn fails; use `write` with the whole file.
 - **Side chats on the fake CLI** show "Could not fork the source conversation natively".
@@ -271,7 +271,7 @@ seeks every animation (in the story and inside each beat) to each frame's time.
   throws if two overlap; two captions crossfading read as garbled text.
 - **Pacing**: `Kit.timeline([[realSeconds, animFrom, animTo], ...])` maps video time to
   animation time; `animFrom == animTo` holds a frame. It also sets the video length.
-- **Outro** `.outro`: logo, a two-line headline, "Available now in **A4 Code** `<version>`",
+- **Outro** `.outro`: logo, a two-line headline, "Available now in **T3 Code** `<version>`",
   `t3.codes`. Change the headline and version, keep the rest. Hold it about 3 s.
 
 Two animations on one property of one element fight (the later one wins for its whole

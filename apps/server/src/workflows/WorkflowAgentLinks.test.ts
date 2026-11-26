@@ -1,4 +1,4 @@
-import { EnvironmentId, OrchestratorMcpFailure } from "@a4code/contracts";
+import { EnvironmentId, OrchestratorMcpFailure } from "@t3tools/contracts";
 import { assert, it } from "@effect/vitest";
 import * as Duration from "effect/Duration";
 import * as Effect from "effect/Effect";

@@ -1,4 +1,6 @@
-import { getPairingTokenFromUrl, setPairingTokenOnUrl } from "@a4code/shared/remote";
+import { DEFAULT_HOSTED_APP_URL } from "@t3tools/shared/connectAuth";
+
+import { getPairingTokenFromUrl, setPairingTokenOnUrl } from "@t3tools/shared/remote";
 
 export interface HostedPairingRequest {
   readonly host: string;
@@ -9,7 +11,7 @@ export interface HostedPairingRequest {
 export type HostedAppChannel = "latest" | "nightly";
 
 export function configuredHostedAppUrl(): string {
-  return originFromUrl(import.meta.env.VITE_HOSTED_APP_URL?.trim() ?? "") ?? "";
+  return import.meta.env.VITE_HOSTED_APP_URL?.trim() || DEFAULT_HOSTED_APP_URL;
 }
 
 function configuredBackendUrl(): string {
@@ -71,7 +73,7 @@ export function buildHostedPairingUrl(input: {
   readonly token: string;
   readonly label?: string | null;
 }): string {
-  const url = new URL("/pair", configuredHostedAppUrl() || window.location.origin);
+  const url = new URL("/pair", configuredHostedAppUrl());
   url.searchParams.set("host", input.host);
 
   const label = input.label?.trim();
@@ -85,7 +87,7 @@ export function buildHostedPairingUrl(input: {
 export function buildHostedChannelSelectionUrl(input: {
   readonly channel: HostedAppChannel;
 }): string {
-  const url = new URL("/__a4code/channel", configuredHostedAppUrl() || window.location.origin);
+  const url = new URL("/__t3code/channel", configuredHostedAppUrl());
   url.searchParams.set("channel", input.channel);
   return url.toString();
 }

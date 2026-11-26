@@ -16,7 +16,7 @@ export class CursorAccountReader extends Context.Service<
       untilMs: number,
     ) => Effect.Effect<CursorAccountUsageReadResult>;
   }
->()("@a4code/provider-cursor/server/CursorAccountReader") {}
+>()("@t3tools/provider-cursor/server/CursorAccountReader") {}
 
 export const layer = Layer.effect(
   CursorAccountReader,

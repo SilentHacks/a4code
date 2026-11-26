@@ -1,4 +1,4 @@
-import type { EnvironmentId } from "@a4code/contracts";
+import type { EnvironmentId } from "@t3tools/contracts";
 
 export interface ComposerPathSearchEntry {
   readonly path: string;

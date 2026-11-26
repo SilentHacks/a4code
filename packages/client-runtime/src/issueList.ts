@@ -8,7 +8,7 @@ import type {
   IssueScopeRef,
   IssueTrackerSummary,
   SourceControlProviderKind,
-} from "@a4code/contracts";
+} from "@t3tools/contracts";
 
 import { mergeIssueListPage } from "./state/issues.ts";
 import { sourceControlClients } from "./sourceControlClients.ts";

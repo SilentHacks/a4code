@@ -3,7 +3,7 @@ import { describe, expect, it, vi } from "vite-plus/test";
 import { page, userEvent, type Locator } from "vite-plus/test/browser";
 
 import { act, render } from "../../../test/render";
-import { compileResolvedKeybindingsConfig } from "@a4code/shared/keybindings";
+import { compileResolvedKeybindingsConfig } from "@t3tools/shared/keybindings";
 import * as atomCommands from "../../state/use-atom-command";
 
 function environmentFixture() {

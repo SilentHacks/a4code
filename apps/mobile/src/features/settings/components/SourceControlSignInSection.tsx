@@ -1,11 +1,11 @@
-import { errorDisplayMessage } from "@a4code/client-runtime/errors";
+import { errorDisplayMessage } from "@t3tools/client-runtime/errors";
 import { useGT } from "gt-react-native";
-import type { SourceControlSignInPrompt } from "@a4code/contracts";
+import type { SourceControlSignInPrompt } from "@t3tools/contracts";
 import {
   readHostCredentialSettings,
   type SourceControlAppSignIn,
   type SourceControlDefinition,
-} from "@a4code/client-runtime/source-control-clients";
+} from "@t3tools/client-runtime/source-control-clients";
 import * as Cause from "effect/Cause";
 import * as Clipboard from "expo-clipboard";
 import { useRef, useState } from "react";
@@ -26,7 +26,7 @@ const failureMessage = (cause: Cause.Cause<unknown>) => {
 
 const openUrl = (url: string) => void tryOpenExternalUrl(url, "provider-auth");
 
-/** Signs an environment in through a forge's own app, such as T3 Code for GitHub. */
+/** Signs an environment in through a forge's own app, such as A4 Code for GitHub. */
 export function AppSignInRow(props: {
   readonly environment: SettingsTarget;
   readonly label: string;

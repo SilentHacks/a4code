@@ -1,4 +1,4 @@
-import { CommandId, EventId, ProviderSessionId, ThreadId } from "@a4code/contracts";
+import { CommandId, EventId, ProviderSessionId, ThreadId } from "@t3tools/contracts";
 import { assert, it } from "@effect/vitest";
 import * as Arr from "effect/Array";
 import * as DateTime from "effect/DateTime";

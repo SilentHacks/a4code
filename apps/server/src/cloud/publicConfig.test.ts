@@ -15,7 +15,7 @@ const provideEnv = (env: Readonly<Record<string, string>>) =>
 
 it.effect("rejects an insecure runtime relay URL override", () =>
   makeRelayUrlConfig("https://embedded.example.test").pipe(
-    provideEnv({ A4CODE_RELAY_URL: "http://runtime.example.test" }),
+    provideEnv({ T3CODE_RELAY_URL: "http://runtime.example.test" }),
     Effect.flip,
   ),
 );
@@ -23,37 +23,17 @@ it.effect("rejects an insecure runtime relay URL override", () =>
 it.effect("rejects malformed or insecure hosted app URLs", () =>
   Effect.gen(function* () {
     for (const value of [
-      "app.example.test",
-      "http://app.example.test",
-      "https://app.example.test/nested",
-      "https://app.example.test?alias=true",
-      "https://user:password@app.example.test",
+      "app.t3.codes",
+      "http://app.t3.codes",
+      "https://app.t3.codes/nested",
+      "https://app.t3.codes?alias=true",
     ]) {
       const result = yield* hostedAppUrlConfig.pipe(
-        provideEnv({ A4CODE_HOSTED_APP_URL: value }),
+        provideEnv({ T3CODE_HOSTED_APP_URL: value }),
         Effect.result,
       );
       assert.isTrue(Result.isFailure(result), value);
     }
-  }),
-);
-
-it.effect("has no hosted app without operator configuration", () =>
-  hostedAppUrlConfig.pipe(provideEnv({}), Effect.flip),
-);
-
-it.effect("uses the existing T3 Connect relay and hosted sign-in with legacy configuration", () =>
-  Effect.gen(function* () {
-    const env = {
-      T3CODE_RELAY_URL: "https://relay.t3.codes",
-      T3CODE_CLERK_PUBLISHABLE_KEY: "pk_live_Y2xlcmsudDMuY29kZXMk",
-      T3CODE_CLERK_CLI_OAUTH_CLIENT_ID: "existing-client",
-    };
-    assert.equal(yield* makeRelayUrlConfig("").pipe(provideEnv(env)), "https://relay.t3.codes");
-    assert.equal(yield* hostedAppUrlConfig.pipe(provideEnv(env)), "https://app.t3.codes");
-    const oauth = yield* makeCloudCliOAuthConfig().pipe(provideEnv(env));
-    assert.equal(oauth.tokenEndpoint, "https://clerk.t3.codes/oauth/token");
-    assert.equal(oauth.clientId, "existing-client");
   }),
 );
 
@@ -82,8 +62,8 @@ it("product opt-out disables relay tracing with either built-in or runtime crede
     tracesToken: "embedded-token",
   };
   const env = {
-    A4CODE_TELEMETRY_ENABLED: "false",
-    A4CODE_OTEL_SDK_DISABLED: "false",
+    T3CODE_TELEMETRY_ENABLED: "false",
+    T3CODE_OTEL_SDK_DISABLED: "false",
   };
 
   assert.equal(resolveRelayClientTracingConfig(env, fallback), null);
@@ -91,9 +71,9 @@ it("product opt-out disables relay tracing with either built-in or runtime crede
     resolveRelayClientTracingConfig(
       {
         ...env,
-        A4CODE_RELAY_CLIENT_OTLP_TRACES_URL: "https://runtime.example.test/v1/traces",
-        A4CODE_RELAY_CLIENT_OTLP_TRACES_DATASET: "runtime-dataset",
-        A4CODE_RELAY_CLIENT_OTLP_TRACES_TOKEN: "runtime-token",
+        T3CODE_RELAY_CLIENT_OTLP_TRACES_URL: "https://runtime.example.test/v1/traces",
+        T3CODE_RELAY_CLIENT_OTLP_TRACES_DATASET: "runtime-dataset",
+        T3CODE_RELAY_CLIENT_OTLP_TRACES_TOKEN: "runtime-token",
       },
       fallback,
     ),

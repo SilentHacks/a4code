@@ -6,13 +6,13 @@ import {
   EnvironmentId,
   type ProjectCloneSnapshot,
   WS_METHODS,
-} from "@a4code/contracts";
-import { mediaMimeTypeFromExtension } from "@a4code/shared/mediaPreview";
-import { isWindowsAbsolutePath } from "@a4code/shared/path";
+} from "@t3tools/contracts";
+import { mediaMimeTypeFromExtension } from "@t3tools/shared/mediaPreview";
+import { isWindowsAbsolutePath } from "@t3tools/shared/path";
 import {
   getProjectFaviconResourceKey,
   isProjectFaviconFallbackUrl,
-} from "@a4code/shared/projectFavicon";
+} from "@t3tools/shared/projectFavicon";
 import * as Cause from "effect/Cause";
 import * as Effect from "effect/Effect";
 import * as Option from "effect/Option";
@@ -31,7 +31,7 @@ const ASSET_URL_REFRESH_INTERVAL_MS = 30 * 60_000;
 const ASSET_URL_IDLE_TTL_MS = 60 * 60_000;
 export const ASSET_URL_MAX_IN_FLIGHT = 6;
 
-class InvalidAssetCollectionKeyError extends Schema.TaggedError<InvalidAssetCollectionKeyError>()(
+export class InvalidAssetCollectionKeyError extends Schema.TaggedError<InvalidAssetCollectionKeyError>()(
   "InvalidAssetCollectionKeyError",
   {
     key: Schema.String,

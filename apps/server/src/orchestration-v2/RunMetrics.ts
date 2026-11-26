@@ -3,7 +3,7 @@ import type {
   OrchestrationV2StoredEvent,
   RunId,
   ThreadId,
-} from "@a4code/contracts";
+} from "@t3tools/contracts";
 import * as DateTime from "effect/DateTime";
 import type * as Duration from "effect/Duration";
 import * as Effect from "effect/Effect";

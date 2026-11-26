@@ -3,9 +3,9 @@ import type {
   OrchestrationV2ProviderThread,
   OrchestrationV2Run,
   OrchestrationV2TurnItem,
-} from "@a4code/contracts";
+} from "@t3tools/contracts";
 import type * as DateTime from "effect/DateTime";
-import type * as IdAllocator from "@a4code/provider-core/server/IdAllocator";
+import type * as IdAllocator from "@t3tools/provider-core/server/IdAllocator";
 
 export function makeInterruptResultTurnItem(input: {
   readonly idAllocator: IdAllocator.IdAllocatorV2["Service"];

@@ -250,7 +250,7 @@ ENV/**
 **/specs/**
 **/e2e/**
 
-# ---- a4code ----
+# ---- t3code ----
 # Vendored read-only reference checkouts of upstream Effect and Alchemy
 # (see scripts/lib/reference-repos.ts). Nothing imports from them; findings
 # there belong upstream.

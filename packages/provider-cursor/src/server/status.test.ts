@@ -6,8 +6,8 @@ import * as Schema from "effect/Schema";
 import * as TestClock from "effect/testing/TestClock";
 import type { CursorSettings } from "../settings.ts";
 import { CursorSettings as CursorSettingsSchema } from "../settings.ts";
-import { createModelCapabilities } from "@a4code/shared/model";
-import { COMPACT_SLASH_COMMAND } from "@a4code/provider-core/server/snapshotProbe";
+import { createModelCapabilities } from "@t3tools/shared/model";
+import { COMPACT_SLASH_COMMAND } from "@t3tools/provider-core/server/snapshotProbe";
 
 import {
   buildCursorCapabilitiesFromSdkModel,
@@ -231,7 +231,7 @@ describe("checkCursorProviderStatus", () => {
     Effect.gen(function* () {
       const fiber = yield* checkCursorProviderStatus(baseCursorSettings, {
         CURSOR_API_KEY: "test-key",
-        A4CODE_CURSOR_PROBE_TIMEOUT_MS: "30000",
+        T3CODE_CURSOR_PROBE_TIMEOUT_MS: "30000",
       }).pipe(
         Effect.provide(
           CursorSdkCatalog.layerTest(() =>

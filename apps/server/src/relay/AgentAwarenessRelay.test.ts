@@ -14,8 +14,8 @@ import {
   RuntimeRequestId,
   ThreadId,
   TurnItemId,
-} from "@a4code/contracts";
-import { RelayAgentActivityState } from "@a4code/contracts/relay";
+} from "@t3tools/contracts";
+import { RelayAgentActivityState } from "@t3tools/contracts/relay";
 import * as DateTime from "effect/DateTime";
 import * as Deferred from "effect/Deferred";
 import * as Effect from "effect/Effect";

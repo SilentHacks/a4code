@@ -6,9 +6,9 @@ import type {
   DesktopPreviewRecordingInputEvent,
   PreviewAnnotationPayload,
   PreviewAnnotationRect,
-} from "@a4code/contracts";
-import * as HostProcess from "@a4code/shared/HostProcess";
-import { parseKeybindingShortcut } from "@a4code/shared/keybindings";
+} from "@t3tools/contracts";
+import * as HostProcess from "@t3tools/shared/HostProcess";
+import { parseKeybindingShortcut } from "@t3tools/shared/keybindings";
 import { app, shell } from "electron";
 import * as Cause from "effect/Cause";
 import * as Deferred from "effect/Deferred";
@@ -201,8 +201,8 @@ vi.mock("electron", () => ({
 const layerBrowserSession = Layer.succeed(
   BrowserSession.BrowserSession,
   BrowserSession.BrowserSession.of({
-    getPartition: () => Effect.succeed("persist:a4code-preview-test"),
-    isPartition: (partition) => partition.startsWith("persist:a4code-preview-"),
+    getPartition: () => Effect.succeed("persist:t3code-preview-test"),
+    isPartition: (partition) => partition.startsWith("persist:t3code-preview-"),
     getSession: () => Effect.succeed(previewSession as unknown as Electron.Session),
     clearCookies: () => Effect.void,
     cookiesCleared: () => Effect.void,

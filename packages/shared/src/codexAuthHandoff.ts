@@ -1,4 +1,4 @@
-import { EnvironmentId, ProviderInstanceId } from "@a4code/contracts";
+import { EnvironmentId, ProviderInstanceId } from "@t3tools/contracts";
 import * as Schema from "effect/Schema";
 import { oauthCallbackUrl } from "./oauthCallback.ts";
 import { providerAuthReturnUrl } from "./providerAuthReturnUrl.ts";
@@ -65,21 +65,17 @@ export function codexCallbackUrl(value: string, redirectUri: string, state: stri
 }
 
 export function codexAuthHandoffUrl(input: CodexAuthHandoff, development = false) {
-  const url = new URL(`${development ? "a4code-dev" : "a4code"}://auth/codex`);
+  const url = new URL(`${development ? "t3code-dev" : "t3code"}://auth/codex`);
   url.searchParams.set("request", encodeHandoff(input));
   return url.toString();
 }
 
-export function readCodexAuthHandoff(
-  value: string,
-  development: boolean,
-  trustedOrigin?: string | null,
-) {
+export function readCodexAuthHandoff(value: string, development: boolean) {
   try {
     const url = new URL(value);
     if (
       value.length > 32_768 ||
-      url.protocol !== (development ? "a4code-dev:" : "a4code:") ||
+      url.protocol !== (development ? "t3code-dev:" : "t3code:") ||
       url.host !== "auth" ||
       url.pathname !== "/codex" ||
       url.username ||
@@ -90,7 +86,7 @@ export function readCodexAuthHandoff(
       return undefined;
     const input = decodeHandoff(url.searchParams.get("request"));
     codexAuthorizationRequest(input.authorizationUrl);
-    if (!providerAuthReturnUrl(input.returnUrl, trustedOrigin)) return undefined;
+    if (!providerAuthReturnUrl(input.returnUrl)) return undefined;
     return input;
   } catch {
     return undefined;
@@ -98,14 +94,10 @@ export function readCodexAuthHandoff(
 }
 
 /** Codes travel in a fragment, never in hosted web requests or a token store on the helper. */
-export function codexAuthDeliveryUrl(
-  input: CodexAuthHandoff,
-  callbackUrl: string,
-  trustedOrigin?: string | null,
-) {
+export function codexAuthDeliveryUrl(input: CodexAuthHandoff, callbackUrl: string) {
   const request = codexAuthorizationRequest(input.authorizationUrl);
   codexCallbackUrl(callbackUrl, request.redirectUri, request.state);
-  const destination = providerAuthReturnUrl(input.returnUrl, trustedOrigin);
+  const destination = providerAuthReturnUrl(input.returnUrl);
   if (!destination) throw new Error("Invalid A4 Code return address.");
   const url = new URL(destination);
   const delivery = {
@@ -119,16 +111,16 @@ export function codexAuthDeliveryUrl(
   return url.toString();
 }
 
-export function readCodexAuthDelivery(value: string, trustedOrigin?: string | null) {
+export function readCodexAuthDelivery(value: string) {
   try {
     const url = new URL(value);
     if (!url.hash.startsWith("#codex-auth=") || url.hash.length > 32_768) return undefined;
     const input = decodeDelivery(decodeURIComponent(url.hash.slice("#codex-auth=".length)));
-    const destination = providerAuthReturnUrl(value, trustedOrigin);
+    const destination = providerAuthReturnUrl(value);
     if (!destination) return undefined;
     const returnUrl = new URL(destination);
     returnUrl.hash = input.returnHash;
-    const sanitized = providerAuthReturnUrl(returnUrl.toString(), trustedOrigin);
+    const sanitized = providerAuthReturnUrl(returnUrl.toString());
     if (!sanitized) return undefined;
     return { ...input, returnUrl: sanitized };
   } catch {

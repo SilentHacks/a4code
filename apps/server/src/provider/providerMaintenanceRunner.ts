@@ -6,8 +6,8 @@ import {
   type ServerProvider,
   type ServerProviderUpdatedPayload,
   type ServerProviderUpdateState,
-} from "@a4code/contracts";
-import { resolveSpawnCommand } from "@a4code/shared/shell";
+} from "@t3tools/contracts";
+import { resolveSpawnCommand } from "@t3tools/shared/shell";
 import * as Cause from "effect/Cause";
 import * as Context from "effect/Context";
 import * as DateTime from "effect/DateTime";
@@ -34,10 +34,10 @@ import {
   resolveLatestProviderUpdateAction,
   resolveLatestProviderVersion,
   type ProviderMaintenanceCommandAction,
-} from "@a4code/provider-core/server/maintenanceResolver";
-import * as ProviderLatestVersions from "@a4code/provider-core/server/ProviderLatestVersions";
-import type { ProviderMaintenanceCapabilities } from "@a4code/provider-core/server/maintenanceResolver";
-import { collectUint8StreamText } from "@a4code/provider-core/server/collectStreamText";
+} from "@t3tools/provider-core/server/maintenanceResolver";
+import * as ProviderLatestVersions from "@t3tools/provider-core/server/ProviderLatestVersions";
+import type { ProviderMaintenanceCapabilities } from "@t3tools/provider-core/server/maintenanceResolver";
+import { collectUint8StreamText } from "@t3tools/provider-core/server/collectStreamText";
 const isServerProviderUpdateError = Schema.is(ServerProviderUpdateError);
 
 const UPDATE_OUTPUT_MAX_BYTES = 10_000;
@@ -70,7 +70,7 @@ export interface ProviderMaintenanceRunnerShape {
 export class ProviderMaintenanceRunner extends Context.Service<
   ProviderMaintenanceRunner,
   ProviderMaintenanceRunnerShape
->()("a4code/provider/providerMaintenanceRunner") {}
+>()("t3/provider/providerMaintenanceRunner") {}
 
 class ProviderMaintenanceCommandError extends Schema.TaggedError<ProviderMaintenanceCommandError>()(
   "ProviderMaintenanceCommandError",

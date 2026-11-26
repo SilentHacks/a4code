@@ -8,7 +8,7 @@ import * as TestClock from "effect/testing/TestClock";
 import * as Result from "effect/Result";
 import * as Stream from "effect/Stream";
 import * as ChildProcessSpawner from "effect/process/ChildProcessSpawner";
-import * as HostProcess from "@a4code/shared/HostProcess";
+import * as HostProcess from "@t3tools/shared/HostProcess";
 
 import {
   makeAcpClientTerminals,
@@ -107,7 +107,7 @@ describe("AcpClientTerminals", () => {
             ? undefined
             : {
                 T3_ACP_MCP_AUTHORIZATION: sessionId === "session-a" ? "token-a" : "token-b",
-                A4CODE_THREAD_ID: sessionId,
+                T3CODE_THREAD_ID: sessionId,
               },
       });
       yield* Effect.addFinalizer(() => terminals.disposeAll);
@@ -123,7 +123,7 @@ describe("AcpClientTerminals", () => {
           command: process.execPath,
           args: [
             "-e",
-            "const env = process.env; process.stdout.write([env.T3_ACP_MCP_AUTHORIZATION ?? '', env.t3_Acp_Mcp_Endpoint ?? '', env.A4CODE_THREAD_ID ?? '', env.T3_TEST_INHERITED, ...Object.keys(env).filter((name) => name.toUpperCase() === 'T3_TEST_OVERRIDE').map((name) => name + '=' + env[name])].join('|'))",
+            "const env = process.env; process.stdout.write([env.T3_ACP_MCP_AUTHORIZATION ?? '', env.t3_Acp_Mcp_Endpoint ?? '', env.T3CODE_THREAD_ID ?? '', env.T3_TEST_INHERITED, ...Object.keys(env).filter((name) => name.toUpperCase() === 'T3_TEST_OVERRIDE').map((name) => name + '=' + env[name])].join('|'))",
           ],
           ...(sessionId === "unknown"
             ? {}
@@ -144,7 +144,7 @@ describe("AcpClientTerminals", () => {
         ...process.env,
         T3_ACP_MCP_AUTHORIZATION: "launching-thread-token",
         t3_Acp_Mcp_Endpoint: "launching-thread-endpoint",
-        A4CODE_THREAD_ID: "launching-thread",
+        T3CODE_THREAD_ID: "launching-thread",
         T3_TEST_INHERITED: "kept",
         T3_TEST_OVERRIDE: "inherited",
       }),

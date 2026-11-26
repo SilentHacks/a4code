@@ -1,8 +1,8 @@
 import { NativeScrollView } from "../../native/NativeScrollViewMarker";
-import { sourceControlClients } from "@a4code/client-runtime/source-control-clients";
+import { sourceControlClients } from "@t3tools/client-runtime/source-control-clients";
 import { AnimatedLegendList } from "@legendapp/list/reanimated";
 import { StackActions, useNavigation, type StaticScreenProps } from "@react-navigation/native";
-import type { PullRequestChangeBreakdown } from "@a4code/contracts";
+import type { PullRequestChangeBreakdown } from "@t3tools/contracts";
 import { msg, T, useGT, useMessages, Var } from "gt-react-native";
 import { memo, useState } from "react";
 import { View } from "react-native";

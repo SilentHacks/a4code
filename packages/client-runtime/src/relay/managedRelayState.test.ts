@@ -1,8 +1,8 @@
-import { EnvironmentId } from "@a4code/contracts";
+import { EnvironmentId } from "@t3tools/contracts";
 import {
   type RelayClientDeviceRecord,
   type RelayClientEnvironmentRecord,
-} from "@a4code/contracts/relay";
+} from "@t3tools/contracts/relay";
 import { describe, expect, it } from "@effect/vitest";
 import * as Effect from "effect/Effect";
 import * as Fiber from "effect/Fiber";

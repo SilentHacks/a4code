@@ -1,9 +1,9 @@
 import * as AgentActivityAlerts from "./agentActivityAlerts.ts";
-import { EnvironmentId, ThreadId } from "@a4code/contracts";
+import { EnvironmentId, ThreadId } from "@t3tools/contracts";
 import type {
   RelayAgentActivityAggregateState,
   RelayAgentActivityState,
-} from "@a4code/contracts/relay";
+} from "@t3tools/contracts/relay";
 import * as NodeCryptoLayer from "@effect/platform-node/NodeCrypto";
 import { describe, expect, it } from "@effect/vitest";
 // @effect-diagnostics-next-line nodeBuiltinImport:off -- Effect's Crypto has no generateKeyPairSync.
@@ -38,12 +38,12 @@ const config = RelayConfiguration.RelayConfiguration.of({
     teamId: "team-id",
     keyId: "key-id",
     privateKey: Redacted.make("not-a-private-key"),
-    bundleId: "io.github.silenthacks.a4code.dev",
+    bundleId: "com.t3tools.t3code.dev",
   },
   apnsDeliveryJobSigningSecret: Redacted.make("job-signing-secret"),
   clerkSecretKey: Redacted.make("clerk-secret"),
   clerkPublishableKey: "pk_test_test",
-  clerkJwtAudience: "a4-code-relay",
+  clerkJwtAudience: "t3-code-relay",
   cloudMintPrivateKey: Redacted.make("cloud-private-key"),
   cloudMintPublicKey: "cloud-public-key",
   managedEndpointBaseDomain: undefined,
@@ -77,7 +77,7 @@ const state: RelayAgentActivityState = {
 };
 
 const aggregate: RelayAgentActivityAggregateState = {
-  title: "A4 Code",
+  title: "T3 Code",
   subtitle: "Agent work in progress",
   activeCount: 1,
   updatedAt: state.updatedAt,
@@ -1377,7 +1377,7 @@ describe("signed APNs registration metadata", () => {
       token: "unchanged-token",
       ...(changed === "legacy"
         ? {}
-        : { bundleId: "io.github.silenthacks.a4code.dev", apsEnvironment: "sandbox" as const }),
+        : { bundleId: "com.t3tools.t3code.dev", apsEnvironment: "sandbox" as const }),
       aggregate: kind === "live_activity_update" ? aggregate : null,
       ...(kind === "push_notification"
         ? {
@@ -1407,7 +1407,7 @@ describe("signed APNs registration metadata", () => {
         `${changed === "environment" ? "https://api.push.apple.com" : "https://api.sandbox.push.apple.com"}/3/device/unchanged-token`,
       );
       expect(requests[0]?.headers["apns-topic"]).toBe(
-        `${changed === "bundle" ? "io.github.silenthacks.a4code.preview" : "io.github.silenthacks.a4code.dev"}${kind === "live_activity_update" ? ".push-type.liveactivity" : ""}`,
+        `${changed === "bundle" ? "com.t3tools.t3code.preview" : "com.t3tools.t3code.dev"}${kind === "live_activity_update" ? ".push-type.liveactivity" : ""}`,
       );
     }).pipe(
       Effect.provide(
@@ -1420,9 +1420,7 @@ describe("signed APNs registration metadata", () => {
               push_token: "unchanged-token",
               activity_push_token: "unchanged-token",
               bundle_id:
-                changed === "bundle"
-                  ? "io.github.silenthacks.a4code.preview"
-                  : "io.github.silenthacks.a4code.dev",
+                changed === "bundle" ? "com.t3tools.t3code.preview" : "com.t3tools.t3code.dev",
               aps_environment: changed === "environment" ? "production" : "sandbox",
             },
           ],

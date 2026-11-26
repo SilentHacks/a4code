@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vite-plus/test";
 
-import type { EnvironmentId, ThreadId } from "@a4code/contracts";
-import type { RelayAgentActivityAggregateState } from "@a4code/contracts/relay";
+import type { EnvironmentId, ThreadId } from "@t3tools/contracts";
+import type { RelayAgentActivityAggregateState } from "@t3tools/contracts/relay";
 
 import {
   AGENT_ACTIVITY_WIDGET_STALE_AFTER_MS,
@@ -16,7 +16,7 @@ function row(phase: Row["phase"], status: string): Row {
   return {
     environmentId: "env-1" as EnvironmentId,
     threadId: `thread-${phase}` as ThreadId,
-    projectTitle: "a4code",
+    projectTitle: "t3code",
     threadTitle: `Thread ${phase}`,
     modelTitle: "GPT-5.5",
     phase,

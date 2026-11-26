@@ -1,7 +1,7 @@
-import { shouldPreserveAssistantLineBreaks } from "@a4code/shared/assistantInsights";
-import { MessageId, type TurnItemId } from "@a4code/contracts";
-import { canForkProjectedAssistantItem } from "@a4code/client-runtime/state/thread-workflows";
-import { agentWorkingDirectories } from "@a4code/client-runtime/workspace-basename-lookup";
+import { shouldPreserveAssistantLineBreaks } from "@t3tools/shared/assistantInsights";
+import { MessageId, type TurnItemId } from "@t3tools/contracts";
+import { canForkProjectedAssistantItem } from "@t3tools/client-runtime/state/thread-workflows";
+import { agentWorkingDirectories } from "@t3tools/client-runtime/workspace-basename-lookup";
 import { T, useGT, useMessages } from "gt-react";
 import { use, useState } from "react";
 import { type ChatMessage } from "../../types";

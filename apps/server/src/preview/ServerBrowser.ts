@@ -47,13 +47,13 @@ import {
   ThreadId,
   SERVER_BROWSER_AUTOMATION_CLIENT_ID,
   type PreviewAppearancePreference,
-} from "@a4code/contracts";
-import { AgentScope, agentScopeLauncherScript } from "@a4code/shared/AgentScope";
-import { writeFileStringAtomically } from "@a4code/shared/atomicWrite";
-import * as HostProcess from "@a4code/shared/HostProcess";
-import { appLinkUrl } from "@a4code/shared/appLinks";
-import { normalizePreviewUrl } from "@a4code/shared/preview";
-import { resolvePreviewViewport } from "@a4code/shared/previewViewport";
+} from "@t3tools/contracts";
+import { AgentScope, agentScopeLauncherScript } from "@t3tools/shared/AgentScope";
+import { writeFileStringAtomically } from "@t3tools/shared/atomicWrite";
+import * as HostProcess from "@t3tools/shared/HostProcess";
+import { appLinkUrl } from "@t3tools/shared/appLinks";
+import { normalizePreviewUrl } from "@t3tools/shared/preview";
+import { resolvePreviewViewport } from "@t3tools/shared/previewViewport";
 import * as NodeCrypto from "node:crypto";
 import * as NodeFSP from "node:fs/promises";
 import * as NodePath from "node:path";
@@ -405,7 +405,7 @@ export class ServerBrowser extends Context.Service<
 
     readonly profileReporter: Effect.Effect<ProfileReporter, never, Scope.Scope>;
   }
->()("a4code/preview/ServerBrowser") {}
+>()("t3/preview/ServerBrowser") {}
 
 interface ViewerState {
   readonly id: string;
@@ -3715,7 +3715,7 @@ const make = Effect.gen(function* () {
     (yield* PreviewBrowserHost.sandboxBlocked)
   ) {
     yield* Effect.logWarning(
-      `This host blocks the sandbox A4 Code's browser runs in, so browser tabs and HTML previews will not start. Run \`${setupCommand}\` once to allow it.`,
+      `This host blocks the sandbox T3's browser runs in, so browser tabs and HTML previews will not start. Run \`${setupCommand}\` once to allow it.`,
     );
   }
 

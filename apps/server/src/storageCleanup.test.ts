@@ -25,8 +25,8 @@ import {
   type StorageCleanupSettings,
   type TerminalMetadataStreamEvent,
   type TerminalSummary,
-} from "@a4code/contracts";
-import * as HostProcess from "@a4code/shared/HostProcess";
+} from "@t3tools/contracts";
+import * as HostProcess from "@t3tools/shared/HostProcess";
 import * as ServerConfig from "./config.ts";
 import * as StorageCleanup from "./storageCleanup.ts";
 import * as CheckpointCaptureIndex from "./vcs/checkpointCaptureIndex.ts";
@@ -59,7 +59,7 @@ import {
   type OrchestrationV2DomainEvent,
   type OrchestrationV2ServerCommand,
   type OrchestrationV2ThreadShell,
-} from "@a4code/contracts";
+} from "@t3tools/contracts";
 import * as DateTime from "effect/DateTime";
 import {
   storageCleanupActivityAt,
@@ -356,7 +356,7 @@ const cleanupFixture = (
     yield* fs.makeDirectory(config.worktreesDir, { recursive: true });
     const worktree = `${config.worktreesDir}/feature`;
     yield* command(repo, ["worktree", "add", "-b", "feature", worktree]);
-    let settings: import("@a4code/contracts").ServerSettings = {
+    let settings: import("@t3tools/contracts").ServerSettings = {
       ...DEFAULT_SERVER_SETTINGS,
       storageCleanup,
     };
@@ -2491,7 +2491,7 @@ describe("orphan worktree reports", () => {
           const config = yield* ServerConfig.ServerConfig;
           const checkout = yield* fs.makeTempDirectoryScoped({ prefix: "cleanup-dev-checkout-" });
           yield* fs.writeFileString(`${checkout}/.git`, "gitdir: /repo/.git/worktrees/dev\n");
-          const baseDir = worktreeHome ? `${checkout}/.a4code` : config.baseDir;
+          const baseDir = worktreeHome ? `${checkout}/.t3` : config.baseDir;
           const fixture = yield* cleanupFixture().pipe(
             Effect.provideService(ServerConfig.ServerConfig, {
               ...config,

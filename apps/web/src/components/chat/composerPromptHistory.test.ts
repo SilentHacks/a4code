@@ -1,8 +1,8 @@
-import { EnvironmentId, ScheduledTaskId, ThreadId } from "@a4code/contracts";
+import { EnvironmentId, ScheduledTaskId, ThreadId } from "@t3tools/contracts";
 import {
   formatComposerContextReference,
   threadContextRecord,
-} from "@a4code/shared/composerContextReferences";
+} from "@t3tools/shared/composerContextReferences";
 import { describe, expect, it } from "vite-plus/test";
 
 import {

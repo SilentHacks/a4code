@@ -1,4 +1,4 @@
-import { splitsSurrogatePair } from "@a4code/shared/assistantCitations";
+import { splitsSurrogatePair } from "@t3tools/shared/assistantCitations";
 
 const PREVIEW_LIMIT = 300;
 

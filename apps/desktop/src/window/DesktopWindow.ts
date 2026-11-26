@@ -16,7 +16,7 @@ import {
   type DatabaseMigrationProgress,
   type DesktopSnapShotEvent,
   DEFAULT_CLIENT_SETTINGS,
-} from "@a4code/contracts";
+} from "@t3tools/contracts";
 
 import * as DesktopAssets from "../app/DesktopAssets.ts";
 import * as DesktopClerk from "../app/DesktopClerk.ts";
@@ -153,7 +153,7 @@ export class DesktopWindow extends Context.Service<
     readonly runMainContentsCommand: (command: MainWindowContentsCommand) => Effect.Effect<void>;
     readonly syncAppearance: Effect.Effect<void>;
   }
->()("@a4code/desktop/window/DesktopWindow") {}
+>()("@t3tools/desktop/window/DesktopWindow") {}
 
 const { logInfo: logWindowInfo, logWarning: logWindowWarning } =
   makeComponentLogger("desktop-window");

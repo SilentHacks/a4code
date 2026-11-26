@@ -2,7 +2,7 @@ import type {
   ServerProvider,
   ServerProviderVersionAdvisory,
   ServerProviderCompatibilityAdvisory,
-} from "@a4code/contracts";
+} from "@t3tools/contracts";
 import { msg } from "gt-react";
 
 import { m, type MessageResolver } from "../../i18n/messages";

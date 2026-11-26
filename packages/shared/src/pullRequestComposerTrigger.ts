@@ -4,7 +4,7 @@ import type {
   PullRequestFilterOptions,
   PullRequestReferenceCandidate,
   PullRequestReferenceSigil,
-} from "@a4code/contracts";
+} from "@t3tools/contracts";
 
 import { replaceTextRange } from "./composerTrigger.ts";
 

@@ -1,4 +1,4 @@
-import type { ServerProviderSubProvider } from "@a4code/contracts";
+import type { ServerProviderSubProvider } from "@t3tools/contracts";
 
 export interface SubProviderGroup<Model> {
   readonly subProvider: ServerProviderSubProvider;

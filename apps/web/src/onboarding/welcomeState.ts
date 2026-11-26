@@ -1,4 +1,4 @@
-import type { EnvironmentId } from "@a4code/contracts";
+import type { EnvironmentId } from "@t3tools/contracts";
 import * as Schema from "effect/Schema";
 
 /**
@@ -17,4 +17,4 @@ export type WelcomeImportSelection = typeof WelcomeImportSelection.Type;
 export const StoredWelcomeImportSelection = Schema.NullOr(WelcomeImportSelection);
 
 export const welcomeImportSelectionKey = (environmentId: EnvironmentId) =>
-  `a4code:welcome-import-selection:${environmentId}`;
+  `t3code:welcome-import-selection:${environmentId}`;

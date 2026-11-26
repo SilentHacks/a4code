@@ -5,7 +5,7 @@ import {
   type ProviderOptionDescriptor,
   type ProviderOptionSelection,
   type ServerProviderModel,
-} from "@a4code/contracts";
+} from "@t3tools/contracts";
 import { getComposerProviderState, getComposerReasoningStep } from "./composerProviderState";
 import { readPromptUltrathink } from "./TraitsPicker";
 

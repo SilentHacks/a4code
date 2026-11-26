@@ -10,8 +10,8 @@ import {
   ProjectId,
   ProviderInstanceId,
   ThreadId,
-} from "@a4code/contracts";
-import { resolveProjectSettings } from "@a4code/shared/projectSettings";
+} from "@t3tools/contracts";
+import { resolveProjectSettings } from "@t3tools/shared/projectSettings";
 import * as Cause from "effect/Cause";
 import * as Console from "effect/Console";
 import * as Context from "effect/Context";
@@ -78,7 +78,7 @@ export class ServerRuntimeStartup extends Context.Service<
       effect: Effect.Effect<A, E>,
     ) => Effect.Effect<A, E | ServerRuntimeStartupError>;
   }
->()("a4code/serverRuntimeStartup") {}
+>()("t3/serverRuntimeStartup") {}
 
 interface QueuedCommand {
   readonly run: Effect.Effect<void, never>;

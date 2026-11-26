@@ -5,7 +5,7 @@ import {
   ProjectId,
   type ProjectScript,
   type ResolvedKeybindingsConfig,
-} from "@a4code/contracts";
+} from "@t3tools/contracts";
 import { AsyncResult } from "effect/reactivity";
 import { describe, expect, it, vi } from "vite-plus/test";
 

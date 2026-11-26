@@ -5,12 +5,12 @@ import type {
   ProviderOptionDescriptor,
   ProviderOptionSelection,
   ServerProviderModel,
-} from "@a4code/contracts";
+} from "@t3tools/contracts";
 import {
   buildProviderOptionSelectionsFromDescriptors,
   getProviderOptionDescriptors,
   withImplicitFastModeDefault,
-} from "@a4code/shared/model";
+} from "@t3tools/shared/model";
 
 export function resolveProviderOptionDescriptors(input: {
   readonly capabilities: ModelCapabilities | null | undefined;

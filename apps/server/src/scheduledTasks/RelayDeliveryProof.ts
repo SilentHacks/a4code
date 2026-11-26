@@ -1,11 +1,11 @@
 // Trust relay headers only with a mint-key-signed proof; otherwise handle the webhook as a direct request.
-import { RelayHookDeliveryProofPayload } from "@a4code/contracts/relay";
+import { RelayHookDeliveryProofPayload } from "@t3tools/contracts/relay";
 import {
   normalizeRelayIssuer,
   RELAY_HOOK_DELIVERY_HEADER,
   RELAY_HOOK_DELIVERY_TYP,
   verifyRelayJwt,
-} from "@a4code/shared/relayJwt";
+} from "@t3tools/shared/relayJwt";
 import * as Context from "effect/Context";
 import * as Signature from "effect/crypto/Signature";
 import * as Effect from "effect/Effect";
@@ -32,7 +32,7 @@ export class RelayDeliveryProof extends Context.Service<
       Option.Option<{ readonly deliveryId: string; readonly receivedAt: string }>
     >;
   }
->()("a4code/scheduledTasks/RelayDeliveryProof") {}
+>()("t3/scheduledTasks/RelayDeliveryProof") {}
 
 const make = Effect.gen(function* () {
   const secrets = yield* ServerSecretStore.ServerSecretStore;

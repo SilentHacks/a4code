@@ -4,8 +4,8 @@ import type {
   OrchestrationV2ShellSnapshot,
   OrchestrationV2ShellStreamItem,
   OrchestrationV2ThreadShell,
-} from "@a4code/contracts";
-import { ProjectId, ProviderInstanceId, ThreadId } from "@a4code/contracts";
+} from "@t3tools/contracts";
+import { ProjectId, ProviderInstanceId, ThreadId } from "@t3tools/contracts";
 import type * as Cause from "effect/Cause";
 import * as DateTime from "effect/DateTime";
 import * as Deferred from "effect/Deferred";

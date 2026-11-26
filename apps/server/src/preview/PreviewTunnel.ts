@@ -2,7 +2,7 @@
 // connection per WebSocket. Raw bytes, so pages keep their own origin, HMR sockets and TLS.
 import * as NodeHttpServerRequest from "@effect/platform-node/NodeHttpServerRequest";
 import * as NodeSocket from "@effect/platform-node/NodeSocket";
-import { allowsPreviewTunnel, AuthTerminalOperateScope } from "@a4code/contracts";
+import { allowsPreviewTunnel, AuthTerminalOperateScope } from "@t3tools/contracts";
 import type * as NodeNet from "node:net";
 import * as Context from "effect/Context";
 import * as Effect from "effect/Effect";
@@ -75,7 +75,7 @@ export class PreviewTunnel extends Context.Service<
      */
     readonly watchTurnedOff: Effect.Effect<Effect.Effect<void>, never, Scope.Scope>;
   }
->()("a4code/preview/PreviewTunnel") {}
+>()("t3/preview/PreviewTunnel") {}
 
 const make = Effect.gen(function* () {
   const serverSettings = yield* ServerSettingsService;

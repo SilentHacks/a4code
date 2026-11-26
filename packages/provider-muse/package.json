@@ -1,5 +1,5 @@
 {
-  "name": "@a4code/provider-muse",
+  "name": "@t3tools/provider-muse",
   "private": true,
   "type": "module",
   "exports": {
@@ -29,16 +29,16 @@
     "test": "vp test run --config ../../vite.config.ts --dir ."
   },
   "dependencies": {
-    "@a4code/contracts": "workspace:*",
-    "@a4code/provider-core": "workspace:*",
-    "@a4code/shared": "workspace:*",
     "@muse-code/sdk": "1.4.6",
+    "@t3tools/contracts": "workspace:*",
+    "@t3tools/provider-core": "workspace:*",
+    "@t3tools/shared": "workspace:*",
     "effect": "catalog:"
   },
   "devDependencies": {
-    "@a4code/provider-testing": "workspace:*",
     "@effect/platform-node": "catalog:",
     "@effect/vitest": "catalog:",
+    "@t3tools/provider-testing": "workspace:*",
     "@types/node": "catalog:",
     "vite-plus": "catalog:"
   }

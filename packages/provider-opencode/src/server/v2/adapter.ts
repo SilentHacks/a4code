@@ -43,7 +43,7 @@ import {
   type ProviderInstanceId,
   type RunId,
   type RuntimeRequestId,
-} from "@a4code/contracts";
+} from "@t3tools/contracts";
 import type * as Cause from "effect/Cause";
 import * as DateTime from "effect/DateTime";
 import * as Deferred from "effect/Deferred";
@@ -61,47 +61,47 @@ import * as Schema from "effect/Schema";
 import * as Semaphore from "effect/Semaphore";
 import * as Stream from "effect/Stream";
 
-import * as ProviderHost from "@a4code/provider-core/server/ProviderHost";
+import * as ProviderHost from "@t3tools/provider-core/server/ProviderHost";
 import * as OpenCode2Client from "./OpenCode2Client.ts";
 import * as OpenCode2Server from "./OpenCode2Server.ts";
 import * as OpenCodeRuntime from "../OpenCodeRuntime.ts";
 import { readableProviderErrorMessage } from "../providerErrorMessage.ts";
-import * as McpProviderSessions from "@a4code/provider-core/server/McpProviderSessions";
-import { buildRuntimeInstructions } from "@a4code/provider-core/server/runtimeInstructions";
-import { t3OrchestrationSystemPrompt } from "@a4code/provider-core/server/orchestrationInstructions";
-import { SKILL_MENTION_PATTERN } from "@a4code/shared/composerInlineTokens";
-import { HTML_RENDER_TOOL_NAME } from "@a4code/shared/htmlRender";
+import * as McpProviderSessions from "@t3tools/provider-core/server/McpProviderSessions";
+import { buildRuntimeInstructions } from "@t3tools/provider-core/server/runtimeInstructions";
+import { t3OrchestrationSystemPrompt } from "@t3tools/provider-core/server/orchestrationInstructions";
+import { SKILL_MENTION_PATTERN } from "@t3tools/shared/composerInlineTokens";
+import { HTML_RENDER_TOOL_NAME } from "@t3tools/shared/htmlRender";
 import {
   htmlRenderFromToolItem,
   SEND_TO_USER_TOOL_NAME,
   sentMessageFromToolItem,
-} from "@a4code/shared/toolOutput";
-import { compareSemverVersions } from "@a4code/shared/semver";
-import * as KeyedLock from "@a4code/shared/KeyedLock";
-import { modelSelectionsEqual } from "@a4code/shared/model";
-import { causeErrorTag } from "@a4code/shared/observability";
+} from "@t3tools/shared/toolOutput";
+import { compareSemverVersions } from "@t3tools/shared/semver";
+import * as KeyedLock from "@t3tools/shared/KeyedLock";
+import { modelSelectionsEqual } from "@t3tools/shared/model";
+import { causeErrorTag } from "@t3tools/shared/observability";
 
 import {
   isProviderNativeImageAttachment,
   providerMessageTextWithAttachmentPaths,
-} from "@a4code/provider-core/server/attachmentPrompt";
-import * as IdAllocator from "@a4code/provider-core/server/IdAllocator";
+} from "@t3tools/provider-core/server/attachmentPrompt";
+import * as IdAllocator from "@t3tools/provider-core/server/IdAllocator";
 import {
   backgroundWorkNotification,
   type BackgroundWorkReport,
-} from "@a4code/provider-core/server/notification";
-import * as ProviderContinuationRequests from "@a4code/provider-core/server/ProviderContinuationRequests";
+} from "@t3tools/provider-core/server/notification";
+import * as ProviderContinuationRequests from "@t3tools/provider-core/server/ProviderContinuationRequests";
 import {
   makeProviderFailure,
   makeProviderRetryTurnItem,
-} from "@a4code/provider-core/server/failure";
+} from "@t3tools/provider-core/server/failure";
 import {
   makeSubagentChildThread,
   makeSubagentConversationArtifacts,
   subagentThreadTitle,
-} from "@a4code/provider-core/server/subagentProjection";
-import * as ProviderAdapter from "@a4code/provider-core/server/ProviderAdapter";
-import { turnScopedSelectionTransition } from "@a4code/provider-core/server/selectionTransition";
+} from "@t3tools/provider-core/server/subagentProjection";
+import * as ProviderAdapter from "@t3tools/provider-core/server/ProviderAdapter";
+import { turnScopedSelectionTransition } from "@t3tools/provider-core/server/selectionTransition";
 import { OPENCODE_PROVIDER, openCodePermissionRequestKind } from "../adapter.ts";
 import {
   openCodeCodeModeHtmlRenders,
@@ -1843,7 +1843,7 @@ export const make = Effect.fn("OpenCode2Adapter.make")(function* (instanceId: Pr
     });
 
     const syncRoster = Effect.fnUntraced(function* (state: ThreadState) {
-      const roster: Array<import("@a4code/contracts").OrchestrationV2PendingBackgroundTask> =
+      const roster: Array<import("@t3tools/contracts").OrchestrationV2PendingBackgroundTask> =
         runningCalls(state)
           .filter((call) => call.background)
           .map((call) => ({

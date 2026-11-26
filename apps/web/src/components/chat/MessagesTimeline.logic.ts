@@ -1,24 +1,24 @@
 import * as DateTime from "effect/DateTime";
 import { msg } from "gt-react";
-import { worktreeSetupAgentStarted } from "@a4code/client-runtime/worktree-setup";
-import { resolveUserMessagePresentation } from "@a4code/client-runtime/user-message";
+import { worktreeSetupAgentStarted } from "@t3tools/client-runtime/worktree-setup";
+import { resolveUserMessagePresentation } from "@t3tools/client-runtime/user-message";
 import {
   isLiveSubagentTurnItem,
   waitingOnSubagentsLabel,
-} from "@a4code/client-runtime/state/subagentRuntime";
+} from "@t3tools/client-runtime/state/subagentRuntime";
 import * as Equal from "effect/Equal";
 import { shallow } from "zustand/vanilla/shallow";
-import { claudeResumeCompactionAge } from "@a4code/shared/claudeCompaction";
+import { claudeResumeCompactionAge } from "@t3tools/shared/claudeCompaction";
 import {
   IDLE_COMPACTING_LABELS,
   IDLE_COMPACTION_TITLES,
-} from "@a4code/client-runtime/user-message";
-import type { HandoffTimelineRun } from "@a4code/client-runtime/handoff";
+} from "@t3tools/client-runtime/user-message";
+import type { HandoffTimelineRun } from "@t3tools/client-runtime/handoff";
 import { renderCodexDirectivesForCopy } from "~/markdown/markdownText";
 import {
   commandDisplayText,
   commandProgramName,
-} from "@a4code/client-runtime/work-log/command-label";
+} from "@t3tools/client-runtime/work-log/command-label";
 import {
   commandlessCommandLabel,
   genericCommandStatusLabel,
@@ -34,7 +34,7 @@ import {
   type ViewedImage,
   liveThoughtLine,
   workEntryHiddenByToolCallVisibility,
-} from "@a4code/client-runtime/work-log/presentation";
+} from "@t3tools/client-runtime/work-log/presentation";
 import {
   deriveRevertTurnCountByUserMessageId,
   isStreamingMessageTextUpdate,
@@ -66,23 +66,23 @@ import {
   RunId,
   type ThreadId,
   type TurnItemId,
-} from "@a4code/contracts";
-import type { ThreadRunSummary } from "@a4code/client-runtime/state/shell";
-import type { ToolCallVisibility } from "@a4code/contracts/settings";
-import { resolveT3McpToolDefinition } from "@a4code/shared/t3McpToolPresentation";
-import { compactDynamicToolOutput } from "@a4code/shared/toolOutput";
-import { htmlRenderReferencesEqual, type HtmlRenderReference } from "@a4code/shared/htmlRender";
-import { mcpAppReferencesEqual, type McpAppReference } from "@a4code/shared/mcpApp";
-import { formatDuration } from "@a4code/shared/orchestrationTimingCopy";
+} from "@t3tools/contracts";
+import type { ThreadRunSummary } from "@t3tools/client-runtime/state/shell";
+import type { ToolCallVisibility } from "@t3tools/contracts/settings";
+import { resolveT3McpToolDefinition } from "@t3tools/shared/t3McpToolPresentation";
+import { compactDynamicToolOutput } from "@t3tools/shared/toolOutput";
+import { htmlRenderReferencesEqual, type HtmlRenderReference } from "@t3tools/shared/htmlRender";
+import { mcpAppReferencesEqual, type McpAppReference } from "@t3tools/shared/mcpApp";
+import { formatDuration } from "@t3tools/shared/orchestrationTimingCopy";
 import { formatWorkspaceRelativePath } from "../../filePathDisplay";
 import { m, type MessageResolver } from "../../i18n/messages";
-import { collectToolFilePaths } from "@a4code/shared/toolActivity";
+import { collectToolFilePaths } from "@t3tools/shared/toolActivity";
 import {
   dynamicToolTitle,
   formatReadToolLabel,
   formatSearchToolLabel,
-} from "@a4code/shared/toolActivityCopy";
-import { isHostPath } from "@a4code/shared/path";
+} from "@t3tools/shared/toolActivityCopy";
+import { isHostPath } from "@t3tools/shared/path";
 
 export function timelineEntryRunId(entry: TimelineEntry): RunId | null {
   if (entry.kind === "message") {

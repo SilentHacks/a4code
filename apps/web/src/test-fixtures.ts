@@ -1,4 +1,4 @@
-import { presentThreadShell } from "@a4code/client-runtime/state/shell";
+import { presentThreadShell } from "@t3tools/client-runtime/state/shell";
 import {
   EnvironmentId,
   MessageId,
@@ -11,7 +11,7 @@ import {
   ProviderInstanceId,
   ThreadId,
   type OrchestrationV2ThreadProjection,
-} from "@a4code/contracts";
+} from "@t3tools/contracts";
 import * as DateTime from "effect/DateTime";
 
 import type { ChatMessage, Thread } from "./types";

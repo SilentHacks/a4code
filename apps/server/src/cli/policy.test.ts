@@ -1,7 +1,7 @@
 import * as NodeCrypto from "@effect/platform-node/NodeCrypto";
 import * as NodeServices from "@effect/platform-node/NodeServices";
-import * as HostProcess from "@a4code/shared/HostProcess";
-import * as NetService from "@a4code/shared/Net";
+import * as HostProcess from "@t3tools/shared/HostProcess";
+import * as NetService from "@t3tools/shared/Net";
 import { assert, it } from "@effect/vitest";
 import * as Effect from "effect/Effect";
 import * as Layer from "effect/Layer";
@@ -31,7 +31,7 @@ it.layer(Layer.mergeAll(NodeServices.layer, NodeCrypto.layer))((it) => {
       );
       const loaded = (organization: string) =>
         ManagedPolicy.loadedPolicy({
-          path: "/etc/a4code/policy.json",
+          path: "/etc/t3code/policy.json",
           document: { schemaVersion: 1, organization },
         });
       const installed = yield* loaded("Example Corp");
@@ -51,7 +51,7 @@ it.layer(Layer.mergeAll(NodeServices.layer, NodeCrypto.layer))((it) => {
       assert.include(yield* running(installed), "loaded this policy.");
       assert.include(
         yield* running(yield* loaded("Other Corp")),
-        "loaded Other Corp's policy from /etc/a4code/policy.json",
+        "loaded Other Corp's policy from /etc/t3code/policy.json",
       );
       assert.include(yield* running(null), "loaded no policy. Restart A4 Code");
       assert.include(yield* running(installed, null), "Restart A4 Code to apply");
@@ -90,7 +90,7 @@ it.layer(Layer.mergeAll(NodeServices.layer, NodeCrypto.layer))((it) => {
       );
 
       assert.include(
-        yield* fs.readFileString(path.join(home, "out", "macos", "a4code.mobileconfig")),
+        yield* fs.readFileString(path.join(home, "out", "macos", "t3code.mobileconfig")),
         "Tilde Corp",
       );
     }),

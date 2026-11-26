@@ -5,13 +5,13 @@ import {
   normalizeProviderAccentColor,
   providerAccentForegroundColor,
   providerInstanceInitials,
-} from "@a4code/client-runtime/state/provider-instance-display";
+} from "@t3tools/client-runtime/state/provider-instance-display";
 import { useId, useState } from "react";
-import { resolveOfficialAcpRegistryIconUrl } from "@a4code/contracts";
+import { resolveOfficialAcpRegistryIconUrl } from "@t3tools/contracts";
 import { useAppearancePreferences } from "../features/settings/appearance/AppearancePreferencesProvider";
 import { AppText as Text } from "./ui/AppText";
 import { cn } from "../lib/cn";
-import { getProviderClient, openRouterIcon } from "@a4code/client-runtime/provider-clients";
+import { getProviderClient, openRouterIcon } from "@t3tools/client-runtime/provider-clients";
 
 type ProviderIconProps = {
   readonly provider: string | null | undefined;

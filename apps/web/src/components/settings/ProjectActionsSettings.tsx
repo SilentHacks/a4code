@@ -1,13 +1,13 @@
-import { thrownErrorMessage } from "@a4code/client-runtime/errors";
+import { thrownErrorMessage } from "@t3tools/client-runtime/errors";
 import { m } from "~/i18n/messages";
 import { useScopedSettingsWriteAllowed } from "./useScopedSettings";
-import { AuthSettingsWriteScope } from "@a4code/contracts";
-import { EnvironmentId, type T3ProjectFileScript } from "@a4code/contracts";
+import { AuthSettingsWriteScope } from "@t3tools/contracts";
+import { EnvironmentId, type T3ProjectFileScript } from "@t3tools/contracts";
 import {
   isAtomCommandInterrupted,
   squashAtomCommandFailure,
-} from "@a4code/client-runtime/state/runtime";
-import { DEFAULT_RESOLVED_KEYBINDINGS } from "@a4code/shared/keybindings";
+} from "@t3tools/client-runtime/state/runtime";
+import { DEFAULT_RESOLVED_KEYBINDINGS } from "@t3tools/shared/keybindings";
 import { ChevronDownIcon, PlusIcon } from "lucide-react";
 import { T, useGT } from "gt-react";
 import { useState } from "react";

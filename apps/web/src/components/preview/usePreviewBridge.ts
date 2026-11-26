@@ -4,7 +4,7 @@ import type {
   PreviewSessionSnapshot,
   ScopedThreadRef,
   ThreadId,
-} from "@a4code/contracts";
+} from "@t3tools/contracts";
 import { useEffect, useEffectEvent, useRef } from "react";
 
 import { recordFaviconForThread } from "~/browserFaviconStore";
@@ -88,7 +88,7 @@ export function usePreviewBridge(input: {
       });
     },
   );
-  // oxlint-disable-next-line a4code/no-unreasoned-state-sync -- subscribes to preview bridge state changes and capture activity for the current tab
+  // oxlint-disable-next-line t3code/no-unreasoned-state-sync -- subscribes to preview bridge state changes and capture activity for the current tab
   useEffect(() => {
     if (!previewBridge || typeof window === "undefined") return;
     lastReportedUrl.current = null;

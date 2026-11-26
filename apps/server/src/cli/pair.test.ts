@@ -6,9 +6,9 @@ import * as NodePath from "node:path";
 
 import * as NodeCrypto from "@effect/platform-node/NodeCrypto";
 import * as NodeServices from "@effect/platform-node/NodeServices";
-import { AuthStandardClientScopes, ORCHESTRATION_PROTOCOL_VERSION } from "@a4code/contracts";
-import * as NetService from "@a4code/shared/Net";
-import * as HostProcess from "@a4code/shared/HostProcess";
+import { AuthStandardClientScopes, ORCHESTRATION_PROTOCOL_VERSION } from "@t3tools/contracts";
+import * as NetService from "@t3tools/shared/Net";
+import * as HostProcess from "@t3tools/shared/HostProcess";
 import { assert, describe, expect, it } from "@effect/vitest";
 import * as Cause from "effect/Cause";
 import * as ConfigProvider from "effect/ConfigProvider";
@@ -46,7 +46,7 @@ import {
 } from "./pair.ts";
 
 import packageJson from "../../package.json" with { type: "json" };
-import { buildPairingAppLink } from "@a4code/shared/remote";
+import { buildPairingAppLink } from "@t3tools/shared/remote";
 
 const layerCliRuntime = Layer.mergeAll(NodeServices.layer, NodeCrypto.layer, NetService.layer);
 
@@ -133,7 +133,7 @@ const withDescriptorServer = <A, E, R>(
     (server) => Effect.sync(() => server.close()),
   );
 
-describe("a4code pair", () => {
+describe("t3 pair", () => {
   it.effect("publishes an IPv6-only server through Tailscale Serve when pairing", () =>
     withDescriptorServer(
       (origin) =>
@@ -316,7 +316,7 @@ describe("a4code pair", () => {
           readonly scopes: ReadonlyArray<string>;
         }>;
         assert.equal(credentials.length, 1);
-        assert.equal(credentials[0]?.label, "a4code pair");
+        assert.equal(credentials[0]?.label, "t3 pair");
         assert.deepEqual(credentials[0]?.scopes, AuthStandardClientScopes);
       }),
     ).pipe(
@@ -387,7 +387,7 @@ describe("a4code pair", () => {
             ),
             Effect.provide(
               ConfigProvider.layer(
-                ConfigProvider.fromEnv({ env: { A4CODE_DEV_MANAGED_POLICY_PATH: policyPath } }),
+                ConfigProvider.fromEnv({ env: { T3CODE_DEV_MANAGED_POLICY_PATH: policyPath } }),
               ),
             ),
             Effect.flip,
@@ -405,7 +405,7 @@ describe("a4code pair", () => {
   it.effect("ignores runtime state whose recorded pid is no longer alive", () =>
     withDescriptorServer((origin) =>
       Effect.gen(function* () {
-        const baseDir = NodeFS.mkdtempSync(NodePath.join(NodeOS.tmpdir(), "a4code pair pid test-"));
+        const baseDir = NodeFS.mkdtempSync(NodePath.join(NodeOS.tmpdir(), "t3 pair pid test-"));
         const statePath = NodePath.join(baseDir, "userdata", "server-runtime.json");
         const state = yield* makePersistedServerRuntimeState({
           config: { host: "127.0.0.1", devUrl: undefined },
@@ -457,7 +457,7 @@ describe("a4code pair", () => {
           runCli(["pair"]).pipe(
             Effect.provideService(HostProcess.WorkingDirectory, worktree),
             Effect.provide(
-              ConfigProvider.layer(ConfigProvider.fromEnv({ env: { A4CODE_HOME: sharedHome } })),
+              ConfigProvider.layer(ConfigProvider.fromEnv({ env: { T3CODE_HOME: sharedHome } })),
             ),
             Effect.flip,
           ),
@@ -500,7 +500,7 @@ describe("a4code pair", () => {
           if (Exit.isFailure(exit)) {
             assert.include(
               String(Cause.squash(exit.cause)),
-              `a4code@0.0.45 pair --base-dir ${baseDir}`,
+              `t3@0.0.45 pair --base-dir ${baseDir}`,
             );
           }
         }),
@@ -895,7 +895,7 @@ describe("auth scope options", () => {
       if (!CliError.isCliError(error) || error._tag !== "ShowHelp") {
         assert.fail(`Expected ShowHelp, got ${String(error)}`);
       }
-      assert.deepEqual(error.commandPath, ["a4code", ...command]);
+      assert.deepEqual(error.commandPath, ["t3", ...command]);
       const scopeError = error.errors[0];
       if (scopeError?._tag !== "InvalidValue") {
         assert.fail(`Expected InvalidValue, got ${String(scopeError?._tag)}`);

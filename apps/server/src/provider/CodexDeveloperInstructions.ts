@@ -1,32 +1,32 @@
-import type { AgentFeedbackMode } from "@a4code/contracts";
+import type { AgentFeedbackMode } from "@t3tools/contracts";
 import type { V2TurnStartParams__AdditionalContextEntry } from "effect-codex-app-server/schema";
-import { buildRuntimeInstructions } from "@a4code/provider-core/server/runtimeInstructions";
+import { buildRuntimeInstructions } from "@t3tools/provider-core/server/runtimeInstructions";
 
 import {
-  A4_CODE_BROWSER_TOOL_INSTRUCTIONS,
-  A4_CODE_DEVICE_TOOL_INSTRUCTIONS,
-  A4_CODE_ORCHESTRATION_SECTIONS,
-} from "@a4code/provider-core/server/orchestrationInstructions";
+  T3_CODE_BROWSER_TOOL_INSTRUCTIONS,
+  T3_CODE_DEVICE_TOOL_INSTRUCTIONS,
+  T3_CODE_ORCHESTRATION_SECTIONS,
+} from "@t3tools/provider-core/server/orchestrationInstructions";
 
 /** Codex silently truncates additionalContext values over 1,000 tokens, counted as UTF-8 bytes / 4. */
 export const CODEX_ADDITIONAL_CONTEXT_VALUE_MAX_BYTES = 4_000;
 
-export interface A4CodeToolAvailability {
+export interface T3CodeToolAvailability {
   readonly browser: boolean;
   readonly device: boolean;
 }
 
 const normalizeAvailability = (
-  availability: boolean | A4CodeToolAvailability,
-): A4CodeToolAvailability =>
+  availability: boolean | T3CodeToolAvailability,
+): T3CodeToolAvailability =>
   typeof availability === "boolean" ? { browser: availability, device: false } : availability;
 
 /** Instructions for unavailable tools would steer the model away from its remaining automation. */
-const toolInstructions = (availability: boolean | A4CodeToolAvailability): string => {
+const toolInstructions = (availability: boolean | T3CodeToolAvailability): string => {
   const tools = normalizeAvailability(availability);
   return [
-    tools.browser ? A4_CODE_BROWSER_TOOL_INSTRUCTIONS : "",
-    tools.device ? A4_CODE_DEVICE_TOOL_INSTRUCTIONS : "",
+    tools.browser ? T3_CODE_BROWSER_TOOL_INSTRUCTIONS : "",
+    tools.device ? T3_CODE_DEVICE_TOOL_INSTRUCTIONS : "",
   ]
     .filter(Boolean)
     .join("\n\n");
@@ -42,13 +42,13 @@ export interface CodexRuntimeInfo {
 /** Keep this outside collaboration mode; model-catalog mode text overrides client developer_instructions. */
 export function buildCodexAdditionalContext(
   runtime: CodexRuntimeInfo,
-  toolsAvailable: boolean | A4CodeToolAvailability = true,
+  toolsAvailable: boolean | T3CodeToolAvailability = true,
 ): Record<string, V2TurnStartParams__AdditionalContextEntry> {
   const tools = toolInstructions(toolsAvailable);
   // Split values to fit per-entry caps; number keys because Codex emits them in key order.
   return {
     ...Object.fromEntries(
-      A4_CODE_ORCHESTRATION_SECTIONS.map((section, index) => [
+      T3_CODE_ORCHESTRATION_SECTIONS.map((section, index) => [
         `t3_code_orchestration_${String(index + 1).padStart(2, "0")}`,
         { kind: "application" as const, value: section },
       ]),

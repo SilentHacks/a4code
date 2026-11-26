@@ -37,6 +37,6 @@ const spawnDetachedVerbatim: WindowsVerbatimSpawner = (command, args) =>
   );
 
 export const WindowsVerbatimSpawn = Context.Reference<WindowsVerbatimSpawner>(
-  "a4code/process/WindowsVerbatimSpawn",
+  "t3/process/WindowsVerbatimSpawn",
   { defaultValue: () => spawnDetachedVerbatim },
 );

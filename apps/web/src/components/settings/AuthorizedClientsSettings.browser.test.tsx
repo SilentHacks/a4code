@@ -2,7 +2,7 @@ import {
   EnvironmentId,
   managedCapabilityDenial,
   type ManagedPolicySummary,
-} from "@a4code/contracts";
+} from "@t3tools/contracts";
 import { describe, expect, it, vi } from "vite-plus/test";
 
 import "~/index.css";

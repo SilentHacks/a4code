@@ -5,7 +5,7 @@ import {
   ThreadId,
   type OrchestrationV2Subagent,
   type OrchestrationV2SubagentWorkflow,
-} from "@a4code/contracts";
+} from "@t3tools/contracts";
 import * as DateTime from "effect/DateTime";
 
 import {

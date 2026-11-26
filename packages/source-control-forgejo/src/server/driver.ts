@@ -1,7 +1,7 @@
 import {
   defineSourceControlDriver,
   withOwnServices,
-} from "@a4code/source-control-core/server/driver";
+} from "@t3tools/source-control-core/server/driver";
 import * as Effect from "effect/Effect";
 
 import { definition } from "../shared/definition.ts";

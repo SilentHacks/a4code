@@ -24,7 +24,7 @@ import {
   type UsageSummary,
   type WorkflowRunsSnapshot,
   WS_METHODS,
-} from "@a4code/contracts";
+} from "@t3tools/contracts";
 import * as Cause from "effect/Cause";
 import * as Duration from "effect/Duration";
 import * as Equal from "effect/Equal";
@@ -118,7 +118,7 @@ export const serverUpdateStateAtom = Atom.family((environmentId: EnvironmentId) 
   ),
 );
 
-class ServerUpdateResumeTimeoutError extends Schema.TaggedError<ServerUpdateResumeTimeoutError>()(
+export class ServerUpdateResumeTimeoutError extends Schema.TaggedError<ServerUpdateResumeTimeoutError>()(
   "ServerUpdateResumeTimeoutError",
   {
     environmentId: Schema.String,
@@ -132,7 +132,7 @@ class ServerUpdateResumeTimeoutError extends Schema.TaggedError<ServerUpdateResu
   get i18nMessage(): MarkedText {
     return [
       msg(
-        "Could not confirm that the server resumed on a4code@{version}. Reconnect to check the update outcome.",
+        "Could not confirm that the server resumed on t3@{version}. Reconnect to check the update outcome.",
         { version: this.targetVersion },
       ),
     ];
@@ -151,7 +151,7 @@ export class ServerUpdateProgressIncompleteError extends Schema.TaggedError<Serv
 
   get i18nMessage(): MarkedText {
     return [
-      msg("The a4code@{version} update ended before the server accepted the restart.", {
+      msg("The t3@{version} update ended before the server accepted the restart.", {
         version: this.targetVersion,
       }),
     ];
@@ -186,11 +186,11 @@ export class ServerUpdateTerminalError extends Schema.TaggedError<ServerUpdateTe
     const version = this.targetVersion;
     switch (this.status) {
       case "committed":
-        return [msg("The a4code@{version} update committed.", { version })];
+        return [msg("The t3@{version} update committed.", { version })];
       case "rolled-back":
-        return [msg("The a4code@{version} update rolled-back.", { version })];
+        return [msg("The t3@{version} update rolled-back.", { version })];
       case "failed":
-        return [msg("The a4code@{version} update failed.", { version })];
+        return [msg("The t3@{version} update failed.", { version })];
     }
   }
 }

@@ -1,4 +1,4 @@
-import { decodeFilePreviewText } from "@a4code/shared/filePreview";
+import { decodeFilePreviewText } from "@t3tools/shared/filePreview";
 import { afterEach, describe, expect, it, vi } from "vite-plus/test";
 
 const NodeTextDecoder = globalThis.TextDecoder;

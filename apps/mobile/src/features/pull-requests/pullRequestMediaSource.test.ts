@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vite-plus/test";
-import { EnvironmentId } from "@a4code/contracts";
+import { EnvironmentId } from "@t3tools/contracts";
 import { filePreviewGallery } from "../../lib/filePreviewGallery";
 import { pullRequestImageSource } from "./pullRequestMediaSource";
 

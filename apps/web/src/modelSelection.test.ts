@@ -6,14 +6,14 @@ import {
   ProviderDriverKind,
   ProviderInstanceId,
   type ServerProvider,
-} from "@a4code/contracts";
+} from "@t3tools/contracts";
 import {
   DEFAULT_CLIENT_SETTINGS,
   DEFAULT_UNIFIED_SETTINGS,
   type UnifiedSettings,
-} from "@a4code/contracts/settings";
+} from "@t3tools/contracts/settings";
 import { describe, expect, it } from "vite-plus/test";
-import { createModelSelection } from "@a4code/shared/model";
+import { createModelSelection } from "@t3tools/shared/model";
 import { deriveEffectiveComposerModelState } from "./composerDraftStore";
 import { getComposerProviderState } from "./components/chat/composerProviderState";
 import { resolveComposerProviderSelection } from "./components/ChatView.logic";

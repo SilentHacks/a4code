@@ -4,13 +4,13 @@ import {
   deregisterManagedRelayEnvironment,
   managedRelaySessionAtom,
   readManagedRelaySnapshotState,
-} from "@a4code/client-runtime/relay";
+} from "@t3tools/client-runtime/relay";
 import {
   createAtomCommandScheduler,
   createRuntimeCommand,
-} from "@a4code/client-runtime/state/runtime";
-import type { EnvironmentId } from "@a4code/contracts";
-import type { RelayClientEnvironmentRecord } from "@a4code/contracts/relay";
+} from "@t3tools/client-runtime/state/runtime";
+import type { EnvironmentId } from "@t3tools/contracts";
+import type { RelayClientEnvironmentRecord } from "@t3tools/contracts/relay";
 import { AsyncResult, Atom } from "effect/reactivity";
 
 import * as Runtime from "../../lib/runtime";

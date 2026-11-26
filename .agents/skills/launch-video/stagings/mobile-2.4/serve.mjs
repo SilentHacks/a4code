@@ -441,7 +441,7 @@ const env = await startEnvironment(HOME, {
   host: "127.0.0.1",
   ...(prior ? { port: prior.serverPort } : {}),
   env: {
-    A4CODE_LINEAR_API_URL: `http://127.0.0.1:${LINEAR_PORT}/graphql`,
+    T3CODE_LINEAR_API_URL: `http://127.0.0.1:${LINEAR_PORT}/graphql`,
     FAKE_CLAUDE_VARS: VARS,
   },
 });

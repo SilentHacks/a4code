@@ -24,9 +24,9 @@ import {
   DpopFailureReason,
   type DpopFailureReason as DpopFailureReasonType,
   mcpClientScopes,
-} from "@a4code/contracts";
-import { isLocalLoopbackHost } from "@a4code/shared/hostClassification";
-import { encodeOAuthScope } from "@a4code/shared/oauthScope";
+} from "@t3tools/contracts";
+import { isLocalLoopbackHost } from "@t3tools/shared/hostClassification";
+import { encodeOAuthScope } from "@t3tools/shared/oauthScope";
 import * as Context from "effect/Context";
 import * as Digest from "effect/crypto/Digest";
 import * as DateTime from "effect/DateTime";
@@ -679,7 +679,7 @@ export class EnvironmentAuth extends Context.Service<
       ServerAuthMcpApprovalCodeError | ServerAuthInternalError
     >;
   }
->()("a4code/auth/EnvironmentAuth") {}
+>()("t3/auth/EnvironmentAuth") {}
 
 type BootstrapExchangeResult = {
   readonly response: AuthBrowserSessionResult;

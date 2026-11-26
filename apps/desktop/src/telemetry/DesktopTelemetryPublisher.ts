@@ -7,7 +7,7 @@ import {
   type DesktopTelemetryRequestDesktopUpdate,
   type DesktopUpdateStatusReport,
   type HostPowerSnapshot,
-} from "@a4code/contracts";
+} from "@t3tools/contracts";
 import * as Cause from "effect/Cause";
 import * as Context from "effect/Context";
 import * as DateTime from "effect/DateTime";
@@ -75,7 +75,7 @@ export class DesktopTelemetryPublisher extends Context.Service<
     readonly updateCommits: Stream.Stream<DesktopTelemetryCommitDesktopUpdate>;
     readonly updateCancellations: Stream.Stream<DesktopTelemetryCancelDesktopUpdate>;
   }
->()("@a4code/desktop/telemetry/DesktopTelemetryPublisher") {}
+>()("@t3tools/desktop/telemetry/DesktopTelemetryPublisher") {}
 
 function booleanState(value: boolean): HostPowerSnapshot["onBattery"] {
   return value ? "true" : "false";

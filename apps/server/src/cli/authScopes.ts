@@ -1,4 +1,4 @@
-import { AuthGrantScope } from "@a4code/contracts";
+import { AuthGrantScope } from "@t3tools/contracts";
 import { Flag } from "effect/cli";
 
 export const authScopesFlag = (defaults: ReadonlyArray<AuthGrantScope>) =>

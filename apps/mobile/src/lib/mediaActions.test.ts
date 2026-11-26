@@ -3,7 +3,7 @@ import {
   EnvironmentId,
   ThreadId,
   type AuthSessionState,
-} from "@a4code/contracts";
+} from "@t3tools/contracts";
 import { AsyncResult } from "effect/reactivity";
 import { beforeEach, expect, it, vi } from "vite-plus/test";
 

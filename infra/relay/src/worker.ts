@@ -21,8 +21,7 @@ import * as HttpRouter from "effect/http/HttpRouter";
 import * as HttpApiBuilder from "effect/http-api/HttpApiBuilder";
 import * as HttpApiScalar from "effect/http-api/HttpApiScalar";
 
-import { RelayApi } from "@a4code/contracts/relay";
-import { normalizeSecureRelayUrl } from "@a4code/shared/relayUrl";
+import { RelayApi } from "@t3tools/contracts/relay";
 
 import {
   RELAY_HTTP_ROUTER_CONFIG,
@@ -146,7 +145,7 @@ export const layer = Api.make(
     const randomApnsDeliveryJobSigningSecret = yield* ApnsDeliveryJobSigningSecret;
     const observability = yield* RelayObservability;
 
-    const apnsEnabled = yield* Config.Boolean("APNS_ENABLED").pipe(Config.withDefault(false));
+    const apnsEnabled = yield* Config.Boolean("APNS_ENABLED").pipe(Config.withDefault(true));
     const apnsCredentials = apnsEnabled
       ? {
           environment: yield* Config.schema(RelayConfiguration.ApnsEnvironment, "APNS_ENVIRONMENT"),
@@ -177,12 +176,12 @@ export const layer = Api.make(
     );
     const t3ChatLinkSecret = Option.getOrUndefined(
       Option.filter(
-        yield* Config.option(Config.Redacted("A4CODE_T3CHAT_LINK_SECRET")),
+        yield* Config.option(Config.Redacted("T3CHAT_LINK_SECRET")),
         (value) => Redacted.value(value).trim().length > 0,
       ),
     );
-    const t3ChatBaseUrl = normalizeSecureRelayUrl(
-      yield* Config.String("A4CODE_T3CHAT_URL").pipe(Config.withDefault("")),
+    const t3ChatBaseUrl = yield* Config.String("T3CHAT_URL").pipe(
+      Config.withDefault("https://t3.chat"),
     );
 
     const cloudMintPrivateKey = yield* cloudMintKeyPair.privateKey;
@@ -255,7 +254,7 @@ export const layer = Api.make(
         managedEndpointCleanupMode,
         legacyManagedEndpointCleanupMode,
         ...(legacyTunnelGraceMinutes === undefined ? {} : { legacyTunnelGraceMinutes }),
-        ...(t3ChatLinkSecret && t3ChatBaseUrl
+        ...(t3ChatLinkSecret
           ? { t3Chat: { baseUrl: t3ChatBaseUrl, linkSecret: t3ChatLinkSecret } }
           : {}),
       });
@@ -595,7 +594,7 @@ export const layer = Api.make(
           Layer.unwrap(
             Effect.map(RelayObservability, (observability) =>
               Axiom.Telemetry({
-                serviceName: "a4code-relay",
+                serviceName: "t3code-relay",
                 token: observability.workerIngestToken,
                 traces: observability.traces,
               }),

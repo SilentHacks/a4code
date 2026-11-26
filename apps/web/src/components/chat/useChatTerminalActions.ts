@@ -1,16 +1,16 @@
 import { msg } from "gt-react";
-import { thrownErrorMessage } from "@a4code/client-runtime/errors";
+import { thrownErrorMessage } from "@t3tools/client-runtime/errors";
 import { m } from "~/i18n/messages";
 import type {
   EnvironmentProject,
   EnvironmentThreadShell,
-} from "@a4code/client-runtime/state/shell";
+} from "@t3tools/client-runtime/state/shell";
 import type { Dispatch } from "react";
 import type { ComposerHandleRef } from "../../composerHandleContext";
 import type { selectThreadTerminalUiState } from "../../terminalUiStateStore";
 import { useStableCallback } from "../../hooks/useStableCallback";
 import { useThreadTerminalActions } from "../terminal/useThreadTerminalActions";
-import { getTerminalLabel } from "@a4code/shared/terminalLabelsCopy";
+import { getTerminalLabel } from "@t3tools/shared/terminalLabelsCopy";
 import {
   AuthTerminalReadScope,
   AuthTerminalOperateScope,
@@ -18,13 +18,13 @@ import {
   type ProjectScript,
   type ScopedThreadRef,
   type ThreadId,
-} from "@a4code/contracts";
-import { projectScriptTerminalInput } from "@a4code/shared/projectScripts";
+} from "@t3tools/contracts";
+import { projectScriptTerminalInput } from "@t3tools/shared/projectScripts";
 import { type SetStateAction } from "react";
 import {
   isAtomCommandInterrupted,
   squashAtomCommandFailure,
-} from "@a4code/client-runtime/state/runtime";
+} from "@t3tools/client-runtime/state/runtime";
 import { MAX_TERMINALS_PER_GROUP } from "../../types";
 import {
   selectThreadRightPanelState,

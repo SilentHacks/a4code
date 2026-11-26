@@ -7,12 +7,12 @@ import {
   type ServerProvider,
   type ServerSettings,
   type ThreadTokenUsageSnapshot,
-} from "@a4code/contracts";
+} from "@t3tools/contracts";
 import {
   CLAUDE_RESUME_COMPACTION_NEVER_ANSWER,
   COMPACTION_SUGGESTION_MIN_TOKENS,
   isClaudeResumeCompactionQuestion,
-} from "@a4code/shared/claudeCompaction";
+} from "@t3tools/shared/claudeCompaction";
 import * as DateTime from "effect/DateTime";
 
 import { resolvePendingHandoff } from "../handoff.ts";

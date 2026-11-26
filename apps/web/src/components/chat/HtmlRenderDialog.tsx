@@ -1,9 +1,9 @@
-import type { ScopedThreadRef } from "@a4code/contracts";
+import type { ScopedThreadRef } from "@t3tools/contracts";
 import {
   HTML_RENDER_COLUMN_WIDTH,
   htmlRenderFrameHeight,
   type HtmlRenderReference,
-} from "@a4code/shared/htmlRender";
+} from "@t3tools/shared/htmlRender";
 import { useGT } from "gt-react";
 import { MinusIcon, PlusIcon, XIcon } from "lucide-react";
 import { useRef, useState } from "react";

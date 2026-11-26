@@ -36,15 +36,15 @@ import {
   type ReviewDiffPreviewSource,
   trimAsciiWhitespace,
   type VcsRef,
-} from "@a4code/contracts";
-import { splitsSurrogatePair } from "@a4code/shared/assistantCitations";
-import { dedupeRemoteBranchesWithLocalMatches } from "@a4code/shared/git";
-import * as HostProcess from "@a4code/shared/HostProcess";
-import { compactTraceAttributes } from "@a4code/shared/observability";
-import { decodeJsonResult } from "@a4code/shared/schemaJson";
-import { resolveSpawnCommand, runsGitWithoutConsole } from "@a4code/shared/shell";
-import { parseT3ProjectFile } from "@a4code/shared/t3ProjectFile";
-import { resolveProjectFileBackedSetting } from "@a4code/shared/projectSettings";
+} from "@t3tools/contracts";
+import { splitsSurrogatePair } from "@t3tools/shared/assistantCitations";
+import { dedupeRemoteBranchesWithLocalMatches } from "@t3tools/shared/git";
+import * as HostProcess from "@t3tools/shared/HostProcess";
+import { compactTraceAttributes } from "@t3tools/shared/observability";
+import { decodeJsonResult } from "@t3tools/shared/schemaJson";
+import { resolveSpawnCommand, runsGitWithoutConsole } from "@t3tools/shared/shell";
+import { parseT3ProjectFile } from "@t3tools/shared/t3ProjectFile";
+import { resolveProjectFileBackedSetting } from "@t3tools/shared/projectSettings";
 import { gitCommandDuration, gitCommandsTotal, withMetrics } from "../observability/Metrics.ts";
 import * as GitVcsDriver from "./GitVcsDriver.ts";
 import { removeEmptyDirectory, type RemoveEmptyDirectoryError } from "./removeEmptyDirectory.ts";
@@ -786,7 +786,7 @@ const createTrace2Monitor = Effect.fnUntraced(function* (
   const fs = yield* FileSystem.FileSystem;
   const path = yield* Path.Path;
   const traceFilePath = yield* fs.makeTempFileScoped({
-    prefix: `a4code-git-trace2-${process.pid}-`,
+    prefix: `t3code-git-trace2-${process.pid}-`,
     suffix: ".json",
   });
   const hookStartByChildKey = new Map<string, { hookName: string; startedAtMs: number }>();
@@ -1916,7 +1916,7 @@ export const makeGitVcsDriverCore = Effect.fn("makeGitVcsDriverCore")(function* 
     // named like Git's own quarantine so `git gc` prunes one a crash left. A dry run downloads
     // without moving refs, which must not point at objects the repository does not hold yet.
     const isolatedFetch = Effect.acquireUseRelease(
-      fileSystem.makeTempDirectory({ directory: objectsPath, prefix: "tmp_objdir-a4code-" }),
+      fileSystem.makeTempDirectory({ directory: objectsPath, prefix: "tmp_objdir-t3code-" }),
       Effect.fnUntraced(function* (privateObjects) {
         const objectDirectories = yield* runGitStdout(
           "GitVcsDriver.fetchRemoteForStatus.alternates",
@@ -4086,7 +4086,7 @@ export const makeGitVcsDriverCore = Effect.fn("makeGitVcsDriverCore")(function* 
           const physicalCwd = yield* fileSystem.realPath(cwd);
           const indexPath = path.resolve(physicalCwd, indexValue.trim());
           const directory = yield* fileSystem.makeTempDirectoryScoped({
-            prefix: "a4code-commit-index-",
+            prefix: "t3code-commit-index-",
           });
           const tempIndexPath = path.join(directory, "index");
           // Staging writes blobs; put them in the temp directory so a draft leaves nothing behind.
@@ -4955,7 +4955,7 @@ export const makeGitVcsDriverCore = Effect.fn("makeGitVcsDriverCore")(function* 
     const omitted = pathsToAdd.length < candidates.length;
     if (pathsToAdd.length === 0 || (omitted && !allowPartial)) return { env: undefined, omitted };
 
-    const prefix = `a4code-review-index-${process.pid}-`;
+    const prefix = `t3code-review-index-${process.pid}-`;
     // The pathspec excludes every other entry, so an index holding only the added paths diffs
     // the same as a copy of the real one. Git reads the missing file as an empty index.
     const tempIndexPath = isolated
@@ -7082,7 +7082,7 @@ export const makeGitVcsDriverCore = Effect.fn("makeGitVcsDriverCore")(function* 
         yield* executeGit(
           "GitVcsDriver.refreshCheckedOutBranch.keepPrevious",
           input.cwd,
-          ["update-ref", "refs/a4code/pre-refresh", headCommit],
+          ["update-ref", "refs/t3code/pre-refresh", headCommit],
           { fallbackErrorDetail: "git failed to record the previous checkout commit" },
         );
       }

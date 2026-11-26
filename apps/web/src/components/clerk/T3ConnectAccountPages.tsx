@@ -17,7 +17,7 @@ export const T3_CONNECT_ACCOUNT_PAGES = [
   },
   {
     label: "T3 Connect",
-    url: "a4-connect",
+    url: "t3-connect",
     icon: <ServerIcon className="size-4" />,
     content: <T3ConnectUserProfilePage />,
   },
@@ -43,7 +43,7 @@ export function useT3ConnectAccountPage(): {
   const m = useMessages();
   const [targets, setTargets] = useState<PortalTargets>({});
 
-  const open = (page: T3ConnectAccountPageUrl = "a4-connect") => {
+  const open = (page: T3ConnectAccountPageUrl = "t3-connect") => {
     const setTarget = (key: string, element: HTMLDivElement | undefined) =>
       setTargets((current) => ({ ...current, [key]: element }));
     clerk.openUserProfile({

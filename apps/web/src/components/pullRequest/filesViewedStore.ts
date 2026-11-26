@@ -2,12 +2,12 @@ import {
   type AtomCommandResult,
   isAtomCommandInterrupted,
   runAtomCommand,
-} from "@a4code/client-runtime/state/runtime";
+} from "@t3tools/client-runtime/state/runtime";
 import type {
   EnvironmentId,
   PullRequestFilesViewedResult,
   PullRequestRef,
-} from "@a4code/contracts";
+} from "@t3tools/contracts";
 
 import { msg } from "gt-react";
 

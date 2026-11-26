@@ -6,7 +6,7 @@ import {
   type PreviewAppearancePreference,
   type PreviewViewportSetting,
   type PreviewZoomFactor,
-} from "@a4code/contracts";
+} from "@t3tools/contracts";
 
 import {
   ensureClientSettingsHydrated,

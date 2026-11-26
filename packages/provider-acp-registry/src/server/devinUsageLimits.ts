@@ -1,10 +1,10 @@
 import type { AcpRegistrySettings } from "../settings.ts";
-import type { ServerProviderUsageLimits, ServerProviderUsageWindow } from "@a4code/contracts";
+import type { ServerProviderUsageLimits, ServerProviderUsageWindow } from "@t3tools/contracts";
 import {
   makeUnavailableUsageLimits,
   makeUsageLimits,
-} from "@a4code/provider-core/server/usageLimits";
-import * as HostProcess from "@a4code/shared/HostProcess";
+} from "@t3tools/provider-core/server/usageLimits";
+import * as HostProcess from "@t3tools/shared/HostProcess";
 import { sha256 } from "@noble/hashes/sha2";
 import * as DateTime from "effect/DateTime";
 import * as Effect from "effect/Effect";

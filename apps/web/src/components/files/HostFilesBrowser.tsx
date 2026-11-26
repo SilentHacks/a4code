@@ -9,15 +9,15 @@ import {
   isHiddenHostEntry,
   isHostDirectoryEntry,
   joinHostPath,
-} from "@a4code/client-runtime/state/hostFiles";
-import { resolveAssetUrl } from "@a4code/client-runtime/state/assets";
-import { runAtomCommand, squashAtomCommandFailure } from "@a4code/client-runtime/state/runtime";
+} from "@t3tools/client-runtime/state/hostFiles";
+import { resolveAssetUrl } from "@t3tools/client-runtime/state/assets";
+import { runAtomCommand, squashAtomCommandFailure } from "@t3tools/client-runtime/state/runtime";
 import type {
   EnvironmentId,
   HostFileEntry,
   HostFilesListResult,
   HostFilesUploadConflict,
-} from "@a4code/contracts";
+} from "@t3tools/contracts";
 import * as Schema from "effect/Schema";
 import {
   ArrowUp,
@@ -77,8 +77,8 @@ async function settleUpload(done: Promise<unknown>): Promise<string | null> {
     return message === "Upload cancelled" ? null : message;
   }
 }
-const SHOW_HIDDEN_STORAGE_KEY = "a4code:host-files:show-hidden";
-const LAST_PATH_STORAGE_KEY = "a4code:host-files:last-path";
+const SHOW_HIDDEN_STORAGE_KEY = "t3code:host-files:show-hidden";
+const LAST_PATH_STORAGE_KEY = "t3code:host-files:last-path";
 
 interface HostFilesBrowserProps {
   environmentId: EnvironmentId;
@@ -248,7 +248,7 @@ export function HostFilesBrowser(props: HostFilesBrowserProps) {
     },
   );
   const revealId = props.initialPathRevealId;
-  // oxlint-disable-next-line a4code/no-unreasoned-state-sync -- Fetch remote listings on mount, permission changes, and external reveal requests.
+  // oxlint-disable-next-line t3code/no-unreasoned-state-sync -- Fetch remote listings on mount, permission changes, and external reveal requests.
   useEffect(() => {
     if (!canManage) return;
     // oxlint-disable-next-line react/set-state-in-effect -- loading a listing is an async server fetch that must start after mount.

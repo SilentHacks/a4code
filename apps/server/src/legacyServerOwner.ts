@@ -1,5 +1,5 @@
 // Effect-free so the service launcher shares the pre-lock owner identity check with server startup.
-import { windowsPowerShellPath } from "@a4code/shared/windowsSystem";
+import { windowsPowerShellPath } from "@t3tools/shared/windowsSystem";
 
 export const legacyOwnerStartTimeCommand = (
   pid: number,

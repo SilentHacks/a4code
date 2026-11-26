@@ -1,7 +1,7 @@
 import * as NodeServices from "@effect/platform-node/NodeServices";
 import { describe, expect, it } from "@effect/vitest";
-import { OmpSettings, ProviderDriverKind, ProviderInstanceId } from "@a4code/contracts";
-import * as HostProcess from "@a4code/shared/HostProcess";
+import { OmpSettings, ProviderDriverKind, ProviderInstanceId } from "@t3tools/contracts";
+import * as HostProcess from "@t3tools/shared/HostProcess";
 import * as Effect from "effect/Effect";
 import * as FileSystem from "effect/FileSystem";
 import * as Layer from "effect/Layer";

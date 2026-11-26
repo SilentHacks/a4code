@@ -7,7 +7,7 @@ import {
   ProviderInstanceId,
   ThreadId,
   type PreviewAutomationRequest,
-} from "@a4code/contracts";
+} from "@t3tools/contracts";
 import * as Deferred from "effect/Deferred";
 import * as Effect from "effect/Effect";
 import * as FileSystem from "effect/FileSystem";

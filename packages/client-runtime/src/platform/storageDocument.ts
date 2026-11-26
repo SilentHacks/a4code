@@ -1,4 +1,4 @@
-import { EnvironmentId } from "@a4code/contracts";
+import { EnvironmentId } from "@t3tools/contracts";
 import * as Effect from "effect/Effect";
 import * as Schema from "effect/Schema";
 
@@ -11,10 +11,11 @@ import { type ConnectionTarget, PersistedConnectionTarget } from "../connection/
 import * as TokenStore from "../authorization/tokenStore.ts";
 import { StoredPullRequestRoutingPermission } from "../connection/pullRequestRoutingPermissions.ts";
 
-const StoredConnectionCredential = Schema.Struct({
+export const StoredConnectionCredential = Schema.Struct({
   connectionId: Schema.String,
   credential: ConnectionCredential,
 });
+export type StoredConnectionCredential = typeof StoredConnectionCredential.Type;
 
 export const ConnectionCatalogDocument = Schema.Struct({
   schemaVersion: Schema.Literal(1),

@@ -1,4 +1,4 @@
-import type { ProviderUserInputAnswers, UserInputQuestion } from "@a4code/contracts";
+import type { ProviderUserInputAnswers, UserInputQuestion } from "@t3tools/contracts";
 import * as Cause from "effect/Cause";
 import * as Deferred from "effect/Deferred";
 import * as Effect from "effect/Effect";
@@ -8,8 +8,8 @@ import * as Schema from "effect/Schema";
 import * as EffectAcpErrors from "effect-acp/errors";
 import type * as EffectAcpSchema from "effect-acp/compat";
 
-import type * as AcpSessionRuntime from "@a4code/provider-acp/server/AcpSessionRuntime";
-import type { AcpToolCallState } from "@a4code/provider-acp/server/runtimeModel";
+import type * as AcpSessionRuntime from "@t3tools/provider-acp/server/AcpSessionRuntime";
+import type { AcpToolCallState } from "@t3tools/provider-acp/server/runtimeModel";
 
 export const xAiRateLimitedErrorCode = -32003;
 const completedXAiPromptIdLimit = 128;

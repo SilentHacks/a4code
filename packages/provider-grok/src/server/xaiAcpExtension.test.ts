@@ -27,14 +27,14 @@ import {
   xAiSubagentFinishedNotice,
   XAiAskUserQuestionRequest,
 } from "./xaiAcpExtension.ts";
-import * as AcpSessionRuntime from "@a4code/provider-acp/server/AcpSessionRuntime";
+import * as AcpSessionRuntime from "@t3tools/provider-acp/server/AcpSessionRuntime";
 import {
   type AcpToolCallState,
   extractMcpToolCallIdentity,
   mergeToolCallState,
   parseSessionUpdateEvent,
-} from "@a4code/provider-acp/server/runtimeModel";
-import { compactDynamicToolOutput, htmlRenderFromToolItem } from "@a4code/shared/toolOutput";
+} from "@t3tools/provider-acp/server/runtimeModel";
+import { compactDynamicToolOutput, htmlRenderFromToolItem } from "@t3tools/shared/toolOutput";
 
 const decodeXAiAskUserQuestionRequest = Schema.decodeUnknownSync(XAiAskUserQuestionRequest);
 

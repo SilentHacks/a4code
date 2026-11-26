@@ -1,8 +1,8 @@
-import { EnvironmentId, MessageId, ThreadId } from "@a4code/contracts";
+import { EnvironmentId, MessageId, ThreadId } from "@t3tools/contracts";
 import {
   serializeAssistantCitation,
   withAssistantCitationComment,
-} from "@a4code/shared/assistantCitations";
+} from "@t3tools/shared/assistantCitations";
 import { createRef, useState } from "react";
 import { expect, it, vi } from "vite-plus/test";
 

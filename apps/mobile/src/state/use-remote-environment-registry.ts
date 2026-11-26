@@ -1,13 +1,13 @@
 import * as Dialog from "../components/ui/Dialog";
-import { errorDisplayMessage } from "@a4code/client-runtime/errors";
+import { errorDisplayMessage } from "@t3tools/client-runtime/errors";
 import { useAtomValue } from "@effect/atom-react";
 import { useNavigation } from "@react-navigation/native";
-import { Discovery } from "@a4code/client-runtime/relay";
-import type { EnvironmentId } from "@a4code/contracts";
+import { Discovery } from "@t3tools/client-runtime/relay";
+import type { EnvironmentId } from "@t3tools/contracts";
 import * as Cause from "effect/Cause";
 import { msg } from "gt-react-native";
 import { AsyncResult, Atom } from "effect/reactivity";
-import { runAtomCommand } from "@a4code/client-runtime/state/runtime";
+import { runAtomCommand } from "@t3tools/client-runtime/state/runtime";
 
 import { hasCloudPublicConfig } from "../features/cloud/publicConfig";
 import { m } from "../i18n/messages";

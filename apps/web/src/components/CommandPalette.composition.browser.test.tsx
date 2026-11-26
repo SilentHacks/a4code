@@ -1,8 +1,8 @@
 import { describe, expect, it, vi } from "vite-plus/test";
 import { page, userEvent } from "vite-plus/test/browser";
-import { DEFAULT_RESOLVED_KEYBINDINGS } from "@a4code/shared/keybindings";
-import { DEFAULT_CLIENT_SETTINGS } from "@a4code/contracts/settings";
-import { AuthOrchestrationOperateScope, AuthSourceControlWriteScope } from "@a4code/contracts";
+import { DEFAULT_RESOLVED_KEYBINDINGS } from "@t3tools/shared/keybindings";
+import { DEFAULT_CLIENT_SETTINGS } from "@t3tools/contracts/settings";
+import { AuthOrchestrationOperateScope, AuthSourceControlWriteScope } from "@t3tools/contracts";
 import { act, render } from "../../test/render";
 import { CommandPalette } from "./CommandPalette";
 import { openCommandPalette } from "../commandPaletteBus";
@@ -225,11 +225,7 @@ it("keeps the caret in place when an edit briefly makes the folder path not a pa
 });
 
 it.each([
-  {
-    flow: "Git URL",
-    value: "https://github.com/SilentHacks/a4code.git",
-    submit: "Continue (Enter)",
-  },
+  { flow: "Git URL", value: "https://github.com/pingdotgg/t3code.git", submit: "Continue (Enter)" },
   { flow: "New project", value: "demo-tab-order", submit: /^Create \(/ },
 ])("moves focus from the $flow input to its enabled submit button on Tab", async (step) => {
   await using _screen = await render(<CommandPalette>{null}</CommandPalette>);

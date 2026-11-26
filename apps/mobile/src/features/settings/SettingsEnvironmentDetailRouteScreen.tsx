@@ -1,5 +1,5 @@
-import { errorDisplayMessage } from "@a4code/client-runtime/errors";
-import { serverUpdateFailureText } from "@a4code/client-runtime/state/server";
+import { errorDisplayMessage } from "@t3tools/client-runtime/errors";
+import { serverUpdateFailureText } from "@t3tools/client-runtime/state/server";
 import { T, useGT, useMessages, Var } from "gt-react-native";
 import * as Dialog from "../../components/ui/Dialog";
 import { useAtom, useAtomValue } from "@effect/atom-react";
@@ -10,10 +10,10 @@ import {
   AuthTerminalOperateScope,
   type EnvironmentId,
   type ServerProvider,
-} from "@a4code/contracts";
-import { settlePromise, squashAtomCommandFailure } from "@a4code/client-runtime/state/runtime";
-import { managedUpdatesDenial } from "@a4code/client-runtime/contract-labels";
-import { sessionPermissionsUnavailableMessage } from "@a4code/shared/authScopeOptions";
+} from "@t3tools/contracts";
+import { settlePromise, squashAtomCommandFailure } from "@t3tools/client-runtime/state/runtime";
+import { managedUpdatesDenial } from "@t3tools/client-runtime/contract-labels";
+import { sessionPermissionsUnavailableMessage } from "@t3tools/shared/authScopeOptions";
 import * as Cause from "effect/Cause";
 import * as Exit from "effect/Exit";
 import { AsyncResult } from "effect/reactivity";

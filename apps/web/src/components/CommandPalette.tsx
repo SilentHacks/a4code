@@ -1,15 +1,15 @@
-import { thrownErrorMessage } from "@a4code/client-runtime/errors";
+import { thrownErrorMessage } from "@t3tools/client-runtime/errors";
 import { msg, T, useGT, useMessages, Var } from "gt-react";
 import { m, type MessageResolver } from "../i18n/messages";
 import { ThreadContextDragGhost } from "./chat/ThreadContextDragGhost";
-import { threadPullRequestLinkMode } from "@a4code/client-runtime/thread-pull-request-compatibility";
-import { visibleThreadPullRequests } from "@a4code/shared/threadPullRequests";
+import { threadPullRequestLinkMode } from "@t3tools/client-runtime/thread-pull-request-compatibility";
+import { visibleThreadPullRequests } from "@t3tools/shared/threadPullRequests";
 
 import {
   scopedThreadKey,
   scopeProjectRef,
   scopeThreadRef,
-} from "@a4code/client-runtime/environment";
+} from "@t3tools/client-runtime/environment";
 import {
   canCreateProjectInEnvironment,
   getCloneDestinationBrowsePath,
@@ -31,22 +31,22 @@ import {
   sortAddProjectProviderSources,
   type AddProjectRemoteSource,
   type AddProjectRemoteSourceReadiness,
-} from "@a4code/client-runtime/operations/projects";
-import { sourceControlClients } from "@a4code/client-runtime/source-control-clients";
-import { connectionStatusText } from "@a4code/client-runtime/connection";
-import { resolveThreadReferenceCopyTarget } from "@a4code/client-runtime/thread-reference";
+} from "@t3tools/client-runtime/operations/projects";
+import { sourceControlClients } from "@t3tools/client-runtime/source-control-clients";
+import { connectionStatusText } from "@t3tools/client-runtime/connection";
+import { resolveThreadReferenceCopyTarget } from "@t3tools/client-runtime/thread-reference";
 import {
   canPreloadBrowsePath,
   createBrowseNavigationCoordinator,
   filterFilesystemBrowseEntries,
   getFilesystemBrowsePath,
   getFilesystemBrowseTabCompletion,
-} from "@a4code/client-runtime/state/filesystem";
+} from "@t3tools/client-runtime/state/filesystem";
 import {
   isAtomCommandInterrupted,
   settlePromise,
   squashAtomCommandFailure,
-} from "@a4code/client-runtime/state/runtime";
+} from "@t3tools/client-runtime/state/runtime";
 import {
   AuthOrchestrationOperateScope,
   AuthSourceControlWriteScope,
@@ -58,8 +58,8 @@ import {
   PRIMARY_LOCAL_ENVIRONMENT_ID,
   resolveEnvironmentMachineKind,
   type ScopedProjectRef,
-} from "@a4code/contracts";
-import type { EnvironmentProject } from "@a4code/client-runtime/state/shell";
+} from "@t3tools/contracts";
+import type { EnvironmentProject } from "@t3tools/client-runtime/state/shell";
 import { useLocation, useNavigate } from "@tanstack/react-router";
 import {
   ArrowLeftIcon,
@@ -158,7 +158,7 @@ import {
   useVisibleThreadShells,
   waitForProject,
 } from "../state/entities";
-import { isShownUnderParent, visibleLinkedThreads } from "@a4code/client-runtime/state/threads";
+import { isShownUnderParent, visibleLinkedThreads } from "@t3tools/client-runtime/state/threads";
 import {
   resolveThreadActionProjectRef,
   startNewThreadFromContext,
@@ -175,8 +175,8 @@ import {
   isScratchProject,
   isUnsupportedWindowsProjectPath,
   resolveProjectPathForDispatch,
-} from "@a4code/client-runtime/state/projects";
-import { resolvePastedPath } from "@a4code/shared/path";
+} from "@t3tools/client-runtime/state/projects";
+import { resolvePastedPath } from "@t3tools/shared/path";
 import {
   dispatchCommandPalette,
   getCommandPaletteReturnFocus,
@@ -188,8 +188,8 @@ import {
   selectActiveRightPanel,
   useRightPanelStore,
 } from "../rightPanelStore";
-import { getLatestThreadForProject, sortThreads } from "@a4code/client-runtime/state/thread-sort";
-import { effectiveSnoozed } from "@a4code/client-runtime/state/thread-settled";
+import { getLatestThreadForProject, sortThreads } from "@t3tools/client-runtime/state/thread-sort";
+import { effectiveSnoozed } from "@t3tools/client-runtime/state/thread-settled";
 import {
   cn,
   getLocalFileManagerName,
@@ -294,14 +294,14 @@ import type { ChatComposerHandle } from "./chat/ChatComposer";
 import {
   isPickableProjectMember,
   pickableProjectGroups,
-} from "@a4code/client-runtime/state/project-grouping";
+} from "@t3tools/client-runtime/state/project-grouping";
 import { buildSidebarProjectPickerEntries } from "../sidebarProjectGrouping";
 import { PullRequestGlyph } from "~/components/pullRequest/pullRequestIcons";
 import { readPullRequestListPreferences } from "~/components/pullRequest/pullRequestListPreferences";
 import { readIssueListPreferences } from "~/components/issue/issueListPreferences";
 import { IssueGlyph } from "~/components/issue/issuePresentation";
 import { useThreadRouteTarget } from "../hooks/useThreadRouteTarget";
-import { threadRecentUse } from "@a4code/shared/paletteSearch";
+import { threadRecentUse } from "@t3tools/shared/paletteSearch";
 import { SharedTooltipTrigger } from "./ui/shared-tooltip";
 
 const EMPTY_BROWSE_ENTRIES: FilesystemBrowseResult["entries"] = [];
@@ -865,7 +865,7 @@ function OpenCommandPaletteDialog(props: {
     });
   };
 
-  // oxlint-disable-next-line a4code/no-unreasoned-state-sync -- invalidates the browse navigation coordinator and in-flight clone lookups when the palette session unmounts
+  // oxlint-disable-next-line t3code/no-unreasoned-state-sync -- invalidates the browse navigation coordinator and in-flight clone lookups when the palette session unmounts
   useEffect(
     () => () => {
       browseNavigation.invalidate();

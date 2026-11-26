@@ -7,7 +7,7 @@ import {
   type OrchestrationV2ThreadProjection,
   type OrchestrationV2ThreadDetailSnapshot,
   type OrchestrationV2ThreadStreamItem,
-} from "@a4code/contracts";
+} from "@t3tools/contracts";
 import { afterEach, describe, expect, it, vi } from "@effect/vitest";
 import * as Deferred from "effect/Deferred";
 import * as Effect from "effect/Effect";

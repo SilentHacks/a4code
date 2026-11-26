@@ -74,7 +74,7 @@ export function RenderedFileFind(props: {
     // Hidden panel tabs stay mounted; only the visible surface answers.
     if (action === "find" && rootRef.current?.getClientRects().length) openFind();
   });
-  // oxlint-disable-next-line a4code/no-unreasoned-state-sync -- subscribes to the panel find command, which fires while focus is anywhere in the right panel
+  // oxlint-disable-next-line t3code/no-unreasoned-state-sync -- subscribes to the panel find command, which fires while focus is anywhere in the right panel
   useEffect(() => subscribePreviewAction(onPanelAction), []);
 
   const query = find.open ? find.query : "";

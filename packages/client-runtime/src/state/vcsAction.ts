@@ -12,7 +12,7 @@ import {
   type ThreadId,
   type ProjectId,
   WS_METHODS,
-} from "@a4code/contracts";
+} from "@t3tools/contracts";
 import * as Cause from "effect/Cause";
 import * as DateTime from "effect/DateTime";
 import * as Effect from "effect/Effect";

@@ -1,5 +1,5 @@
 {
-  "name": "@a4code/mobile-highlights-native",
+  "name": "@t3tools/mobile-highlights-native",
   "version": "0.0.0",
   "private": true,
   "types": "./src/T3Highlights.nitro.ts",

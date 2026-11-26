@@ -3,7 +3,7 @@ import type {
   RelayLinkProofRequest,
   RelayManagedEndpointOrigin,
   RelayManagedEndpointRuntimeConfig,
-} from "@a4code/contracts/relay";
+} from "@t3tools/contracts/relay";
 
 const CLOUD_PROOF_MAX_LIFETIME_SECONDS = 5 * 60;
 const CLOUD_PROOF_CLOCK_SKEW_SECONDS = 60;

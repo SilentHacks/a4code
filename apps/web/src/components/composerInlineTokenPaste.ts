@@ -1,21 +1,20 @@
-import { configuredHostedAppUrl } from "../hostedPairing";
-import { ComposerContextId } from "@a4code/contracts";
+import { ComposerContextId } from "@t3tools/contracts";
 import type {
   ComposerContextClipboardFragment,
   ComposerContextRecord,
   ScopedThreadRef,
-} from "@a4code/contracts";
+} from "@t3tools/contracts";
 import {
   COMPOSER_CONTEXT_CLIPBOARD_MIME,
   decodeComposerContextFragment,
   decodeComposerContextClipboardHtml,
-} from "@a4code/shared/composerContextClipboard";
+} from "@t3tools/shared/composerContextClipboard";
 import {
   collectComposerContextReferences,
   formatComposerContextReference,
   replaceComposerContextReferences,
   threadLinkContextReferences,
-} from "@a4code/shared/composerContextReferences";
+} from "@t3tools/shared/composerContextReferences";
 
 import { readThreadShell } from "~/state/entities";
 
@@ -38,8 +37,6 @@ export function readPastedComposerContext(
     pastedText,
     decodedFragment?.records ?? [],
     threadTitle,
-    undefined,
-    configuredHostedAppUrl(),
   );
   const source =
     decodedFragment?.source ??
@@ -93,11 +90,7 @@ export function importPastedComposerText(
       : occurrence.source;
   });
   // A thread the import refused, on a machine this agent cannot read, stays the link it was.
-  return threadLinkContextReferences(
-    text,
-    fragment?.records ?? [],
-    threadTitle,
-    (record) => nextId(record.contextId),
-    configuredHostedAppUrl(),
+  return threadLinkContextReferences(text, fragment?.records ?? [], threadTitle, (record) =>
+    nextId(record.contextId),
   ).text;
 }

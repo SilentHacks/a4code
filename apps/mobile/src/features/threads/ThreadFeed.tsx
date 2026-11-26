@@ -1,17 +1,16 @@
-import { hostedAppOrigin } from "../../lib/mobileBranding";
 import { CollapsibleUserMessageBody } from "./CollapsibleUserMessageBody";
 import { msg, T, useGT, useLocale, useMessages } from "gt-react-native";
 import { m } from "../../i18n/messages";
-import { errorDisplayMessage } from "@a4code/client-runtime/errors";
-import { toServerClock } from "@a4code/client-runtime/clock";
-import { formatDuration } from "@a4code/shared/orchestrationTimingCopy";
+import { errorDisplayMessage } from "@t3tools/client-runtime/errors";
+import { toServerClock } from "@t3tools/client-runtime/clock";
+import { formatDuration } from "@t3tools/shared/orchestrationTimingCopy";
 import { Sheet } from "../../components/ui/Sheet";
 import { ListActionRow } from "../../components/ui/ListActionRow";
 import { ListSection } from "../../components/ui/ListSection";
 import { collectMobileAssistantTextSelectors } from "../../lib/assistantCitationSelection";
 import { Button } from "../../components/ui/Button";
 import * as Dialog from "../../components/ui/Dialog";
-import { ASSISTANT_CITATION_MAX_TEXT_LENGTH, type AssistantCitation } from "@a4code/contracts";
+import { ASSISTANT_CITATION_MAX_TEXT_LENGTH, type AssistantCitation } from "@t3tools/contracts";
 import { useOpenPullRequest } from "../../native/useOpenPullRequest";
 import { useWorkspaceSettledContentWidth } from "../layout/workspace-content-width";
 import { useVisibleSecondClock } from "./use-visible-second-clock";
@@ -30,7 +29,7 @@ import {
   enrichedSkillInstructionsPath,
   enrichedSkillReference,
 } from "../../lib/enrichedLinkPresentation";
-import { formatProviderSkillDisplayName } from "@a4code/shared/inlineSkills";
+import { formatProviderSkillDisplayName } from "@t3tools/shared/inlineSkills";
 import {
   ThreadContextDivider,
   ThreadStatusLine,
@@ -58,15 +57,15 @@ import {
 import * as Haptics from "expo-haptics";
 import { KeyboardAwareLegendList } from "@legendapp/list/keyboard";
 import { useViewabilityAmount, type LegendListRef } from "@legendapp/list/react-native";
-import { scopeThreadRef } from "@a4code/client-runtime/environment";
-import type { HandoffEndpoints } from "@a4code/client-runtime/handoff";
+import { scopeThreadRef } from "@t3tools/client-runtime/environment";
+import type { HandoffEndpoints } from "@t3tools/client-runtime/handoff";
 import {
   IDLE_COMPACTING_LABELS,
   resolveUserMessageFileCards,
   resolveUserMessagePresentation,
-} from "@a4code/client-runtime/user-message";
-import { canForkProjectedAssistantItem } from "@a4code/client-runtime/state/thread-workflows";
-import type { WorkflowOpening } from "@a4code/client-runtime/state/subagentRuntime";
+} from "@t3tools/client-runtime/user-message";
+import { canForkProjectedAssistantItem } from "@t3tools/client-runtime/state/thread-workflows";
+import type { WorkflowOpening } from "@t3tools/client-runtime/state/subagentRuntime";
 import {
   AuthFilesystemReadScope,
   idleCompactionOf,
@@ -82,49 +81,49 @@ import {
   type RunId,
   type ScheduledTaskId,
   type ScopedThreadRef,
-} from "@a4code/contracts";
-import type { ToolCallVisibility } from "@a4code/contracts/settings";
-import { encodeComposerContextFragment } from "@a4code/shared/composerContextClipboard";
+} from "@t3tools/contracts";
+import type { ToolCallVisibility } from "@t3tools/contracts/settings";
+import { encodeComposerContextFragment } from "@t3tools/shared/composerContextClipboard";
 import {
   hasThreadLinks,
   hostedThreadLink,
   parseThreadLinkHref,
   threadLinkRefs,
-} from "@a4code/shared/threadLinks";
-import { PROMPT_LINK_MAX_PROMPT_LENGTH } from "@a4code/shared/promptLinks";
+} from "@t3tools/shared/threadLinks";
+import { PROMPT_LINK_MAX_PROMPT_LENGTH } from "@t3tools/shared/promptLinks";
 import {
   parseComposerContextHref,
   collectComposerContextReferences,
   replaceComposerContextReferences,
   formatComposerContextReference,
-} from "@a4code/shared/composerContextReferences";
+} from "@t3tools/shared/composerContextReferences";
 import { ComposerContextSheet } from "../../components/ComposerContextSheet";
 import { writeComposerContextClipboard } from "../../lib/composerContextClipboard";
-import type { CodexArtifactTemplate } from "@a4code/shared/codexArtifactTemplates";
-import { codexArtifactTemplatePresentationLabel } from "@a4code/shared/codexArtifactTemplatesCopy";
-import { resolveAssetUrl } from "@a4code/client-runtime/state/assets";
-import { formatAttachmentSize } from "@a4code/client-runtime/state/attachments";
+import type { CodexArtifactTemplate } from "@t3tools/shared/codexArtifactTemplates";
+import { codexArtifactTemplatePresentationLabel } from "@t3tools/shared/codexArtifactTemplatesCopy";
+import { resolveAssetUrl } from "@t3tools/client-runtime/state/assets";
+import { formatAttachmentSize } from "@t3tools/client-runtime/state/attachments";
 import {
   executeAtomQuery,
   isAtomCommandInterrupted,
   settlePromise,
   squashAtomCommandFailure,
-} from "@a4code/client-runtime/state/runtime";
-import { classifyMarkdownImageSource } from "@a4code/client-runtime/markdown-images";
+} from "@t3tools/client-runtime/state/runtime";
+import { classifyMarkdownImageSource } from "@t3tools/client-runtime/markdown-images";
 import {
   contextCompactionTokenCounts,
   resolveViewedImageAsset,
   viewedImageMarkdownSource,
-} from "@a4code/client-runtime/work-log/presentation";
+} from "@t3tools/client-runtime/work-log/presentation";
 import {
   renderCodexInlineDirectivesAsMarkdown,
   splitCodexArtifactTemplateMarkdown,
-} from "@a4code/shared/codexMarkdownDirectives";
-import { CHAT_LIST_ANCHOR_OFFSET, resolveChatListAnchoredEndSpace } from "@a4code/shared/chatList";
-import { imageMimeType } from "@a4code/shared/image";
-import { videoMimeType } from "@a4code/shared/video";
+} from "@t3tools/shared/codexMarkdownDirectives";
+import { CHAT_LIST_ANCHOR_OFFSET, resolveChatListAnchoredEndSpace } from "@t3tools/shared/chatList";
+import { imageMimeType } from "@t3tools/shared/image";
+import { videoMimeType } from "@t3tools/shared/video";
 import { SymbolView, type AppSymbolName } from "../../components/ui/AppSymbol";
-import { textDirection } from "@a4code/shared/textDirection";
+import { textDirection } from "@t3tools/shared/textDirection";
 import { useFocusEffect, useIsFocused, useNavigation } from "@react-navigation/native";
 import { useNativeWorkspaceColumnsSupported } from "../../native/NativeWorkspaceColumns";
 import { useDeviceType } from "../../native/native-layout-metrics";
@@ -276,7 +275,7 @@ import {
 } from "./pending-thread-feed";
 import type { QueuedThreadMessage } from "../../state/thread-outbox-model";
 import { resolveThreadFeedFixedItemSize } from "./thread-feed-item-size";
-import { htmlRenderFrameHeight } from "@a4code/shared/htmlRender";
+import { htmlRenderFrameHeight } from "@t3tools/shared/htmlRender";
 import { htmlRenderRowHeight, ThreadHtmlRender } from "./HtmlRenderWebView";
 import { ThreadMcpApp } from "./McpAppWebView";
 import { assetEnvironment, useAssetUrl, useRefreshAssetUrl } from "../../state/assets";
@@ -291,7 +290,7 @@ import {
   pickWorkspaceLinkMatch,
   WORKSPACE_BASENAME_LOOKUP_LIMIT,
   workspaceLinkLookupQuery,
-} from "@a4code/client-runtime/workspace-basename-lookup";
+} from "@t3tools/client-runtime/workspace-basename-lookup";
 import {
   resolveThreadLink,
   useEnvironmentPreviewTunnelOff,
@@ -348,8 +347,8 @@ import { useMessageTimeFormatter } from "./useMessageTimeFormatter";
 import { perfProbe, type PerfProbe } from "../development/perf-probe-hooks";
 
 const linkedThreadEnvironmentIds = (markdown: string, environmentId: EnvironmentId) =>
-  hasThreadLinks(markdown, hostedAppOrigin)
-    ? threadLinkRefs(markdown, environmentId, hostedAppOrigin).map((ref) => ref.environmentId)
+  hasThreadLinks(markdown)
+    ? threadLinkRefs(markdown, environmentId).map((ref) => ref.environmentId)
     : [];
 
 const WIDE_MARKDOWN_BLOCK_OPTIONS = {
@@ -1325,7 +1324,7 @@ const AssistantMarkdownContent = memo(function AssistantMarkdownContent(props: {
     props.markdown,
     props.environmentId,
     useLinkedEnvironments(
-      hasThreadLinks(props.markdown, hostedAppOrigin) ? props.environmentId : null,
+      hasThreadLinks(props.markdown) ? props.environmentId : null,
       linkedThreadEnvironmentIds(props.markdown, props.environmentId),
     ),
   );
@@ -1907,7 +1906,7 @@ function RunFoldButton({
     );
   };
   const loadOnExpand = useEffectEvent(load);
-  // oxlint-disable-next-line a4code/no-unreasoned-state-sync -- Restored expanded folds load their deferred server history on mount.
+  // oxlint-disable-next-line t3code/no-unreasoned-state-sync -- Restored expanded folds load their deferred server history on mount.
   useEffect(() => {
     if (entry.expanded && anchorsKey && environmentId && threadId) loadOnExpand();
   }, [entry.expanded, anchorsKey, environmentId, threadId]);
@@ -2399,7 +2398,7 @@ function renderFeedEntry(
           className={cn("items-end", props.userMessageGrouping.groupedWithNext ? "mb-1" : "mb-2")}
           {...(enterAnimated ? { entering: FadeInDown.duration(220) } : {})}
         >
-          {presentation.attribution === "a4code" ? (
+          {presentation.attribution === "t3code" ? (
             <Text className="mb-1 pr-1 font-t3-medium text-2xs text-foreground-muted opacity-60">
               {m(msg("Sent by A4 Code"))}
             </Text>
@@ -2774,7 +2773,7 @@ function UserMessageContent(props: UserMessageContentProps) {
     props.text,
     props.environmentId,
     useLinkedEnvironments(
-      hasThreadLinks(props.text, hostedAppOrigin) ? props.environmentId : null,
+      hasThreadLinks(props.text) ? props.environmentId : null,
       linkedThreadEnvironmentIds(props.text, props.environmentId),
     ),
   );
@@ -3101,7 +3100,7 @@ let lastSplitViewport: { windowWidth: number; width: number; height: number } | 
 /** Tells mobile:metrics' probe the commit that first showed this thread's rows. */
 function PerfContentMark(props: { readonly probe: PerfProbe; readonly thread: string }) {
   const { probe, thread } = props;
-  // oxlint-disable-next-line a4code/no-unreasoned-state-sync -- reports the visible commit to the dev-only perf probe
+  // oxlint-disable-next-line t3code/no-unreasoned-state-sync -- reports the visible commit to the dev-only perf probe
   useLayoutEffect(() => probe.contentShown(thread), [probe, thread]);
   return null;
 }
@@ -3180,7 +3179,7 @@ export const ThreadFeed = memo(function ThreadFeed(props: ThreadFeedProps) {
     props.threadId,
     props.contentPresentation.kind,
   ]);
-  // oxlint-disable-next-line react/exhaustive-effect-dependencies, a4code/no-unreasoned-state-sync -- A scope change (thread or presentation) aborts the pending link lookup opened from the old scope.
+  // oxlint-disable-next-line react/exhaustive-effect-dependencies, t3code/no-unreasoned-state-sync -- A scope change (thread or presentation) aborts the pending link lookup opened from the old scope.
   useLayoutEffect(() => () => markdownLinkRequest.current?.abort(), [markdownLinkScope]);
   const [preview, setPreview] = useState<{
     readonly scope: string;
@@ -3256,7 +3255,7 @@ export const ThreadFeed = memo(function ThreadFeed(props: ThreadFeedProps) {
     });
   };
   const resolveLinkedThread = (href: string) => {
-    const link = parseThreadLinkHref(href, hostedAppOrigin);
+    const link = parseThreadLinkHref(href);
     if (!link) return null;
     const resolved = resolveThreadLink(
       (atom) => appAtomRegistry.get(atom),
@@ -3401,7 +3400,7 @@ export const ThreadFeed = memo(function ThreadFeed(props: ThreadFeedProps) {
       );
       return;
     }
-    if (parseThreadLinkHref(href, hostedAppOrigin)) {
+    if (parseThreadLinkHref(href)) {
       const target = resolveLinkedThread(href);
       if (target) openThreadLink(target);
       return;
@@ -3549,8 +3548,7 @@ export const ThreadFeed = memo(function ThreadFeed(props: ThreadFeedProps) {
       const thread = resolveLinkedThread(href);
       if (thread) {
         if (actionId === "open-thread") onMarkdownLinkPress(href);
-        else if (actionId === "copy-thread-link")
-          copyTextWithHaptic(hostedThreadLink(thread, hostedAppOrigin));
+        else if (actionId === "copy-thread-link") copyTextWithHaptic(hostedThreadLink(thread));
         return;
       }
       const deviceUrl = deviceLoopbackUrl(href);
@@ -3809,7 +3807,7 @@ export const ThreadFeed = memo(function ThreadFeed(props: ThreadFeedProps) {
     );
     handleMetricsChange();
   };
-  // oxlint-disable-next-line a4code/no-unreasoned-state-sync -- subscribes to the list's end state to report it to the parent
+  // oxlint-disable-next-line t3code/no-unreasoned-state-sync -- subscribes to the list's end state to report it to the parent
   useLayoutEffect(() => {
     const state = listRef.current?.getState();
     if (!state) return;
@@ -3825,7 +3823,7 @@ export const ThreadFeed = memo(function ThreadFeed(props: ThreadFeedProps) {
       for (const stop of stops) stop();
     };
   }, [listRef, handleMetricsChange]);
-  // oxlint-disable-next-line a4code/no-unreasoned-state-sync -- clears the landing fallback timer when the feed unmounts
+  // oxlint-disable-next-line t3code/no-unreasoned-state-sync -- clears the landing fallback timer when the feed unmounts
   useEffect(
     () => () => {
       if (landingFallback.current !== null) clearTimeout(landingFallback.current);
@@ -3910,7 +3908,7 @@ export const ThreadFeed = memo(function ThreadFeed(props: ThreadFeedProps) {
     };
   });
   // A jump can unfold a run; keep end maintenance off until its position settles.
-  // oxlint-disable-next-line a4code/no-unreasoned-state-sync -- scrolls the native list to the jump target after the commit that rendered its row
+  // oxlint-disable-next-line t3code/no-unreasoned-state-sync -- scrolls the native list to the jump target after the commit that rendered its row
   useEffect(() => {
     if (jumpIndex !== null) return landJump(jumpIndex);
     // oxlint-disable-next-line react/exhaustive-effect-dependencies -- Jumping to a different message whose row index is unchanged must still land the jump.
@@ -3964,7 +3962,7 @@ export const ThreadFeed = memo(function ThreadFeed(props: ThreadFeedProps) {
     }
   }
 
-  // oxlint-disable-next-line a4code/no-unreasoned-state-sync -- clears copy feedback and disclosure animation timers and frames on unmount
+  // oxlint-disable-next-line t3code/no-unreasoned-state-sync -- clears copy feedback and disclosure animation timers and frames on unmount
   useEffect(
     () => () => {
       if (copyFeedbackTimeoutRef.current) clearTimeout(copyFeedbackTimeoutRef.current);
@@ -4184,7 +4182,7 @@ export const ThreadFeed = memo(function ThreadFeed(props: ThreadFeedProps) {
   const { textSizeKey } = workRowSizing;
   const hasHtmlRenders = presentedFeed.some((entry) => entry.type === "html-render");
   const previousRowGeometry = useRef({ textSizeKey, contentWidth });
-  // oxlint-disable-next-line a4code/no-unreasoned-state-sync -- clears LegendList size caches after the commit that brings new row geometry
+  // oxlint-disable-next-line t3code/no-unreasoned-state-sync -- clears LegendList size caches after the commit that brings new row geometry
   useLayoutEffect(() => {
     const previous = previousRowGeometry.current;
     if (previous.textSizeKey === textSizeKey && previous.contentWidth === contentWidth) return;
@@ -4320,7 +4318,7 @@ export const ThreadFeed = memo(function ThreadFeed(props: ThreadFeedProps) {
           {perfProbe && !settling && props.feed.length > 0 ? (
             <PerfContentMark key={feedThreadKey} probe={perfProbe} thread={feedThreadKey} />
           ) : null}
-          {/* oxlint-disable-next-line a4code/require-registered-list-scroll -- ThreadFeedScrollView is passed through the iOS-only spread below; the prop rejects undefined. */}
+          {/* oxlint-disable-next-line t3code/require-registered-list-scroll -- ThreadFeedScrollView is passed through the iOS-only spread below; the prop rejects undefined. */}
           <KeyboardAwareLegendList
             ref={attachList}
             dataKey={feedThreadKey}

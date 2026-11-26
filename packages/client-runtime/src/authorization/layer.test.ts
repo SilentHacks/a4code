@@ -3,8 +3,8 @@ import {
   EnvironmentId,
   ORCHESTRATION_PROTOCOL_VERSION,
   type ExecutionEnvironmentDescriptor,
-} from "@a4code/contracts";
-import { type RelayEnvironmentConnectResponse } from "@a4code/contracts/relay";
+} from "@t3tools/contracts";
+import { type RelayEnvironmentConnectResponse } from "@t3tools/contracts/relay";
 import { describe, expect, it } from "@effect/vitest";
 import * as Deferred from "effect/Deferred";
 import * as Effect from "effect/Effect";
@@ -228,7 +228,7 @@ const makeHarness = Effect.fn("TestRemoteAuthorization.makeHarness")(function* (
           ClientCapabilities.ClientPresentation,
           ClientCapabilities.ClientPresentation.of({
             metadata: {
-              label: "A4 Code Test",
+              label: "T3 Code Test",
               deviceType: "mobile",
               os: "test",
             },
@@ -824,7 +824,7 @@ describe("RemoteEnvironmentAuthorization", () => {
         for (const [, init] of exchanges) {
           expect(Object.fromEntries(tokenFields(init))).toMatchObject({
             subject_token: BOOTSTRAP.credential,
-            client_label: "A4 Code Test",
+            client_label: "T3 Code Test",
             client_device_type: "mobile",
             client_os: "test",
           });

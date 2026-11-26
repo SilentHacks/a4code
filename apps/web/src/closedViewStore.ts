@@ -1,10 +1,10 @@
-import { scopedThreadKey } from "@a4code/client-runtime/environment";
+import { scopedThreadKey } from "@t3tools/client-runtime/environment";
 import {
   ChatFileAttachment,
   INCOGNITO_BROWSER_PROFILE_ID,
   PreviewSessionSnapshot,
   ScopedThreadRef,
-} from "@a4code/contracts";
+} from "@t3tools/contracts";
 import * as Schema from "effect/Schema";
 import { create } from "zustand";
 import { createJSONStorage, persist } from "zustand/middleware";
@@ -148,7 +148,7 @@ export const useClosedViewStore = create<ClosedViewStoreState>()(
         set((state) => ({ entries: state.entries.filter((entry) => entry.id !== id) })),
     }),
     {
-      name: "a4code:closed-views:v2",
+      name: "t3code:closed-views:v2",
       storage: createJSONStorage(() =>
         resolveStorage(typeof window !== "undefined" ? window.localStorage : undefined),
       ),

@@ -5,7 +5,7 @@ import {
   type PeerLinkFailureKind,
   type PeerLinkSummary,
   peerLinkFailureKind,
-} from "@a4code/contracts";
+} from "@t3tools/contracts";
 import * as Result from "effect/Result";
 import { mFallback, msg } from "gt-i18n";
 import type { MFunctionType } from "gt-i18n/types";

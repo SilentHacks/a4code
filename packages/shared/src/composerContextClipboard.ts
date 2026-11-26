@@ -1,7 +1,7 @@
 import {
   COMPOSER_CONTEXT_CLIPBOARD_MIME,
   ComposerContextClipboardFragment,
-} from "@a4code/contracts";
+} from "@t3tools/contracts";
 import * as Option from "effect/Option";
 import * as Schema from "effect/Schema";
 

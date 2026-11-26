@@ -1,5 +1,5 @@
 import { useAuth } from "@clerk/react";
-import type { EnvironmentId } from "@a4code/contracts";
+import type { EnvironmentId } from "@t3tools/contracts";
 import { Link } from "@tanstack/react-router";
 import { T } from "gt-react";
 import { CheckIcon } from "lucide-react";
@@ -97,7 +97,7 @@ function T3ConnectSteps() {
         )}
       </SetupStep>
       <SetupStep number={2}>
-        <RunOnComputer command="a4code connect" />
+        <RunOnComputer command="t3 connect" />
         {isSignedIn ? (
           <div className="mt-4 space-y-1.5">
             <CloudEnvironmentConnectRows
@@ -132,7 +132,7 @@ function PairingSteps() {
   return (
     <>
       <SetupStep number={1}>
-        <RunOnComputer command="a4code pair" />
+        <RunOnComputer command="t3 pair" />
       </SetupStep>
       <SetupStep number={2}>
         <Button render={<Link to="/settings/connections" />} size="sm">

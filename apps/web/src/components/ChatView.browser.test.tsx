@@ -1,5 +1,5 @@
 import { createMemoryHistory } from "@tanstack/react-router";
-import { scopeProjectRef, scopeThreadRef } from "@a4code/client-runtime/environment";
+import { scopeProjectRef, scopeThreadRef } from "@t3tools/client-runtime/environment";
 import {
   EnvironmentId,
   IssueTrackerKind,
@@ -10,12 +10,12 @@ import {
   type IssueDetail,
   type IssueRef,
   type ThreadIssueLink,
-} from "@a4code/contracts";
-import { DEFAULT_CLIENT_SETTINGS } from "@a4code/contracts/settings";
+} from "@t3tools/contracts";
+import { DEFAULT_CLIENT_SETTINGS } from "@t3tools/contracts/settings";
 import {
   compileResolvedKeybindingsConfig,
   mergeWithDefaultKeybindings,
-} from "@a4code/shared/keybindings";
+} from "@t3tools/shared/keybindings";
 import type * as Context from "effect/Context";
 import * as Schema from "effect/Schema";
 import * as Effect from "effect/Effect";
@@ -172,9 +172,9 @@ it("opens a linked Linear issue from an inactive thread's sidebar badge", async 
       pullRequests: [
         {
           host: "github.com",
-          repository: "SilentHacks/a4code",
+          repository: "pingdotgg/t3code",
           number: 124,
-          url: "https://github.com/SilentHacks/a4code/pull/124",
+          url: "https://github.com/pingdotgg/t3code/pull/124",
           source: "manual",
           linkedAt: "2026-01-01T00:00:00.000Z",
           snapshot: null,

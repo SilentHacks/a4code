@@ -1,10 +1,10 @@
-import { resolveAssetUrl } from "@a4code/client-runtime/state/assets";
+import { resolveAssetUrl } from "@t3tools/client-runtime/state/assets";
 import {
   isAssetAttachmentNotFoundFailure,
   runAttachmentUploadCycle,
   verifyPersistedAttachmentUpload,
-} from "@a4code/client-runtime/state/attachments";
-import { runAtomCommand, squashAtomCommandFailure } from "@a4code/client-runtime/state/runtime";
+} from "@t3tools/client-runtime/state/attachments";
+import { runAtomCommand, squashAtomCommandFailure } from "@t3tools/client-runtime/state/runtime";
 import { msg } from "gt-react-native";
 import { m } from "../i18n/messages";
 import type {
@@ -12,11 +12,11 @@ import type {
   ChatImageAttachment,
   EnvironmentId,
   UploadChatImageAttachment,
-} from "@a4code/contracts";
+} from "@t3tools/contracts";
 import {
   AuthOrchestrationOperateScope,
   PROVIDER_SEND_TURN_SUPPORTED_IMAGE_MIME_TYPES,
-} from "@a4code/contracts";
+} from "@t3tools/contracts";
 import * as Effect from "effect/Effect";
 import * as Option from "effect/Option";
 
@@ -32,12 +32,12 @@ import {
   type DraftComposerAttachment,
   type DraftComposerImageAttachment,
 } from "./composerImages";
-import { imageMimeType } from "@a4code/shared/image";
+import { imageMimeType } from "@t3tools/shared/image";
 import { uuidv4 } from "./uuid";
 import {
   attachmentUploadError,
   type AttachmentUploadError,
-} from "@a4code/client-runtime/state/attachment-uploads";
+} from "@t3tools/client-runtime/state/attachment-uploads";
 
 export type UploadedMobileAttachment =
   | UploadChatImageAttachment

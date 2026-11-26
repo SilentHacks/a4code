@@ -6,10 +6,10 @@ import {
   AuthMcpAuthorizationRequest,
   isRuntimeModeAbove,
   parseMcpApprovalCode,
-} from "@a4code/contracts";
-import { managedRuntimeModeCeilingMessage } from "@a4code/client-runtime/contract-labels";
+} from "@t3tools/contracts";
+import { managedRuntimeModeCeilingMessage } from "@t3tools/client-runtime/contract-labels";
 import { Radio as RadioPrimitive } from "@base-ui/react/radio";
-import { isLoopbackHost } from "@a4code/shared/preview";
+import { isLoopbackHost } from "@t3tools/shared/preview";
 import { EyeIcon, type LucideIcon } from "lucide-react";
 import type * as Context from "effect/Context";
 import * as Effect from "effect/Effect";
@@ -165,7 +165,7 @@ export function McpConsent({
   const [errorMessage, setErrorMessage] = useState("");
   const [pending, setPending] = useState<"approve" | "deny" | null>(null);
 
-  // oxlint-disable-next-line a4code/no-unreasoned-state-sync -- fetches the MCP OAuth approval and redirects the window or stores details, ignoring stale answers
+  // oxlint-disable-next-line t3code/no-unreasoned-state-sync -- fetches the MCP OAuth approval and redirects the window or stores details, ignoring stale answers
   useEffect(() => {
     let cancelled = false;
     void transport.load(authorization).then((answer) => {
@@ -187,7 +187,7 @@ export function McpConsent({
     };
   }, [authorization, transport]);
 
-  // oxlint-disable-next-line a4code/no-unreasoned-state-sync -- keeps Approve off briefly after the page shows or regains focus, so a click aimed at another window cannot land on it
+  // oxlint-disable-next-line t3code/no-unreasoned-state-sync -- keeps Approve off briefly after the page shows or regains focus, so a click aimed at another window cannot land on it
   useEffect(() => {
     if (loaded.status !== "ready") return;
     let timer = window.setTimeout(() => setArmed(true), ARM_DELAY_MS);
@@ -352,7 +352,7 @@ export function McpConsent({
             <p className="text-xs text-muted-foreground">
               <T>
                 Get one from Use A4 Code in another app (MCP), Settings → Sharing & access, or{" "}
-                <code>a4code auth pairing create</code> on this machine.
+                <code>t3 auth pairing create</code> on this machine.
               </T>
             </p>
           </div>

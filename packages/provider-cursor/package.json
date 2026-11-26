@@ -1,5 +1,5 @@
 {
-  "name": "@a4code/provider-cursor",
+  "name": "@t3tools/provider-cursor",
   "private": true,
   "type": "module",
   "exports": {
@@ -53,18 +53,18 @@
     "test": "vp test run --config ../../vite.config.ts --dir ."
   },
   "dependencies": {
-    "@a4code/contracts": "workspace:*",
-    "@a4code/provider-core": "workspace:*",
-    "@a4code/shared": "workspace:*",
     "@cursor/sdk": "1.5.0",
+    "@t3tools/contracts": "workspace:*",
+    "@t3tools/provider-core": "workspace:*",
+    "@t3tools/shared": "workspace:*",
     "effect": "catalog:",
     "jsonc-parser": "3.3.1",
     "yaml": "catalog:"
   },
   "devDependencies": {
-    "@a4code/provider-testing": "workspace:*",
     "@effect/platform-node": "catalog:",
     "@effect/vitest": "catalog:",
+    "@t3tools/provider-testing": "workspace:*",
     "@types/node": "catalog:",
     "vite-plus": "catalog:"
   }

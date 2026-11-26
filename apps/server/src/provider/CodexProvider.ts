@@ -1,4 +1,4 @@
-import { resolveProviderProbeTimeoutMs } from "@a4code/provider-core/server/snapshotProbe";
+import { resolveProviderProbeTimeoutMs } from "@t3tools/provider-core/server/snapshotProbe";
 import { pipe } from "effect/Function";
 import * as DateTime from "effect/DateTime";
 import * as Duration from "effect/Duration";
@@ -30,15 +30,15 @@ import type {
   ProviderOptionDescriptor,
   ServerProviderModel,
   ServerProviderSkill,
-} from "@a4code/contracts";
-import { PREFERRED_DEFAULT_CODEX_MODELS, ServerSettingsError } from "@a4code/contracts";
+} from "@t3tools/contracts";
+import { PREFERRED_DEFAULT_CODEX_MODELS, ServerSettingsError } from "@t3tools/contracts";
 
 import {
   codexModelFamily,
   createModelCapabilities,
   formatCodexModelName,
-} from "@a4code/shared/model";
-import { resolveSpawnCommand } from "@a4code/shared/shell";
+} from "@t3tools/shared/model";
+import { resolveSpawnCommand } from "@t3tools/shared/shell";
 import { codexAppServerArgs, resolveCodexLaunchArgs } from "./codexLaunchArgs.ts";
 import {
   buildServerProvider,
@@ -48,16 +48,16 @@ import {
   providerProbeEnvironment,
   spawnAndCollect,
   type ServerProviderDraft,
-} from "@a4code/provider-core/server/snapshotProbe";
-import { expandHomePath } from "@a4code/provider-core/server/pathExpansion";
-import { makeUnavailableUsageLimits } from "@a4code/provider-core/server/usageLimits";
+} from "@t3tools/provider-core/server/snapshotProbe";
+import { expandHomePath } from "@t3tools/provider-core/server/pathExpansion";
+import { makeUnavailableUsageLimits } from "@t3tools/provider-core/server/usageLimits";
 import {
   codexRateLimitsFailureMessage,
   codexRateLimitsToLimits,
   type CodexRateLimitSnapshot,
   type CodexResetCreditsSummary,
 } from "./codexUsageLimits.ts";
-import * as HostProcess from "@a4code/shared/HostProcess";
+import * as HostProcess from "@t3tools/shared/HostProcess";
 import packageJson from "../../package.json" with { type: "json" };
 const isCodexAppServerSpawnError = Schema.is(CodexErrors.CodexAppServerSpawnError);
 
@@ -140,7 +140,7 @@ const CODEX_APP_SERVER_PROBE_FORCE_KILL_AFTER = "2 seconds" as const;
 const CODEX_CATALOG_REFRESH_TIMEOUT_MS = 3_000;
 const CODEX_CONFIG_PROBE_TIMEOUT_MS = 3_000;
 const CODEX_CATALOG_REFRESH_POLL = "100 millis" as const;
-const CODEX_CLIENT_NAME = "A4 Code";
+const CODEX_CLIENT_NAME = "T3 Code";
 // Handshake plus account/models/skills requests can exceed the shared 10s probe budget.
 const CODEX_AUTH_PROBE_TIMEOUT_MS = 20_000;
 const CODEX_DISCOVERY_MARGIN_MS = 250;

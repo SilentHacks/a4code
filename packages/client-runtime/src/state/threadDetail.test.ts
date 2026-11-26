@@ -13,7 +13,7 @@ import {
   type OrchestrationV2Run,
   type OrchestrationV2ThreadProjection,
   type OrchestrationV2TurnItem,
-} from "@a4code/contracts";
+} from "@t3tools/contracts";
 import { describe, expect, it } from "@effect/vitest";
 import * as DateTime from "effect/DateTime";
 import * as Option from "effect/Option";

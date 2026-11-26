@@ -4,7 +4,7 @@ import {
   repositoryRewindCheckpoint,
   TASK_FOLDER_DEFAULT_REPOSITORIES_MAX,
   type TaskFolder,
-} from "@a4code/contracts";
+} from "@t3tools/contracts";
 import type {
   CheckpointScopeId,
   OrchestrationV2Checkpoint,
@@ -15,8 +15,8 @@ import type {
   ThreadTurnRepositoryDiff,
   VcsStatusResult,
   WorkspaceFolder,
-} from "@a4code/contracts";
-import { isAbsolutePath } from "@a4code/shared/path";
+} from "@t3tools/contracts";
+import { isAbsolutePath } from "@t3tools/shared/path";
 
 type ChangedFiles = OrchestrationV2Checkpoint["files"];
 

@@ -23,11 +23,11 @@ import {
   type RuntimeRequestId,
   type ServerProviderModel,
   type ThreadId,
-} from "@a4code/contracts";
+} from "@t3tools/contracts";
 import type { MuseSettings } from "../settings.ts";
-import { AgentScope } from "@a4code/shared/AgentScope";
-import { getModelSelectionStringOptionValue } from "@a4code/shared/model";
-import { formatDuration } from "@a4code/shared/orchestrationTiming";
+import { AgentScope } from "@t3tools/shared/AgentScope";
+import { getModelSelectionStringOptionValue } from "@t3tools/shared/model";
+import { formatDuration } from "@t3tools/shared/orchestrationTiming";
 import * as Cause from "effect/Cause";
 import * as DateTime from "effect/DateTime";
 import * as Deferred from "effect/Deferred";
@@ -39,10 +39,10 @@ import * as Semaphore from "effect/Semaphore";
 import * as Scope from "effect/Scope";
 import * as Stream from "effect/Stream";
 
-import * as ProviderHost from "@a4code/provider-core/server/ProviderHost";
-import * as McpProviderSession from "@a4code/provider-core/server/mcpSession";
-import * as McpProviderSessions from "@a4code/provider-core/server/McpProviderSessions";
-import { buildRuntimeInstructions } from "@a4code/provider-core/server/runtimeInstructions";
+import * as ProviderHost from "@t3tools/provider-core/server/ProviderHost";
+import * as McpProviderSession from "@t3tools/provider-core/server/mcpSession";
+import * as McpProviderSessions from "@t3tools/provider-core/server/McpProviderSessions";
+import { buildRuntimeInstructions } from "@t3tools/provider-core/server/runtimeInstructions";
 import { museModelCapabilities, resolveMuseReasoningEffort } from "./modelCatalog.ts";
 import {
   MuseApproval,
@@ -78,29 +78,29 @@ import {
   type createMuseSdkHost,
   type MuseSdkHost,
 } from "./sdk.ts";
-import type * as ProviderEventLoggers from "@a4code/provider-core/server/ProviderEventLoggers";
-import type { ManagedServerProvider } from "@a4code/provider-core/server/snapshot";
+import type * as ProviderEventLoggers from "@t3tools/provider-core/server/ProviderEventLoggers";
+import type { ManagedServerProvider } from "@t3tools/provider-core/server/snapshot";
 import {
   providerMessageTextWithAttachmentPaths,
   isProviderNativeImageAttachment,
-} from "@a4code/provider-core/server/attachmentPrompt";
-import * as IdAllocator from "@a4code/provider-core/server/IdAllocator";
-import * as ProviderAdapter from "@a4code/provider-core/server/ProviderAdapter";
+} from "@t3tools/provider-core/server/attachmentPrompt";
+import * as IdAllocator from "@t3tools/provider-core/server/IdAllocator";
+import * as ProviderAdapter from "@t3tools/provider-core/server/ProviderAdapter";
 import {
   backgroundWorkNotification,
   type BackgroundWorkReport,
-} from "@a4code/provider-core/server/notification";
-import type * as ProviderContinuationRequests from "@a4code/provider-core/server/ProviderContinuationRequests";
+} from "@t3tools/provider-core/server/notification";
+import type * as ProviderContinuationRequests from "@t3tools/provider-core/server/ProviderContinuationRequests";
 import {
   makeProviderFailure,
   makeProviderRetryTurnItem,
-} from "@a4code/provider-core/server/failure";
+} from "@t3tools/provider-core/server/failure";
 import {
   makeSubagentChildThread,
   makeSubagentConversationArtifacts,
   subagentThreadTitle,
-} from "@a4code/provider-core/server/subagentProjection";
-import { turnScopedSelectionTransition } from "@a4code/provider-core/server/selectionTransition";
+} from "@t3tools/provider-core/server/subagentProjection";
+import { turnScopedSelectionTransition } from "@t3tools/provider-core/server/selectionTransition";
 import { museItemStatus, museToolPresentation } from "./itemPresentation.ts";
 
 const MUSE_PROVIDER = ProviderDriverKind.make("muse");

@@ -3,7 +3,7 @@
 
 import * as NodeChildProcess from "node:child_process";
 
-import type { SnapShotModifier } from "@a4code/contracts";
+import type { SnapShotModifier } from "@t3tools/contracts";
 
 export function startGlobalShiftShortcutProcess(
   workerPath: string,

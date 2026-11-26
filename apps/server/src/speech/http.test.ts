@@ -1,4 +1,4 @@
-import { encodeSpeechPcmRequest } from "@a4code/shared/speech";
+import { encodeSpeechPcmRequest } from "@t3tools/shared/speech";
 // @effect-diagnostics nodeBuiltinImport:off globalFetch:off globalFetchInEffect:off - real HTTP streaming boundary test.
 import * as NodeHttpServer from "@effect/platform-node/NodeHttpServer";
 import * as NodeServices from "@effect/platform-node/NodeServices";
@@ -19,7 +19,7 @@ import {
   EnvironmentAuthenticatedPrincipal,
   type EnvironmentSpeechModel,
   EnvironmentVoiceHttpApi,
-} from "@a4code/contracts";
+} from "@t3tools/contracts";
 import * as Effect from "effect/Effect";
 import * as Layer from "effect/Layer";
 import * as Redacted from "effect/Redacted";

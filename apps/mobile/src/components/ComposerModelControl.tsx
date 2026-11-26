@@ -1,9 +1,9 @@
-import type { ModelSelection, ProviderDriverKind } from "@a4code/contracts";
+import type { ModelSelection, ProviderDriverKind } from "@t3tools/contracts";
 import { useGT, useMessages } from "gt-react-native";
 import {
   buildTraitsTriggerDisplay,
   getPromptControlledTraits,
-} from "@a4code/client-runtime/model-traits";
+} from "@t3tools/client-runtime/model-traits";
 import type { ModelOption } from "../lib/modelOptions";
 import { resolveProviderOptionDescriptors } from "../lib/providerOptions";
 import { AppText as Text } from "./ui/AppText";

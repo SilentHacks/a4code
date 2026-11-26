@@ -1,4 +1,4 @@
-import type { ProjectId, ProjectScript, ServerSettings } from "@a4code/contracts";
+import type { ProjectId, ProjectScript, ServerSettings } from "@t3tools/contracts";
 
 type ProjectScriptSettings = Pick<
   ServerSettings,
@@ -41,10 +41,10 @@ export function projectScriptRuntimeEnv(
   input: ProjectScriptRuntimeEnvInput,
 ): Record<string, string> {
   const env: Record<string, string> = {
-    A4CODE_PROJECT_ROOT: input.project.cwd,
+    T3CODE_PROJECT_ROOT: input.project.cwd,
   };
   if (input.worktreePath) {
-    env.A4CODE_WORKTREE_PATH = input.worktreePath;
+    env.T3CODE_WORKTREE_PATH = input.worktreePath;
   }
   if (input.extraEnv) {
     return { ...env, ...input.extraEnv };

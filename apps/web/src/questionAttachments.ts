@@ -1,18 +1,18 @@
-import { scopedThreadKey, scopeThreadRef } from "@a4code/client-runtime/environment";
-import type { PendingUserInputDraftAnswer } from "@a4code/client-runtime/state/pending-user-input";
+import { scopedThreadKey, scopeThreadRef } from "@t3tools/client-runtime/environment";
+import type { PendingUserInputDraftAnswer } from "@t3tools/client-runtime/state/pending-user-input";
 import {
   onThreadRequestsResolved,
   pruneResolvedUserInputDrafts,
   resolvedQuestionDraftKeys,
   userInputDraftKey,
-} from "@a4code/client-runtime/state/thread-requests";
+} from "@t3tools/client-runtime/state/thread-requests";
 import type {
   EnvironmentId,
   RuntimeRequestId,
   ScopedThreadRef,
   ThreadContextRecord,
   ThreadId,
-} from "@a4code/contracts";
+} from "@t3tools/contracts";
 import { create } from "zustand";
 import { DraftId, useComposerDraftStore } from "./composerDraftStore";
 import {

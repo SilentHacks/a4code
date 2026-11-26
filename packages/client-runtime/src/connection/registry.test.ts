@@ -5,7 +5,7 @@ import {
   ORCHESTRATION_PROTOCOL_VERSION,
   type ExecutionEnvironmentDescriptor,
   type ServerConfig,
-} from "@a4code/contracts";
+} from "@t3tools/contracts";
 import { describe, expect, it } from "@effect/vitest";
 import * as Context from "effect/Context";
 import * as Deferred from "effect/Deferred";
@@ -67,7 +67,7 @@ import * as EnvironmentSupervisor from "./supervisor.ts";
 import * as ConnectionWakeups from "./wakeups.ts";
 import { watchDiscoveredCompatibility } from "./layer.ts";
 import * as RelayEnvironmentDiscovery from "../relay/discovery.ts";
-import type { RelayEnvironmentStatusResponse } from "@a4code/contracts/relay";
+import type { RelayEnvironmentStatusResponse } from "@t3tools/contracts/relay";
 import { runDesktopCommitWithReconnectObserver } from "../state/server.ts";
 import { v2ShellSnapshot } from "../state/orchestrationV2TestFixtures.ts";
 
@@ -936,7 +936,7 @@ describe("EnvironmentRegistry", () => {
         const profile = new BearerConnectionProfile({
           ...BEARER_PROFILE,
           learned: true,
-          authorization: "a4-connect",
+          authorization: "t3-connect",
         });
         const harness = yield* makeHarness(
           learned ? [relay, BEARER_TARGET] : [relay],

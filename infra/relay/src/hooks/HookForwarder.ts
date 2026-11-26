@@ -12,13 +12,13 @@ import * as HttpClient from "effect/http/HttpClient";
 import type * as HttpServerRequest from "effect/http/HttpServerRequest";
 import * as HttpServerResponse from "effect/http/HttpServerResponse";
 import * as HttpApiBuilder from "effect/http-api/HttpApiBuilder";
-import { EnvironmentId } from "@a4code/contracts";
-import { RelayApi, type RelayHookDeliveryProofPayload } from "@a4code/contracts/relay";
+import { EnvironmentId } from "@t3tools/contracts";
+import { RelayApi, type RelayHookDeliveryProofPayload } from "@t3tools/contracts/relay";
 import {
   normalizeRelayIssuer,
   RELAY_HOOK_DELIVERY_HEADER,
   RELAY_HOOK_DELIVERY_TYP,
-} from "@a4code/shared/relayJwt";
+} from "@t3tools/shared/relayJwt";
 
 import * as RelayConfiguration from "../Config.ts";
 import * as CloudMintSigner from "../auth/CloudMintSigner.ts";
@@ -100,7 +100,7 @@ export class HookRateLimiter extends Context.Service<
     readonly allowHook: (key: string) => Effect.Effect<boolean>;
     readonly allowEndpoint: (endpointKey: string) => Effect.Effect<boolean>;
   }
->()("a4code-relay/hooks/HookForwarder/HookRateLimiter") {}
+>()("t3code-relay/hooks/HookForwarder/HookRateLimiter") {}
 
 export class HookForwarder extends Context.Service<
   HookForwarder,
@@ -109,7 +109,7 @@ export class HookForwarder extends Context.Service<
       request: HttpServerRequest.HttpServerRequest,
     ) => Effect.Effect<HttpServerResponse.HttpServerResponse>;
   }
->()("a4code-relay/hooks/HookForwarder") {}
+>()("t3code-relay/hooks/HookForwarder") {}
 
 class HookBodyTooLarge extends Schema.TaggedError<HookBodyTooLarge>()("HookBodyTooLarge", {}) {}
 

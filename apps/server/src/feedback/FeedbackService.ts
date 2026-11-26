@@ -1,6 +1,6 @@
 import * as NodeOS from "node:os";
 
-import type { ThreadId } from "@a4code/contracts";
+import type { ThreadId } from "@t3tools/contracts";
 import * as Context from "effect/Context";
 import * as SecureRandom from "effect/crypto/SecureRandom";
 import * as Effect from "effect/Effect";
@@ -78,7 +78,7 @@ export class FeedbackService extends Context.Service<
       | FeedbackStorageError
     >;
   }
->()("a4code/feedback/FeedbackService") {}
+>()("t3/feedback/FeedbackService") {}
 
 const storageError = (cause: unknown) => new FeedbackStorageError({ cause });
 

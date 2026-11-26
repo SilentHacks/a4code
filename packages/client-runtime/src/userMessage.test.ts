@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vite-plus/test";
 
-import { ComposerContextId, GuestMessageId, ScheduledTaskId } from "@a4code/contracts";
-import { ATTACHMENT_ONLY_BOOTSTRAP_PROMPT } from "@a4code/shared/composerContextReferences";
+import { ComposerContextId, GuestMessageId, ScheduledTaskId } from "@t3tools/contracts";
+import { ATTACHMENT_ONLY_BOOTSTRAP_PROMPT } from "@t3tools/shared/composerContextReferences";
 
 import {
   resolveUserMessageFileCards,
@@ -201,7 +201,7 @@ describe("resolveUserMessagePresentation", () => {
   });
 
   it("attributes older server-sent restart continuations to A4 Code, not another agent", () => {
-    const text = "Note: the A4 Code server restarted.";
+    const text = "Note: the T3 server restarted.";
     expect(
       resolveUserMessagePresentation({
         role: "user",
@@ -209,7 +209,7 @@ describe("resolveUserMessagePresentation", () => {
         creationSource: "server",
         text,
       }),
-    ).toMatchObject({ attribution: "a4code" });
+    ).toMatchObject({ attribution: "t3code" });
     for (const creationSource of ["mcp", "provider"] as const) {
       expect(
         resolveUserMessagePresentation({ role: "user", createdBy: "agent", creationSource, text }),

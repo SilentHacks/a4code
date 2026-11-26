@@ -14,16 +14,16 @@ import {
   resolveProviderInstanceEnabled,
   type RuntimeMode,
   type ServerSettings,
-} from "@a4code/contracts";
-import { acpRegistryClient } from "@a4code/provider-acp-registry/client";
-import { cursorClient } from "@a4code/provider-cursor/client";
-import { fxClient } from "@a4code/provider-fx/client";
-import { grokClient } from "@a4code/provider-grok/client";
-import { kiroClient } from "@a4code/provider-kiro/client";
-import { museClient } from "@a4code/provider-muse/client";
-import { openCodeClient } from "@a4code/provider-opencode/client";
-import { piClient } from "@a4code/provider-pi/client";
-import type { ProviderClientDefinition } from "@a4code/provider-core/client";
+} from "@t3tools/contracts";
+import { acpRegistryClient } from "@t3tools/provider-acp-registry/client";
+import { cursorClient } from "@t3tools/provider-cursor/client";
+import { fxClient } from "@t3tools/provider-fx/client";
+import { grokClient } from "@t3tools/provider-grok/client";
+import { kiroClient } from "@t3tools/provider-kiro/client";
+import { museClient } from "@t3tools/provider-muse/client";
+import { openCodeClient } from "@t3tools/provider-opencode/client";
+import { piClient } from "@t3tools/provider-pi/client";
+import type { ProviderClientDefinition } from "@t3tools/provider-core/client";
 
 interface KnownDriver {
   readonly label: string;
@@ -154,7 +154,7 @@ export const disallowedDriverReason = (
  * server they are ignored under any policy, which can lock launch arguments in more than one way;
  * from an instance's own variables they are ignored when the policy locks launch arguments.
  */
-const LAUNCH_OVERRIDE_VARIABLES = ["A4CODE_CODEX_LAUNCH_ARGS"] as const;
+const LAUNCH_OVERRIDE_VARIABLES = ["T3CODE_CODEX_LAUNCH_ARGS"] as const;
 
 /** The environment provider drivers launch from under the policy clients were told about. */
 export const providerHostEnvironment = (

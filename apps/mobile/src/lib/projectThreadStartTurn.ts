@@ -8,12 +8,12 @@ import {
   type ProjectId,
   type ProviderInteractionMode,
   type RuntimeMode,
-} from "@a4code/contracts";
+} from "@t3tools/contracts";
 import {
   deriveThreadTitleSeed,
   threadTitleTextFromPrompt,
-} from "@a4code/client-runtime/operations";
-import { splitsSurrogatePair } from "@a4code/shared/assistantCitations";
+} from "@t3tools/client-runtime/operations";
+import { splitsSurrogatePair } from "@t3tools/shared/assistantCitations";
 import { msg } from "gt-react-native";
 
 import { m } from "../i18n/messages";

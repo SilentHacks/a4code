@@ -1,12 +1,12 @@
 import { useAtomValue } from "@effect/atom-react";
-import { scopeThreadRef } from "@a4code/client-runtime/environment";
+import { scopeThreadRef } from "@t3tools/client-runtime/environment";
 import {
   EMPTY_V2_ITEM_SUPPORT,
   resolveV2ItemSupport,
   v2ItemSupportEqual,
   type V2ItemSupport,
-} from "@a4code/client-runtime/state/item-support";
-import type { EnvironmentId, ThreadId, TurnItemId } from "@a4code/contracts";
+} from "@t3tools/client-runtime/state/item-support";
+import type { EnvironmentId, ThreadId, TurnItemId } from "@t3tools/contracts";
 import { Atom } from "effect/reactivity";
 
 import { environmentThreadDetails } from "./threads";

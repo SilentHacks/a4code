@@ -5,7 +5,7 @@ import {
   type OrchestrationSearchThreadsResult,
   type OrchestrationV2SearchThreadsInput,
   type OrchestrationV2ThreadShell,
-} from "@a4code/contracts";
+} from "@t3tools/contracts";
 import * as Cause from "effect/Cause";
 import { AsyncResult, Atom, AtomRegistry } from "effect/reactivity";
 import { expect, it } from "vite-plus/test";

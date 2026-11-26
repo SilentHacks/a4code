@@ -1,4 +1,4 @@
-import { RelayAuthInvalidError } from "@a4code/contracts/relay";
+import { RelayAuthInvalidError } from "@t3tools/contracts/relay";
 import { describe, expect, it } from "@effect/vitest";
 
 import {

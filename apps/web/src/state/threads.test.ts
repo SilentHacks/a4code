@@ -1,14 +1,14 @@
 import {
   EMPTY_ENVIRONMENT_THREAD_STATE,
   type EnvironmentThreadState,
-} from "@a4code/client-runtime/state/threads";
+} from "@t3tools/client-runtime/state/threads";
 import {
   EnvironmentId,
   MessageId,
   RunId,
   ThreadId,
   type OrchestrationV2ThreadShell,
-} from "@a4code/contracts";
+} from "@t3tools/contracts";
 import { makeThreadProjectionFixture } from "../test-fixtures";
 import * as Option from "effect/Option";
 import { AsyncResult, Atom, AtomRegistry } from "effect/reactivity";

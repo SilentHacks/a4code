@@ -8,8 +8,8 @@ import {
   hasRelayRoute,
   presentConnectionDiagnosis,
   type EnvironmentPresentation,
-} from "@a4code/client-runtime/connection";
-import type { EnvironmentId } from "@a4code/contracts";
+} from "@t3tools/client-runtime/connection";
+import type { EnvironmentId } from "@t3tools/contracts";
 import Constants from "expo-constants";
 import { AsyncResult } from "effect/reactivity";
 import { View } from "react-native";

@@ -2,7 +2,7 @@ import {
   type ProviderInstanceId,
   textGeneratorForSelection,
   type UnifiedSettings,
-} from "@a4code/contracts";
+} from "@t3tools/contracts";
 import { useGT } from "gt-react";
 
 import { mergeEnvironmentSettings } from "../../hooks/useSettings";

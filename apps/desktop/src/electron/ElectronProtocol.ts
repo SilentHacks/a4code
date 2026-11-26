@@ -13,8 +13,8 @@ import * as Scope from "effect/Scope";
 import * as Electron from "electron";
 
 export const DESKTOP_HOST = "app";
-const DESKTOP_PRODUCTION_SCHEME = "a4code";
-const DESKTOP_DEVELOPMENT_SCHEME = "a4code-dev";
+const DESKTOP_PRODUCTION_SCHEME = "t3code";
+const DESKTOP_DEVELOPMENT_SCHEME = "t3code-dev";
 
 export function getDesktopScheme(isDevelopment: boolean): string {
   return isDevelopment ? DESKTOP_DEVELOPMENT_SCHEME : DESKTOP_PRODUCTION_SCHEME;
@@ -64,7 +64,7 @@ export class ElectronProtocol extends Context.Service<
       input: DesktopProtocolRegistrationInput,
     ) => Effect.Effect<void, ElectronProtocolRegistrationError, Scope.Scope>;
   }
->()("@a4code/desktop/electron/ElectronProtocol") {}
+>()("@t3tools/desktop/electron/ElectronProtocol") {}
 
 function makeDesktopContentSecurityPolicy(input: DesktopProtocolRegistrationInput): string {
   const clerkOrigin = input.clerkFrontendApiHostname

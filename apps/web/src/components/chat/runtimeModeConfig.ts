@@ -1,12 +1,12 @@
 import {
   managedRuntimeModeDenial,
   providerRuntimeModeLimitMessage,
-} from "@a4code/client-runtime/contract-labels";
+} from "@t3tools/client-runtime/contract-labels";
 import type {
   ManagedPolicySummary,
   ProviderRuntimeModeLimit,
   RuntimeMode,
-} from "@a4code/contracts";
+} from "@t3tools/contracts";
 import { msg } from "gt-react";
 import { m, type MessageResolver } from "~/i18n/messages";
 import {

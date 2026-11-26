@@ -1,4 +1,4 @@
-import { DESKTOP_UPDATE_IN_PROGRESS_TTL_MS } from "@a4code/contracts";
+import { DESKTOP_UPDATE_IN_PROGRESS_TTL_MS } from "@t3tools/contracts";
 import * as Clock from "effect/Clock";
 import * as Context from "effect/Context";
 import * as Effect from "effect/Effect";
@@ -38,7 +38,7 @@ export class DesktopUpdateMarker extends Context.Service<
      */
     readonly remainingWait: (markerFile: string) => Effect.Effect<Option.Option<number>>;
   }
->()("a4code/desktopUpdate/DesktopUpdateMarker") {}
+>()("t3/desktopUpdate/DesktopUpdateMarker") {}
 
 const make = Effect.gen(function* () {
   const fileSystem = yield* FileSystem.FileSystem;

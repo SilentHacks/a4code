@@ -1,19 +1,19 @@
 import {
   appendTrackedFolders,
   suggestedTrackedFolders,
-} from "@a4code/client-runtime/state/projects";
+} from "@t3tools/client-runtime/state/projects";
 import {
   isAtomCommandInterrupted,
   squashAtomCommandFailure,
-} from "@a4code/client-runtime/state/runtime";
-import type { EnvironmentProject } from "@a4code/client-runtime/state/shell";
+} from "@t3tools/client-runtime/state/runtime";
+import type { EnvironmentProject } from "@t3tools/client-runtime/state/shell";
 import {
   AuthFilesystemReadScope,
   AuthOrchestrationOperateScope,
   PROJECT_TRACKED_FOLDERS_MAX,
   type ProjectTrackedFolder,
   type WorkspaceFolderState,
-} from "@a4code/contracts";
+} from "@t3tools/contracts";
 import { msg, T, useGT, useMessages } from "gt-react-native";
 import { useState } from "react";
 import { Pressable } from "react-native";

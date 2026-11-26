@@ -9,7 +9,7 @@ import type {
   AuthMcpApprovalDetails,
   AuthMcpAuthorizationRequest,
   EnvironmentId,
-} from "@a4code/contracts";
+} from "@t3tools/contracts";
 import * as Effect from "effect/Effect";
 import * as Option from "effect/Option";
 import type * as HttpClient from "effect/http/HttpClient";

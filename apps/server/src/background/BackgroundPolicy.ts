@@ -6,12 +6,12 @@ import {
   type ClientActivityReportInput,
   type HostPowerSnapshot,
   type RpcClientId,
-} from "@a4code/contracts";
+} from "@t3tools/contracts";
 import {
   getBackgroundActivityPresetSettings,
   resolveServerBackgroundActivitySettings,
   type ResolvedBackgroundActivitySettings,
-} from "@a4code/shared/backgroundActivitySettings";
+} from "@t3tools/shared/backgroundActivitySettings";
 import * as DateTime from "effect/DateTime";
 import * as Context from "effect/Context";
 import * as Effect from "effect/Effect";
@@ -39,7 +39,7 @@ export class BackgroundPolicy extends Context.Service<
     /** Host power and lock state only, for server-owned work that no client lease asks for. */
     readonly shouldRunHostWork: Effect.Effect<boolean>;
   }
->()("a4code/background/BackgroundPolicy") {}
+>()("t3/background/BackgroundPolicy") {}
 
 const DEFAULT_LEASE_TTL_MS = 45_000;
 const MAX_LEASE_TTL_MS = 120_000;

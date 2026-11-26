@@ -102,7 +102,7 @@ export function AgentActivityWidget(
   const linkRow = rows[0];
   const deepLink =
     linkRow && linkRow.deepLink.startsWith("/") && !linkRow.deepLink.startsWith("//")
-      ? `a4code://${linkRow.deepLink.slice(1)}`
+      ? `t3code://${linkRow.deepLink.slice(1)}`
       : null;
 
   const background = accessory ? "clear" : isLightScheme ? "#ffffff" : "#1c1c1e";
@@ -117,7 +117,7 @@ export function AgentActivityWidget(
     <HStack
       modifiers={[frame({ width: height * 1.5, height }), foregroundStyle(primaryForeground)]}
     >
-      <Image assetName="A4Mark" modifiers={[resizable()]} />
+      <Image assetName="T3Mark" modifiers={[resizable()]} />
     </HStack>
   );
 

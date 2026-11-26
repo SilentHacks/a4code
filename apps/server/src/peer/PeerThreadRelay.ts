@@ -10,7 +10,7 @@ import {
   type PeerLinkThreadInput,
   type PeerLinkThreadItemInput,
   PeerLinkThreadReadError,
-} from "@a4code/contracts";
+} from "@t3tools/contracts";
 import * as Context from "effect/Context";
 import * as DateTime from "effect/DateTime";
 import * as Duration from "effect/Duration";
@@ -56,7 +56,7 @@ export class PeerThreadRelay extends Context.Service<
       input: PeerLinkThreadItemInput,
     ) => Effect.Effect<OrchestrationV2GetTurnItemResult, PeerLinkThreadReadError>;
   }
->()("a4code/peer/PeerThreadRelay") {}
+>()("t3/peer/PeerThreadRelay") {}
 
 const decodeStreamItem = Schema.decodeUnknownOption(
   Schema.fromJsonString(Schema.toCodecJson(OrchestrationV2ThreadStreamItem)),

@@ -1,5 +1,4 @@
-import { hostedAppOrigin } from "./mobileBranding";
-import type { ComposerContextRecord, EnvironmentId, ThreadId } from "@a4code/contracts";
+import type { ComposerContextRecord, EnvironmentId, ThreadId } from "@t3tools/contracts";
 import {
   composerChipSizeSuffix,
   contextChipIcon,
@@ -8,7 +7,7 @@ import {
   type ContextChipIconRef,
   UNAVAILABLE_CONTEXT_CHIP_PRESENTATION,
 } from "./composerChipPresentation";
-import { formatComposerModelMention } from "@a4code/client-runtime/composer-model-mentions";
+import { formatComposerModelMention } from "@t3tools/client-runtime/composer-model-mentions";
 import type {
   SelectableMarkdownModel,
   SelectableMarkdownSkill,
@@ -16,9 +15,9 @@ import type {
 import {
   formatComposerContextHref,
   parseComposerContextHref,
-} from "@a4code/shared/composerContextReferences";
-import { hasThreadLinks, parseThreadLinkHref } from "@a4code/shared/threadLinks";
-import { EXTENSIONLESS_FILE_NAMES } from "@a4code/shared/markdownLinks";
+} from "@t3tools/shared/composerContextReferences";
+import { hasThreadLinks, parseThreadLinkHref } from "@t3tools/shared/threadLinks";
+import { EXTENSIONLESS_FILE_NAMES } from "@t3tools/shared/markdownLinks";
 
 export function enrichedContextLinkPresentation(
   href: string,
@@ -42,7 +41,7 @@ export function enrichedContextLinkPresentation(
 export function enrichedThreadLinkPresentation(
   href: string,
 ): { accent?: string; icon: ContextChipIconRef } | undefined {
-  if (!parseThreadLinkHref(href, hostedAppOrigin)) return undefined;
+  if (!parseThreadLinkHref(href)) return undefined;
   const presentation = contextChipPresentation("thread");
   return {
     ...(presentation.accent ? { accent: presentation.accent } : {}),
@@ -63,9 +62,9 @@ export function threadChipTargets(
   records?: ReadonlyArray<ComposerContextRecord>,
 ): ReadonlyArray<ThreadChipTarget> {
   const targets = new Map<string, ThreadChipTarget>();
-  if (hasThreadLinks(markdown, hostedAppOrigin)) {
+  if (hasThreadLinks(markdown)) {
     for (const [, href = ""] of markdown.matchAll(/\]\(<?(t3-thread:\/\/v[12]\/[^\s>)]+)>?\)/g)) {
-      const link = parseThreadLinkHref(href, hostedAppOrigin);
+      const link = parseThreadLinkHref(href);
       if (link) {
         targets.set(href, {
           href,

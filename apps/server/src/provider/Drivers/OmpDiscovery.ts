@@ -2,8 +2,8 @@ import type {
   OmpSettings,
   ServerProviderModel,
   ServerProviderWorkspaceSnapshot,
-} from "@a4code/contracts";
-import { resolveSpawnCommand } from "@a4code/shared/shell";
+} from "@t3tools/contracts";
+import { resolveSpawnCommand } from "@t3tools/shared/shell";
 import * as Clock from "effect/Clock";
 import * as DateTime from "effect/DateTime";
 import * as Effect from "effect/Effect";
@@ -14,8 +14,8 @@ import * as Stream from "effect/Stream";
 import { ChildProcess, ChildProcessSpawner } from "effect/process";
 import * as NodeBuffer from "node:buffer";
 
-import { collectUint8StreamText } from "@a4code/provider-core/server/collectStreamText";
-import { buildSelectOptionDescriptor } from "@a4code/provider-core/server/snapshotProbe";
+import { collectUint8StreamText } from "@t3tools/provider-core/server/collectStreamText";
+import { buildSelectOptionDescriptor } from "@t3tools/provider-core/server/snapshotProbe";
 import { catalogFromCommandEntries, type OmpCommandCatalog } from "./OmpCommands.ts";
 
 const CATALOG_MAX_BYTES = 4 * 1024 * 1024;

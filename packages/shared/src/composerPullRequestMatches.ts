@@ -1,4 +1,4 @@
-import type { ThreadPullRequestKey, ThreadPullRequestLink } from "@a4code/contracts";
+import type { ThreadPullRequestKey, ThreadPullRequestLink } from "@t3tools/contracts";
 
 import { visibleThreadPullRequests } from "./threadPullRequests.ts";
 

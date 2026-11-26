@@ -12,7 +12,7 @@ import {
   type ServerProvider,
   ThreadId,
   TurnItemId,
-} from "@a4code/contracts";
+} from "@t3tools/contracts";
 import * as SecureRandom from "effect/crypto/SecureRandom";
 import * as DateTime from "effect/DateTime";
 import * as Deferred from "effect/Deferred";
@@ -452,14 +452,14 @@ it.effect("scrubs the caller's private values and sends only the event contract"
       expect(closed.conversationTrace).toBeUndefined();
 
       yield* Ref.set(telemetry, true);
-      const sent = yield* feedback.submit({ ...input, subject: "a4code thread show" }, fromThread);
+      const sent = yield* feedback.submit({ ...input, subject: "t3 thread show" }, fromThread);
       expect("sent" in sent && sent.sent).toBe(true);
       expect(yield* Ref.get(events)).toEqual([
         [
           "agent.feedback",
           {
             kind: "bug",
-            subject: "a4code thread show",
+            subject: "t3 thread show",
             userRequested: false,
             trace: null,
             source: "mcp",
@@ -498,7 +498,7 @@ it.effect("scrubs the caller's private values and sends only the event contract"
         { subject: "t3_thread_read", userRequested: false, sent: true, threadId: null },
         { subject: "t3_thread_read", userRequested: false, sent: true, threadId },
         { subject: "general", userRequested: false, sent: true, threadId: null },
-        { subject: "a4code thread show", userRequested: false, sent: true, threadId },
+        { subject: "t3 thread show", userRequested: false, sent: true, threadId },
         { subject: "t3_thread_read", userRequested: true, sent: false, threadId },
       ]);
     }).pipe(Effect.provide(layer));
@@ -518,7 +518,7 @@ it.effect(
         for (const subject of ["", "acme payments roadmap", "mcp__other__t3_thread_read"]) {
           const error = yield* Effect.flip(feedback.submit({ ...input, subject }, fromThread));
           expect(error.message).toBe(
-            "Set subject to the exact T3 tool name, the a4code command, or `general`.",
+            "Set subject to the exact T3 tool name, the t3 command, or `general`.",
           );
         }
         const refused = (report: Partial<typeof input>, caller: Feedback.FeedbackCaller) =>
@@ -554,7 +554,7 @@ it.effect(
         expect((yield* Effect.flip(feedback.submit(input, fromThread))).message).toBe(
           "This turn already sent 3 agent feedback reports; nothing was sent.",
         );
-        // Outside a turn, such as `a4code feedback`, 10 an hour.
+        // Outside a turn, such as `t3 feedback`, 10 an hour.
         const fromCli = { source: "cli" as const };
         yield* Effect.replicateEffect(feedback.submit(input, fromCli), 10, { discard: true });
         expect((yield* Effect.flip(feedback.submit(input, fromCli))).message).toBe(

@@ -1,8 +1,8 @@
 import * as NodeRuntime from "@effect/platform-node/NodeRuntime";
 import * as NodeCrypto from "@effect/platform-node/NodeCrypto";
 import * as NodeServices from "@effect/platform-node/NodeServices";
-import * as HostProcess from "@a4code/shared/HostProcess";
-import { isCommandAvailable, resolveSpawnCommand } from "@a4code/shared/shell";
+import * as HostProcess from "@t3tools/shared/HostProcess";
+import { isCommandAvailable, resolveSpawnCommand } from "@t3tools/shared/shell";
 import * as Clock from "effect/Clock";
 import * as Console from "effect/Console";
 import * as Context from "effect/Context";
@@ -135,7 +135,7 @@ export const hashBundle = Effect.fn("hashBundle")(function* (root: string) {
 });
 type FileSystemError = import("effect/PlatformError").PlatformError;
 
-const bundleId = "io.github.silenthacks.a4code.dev";
+const bundleId = "com.t3tools.t3code.dev";
 const roots = Effect.gen(function* () {
   const path = yield* Path.Path;
   const repo = yield* path.fromFileUrl(new URL("../", import.meta.url));
@@ -215,7 +215,7 @@ const command = Effect.fn("nativeClient.command")(function* (
         ...(sdk ? { ANDROID_HOME: sdk } : {}),
         APP_VARIANT: "development",
         MOBILE_VERSION_POLICY: "appVersion",
-        A4CODE_IOS_PERSONAL_TEAM: "0",
+        T3CODE_IOS_PERSONAL_TEAM: "0",
         CI: "1",
         EXPO_NO_GIT_STATUS: "1",
         // macOS tar otherwise adds AppleDouble entries that change the extracted bundle.
@@ -431,7 +431,7 @@ export const prebuildAndroid = Effect.fn("nativeClient.prebuildAndroid")(functio
   );
 });
 
-const artifactNames = { ios: "A4CodeDev.app", android: "app-debug.apk" } as const;
+const artifactNames = { ios: "T3CodeDev.app", android: "app-debug.apk" } as const;
 // R2 requires equal-sized parts and Workers cap request bodies at 100 MB.
 const partSize = 64 * 1024 * 1024;
 const RemoteCredentials = Schema.fromJsonString(
@@ -468,13 +468,11 @@ const remoteCache = Effect.fn("nativeClient.remoteCache")(
     if (environment.T3_NATIVE_CLIENT_CACHE === "off") return null;
     const fs = yield* FileSystem.FileSystem;
     const path = yield* Path.Path;
-    const endpoint =
-      environment.A4CODE_TASK_CACHE_ENDPOINT?.trim().replace(/\/+$/, "") ||
-      (yield* decodeEndpoint(
-        yield* fs.readFileString(path.join((yield* roots).repo, ".task-cache.json")),
-      )).endpoint;
+    const { endpoint } = yield* decodeEndpoint(
+      yield* fs.readFileString(path.join((yield* roots).repo, ".task-cache.json")),
+    );
     const credentials = yield* decodeCredentials(
-      yield* fs.readFileString(path.join(home, ".config/a4-task-cache/credentials.json")),
+      yield* fs.readFileString(path.join(home, ".config/t3-task-cache/credentials.json")),
     );
     const login = credentials[endpoint];
     if (!login) return null;
@@ -745,9 +743,9 @@ const build = Effect.fn("nativeClient.build")(function* (
         [
           "xcodebuild",
           "-workspace",
-          path.join(mobile, "ios/A4CodeDev.xcworkspace"),
+          path.join(mobile, "ios/T3CodeDev.xcworkspace"),
           "-scheme",
-          "A4CodeDev",
+          "T3CodeDev",
           "-configuration",
           "Debug",
           "-destination",
@@ -878,7 +876,7 @@ const buildOnBlacksmith = Effect.fn("nativeClient.buildOnBlacksmith")(
     if (environment.GITHUB_ACTIONS === "true" || environment.T3_NATIVE_CLIENT_BUILD === "local")
       return false;
     if (!(yield* isCommandAvailable("gh"))) return false;
-    const repository = environment.T3_NATIVE_CLIENT_REPOSITORY ?? "SilentHacks/a4code";
+    const repository = environment.T3_NATIVE_CLIENT_REPOSITORY ?? "pingdotgg/t3code";
     const { repo } = yield* roots;
     const sha = yield* command("git", ["rev-parse", "HEAD"], false, repo);
     const pushed = yield* command(
@@ -986,7 +984,7 @@ export const resolveArtifact = Effect.fn("nativeClient.resolveArtifact")(functio
   const fs = yield* FileSystem.FileSystem;
   const path = yield* Path.Path;
   const key = `${platform}/${abi ? `development-${abi}` : "development"}/${fingerprint}`;
-  const directory = path.join(home, ".cache/a4code/native-clients/artifacts", key);
+  const directory = path.join(home, ".cache/t3code/native-clients/artifacts", key);
   const artifact = { directory, file: path.join(directory, artifactNames[platform]) };
   if (yield* fs.exists(artifact.file)) {
     yield* Console.error(`Using cached client ${key}.`);
@@ -1108,7 +1106,7 @@ const reportTelemetry = Effect.fn("nativeClient.reportTelemetry")(
           arch: yield* HostProcess.Architecture,
           ci: environment.CI === "true" || environment.CI === "1",
           runId: environment.GITHUB_RUN_ID ?? "",
-          tasks: [{ package: "@a4code/mobile", task, source, savedMs: Math.round(savedMs) }],
+          tasks: [{ package: "@t3tools/mobile", task, source, savedMs: Math.round(savedMs) }],
         }),
       ),
     );
@@ -1195,7 +1193,7 @@ const installIntoSession = Effect.fn("nativeClient.installIntoSession")(function
         agentDevice,
         "open",
         bundleId,
-        `a4code-dev://expo-development-client/?url=${url}&disableOnboarding=1&disableFab=1&disableAutoLaunch=1`,
+        `t3code-dev://expo-development-client/?url=${url}&disableOnboarding=1&disableFab=1&disableAutoLaunch=1`,
         ...target,
       ],
       true,
@@ -1332,7 +1330,7 @@ const main = Command.make(
       return yield* new NativeClientError({
         message: "HOME or USERPROFILE must be set to store native client records.",
       });
-    const cache = path.join(home, ".cache/a4code/native-clients");
+    const cache = path.join(home, ".cache/t3code/native-clients");
     const recordPath = path.join(cache, platform, `${yield* digest(device)}.json`);
     // An iOS simulator build is arm64 for every device; an APK carries only the device's own ABI.
     const abi = Effect.gen(function* () {

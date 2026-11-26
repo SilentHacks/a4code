@@ -14,7 +14,7 @@ import type { PlatformError } from "effect/PlatformError";
 import * as Schema from "effect/Schema";
 import * as Stream from "effect/Stream";
 
-import * as HostProcess from "@a4code/shared/HostProcess";
+import * as HostProcess from "@t3tools/shared/HostProcess";
 
 import * as ServerConfig from "../config.ts";
 import { expandHomePath } from "../os-jank.ts";
@@ -68,7 +68,7 @@ export class SpeechModelStore extends Context.Service<
     /** Removes A4 Code's file or link; a linked file itself is left in place. */
     readonly remove: (model: ModelFile) => Effect.Effect<void, PlatformError>;
   }
->()("a4code/speech/SpeechModelStore") {}
+>()("t3/speech/SpeechModelStore") {}
 
 const DOWNLOAD_ATTEMPTS = 3;
 const PARTIAL_FILENAME =

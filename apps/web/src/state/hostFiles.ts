@@ -1,5 +1,5 @@
-import { createHostFilesEnvironmentAtoms } from "@a4code/client-runtime/state/hostFiles";
-import { AuthTerminalOperateScope, type EnvironmentId } from "@a4code/contracts";
+import { createHostFilesEnvironmentAtoms } from "@t3tools/client-runtime/state/hostFiles";
+import { AuthTerminalOperateScope, type EnvironmentId } from "@t3tools/contracts";
 
 import { connectionAtomRuntime } from "../connection/runtime";
 import { useEnvironmentScope } from "./session";

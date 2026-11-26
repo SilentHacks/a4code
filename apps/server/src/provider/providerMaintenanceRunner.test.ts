@@ -5,8 +5,8 @@ import {
   ProviderInstanceId,
   type ServerProvider,
   type ServerProviderUpdateState,
-} from "@a4code/contracts";
-import { ServerProviderUpdateError } from "@a4code/contracts";
+} from "@t3tools/contracts";
+import { ServerProviderUpdateError } from "@t3tools/contracts";
 import * as Cause from "effect/Cause";
 import * as Context from "effect/Context";
 import * as Deferred from "effect/Deferred";
@@ -22,10 +22,10 @@ import * as Stream from "effect/Stream";
 import * as TestClock from "effect/testing/TestClock";
 import { HttpClient, HttpClientResponse } from "effect/http";
 import { ChildProcessSpawner } from "effect/process";
-import * as HostProcess from "@a4code/shared/HostProcess";
-import { SpawnExecutableResolution } from "@a4code/shared/shell";
+import * as HostProcess from "@t3tools/shared/HostProcess";
+import { SpawnExecutableResolution } from "@t3tools/shared/shell";
 
-import type { ProviderInstance } from "@a4code/provider-core/server/driver";
+import type { ProviderInstance } from "@t3tools/provider-core/server/driver";
 
 import * as ServerSettings from "../serverSettings.ts";
 import * as SourceControlProviderRegistry from "../sourceControl/SourceControlProviderRegistry.ts";
@@ -36,12 +36,12 @@ import * as ProviderInstanceRegistry from "./ProviderInstanceRegistry.ts";
 import * as ProviderRegistry from "./ProviderRegistry.ts";
 import * as ModelManifest from "./ModelManifest.ts";
 import * as ProviderMaintenanceRunner from "./providerMaintenanceRunner.ts";
-import * as ProviderLatestVersions from "@a4code/provider-core/server/ProviderLatestVersions";
+import * as ProviderLatestVersions from "@t3tools/provider-core/server/ProviderLatestVersions";
 import {
   enrichProviderSnapshotWithVersionAdvisory,
   makeProviderMaintenanceCapabilities,
   type ProviderMaintenanceCapabilities,
-} from "@a4code/provider-core/server/maintenanceResolver";
+} from "@t3tools/provider-core/server/maintenanceResolver";
 const isServerProviderUpdateError = Schema.is(ServerProviderUpdateError);
 
 const CODEX_DRIVER = ProviderDriverKind.make("codex");

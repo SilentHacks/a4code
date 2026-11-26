@@ -1,13 +1,13 @@
 import { useAuth } from "@clerk/react";
 import { useAtomValue } from "@effect/atom-react";
-import { managedCapabilityDenial } from "@a4code/client-runtime/contract-labels";
+import { managedCapabilityDenial } from "@t3tools/client-runtime/contract-labels";
 import {
   AuthAccessWriteScope,
   AuthRelayReadScope,
   AuthRelayWriteScope,
   type AuthSessionState,
   type EnvironmentId,
-} from "@a4code/contracts";
+} from "@t3tools/contracts";
 import { AsyncResult, Atom } from "effect/reactivity";
 import { msg, T, useGT, useMessages } from "gt-react";
 import { useState } from "react";
@@ -416,7 +416,7 @@ function OnboardingTunnelLimitAlert({
     <TunnelLimitAlert
       upgrade={upgrade}
       onLinkT3Chat={onOpenAccountPage ? () => onOpenAccountPage("t3-chat") : null}
-      onManageTunnels={onOpenAccountPage ? () => onOpenAccountPage("a4-connect") : null}
+      onManageTunnels={onOpenAccountPage ? () => onOpenAccountPage("t3-connect") : null}
     />
   );
 }

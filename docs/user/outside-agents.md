@@ -26,7 +26,7 @@ Open the command palette (`Cmd/Ctrl+K`) and run **Use A4 Code in another app (MC
 
 ## Approve access and permissions
 
-The first time an outside agent connects, approve its sign-in page (via your T3 Connect account, an already-authorized browser, or a one-time pairing code from **Settings → Sharing & access** / `a4code auth pairing create`).
+The first time an outside agent connects, approve its sign-in page (via your T3 Connect account, an already-authorized browser, or a one-time pairing code from **Settings → Sharing & access** / `t3 auth pairing create`).
 
 - **Read only**: Inspect projects, threads, providers, and models.
 - **Supervised → Full access**: Also launch, message, and stop threads up to the granted permission mode. Managing [workflow runs](./workflows.md) or using approval-skipping agent modes requires **Full access** (or your policy's maximum mode).
@@ -38,17 +38,17 @@ Tools that act as a running T3 thread (`delegate_task`, `create_threads`, `reque
 
 - Use `t3_thread_launch` + `t3_thread_wait` / `t3_thread_read` to run and follow work.
 - Pass `projectId` or `threadId` explicitly (or `allProjects: true` on `t3_thread_list`).
-- **MCP Events (`io.modelcontextprotocol/events`)**: Bots can poll, stream, or subscribe via HTTPS webhooks (up to 1-hour leases; latest 1,000 milestones buffered in memory) for turn, approval, guest, PR watch, and workflow events. For local webhook testing, set `A4CODE_MCP_WEBHOOK_ALLOWED_HOSTS=localhost,127.0.0.1` on the server.
+- **MCP Events (`io.modelcontextprotocol/events`)**: Bots can poll, stream, or subscribe via HTTPS webhooks (up to 1-hour leases; latest 1,000 milestones buffered in memory) for turn, approval, guest, PR watch, and workflow events. For local webhook testing, set `T3CODE_MCP_WEBHOOK_ALLOWED_HOSTS=localhost,127.0.0.1` on the server.
 
-## Host scripts (`a4code thread`)
+## Host scripts (`t3 thread`)
 
 On the server machine itself, drive threads directly without OAuth:
 
 ```sh
-id=$(a4code thread start . "Find why the tests are slow")
-a4code thread send "$id" "Now fix it" --wait
-a4code thread show "$id"
-a4code thread list
+id=$(t3 thread start . "Find why the tests are slow")
+t3 thread send "$id" "Now fix it" --wait
+t3 thread show "$id"
+t3 thread list
 ```
 
 - Pass `--worktree <base-branch>`, `--title` / `--generate-title`, `--provider <id> --model <slug>`, `--option id=value` (e.g. `reasoningEffort=high` for Codex, `effort=high` for Claude), or `-` to read the prompt from stdin.

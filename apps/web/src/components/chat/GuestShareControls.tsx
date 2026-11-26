@@ -2,14 +2,14 @@ import { useAtomValue } from "@effect/atom-react";
 import {
   isAtomCommandInterrupted,
   squashAtomCommandFailure,
-} from "@a4code/client-runtime/state/runtime";
+} from "@t3tools/client-runtime/state/runtime";
 import {
   AuthOrchestrationOperateScope,
   type ChatAttachment,
   type GuestMessageId,
   type ScopedThreadRef,
   type ThreadGuestShare,
-} from "@a4code/contracts";
+} from "@t3tools/contracts";
 import { msg, T, useGT } from "gt-react";
 import { CheckIcon, CopyIcon, UserIcon } from "lucide-react";
 import { useState } from "react";

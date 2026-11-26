@@ -1,23 +1,16 @@
 # T3 Connect setup
 
-Use the existing T3 Connect service with A4 Code, or run your own relay. See [T3 Connect architecture](../internals/06_a4-connect.md) for trust boundaries.
+Deployment and client configuration for T3 Connect. See [T3 Connect](../internals/06_t3-connect.md) for trust boundaries and [infra/relay/README.md](../../infra/relay/README.md#deployment) for relay provisioning.
 
 ## Public application configuration
 
-For source builds, copy `.env.example` to `.env` to use the hosted T3 Connect service. Existing `T3CODE_*` public Connect settings still work. No new account or relay is needed. Local, LAN, and direct pairing do not require Connect.
-
-Use a supported T3-hosted sign-in origin for browser-based sign-in. Clerk controls which origins, native callbacks, and passkey associations it accepts; fork-specific native IDs are not automatically registered with the upstream service.
-
-## Run your own relay
-
-See the [relay deployment guide](../../infra/relay/README.md#deployment). Set the repository Actions variable `A4CODE_DEPLOY_RELAY=true` only after configuring the production account and credentials. To use that relay, set these public identifiers in `.env` or `.env.local` (process env > `.env.local` > `.env`):
+T3 Connect is disabled in a fresh clone. Copy `.env.example` to `.env` for production, or set these public identifiers in `.env` / `.env.local` (process env > `.env.local` > `.env`):
 
 ```dotenv
-A4CODE_CLERK_PUBLISHABLE_KEY=<publishable key>
-A4CODE_CLERK_JWT_TEMPLATE=<JWT template name>
-A4CODE_CLERK_CLI_OAUTH_CLIENT_ID=<public OAuth application client ID>
-A4CODE_RELAY_URL=https://relay.example.com
-A4CODE_HOSTED_APP_URL=https://app.example.com
+T3CODE_CLERK_PUBLISHABLE_KEY=<publishable key>
+T3CODE_CLERK_JWT_TEMPLATE=<JWT template name>
+T3CODE_CLERK_CLI_OAUTH_CLIENT_ID=<public OAuth application client ID>
+T3CODE_RELAY_URL=https://relay.example.com
 ```
 
 `CLERK_SECRET_KEY` belongs only in relay secrets, never in client config. Client and bundled-server builds embed these values at build time; EAS preview/production environments need the publishable key, JWT template, and relay URL.
@@ -31,25 +24,25 @@ Create a public OAuth application in Clerk (authorization code + PKCE):
 1. Redirect URI: `http://127.0.0.1:34338/callback`
 2. Scopes: `openid`, `profile`, `email`, `offline_access`
 3. Enable **Device authorization grant** (required for headless/SSH login; Clerk enables it per account on request).
-4. Set `A4CODE_CLERK_CLI_OAUTH_CLIENT_ID` to its public client ID.
+4. Set `T3CODE_CLERK_CLI_OAUTH_CLIENT_ID` to its public client ID.
 
 ### JWT template
 
-Create a Clerk JWT template named `t3-relay` with `{ "aud": "t3-code-relay" }`. Set `A4CODE_CLERK_JWT_TEMPLATE=t3-relay` on clients and `CLERK_JWT_AUDIENCE=t3-code-relay` on the relay.
+Create a Clerk JWT template named `t3-relay` with `{ "aud": "t3-code-relay" }`. Set `T3CODE_CLERK_JWT_TEMPLATE=t3-relay` on clients and `CLERK_JWT_AUDIENCE=t3-code-relay` on the relay.
 
 ### Desktop OAuth redirects
 
-Enable Clerk's Native API, add `a4code-dev://app/` and `a4code://app/` to the SSO redirect allowlist, and add `a4code-dev://app` and `a4code://app` to `allowed_origins` via `PATCH https://api.clerk.com/v1/instance` (preserving existing entries).
+Enable Clerk's Native API, add `t3code-dev://app/` and `t3code://app/` to the SSO redirect allowlist, and add `t3code-dev://app` and `t3code://app` to `allowed_origins` via `PATCH https://api.clerk.com/v1/instance` (preserving existing entries).
 
 ### Android native sign-in redirects
 
 In Clerk **Native applications > Allowlist for mobile SSO redirect**, allow each variant's callback:
 
-| Variant     | Callback                                                |
-| ----------- | ------------------------------------------------------- |
-| Development | `clerk://io.github.silenthacks.a4code.dev.callback`     |
-| Preview     | `clerk://io.github.silenthacks.a4code.preview.callback` |
-| Production  | `clerk://io.github.silenthacks.a4code.callback`         |
+| Variant     | Callback                                      |
+| ----------- | --------------------------------------------- |
+| Development | `clerk://com.t3tools.t3code.dev.callback`     |
+| Preview     | `clerk://com.t3tools.t3code.preview.callback` |
+| Production  | `clerk://com.t3tools.t3code.callback`         |
 
 ### Restricting sign-ups
 
@@ -63,22 +56,22 @@ Under Clerk **Webhooks**, add an endpoint at `https://<relay domain>/v1/webhooks
 
 The relay sends Android push notifications directly via FCM HTTP v1 (no Expo Push account required):
 
-1. Register each Android package (`io.github.silenthacks.a4code.{dev,preview}` / `io.github.silenthacks.a4code`) in Firebase and download `google-services.json`.
-2. Pass `A4CODE_ANDROID_GOOGLE_SERVICES_FILE=/abs/path/google-services.json` when prebuilding/building locally or as an EAS file variable (available to fingerprint generation as well).
+1. Register each Android package (`com.t3tools.t3code.{dev,preview}` / `com.t3tools.t3code`) in Firebase and download `google-services.json`.
+2. Pass `T3CODE_ANDROID_GOOGLE_SERVICES_FILE=/abs/path/google-services.json` when prebuilding/building locally or as an EAS file variable (available to fingerprint generation as well).
 3. Enable the FCM API and store the Firebase service-account JSON only in the relay's `FCM_SERVICE_ACCOUNT` secret (never in EAS app env or the repo). Set `APNS_ENABLED=false` for an Android-only relay stage.
 4. For local smoke/watch verification without deploying a relay, use `vp run push:android:smoke` and `vp run push:android:watch` from `infra/relay`.
 
 ## Desktop passkeys
 
-For a signed macOS build (`io.github.silenthacks.a4code`):
+For a signed macOS build (`com.t3tools.t3code`):
 
 1. Create an explicit macOS App ID with **Associated Domains** and a matching distribution provisioning profile.
-2. In Clerk Native API settings, add an iOS app with the same Apple Team ID and bundle ID, and verify `https://<frontend-api>/.well-known/apple-app-site-association` includes `<TEAM_ID>.io.github.silenthacks.a4code`.
-3. Configure signing per [Apple signing and notarization](./03_release.md#apple-signing-and-notarization-macos). Local signed builds use `A4CODE_APPLE_TEAM_ID`, `A4CODE_MACOS_PROVISIONING_PROFILE`, and optionally `A4CODE_CLERK_PASSKEY_RP_DOMAINS`. Bump the build version after changing Associated Domains so macOS refreshes cached Shared Web Credentials.
+2. In Clerk Native API settings, add an iOS app with the same Apple Team ID and bundle ID, and verify `https://<frontend-api>/.well-known/apple-app-site-association` includes `<TEAM_ID>.com.t3tools.t3code`.
+3. Configure signing per [Apple signing and notarization](./03_release.md#apple-signing-and-notarization-macos). Local signed builds use `T3CODE_APPLE_TEAM_ID`, `T3CODE_MACOS_PROVISIONING_PROFILE`, and optionally `T3CODE_CLERK_PASSKEY_RP_DOMAINS`. Bump the build version after changing Associated Domains so macOS refreshes cached Shared Web Credentials.
 
 Unsigned `dev:desktop` cannot exercise passkeys. For renderer HMR with passkeys, launch an installed signed build against `vp run dev:web`:
 
 ```sh
-VITE_DEV_SERVER_URL=http://127.0.0.1:5733 A4CODE_PORT=13773 \
+VITE_DEV_SERVER_URL=http://127.0.0.1:5733 T3CODE_PORT=13773 \
   "/Applications/A4 Code (Alpha).app/Contents/MacOS/A4 Code (Alpha)"
 ```

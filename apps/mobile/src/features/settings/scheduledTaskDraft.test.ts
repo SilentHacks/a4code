@@ -7,7 +7,7 @@ import {
   ProjectId,
   ScheduledTaskId,
   type ScheduledTask,
-} from "@a4code/contracts";
+} from "@t3tools/contracts";
 import {
   createDraft,
   editDraft,

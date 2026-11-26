@@ -21,7 +21,7 @@ import {
   ThreadPullRequestLinkSource,
   TrimmedNonEmptyString,
   ThreadId,
-} from "@a4code/contracts";
+} from "@t3tools/contracts";
 import * as Schema from "effect/Schema";
 import * as McpSchema from "effect/ai/McpSchema";
 import * as Tool from "effect/ai/Tool";

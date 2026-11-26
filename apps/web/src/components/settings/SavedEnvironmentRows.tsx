@@ -1,4 +1,4 @@
-import { managedCapabilityDenial } from "@a4code/client-runtime/contract-labels";
+import { managedCapabilityDenial } from "@t3tools/client-runtime/contract-labels";
 import { SessionPermissions } from "./SessionPermissions";
 import {
   ChevronRightIcon,
@@ -14,14 +14,14 @@ import {
   connectReachabilityHelpUrl,
   formatConnectReachable,
   resolveEnvironmentMachineKind,
-} from "@a4code/contracts";
+} from "@t3tools/contracts";
 import {
   connectionRoutes,
   hasSavedBearerRoute,
   connectionErrorText,
   connectionStatusText,
   environmentMcpUrl,
-} from "@a4code/client-runtime/connection";
+} from "@t3tools/client-runtime/connection";
 import * as Option from "effect/Option";
 import { msg, T, useGT, useMessages } from "gt-react";
 import { m, type MessageResolver } from "../../i18n/messages";
@@ -390,7 +390,7 @@ export function SavedBackendListRow({
           environmentId={environmentId}
           serverLabel={gt("{label} server", {
             label: environment.label,
-            $context: "names a A4 Code server inside sentences such as {serverLabel} updated",
+            $context: "names a T3 server inside sentences such as {serverLabel} updated",
           })}
           fromVersion={lastDescriptor?.serverVersion}
           targetVersion={APP_VERSION}
@@ -402,7 +402,7 @@ export function SavedBackendListRow({
           environmentId={environmentId}
           serverLabel={gt("{label} server", {
             label: environment.label,
-            $context: "names a A4 Code server inside sentences such as {serverLabel} updated",
+            $context: "names a T3 server inside sentences such as {serverLabel} updated",
           })}
           selfUpdate={resolveServerSelfUpdateCapability(environment.serverConfig)}
           installation={environment.serverConfig?.environment.capabilities.serverInstallation}
@@ -532,7 +532,7 @@ function T3ConnectTunnelUsage({ tunnelLimit }: { readonly tunnelLimit: number | 
               <T>Get more tunnels</T>
             </InlineButton>
           ) : usage.used >= usage.limit ? (
-            <InlineButton onClick={() => openAccountPage("a4-connect")}>
+            <InlineButton onClick={() => openAccountPage("t3-connect")}>
               <T>Manage tunnels</T>
             </InlineButton>
           ) : null
@@ -550,7 +550,7 @@ function T3ConnectTunnelUsage({ tunnelLimit }: { readonly tunnelLimit: number | 
             <TunnelLimitAlert
               upgrade={usage.upgrade}
               onLinkT3Chat={openAccountPage ? () => openAccountPage("t3-chat") : null}
-              onManageTunnels={openAccountPage ? () => openAccountPage("a4-connect") : null}
+              onManageTunnels={openAccountPage ? () => openAccountPage("t3-connect") : null}
             />
           ) : null}
         </div>
@@ -633,7 +633,7 @@ function ConfiguredCloudLinkRow({
   const refreshLinkState = useEffectEvent(cloudLinkState.refresh);
   // The server rechecks reachability when the tunnel's 30 s readiness poll changes.
   // Poll while mounted, so a failed read does not stop later ones.
-  // oxlint-disable-next-line a4code/no-unreasoned-state-sync -- 30 s interval that refreshes the cloud link reachability while mounted
+  // oxlint-disable-next-line t3code/no-unreasoned-state-sync -- 30 s interval that refreshes the cloud link reachability while mounted
   useEffect(() => {
     const interval = window.setInterval(() => refreshLinkState(), 30_000);
     return () => window.clearInterval(interval);
@@ -723,7 +723,7 @@ function ConfiguredCloudLinkRow({
     <>
       {showSwitch ? (
         <SettingsRow
-          title={setting("a4-connect").title}
+          title={setting("t3-connect").title}
           description={
             connectDenial !== undefined && !managedTunnelActive
               ? connectDenial
@@ -770,15 +770,15 @@ function ConfiguredCloudLinkRow({
         </SettingsRow>
       ) : linkRevoked ? (
         <SettingsRow
-          title={setting("a4-connect").title}
+          title={setting("t3-connect").title}
           description={gt(
-            "This environment was removed from T3 Connect. Run `a4code connect link` on the host to link it again.",
+            "This environment was removed from T3 Connect. Run `t3 connect link` on the host to link it again.",
           )}
         />
       ) : (
         <SettingsRow
-          title={setting("a4-connect").title}
-          description={gt("Run `a4code connect link` on the host, then restart A4 Code there.")}
+          title={setting("t3-connect").title}
+          description={gt("Run `t3 connect link` on the host, then restart A4 Code there.")}
         />
       )}
       {signedOut && showSwitch ? null : (

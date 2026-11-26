@@ -20,7 +20,7 @@ import type {
   RelayManagedEndpoint,
   RelayManagedEndpointOrigin,
   RelayManagedEndpointRuntimeConfig,
-} from "@a4code/contracts/relay";
+} from "@t3tools/contracts/relay";
 
 import * as RelayConfiguration from "../Config.ts";
 import {
@@ -195,7 +195,7 @@ export class ManagedEndpointProvider extends Context.Service<
       readonly markReleased?: boolean;
     }) => Effect.Effect<boolean, ManagedEndpointDeprovisioningFailed>;
   }
->()("a4code-relay/environments/ManagedEndpointProvider") {}
+>()("t3code-relay/environments/ManagedEndpointProvider") {}
 
 export interface ManagedEndpointTunnel {
   readonly id?: string | null;
@@ -295,7 +295,7 @@ export class ManagedEndpointTunnelClient extends Context.Service<
       tunnelId: string,
     ) => Effect.Effect<void, ManagedEndpointTunnelClientError>;
   }
->()("a4code-relay/environments/ManagedEndpointProvider/ManagedEndpointTunnelClient") {}
+>()("t3code-relay/environments/ManagedEndpointProvider/ManagedEndpointTunnelClient") {}
 
 export const layerTunnelClient = (client: ManagedEndpointTunnelClient["Service"]) =>
   Layer.succeed(ManagedEndpointTunnelClient, client);
@@ -347,7 +347,7 @@ export class ManagedEndpointDnsClient extends Context.Service<
       dnsRecordId: string,
     ) => Effect.Effect<unknown, ManagedEndpointDnsClientError>;
   }
->()("a4code-relay/environments/ManagedEndpointProvider/ManagedEndpointDnsClient") {}
+>()("t3code-relay/environments/ManagedEndpointProvider/ManagedEndpointDnsClient") {}
 
 export const layerDnsClient = (client: ManagedEndpointDnsClient["Service"]) =>
   Layer.succeed(ManagedEndpointDnsClient, client);

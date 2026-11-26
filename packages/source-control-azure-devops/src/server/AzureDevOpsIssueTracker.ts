@@ -17,11 +17,11 @@ import {
   type IssueInvolvement,
   type IssueLinkedPullRequest,
   type IssueViewerPermissions,
-} from "@a4code/contracts";
+} from "@t3tools/contracts";
 import {
   IssueTrackerError,
   type IssueTrackerApi,
-} from "@a4code/source-control-core/server/IssueTracker";
+} from "@t3tools/source-control-core/server/IssueTracker";
 
 import * as AzureDevOpsCli from "./AzureDevOpsCli.ts";
 import {

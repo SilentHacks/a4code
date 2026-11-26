@@ -15,7 +15,7 @@ import {
   type ThreadId,
   type ThreadPullRequestLink,
   TrimmedNonEmptyString,
-} from "@a4code/contracts";
+} from "@t3tools/contracts";
 import * as Cause from "effect/Cause";
 import * as SecureRandom from "effect/crypto/SecureRandom";
 import * as Effect from "effect/Effect";
@@ -271,7 +271,7 @@ const isPushHooksUnapproved = Schema.is(GitManager.GitPushHooksUnapprovedError);
 const PUSH_HOOKS_DECLINED =
   "The person declined to run this repository's push hooks. Nothing was pushed and no PR was opened.";
 const PUSH_HOOKS_UNCONFIRMED =
-  "A4 Code has no approval from the person for this repository's push hooks. Nothing was pushed and no PR was opened. Call again to ask.";
+  "T3 Code has no approval from the person for this repository's push hooks. Nothing was pushed and no PR was opened. Call again to ask.";
 const PUSH_HOOKS_KEPT_CHANGING =
   "This repository's push hooks kept changing while approval was asked. Nothing was pushed.";
 const PUSH_HOOKS_SKIPPED =

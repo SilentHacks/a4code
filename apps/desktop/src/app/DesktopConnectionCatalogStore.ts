@@ -5,13 +5,13 @@ import {
   RelayConnectionTarget,
   SshConnectionProfile,
   SshConnectionTarget,
-} from "@a4code/client-runtime/connection";
+} from "@t3tools/client-runtime/connection";
 import {
   ConnectionCatalogDocument as RuntimeConnectionCatalogDocument,
   type ConnectionCatalogDocument as RuntimeConnectionCatalogDocumentType,
-} from "@a4code/client-runtime/platform";
-import type { PersistedSavedEnvironmentRecord } from "@a4code/contracts";
-import { fromLenientJson } from "@a4code/shared/schemaJson";
+} from "@t3tools/client-runtime/platform";
+import type { PersistedSavedEnvironmentRecord } from "@t3tools/contracts";
+import { fromLenientJson } from "@t3tools/shared/schemaJson";
 import * as Context from "effect/Context";
 import * as SecureRandom from "effect/crypto/SecureRandom";
 import * as Effect from "effect/Effect";
@@ -169,7 +169,7 @@ export class DesktopConnectionCatalogStore extends Context.Service<
       DesktopConnectionCatalogStoreWriteError | DesktopConnectionCatalogStoreProtectionError
     >;
   }
->()("@a4code/desktop/app/DesktopConnectionCatalogStore") {}
+>()("@t3tools/desktop/app/DesktopConnectionCatalogStore") {}
 
 function decodeSecretBytes(
   catalogPath: string,

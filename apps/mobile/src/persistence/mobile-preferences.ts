@@ -5,7 +5,7 @@ import * as Option from "effect/Option";
 import * as Ref from "effect/Ref";
 import * as Schema from "effect/Schema";
 import * as Semaphore from "effect/Semaphore";
-import { SavedViewIdentity } from "@a4code/client-runtime/saved-views";
+import { SavedViewIdentity } from "@t3tools/client-runtime/saved-views";
 import {
   EnvironmentId,
   IssueInvolvement,
@@ -17,8 +17,8 @@ import {
   type ProviderInstanceId,
   PullRequestMergeMethod,
   type SidebarProjectGroupingMode,
-} from "@a4code/contracts";
-import { ToolCallVisibility } from "@a4code/contracts/settings";
+} from "@t3tools/contracts";
+import { ToolCallVisibility } from "@t3tools/contracts/settings";
 import type { AndroidNavigationStyle } from "../lib/androidNavigationStyle";
 import type { ComposerEnterBehavior } from "../lib/composerEnterBehavior";
 import type { FollowUpBehavior } from "../lib/followUpBehavior";
@@ -28,8 +28,8 @@ import * as MobileDatabase from "./mobile-database";
 import * as MobileSecureStorage from "./mobile-secure-storage";
 import { MobileStorageDecodeError, MobileStorageEncodeError } from "./mobile-storage";
 
-const PREFERENCES_KEY = "a4code.preferences";
-const PREFERENCES_FALLBACK_KEY = "a4code.preferences.fallback";
+const PREFERENCES_KEY = "t3code.preferences";
+const PREFERENCES_FALLBACK_KEY = "t3code.preferences.fallback";
 const encodeJson = Schema.encodeUnknownEffect(Schema.fromJsonString(Schema.Unknown));
 
 export const PullRequestListControls = Schema.Struct({
@@ -228,7 +228,7 @@ export class MobilePreferencesStore extends Context.Service<
       transform: (current: Preferences) => Partial<Preferences>,
     ) => Effect.Effect<Preferences, MobilePreferencesSaveError>;
   }
->()("@a4code/mobile/persistence/mobile-preferences/MobilePreferencesStore") {}
+>()("@t3tools/mobile/persistence/mobile-preferences/MobilePreferencesStore") {}
 
 const isToolCallVisibility = Schema.is(ToolCallVisibility);
 const isPullRequestMergeMethod = Schema.is(PullRequestMergeMethod);

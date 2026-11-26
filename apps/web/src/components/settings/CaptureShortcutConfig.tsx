@@ -3,12 +3,12 @@ import {
   type DesktopCaptureConfigApplied,
   type DesktopCaptureConfigPreview,
   type DesktopSnapShotState,
-} from "@a4code/contracts";
-import { parseKeybindingShortcut } from "@a4code/shared/keybindings";
+} from "@t3tools/contracts";
+import { parseKeybindingShortcut } from "@t3tools/shared/keybindings";
 import { FileDiff } from "@pierre/diffs/react";
 import { T, useGT, Var } from "gt-react";
 import { parseDiffFromFile } from "@pierre/diffs";
-import { settlePromise } from "@a4code/client-runtime/state/runtime";
+import { settlePromise } from "@t3tools/client-runtime/state/runtime";
 import * as Cause from "effect/Cause";
 import { useState } from "react";
 import { getDesktopSnapShotBridge } from "../../lib/desktopSnapShot";

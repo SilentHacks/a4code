@@ -8,7 +8,7 @@ import {
   type ProviderAuthInteraction,
   type ProviderAuthResponse,
   type ProviderAuthState,
-} from "@a4code/contracts";
+} from "@t3tools/contracts";
 import * as Fiber from "effect/Fiber";
 import * as Exit from "effect/Exit";
 import * as Scope from "effect/Scope";

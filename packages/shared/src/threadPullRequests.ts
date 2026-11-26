@@ -1,4 +1,4 @@
-import type { ThreadLinkedPullRequest, ThreadPullRequestLink } from "@a4code/contracts";
+import type { ThreadLinkedPullRequest, ThreadPullRequestLink } from "@t3tools/contracts";
 
 /** Tombstones prevent sync from re-adding hidden members. */
 export function visibleThreadPullRequests(

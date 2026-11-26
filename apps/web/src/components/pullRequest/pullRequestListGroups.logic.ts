@@ -2,7 +2,7 @@ import type {
   PullRequestInvolvement,
   PullRequestListFilters,
   PullRequestListResult,
-} from "@a4code/contracts";
+} from "@t3tools/contracts";
 
 import type { PullRequestTabStatusSeed } from "~/components/RightPanelTabs";
 import { pullRequestSurfaceId } from "~/rightPanelStore";

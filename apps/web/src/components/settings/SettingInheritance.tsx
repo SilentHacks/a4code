@@ -5,7 +5,7 @@ import {
   resolveEnvironmentMachineKind,
   type ServerSettings,
   type WorktreeSubmodules,
-} from "@a4code/contracts";
+} from "@t3tools/contracts";
 import { CheckIcon, ChevronRightIcon, LayersIcon } from "lucide-react";
 import * as Equal from "effect/Equal";
 import { msg, T, useGT, useMessages } from "gt-react";

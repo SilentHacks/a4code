@@ -1,5 +1,5 @@
-import { runRanAfter } from "@a4code/shared/orchestrationV2ThreadError";
-import { resolveProjectSettings } from "@a4code/shared/projectSettings";
+import { runRanAfter } from "@t3tools/shared/orchestrationV2ThreadError";
+import { resolveProjectSettings } from "@t3tools/shared/projectSettings";
 import {
   CommandId,
   isOrchestrationV2WorkActive,
@@ -8,7 +8,7 @@ import {
   type OrchestrationV2Run,
   type RunId,
   type ThreadId,
-} from "@a4code/contracts";
+} from "@t3tools/contracts";
 import * as DateTime from "effect/DateTime";
 import * as Effect from "effect/Effect";
 import type {

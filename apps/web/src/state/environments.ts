@@ -3,9 +3,9 @@ import {
   connectionCatalogDisplayUrl,
   hasRelayRoute,
   type EnvironmentPresentation as BaseEnvironmentPresentation,
-} from "@a4code/client-runtime/connection";
-import { Discovery } from "@a4code/client-runtime/relay";
-import type { EnvironmentId } from "@a4code/contracts";
+} from "@t3tools/client-runtime/connection";
+import { Discovery } from "@t3tools/client-runtime/relay";
+import type { EnvironmentId } from "@t3tools/contracts";
 import * as Option from "effect/Option";
 import { useState } from "react";
 

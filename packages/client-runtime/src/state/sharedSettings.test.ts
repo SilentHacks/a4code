@@ -1,4 +1,8 @@
-import { DEFAULT_SERVER_SETTINGS, ProviderDriverKind, ProviderInstanceId } from "@a4code/contracts";
+import {
+  DEFAULT_SERVER_SETTINGS,
+  ProviderDriverKind,
+  ProviderInstanceId,
+} from "@t3tools/contracts";
 import { describe, expect, it } from "@effect/vitest";
 
 import { filterSharedServerPatch } from "./sharedSettings.ts";

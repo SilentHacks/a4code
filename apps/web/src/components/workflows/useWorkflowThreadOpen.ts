@@ -1,8 +1,8 @@
 import {
   type LinkedThreadOpen,
   resolveLinkedThreadOpen,
-} from "@a4code/client-runtime/linked-thread";
-import type { EnvironmentId } from "@a4code/contracts";
+} from "@t3tools/client-runtime/linked-thread";
+import type { EnvironmentId } from "@t3tools/contracts";
 
 import { useConnectedEnvironmentIds, useEnvironment } from "../../state/environments";
 import { useLinkedEnvironments } from "../../state/peerLinks";

@@ -1,7 +1,7 @@
-import { EnvironmentId, ProjectId } from "@a4code/contracts";
+import { EnvironmentId, ProjectId } from "@t3tools/contracts";
 import { describe, expect, it } from "vite-plus/test";
 
-import type { EnvironmentProject } from "@a4code/client-runtime/state/shell";
+import type { EnvironmentProject } from "@t3tools/client-runtime/state/shell";
 import { buildHomeProjectScopes, type HomeProjectScope } from "../home/homeThreadList";
 import {
   getProjectScopeSelectionTarget,
@@ -46,7 +46,7 @@ function makeProject(
 
 function makeScope(projects: ReadonlyArray<EnvironmentProject>): HomeProjectScope {
   return {
-    key: "github.com/SilentHacks/a4code",
+    key: "github.com/t3tools/t3code",
     title: "A4 Code",
     representative: projects[0]!,
     projects,
@@ -61,7 +61,7 @@ function makeScope(projects: ReadonlyArray<EnvironmentProject>): HomeProjectScop
 
 describe("getProjectScopeSelectionTarget", () => {
   it("chooses an open copy of a repository over an archived copy on the preferred machine", () => {
-    const repo = { repositoryKey: "github.com/SilentHacks/a4code" };
+    const repo = { repositoryKey: "github.com/t3tools/t3code" };
     const archived = {
       ...makeProject("archived-copy", "mac", repo),
       archivedAt: "2026-07-02T00:00:00.000Z",
@@ -84,8 +84,8 @@ describe("getProjectScopeSelectionTarget", () => {
   });
 
   it("prefers a connected copy of a project that spans environments", () => {
-    const mac = makeProject("a4code", "mac");
-    const server = makeProject("a4code", "server");
+    const mac = makeProject("t3code", "mac");
+    const server = makeProject("t3code", "server");
     const target = (connected: ReadonlyArray<string>, preferred: string | null = null) =>
       getProjectScopeSelectionTarget(
         makeScope([mac, server]),
@@ -127,75 +127,73 @@ describe("getProjectScopeSelectionTarget", () => {
 
 describe("newTaskFilteredProject", () => {
   it("never starts in an archived copy of the filtered project", () => {
-    const mac = { ...makeProject("a4code", "mac"), archivedAt: "2026-01-01T00:00:00.000Z" };
-    const server = makeProject("a4code", "server");
+    const mac = { ...makeProject("t3code", "mac"), archivedAt: "2026-01-01T00:00:00.000Z" };
+    const server = makeProject("t3code", "server");
     expect(
       newTaskFilteredProject(
         makeScope([mac, server]),
         null,
         new Set([mac.environmentId, server.environmentId]),
-        { environmentId: "mac", projectId: "a4code" },
+        { environmentId: "mac", projectId: "t3code" },
       ),
-    ).toEqual({ environmentId: "server", projectId: "a4code" });
+    ).toEqual({ environmentId: "server", projectId: "t3code" });
   });
 
   it("prefers the remembered copy of the filtered project", () => {
-    const mac = makeProject("a4code", "mac");
-    const server = makeProject("a4code", "server");
+    const mac = makeProject("t3code", "mac");
+    const server = makeProject("t3code", "server");
     const connected = new Set([mac.environmentId, server.environmentId]);
     const filtered = (last?: { readonly environmentId: string; readonly projectId: string }) =>
       newTaskFilteredProject(makeScope([mac, server]), null, connected, last);
-    expect(filtered({ environmentId: "server", projectId: "a4code" })).toEqual({
+    expect(filtered({ environmentId: "server", projectId: "t3code" })).toEqual({
       environmentId: "server",
-      projectId: "a4code",
+      projectId: "t3code",
     });
     expect(filtered({ environmentId: "server", projectId: "other" })).toEqual({
       environmentId: "mac",
-      projectId: "a4code",
+      projectId: "t3code",
     });
   });
 });
 
 describe("resolveEnvironmentProjectMatch", () => {
   it("follows the same repository onto the target machine", () => {
-    const selected = makeProject("a4code", "mac", {
-      repositoryKey: "github.com/SilentHacks/a4code",
-    });
+    const selected = makeProject("t3code", "mac", { repositoryKey: "github.com/t3tools/t3code" });
     const target = [
       makeProject("other", "server", { repositoryKey: "github.com/t3tools/other" }),
-      makeProject("a4code-clone", "server", { repositoryKey: "github.com/SilentHacks/a4code" }),
+      makeProject("t3code-clone", "server", { repositoryKey: "github.com/t3tools/t3code" }),
     ];
     expect(resolveEnvironmentProjectMatch(target, selected)).toBe(target[1]);
     expect(isSameRepository(target[1]!, selected)).toBe(true);
   });
 
   it("falls back to workspace basename, then title, for unindexed projects", () => {
-    const selected = makeProject("a4code", "mac", { workspaceRoot: "/Users/me/a4code" });
+    const selected = makeProject("t3code", "mac", { workspaceRoot: "/Users/me/t3code" });
     const byBasename = [
       makeProject("other", "server"),
-      makeProject("srv", "server", { workspaceRoot: "/home/me/a4code" }),
+      makeProject("srv", "server", { workspaceRoot: "/home/me/t3code" }),
     ];
     expect(resolveEnvironmentProjectMatch(byBasename, selected)).toBe(byBasename[1]);
     expect(isSameRepository(byBasename[1]!, selected)).toBe(false);
 
     const byTitle = [
       makeProject("other", "server"),
-      makeProject("srv", "server", { title: "a4code" }),
+      makeProject("srv", "server", { title: "t3code" }),
     ];
     expect(resolveEnvironmentProjectMatch(byTitle, selected)).toBe(byTitle[1]);
   });
 
   it("does not treat a known different repository as a basename or title match", () => {
-    const selected = makeProject("a4code", "mac", {
-      repositoryKey: "github.com/SilentHacks/a4code",
-      workspaceRoot: "/Users/me/a4code",
+    const selected = makeProject("t3code", "mac", {
+      repositoryKey: "github.com/t3tools/t3code",
+      workspaceRoot: "/Users/me/t3code",
     });
     const fork = makeProject("fork", "server", {
-      repositoryKey: "github.com/someone/a4code",
-      title: "a4code",
-      workspaceRoot: "/home/me/a4code",
+      repositoryKey: "github.com/someone/t3code",
+      title: "t3code",
+      workspaceRoot: "/home/me/t3code",
     });
-    const unindexed = makeProject("unindexed", "server", { workspaceRoot: "/srv/a4code" });
+    const unindexed = makeProject("unindexed", "server", { workspaceRoot: "/srv/t3code" });
     expect(resolveEnvironmentProjectMatch([fork, unindexed], selected)).toBe(unindexed);
     expect(resolveEnvironmentProjectMatch([fork], selected)).toBe(fork);
     expect(isSameRepository(fork, selected)).toBe(false);
@@ -203,7 +201,7 @@ describe("resolveEnvironmentProjectMatch", () => {
 });
 
 describe("resolveDraftProjectSelection", () => {
-  const projects = [makeProject("a4code"), makeProject("a4code-2")];
+  const projects = [makeProject("t3code"), makeProject("t3code-2")];
   const draft = { incomingShareId: undefined, pickerClosed: false };
 
   it("opens the picker instead of auto-selecting the only project", () => {
@@ -232,7 +230,7 @@ describe("resolveDraftProjectSelection", () => {
 
   it("keeps the draft when the picker closes after a choice", () => {
     expect(
-      resolveDraftProjectSelection("environment:a4code-2", projects, [makeScope(projects)], {
+      resolveDraftProjectSelection("environment:t3code-2", projects, [makeScope(projects)], {
         ...draft,
         pickerClosed: true,
       }),
@@ -255,7 +253,7 @@ describe("resolveDraftProjectSelection", () => {
       incomingShareId: "share",
       pickerClosed: false,
       useLastProject: undefined,
-      lastProject: { environmentId: "environment", projectId: "a4code-2" },
+      lastProject: { environmentId: "environment", projectId: "t3code-2" },
     };
     expect(resolveDraftProjectSelection(null, projects, scopes, shareDraft)).toEqual({
       kind: "select",

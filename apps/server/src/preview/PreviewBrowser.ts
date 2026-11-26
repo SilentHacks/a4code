@@ -1,6 +1,6 @@
 // @effect-diagnostics nodeBuiltinImport:off - Effect has no incremental digest.
 import * as EffectNodeStream from "@effect/platform-node/NodeStream";
-import * as HostProcess from "@a4code/shared/HostProcess";
+import * as HostProcess from "@t3tools/shared/HostProcess";
 import * as Cause from "effect/Cause";
 import * as Clock from "effect/Clock";
 import * as Context from "effect/Context";
@@ -97,7 +97,7 @@ export class PreviewBrowserInstallError extends Schema.TaggedError<PreviewBrowse
   { detail: Schema.String, cause: Schema.optional(Schema.Defect()) },
 ) {
   override get message(): string {
-    return `A4 Code could not install its headless browser: ${this.detail} Try again.`;
+    return `T3 could not install its headless browser: ${this.detail} Try again.`;
   }
 }
 const isInstallError = Schema.is(PreviewBrowserInstallError);
@@ -110,7 +110,7 @@ export class PreviewBrowserInstallingError extends Schema.TaggedError<PreviewBro
     const progress = this.unpacking
       ? "unpacking"
       : `${megabytes(this.downloadedBytes)} of ${megabytes(this.totalBytes)} MB downloaded`;
-    return `A4 Code is installing its headless browser (${progress}). Try again in a minute.`;
+    return `T3 is installing its headless browser (${progress}). Try again in a minute.`;
   }
 }
 
@@ -119,7 +119,7 @@ export class PreviewBrowserUnsupportedError extends Schema.TaggedError<PreviewBr
   { platform: Schema.String, arch: Schema.String },
 ) {
   override get message(): string {
-    return `A4 Code's headless browser is not available on ${this.platform}-${this.arch}: Chrome for Testing has no headless shell for it.`;
+    return `T3's headless browser is not available on ${this.platform}-${this.arch}: Chrome for Testing has no headless shell for it.`;
   }
 }
 
@@ -133,7 +133,7 @@ export class PreviewBrowser extends Context.Service<
     >;
     readonly installed: Effect.Effect<Option.Option<string>>;
   }
->()("a4code/preview/PreviewBrowser") {}
+>()("t3/preview/PreviewBrowser") {}
 
 export interface PreviewBrowserOptions {
   readonly baseDir: string;
@@ -299,9 +299,7 @@ export const makePreviewBrowser = Effect.fn("PreviewBrowser.make")(function* (
     },
     Effect.scoped,
     Effect.mapError(
-      wrapFailure(
-        "Could not unpack the browser. Check free disk space in the A4 Code data directory.",
-      ),
+      wrapFailure("Could not unpack the browser. Check free disk space in T3's home directory."),
     ),
   );
 
@@ -352,7 +350,7 @@ export const makePreviewBrowser = Effect.fn("PreviewBrowser.make")(function* (
       );
       return path.join(installRoot, release.version, executableName);
     },
-    Effect.mapError(wrapFailure("Could not save the browser in the A4 Code data directory.")),
+    Effect.mapError(wrapFailure("Could not save the browser in T3's home directory.")),
   );
 
   const join = (release: PreviewBrowserRelease) =>

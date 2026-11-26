@@ -3,7 +3,7 @@ import {
   type OrchestrationV2ThreadShell,
   ProjectId,
   type ThreadId,
-} from "@a4code/contracts";
+} from "@t3tools/contracts";
 import * as Context from "effect/Context";
 import * as SecureRandom from "effect/crypto/SecureRandom";
 import * as Effect from "effect/Effect";
@@ -42,7 +42,7 @@ export class ScratchThreadPromotion extends Context.Service<
       readonly threadId: ThreadId;
     }) => Effect.Effect<{ readonly projectId: ProjectId }, ScratchThreadPromotionError>;
   }
->()("a4code/project/ScratchThreadPromotion") {}
+>()("t3/project/ScratchThreadPromotion") {}
 
 const make = Effect.gen(function* () {
   const managedFolders = yield* ManagedProjectFolders.ManagedProjectFolders;

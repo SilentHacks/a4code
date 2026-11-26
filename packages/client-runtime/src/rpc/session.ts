@@ -5,11 +5,11 @@ import {
   type ServerConfigStreamEvent,
   WsSubscribeServerConfigRpc,
   WS_METHODS,
-} from "@a4code/contracts";
+} from "@t3tools/contracts";
 import {
   joinSocketFrameParts,
   SOCKET_FRAME_PARTS_QUERY_PARAM,
-} from "@a4code/shared/socketFrameParts";
+} from "@t3tools/shared/socketFrameParts";
 import * as Cause from "effect/Cause";
 import * as Clock from "effect/Clock";
 import * as Context from "effect/Context";
@@ -82,7 +82,7 @@ export class RpcSessionFactory extends Context.Service<
       connection: PreparedConnection,
     ) => Effect.Effect<RpcSession, ConnectionAttemptError, Scope.Scope>;
   }
->()("@a4code/client-runtime/rpc/session/RpcSessionFactory") {}
+>()("@t3tools/client-runtime/rpc/session/RpcSessionFactory") {}
 
 type InitialConfigError = Effect.Error<
   ReturnType<WsRpcProtocolClient[typeof WS_METHODS.serverGetConfig]>

@@ -3,12 +3,12 @@ import * as NodeCrypto from "node:crypto";
 import * as NodeFS from "node:fs";
 import * as NodePath from "node:path";
 
-import type { ChatAttachment } from "@a4code/contracts";
+import type { ChatAttachment } from "@t3tools/contracts";
 import {
   htmlRenderFromToolItem,
   mcpAppFromToolItem,
   previewRecordingIdFromToolItem,
-} from "@a4code/shared/toolOutput";
+} from "@t3tools/shared/toolOutput";
 
 import {
   normalizeAttachmentRelativePath,

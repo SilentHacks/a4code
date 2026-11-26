@@ -6,17 +6,16 @@ import * as NodeCrypto from "node:crypto";
 import * as NodeFSP from "node:fs/promises";
 import * as NodeOS from "node:os";
 import * as NodePath from "node:path";
-import { taskCacheEndpoint } from "../src/remoteCache.ts";
 
 const project = NodePath.join(import.meta.dirname, "../../..");
 const env = {
   ...process.env,
-  A4CODE_TASK_CACHE_TELEMETRY: "off",
+  T3_TASK_CACHE_TELEMETRY: "off",
   VP_REMOTE_CACHE: "read-write",
   VP_REMOTE_CACHE_URL: undefined,
 };
-const root = await NodeFSP.mkdtemp(NodePath.join(NodeOS.tmpdir(), "a4-cache-probe-"));
-const name = `a4-cache-probe-${NodeCrypto.randomUUID()}`;
+const root = await NodeFSP.mkdtemp(NodePath.join(NodeOS.tmpdir(), "t3-cache-probe-"));
+const name = `t3-cache-probe-${NodeCrypto.randomUUID()}`;
 
 async function run(directory: string, home = NodeOS.homedir()) {
   return new Promise<string>((resolve, reject) => {
@@ -46,8 +45,9 @@ async function run(directory: string, home = NodeOS.homedir()) {
 }
 
 try {
-  const endpoint = taskCacheEndpoint(project);
-  if (!endpoint) throw new Error("Set A4CODE_TASK_CACHE_ENDPOINT to the deployed cache URL.");
+  const { endpoint } = JSON.parse(
+    await NodeFSP.readFile(NodePath.join(project, ".task-cache.json"), "utf8"),
+  );
   for (const [path, method] of [
     ["fetch", "POST"],
     ["blob/12345678-1234-1234-1234-123456789abc", "GET"],
@@ -84,7 +84,7 @@ try {
     await NodeFSP.writeFile(NodePath.join(cwd, "input.txt"), "version-a");
   }
   console.log("First checkout:\n" + (await run("a")));
-  const readerFile = NodePath.join(NodeOS.homedir(), ".config/a4-task-cache/ci-reader.json");
+  const readerFile = NodePath.join(NodeOS.homedir(), ".config/t3-task-cache/ci-reader.json");
   let reader;
   try {
     reader = JSON.parse(await NodeFSP.readFile(readerFile, "utf8"));
@@ -92,16 +92,16 @@ try {
     if (!(error instanceof Error) || !("code" in error) || error.code !== "ENOENT") throw error;
     const credentials = JSON.parse(
       await NodeFSP.readFile(
-        NodePath.join(NodeOS.homedir(), ".config/a4-task-cache/credentials.json"),
+        NodePath.join(NodeOS.homedir(), ".config/t3-task-cache/credentials.json"),
         "utf8",
       ),
     );
     reader = credentials[endpoint];
   }
   const otherHome = NodePath.join(root, "other-developer");
-  await NodeFSP.mkdir(NodePath.join(otherHome, ".config/a4-task-cache"), { recursive: true });
+  await NodeFSP.mkdir(NodePath.join(otherHome, ".config/t3-task-cache"), { recursive: true });
   await NodeFSP.writeFile(
-    NodePath.join(otherHome, ".config/a4-task-cache/credentials.json"),
+    NodePath.join(otherHome, ".config/t3-task-cache/credentials.json"),
     JSON.stringify({
       [endpoint]: reader,
     }),

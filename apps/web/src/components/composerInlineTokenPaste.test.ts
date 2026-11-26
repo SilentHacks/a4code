@@ -1,10 +1,10 @@
-import { threadChipCopyTarget } from "@a4code/client-runtime/thread-reference";
-import { type ComposerContextClipboardFragment, EnvironmentId, ThreadId } from "@a4code/contracts";
+import { threadChipCopyTarget } from "@t3tools/client-runtime/thread-reference";
+import { type ComposerContextClipboardFragment, EnvironmentId, ThreadId } from "@t3tools/contracts";
 import {
   COMPOSER_CONTEXT_CLIPBOARD_MIME,
   encodeComposerContextFragment,
-} from "@a4code/shared/composerContextClipboard";
-import { threadContextRecord } from "@a4code/shared/composerContextReferences";
+} from "@t3tools/shared/composerContextClipboard";
+import { threadContextRecord } from "@t3tools/shared/composerContextReferences";
 import { describe, expect, it } from "vite-plus/test";
 
 import { importPastedComposerText } from "./composerInlineTokenPaste";

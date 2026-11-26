@@ -8,9 +8,9 @@ Pod::Spec.new do |s|
   s.version = package["version"]
   s.summary = "Native selectable source text for A4 Code mobile."
   s.description = "Fabric-backed styled source text with whole-document selection."
-  s.homepage = "https://github.com/SilentHacks/a4code"
+  s.homepage = "https://t3tools.com"
   s.license = { :type => "MIT", :file => "LICENSE" }
-  s.author = { "A4 Code contributors" => "26593675+SilentHacks@users.noreply.github.com" }
+  s.author = { "T3 Tools" => "hello@t3tools.com" }
   s.platforms = { :ios => min_ios_version_supported }
   s.source = { :path => "." }
   s.source_files = "ios/**/*.{h,m,mm,cpp}"

@@ -63,22 +63,12 @@ export function SubscriptionUsage(props: SubscriptionUsageProps, environment: Wi
     moreInApp: {} as Record<string, string>,
   };
   const providers = props.providers ?? [
-    {
-      name: "Codex",
-      // oxlint-disable-next-line a4code/no-untranslated-copy -- widget fallback until the app publishes translated text
-      detail: "Open A4 Code to connect",
-      windows: [],
-      expiresAt: 0,
-      totalWindows: 0,
-    },
-    {
-      name: "Claude",
-      // oxlint-disable-next-line a4code/no-untranslated-copy -- widget fallback until the app publishes translated text
-      detail: "Open A4 Code to connect",
-      windows: [],
-      expiresAt: 0,
-      totalWindows: 0,
-    },
+    // prettier-ignore
+    // oxlint-disable-next-line t3code/no-untranslated-copy -- widget fallback until the app publishes translated text
+    { name: "Codex", detail: "Open A4 Code to connect", windows: [], expiresAt: 0, totalWindows: 0 },
+    // prettier-ignore
+    // oxlint-disable-next-line t3code/no-untranslated-copy -- widget fallback until the app publishes translated text
+    { name: "Claude", detail: "Open A4 Code to connect", windows: [], expiresAt: 0, totalWindows: 0 },
   ];
 
   const pad = 14;
@@ -349,8 +339,8 @@ export function SubscriptionUsage(props: SubscriptionUsageProps, environment: Wi
           {shown.map(row)}
           {hidden > 0 ? (
             <Text color={colors.muted} maxLines={1} style={{ fontSize: 10 }}>
-              {/* oxlint-disable-next-line a4code/no-untranslated-copy -- widget fallback until the app publishes translated text */}
-              {text.moreInApp[String(hidden)] ?? `${hidden} more in A4 Code`}
+              {/* oxlint-disable-next-line t3code/no-untranslated-copy -- widget fallback until the app publishes translated text */}
+              {text.moreInApp[String(hidden)] ?? `${hidden} more in T3`}
             </Text>
           ) : null}
         </Column>

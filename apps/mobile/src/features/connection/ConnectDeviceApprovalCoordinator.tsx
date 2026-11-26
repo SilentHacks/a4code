@@ -1,11 +1,11 @@
 import { msg } from "gt-react-native";
-import { unseenConnectDevices } from "@a4code/client-runtime/connect-device-notices";
+import { unseenConnectDevices } from "@t3tools/client-runtime/connect-device-notices";
 import {
   AuthAccessWriteScope,
   type AuthConnectDevice,
   type AuthPairingLink,
   type EnvironmentId,
-} from "@a4code/contracts";
+} from "@t3tools/contracts";
 import { Fragment, useEffect, useEffectEvent } from "react";
 
 import * as Dialog from "../../components/ui/Dialog";
@@ -152,11 +152,11 @@ function NewConnectDeviceWatcher(props: {
       { pairingLinkId: `${props.environmentId}:${newest}`, environmentId: props.environmentId },
     ]);
   });
-  // oxlint-disable-next-line a4code/no-unreasoned-state-sync -- a device this phone has not announced opens a native alert
+  // oxlint-disable-next-line t3code/no-unreasoned-state-sync -- a device this phone has not announced opens a native alert
   useEffect(() => {
     if (devices !== undefined) void check(devices);
   }, [devices]);
-  // oxlint-disable-next-line a4code/no-unreasoned-state-sync -- forgets this host and drops its queued notice when it goes away
+  // oxlint-disable-next-line t3code/no-unreasoned-state-sync -- forgets this host and drops its queued notice when it goes away
   useEffect(() => {
     const environmentId = props.environmentId;
     return () => {
@@ -260,7 +260,7 @@ function EnvironmentApprovalWatcher(props: {
       })),
     );
   });
-  // oxlint-disable-next-line a4code/no-unreasoned-state-sync -- registers this host with the module-level prompt queue and drops its prompts when it goes away
+  // oxlint-disable-next-line t3code/no-unreasoned-state-sync -- registers this host with the module-level prompt queue and drops its prompts when it goes away
   useEffect(() => {
     const environmentId = props.environmentId;
     watchedEnvironments.add(environmentId);
@@ -269,7 +269,7 @@ function EnvironmentApprovalWatcher(props: {
       approvalPrompts.drop((prompt) => prompt.environmentId === environmentId);
     };
   }, [props.environmentId]);
-  // oxlint-disable-next-line a4code/no-unreasoned-state-sync -- a new request on the access stream opens a native alert
+  // oxlint-disable-next-line t3code/no-unreasoned-state-sync -- a new request on the access stream opens a native alert
   useEffect(() => {
     if (pairingLinks !== undefined) offerPrompts(pairingLinks);
   }, [pairingLinks]);

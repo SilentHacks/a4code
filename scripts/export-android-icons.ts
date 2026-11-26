@@ -15,7 +15,7 @@ type IconVariant = "dev" | "nightly" | "prod";
 
 const ADAPTIVE_CANVAS = 432;
 const SPLASH_CANVAS = 1152;
-const TEXT_WIDTH = 88;
+const TEXT = { x: 15.53, y: 37, width: 94.5, height: 57 };
 const WORDMARK_FRACTION = 0.48;
 const COMPOSER_CANVAS_PT = 1024;
 const SVG_DENSITY = 300;
@@ -27,10 +27,11 @@ export class AndroidIconRenderError extends Schema.TaggedError<AndroidIconRender
   { layer: Schema.String, cause: Schema.Defect() },
 ) {}
 
-const wordmarkTransform = (size: number, fraction: number) => {
-  const scale = (size * fraction) / TEXT_WIDTH;
-  const offset = (size - 128 * scale) / 2;
-  return `translate(${offset} ${offset}) scale(${scale})`;
+const wordmarkTransform = (size: number) => {
+  const scale = (size * WORDMARK_FRACTION) / TEXT.width;
+  const tx = (size - TEXT.width * scale) / 2 - TEXT.x * scale;
+  const ty = (size - TEXT.height * scale) / 2 - TEXT.y * scale;
+  return `translate(${tx.toFixed(3)} ${ty.toFixed(3)}) scale(${scale.toFixed(4)})`;
 };
 
 const canvasSvg = (size: number, inner: string) =>
@@ -82,25 +83,21 @@ const readLayerSource = Effect.fn("androidIcons.readLayerSource")(function* (
   );
 });
 
-export const renderForeground = Effect.fn("androidIcons.renderForeground")(function* (
+const renderForeground = Effect.fn("androidIcons.renderForeground")(function* (
   repositoryRoot: string,
-  variant: IconVariant,
   size: number,
-  fraction = WORDMARK_FRACTION,
 ) {
-  const text = yield* readLayerSource(repositoryRoot, variant, "text.svg");
-  const paths = text.match(/<path[^>]*\/>/g);
-  if (!paths)
-    return yield* new AndroidIconRenderError({ layer: "foreground", cause: "No SVG path" });
+  const text = yield* readLayerSource(repositoryRoot, "prod", "text.svg");
+  const paths = text.match(/<path[^>]*\/>/g) ?? [];
   return yield* rasterize(
     "foreground",
-    canvasSvg(size, `<g transform="${wordmarkTransform(size, fraction)}">${paths.join("")}</g>`),
+    canvasSvg(size, `<g transform="${wordmarkTransform(size)}">${paths.join("")}</g>`),
     size,
   );
 });
 
 const renderDevelopmentBackground = Effect.fn("androidIcons.renderDevelopmentBackground")(
-  function* (repositoryRoot: string, size: number, fraction: number) {
+  function* (repositoryRoot: string, size: number) {
     const annotations = yield* readLayerSource(repositoryRoot, "dev", "annotations.svg");
     const defs = annotations.match(/<defs>[\s\S]*?<\/defs>/)?.[0] ?? "";
     const body = annotations.replace(/^[\s\S]*?<\/defs>/, "").replace(/<\/svg>\s*$/, "");
@@ -108,7 +105,7 @@ const renderDevelopmentBackground = Effect.fn("androidIcons.renderDevelopmentBac
     const background = yield* rasterize("dev-background", fullBleed(paper), size);
     const overlay = yield* rasterize(
       "dev-annotations",
-      canvasSvg(size, `${defs}<g transform="${wordmarkTransform(size, fraction)}">${body}</g>`),
+      canvasSvg(size, `${defs}<g transform="${wordmarkTransform(size)}">${body}</g>`),
       size,
     );
     return yield* composite("dev-background", background, [{ input: overlay }]);
@@ -162,15 +159,14 @@ const renderNightlyBackground = Effect.fn("androidIcons.renderNightlyBackground"
   return yield* composite("nightly-background", background, overlays);
 });
 
-export const renderBackground = Effect.fn("androidIcons.renderBackground")(function* (
+const renderBackground = Effect.fn("androidIcons.renderBackground")(function* (
   repositoryRoot: string,
   variant: IconVariant,
   size: number,
-  fraction = WORDMARK_FRACTION,
 ) {
   switch (variant) {
     case "dev":
-      return yield* renderDevelopmentBackground(repositoryRoot, size, fraction);
+      return yield* renderDevelopmentBackground(repositoryRoot, size);
     case "nightly":
       return yield* renderNightlyBackground(repositoryRoot, size);
     case "prod":
@@ -183,7 +179,7 @@ const renderSplashIcon = Effect.fn("androidIcons.renderSplashIcon")(function* (
   variant: IconVariant,
 ) {
   const background = yield* renderBackground(repositoryRoot, variant, SPLASH_CANVAS);
-  const foreground = yield* renderForeground(repositoryRoot, "prod", SPLASH_CANVAS);
+  const foreground = yield* renderForeground(repositoryRoot, SPLASH_CANVAS);
   return yield* composite(`${variant}-splash`, background, [{ input: foreground }]);
 });
 
@@ -191,18 +187,15 @@ const exportAndroidIcons = Effect.gen(function* () {
   const fs = yield* FileSystem.FileSystem;
   const path = yield* Path.Path;
   const repositoryRoot = path.resolve(import.meta.dirname, "..");
-  const mark = yield* renderForeground(repositoryRoot, "prod", ADAPTIVE_CANVAS);
   const outputs = [
-    ["android-icon-foreground.png", mark],
-    ["android-icon-mark.png", mark],
-    ["android-notification-icon.png", yield* renderForeground(repositoryRoot, "prod", 96, 0.8)],
+    ["android-icon-foreground.png", yield* renderForeground(repositoryRoot, ADAPTIVE_CANVAS)],
     [
       "android-icon-background-dev.png",
-      yield* renderBackground(repositoryRoot, "dev", ADAPTIVE_CANVAS),
+      yield* renderDevelopmentBackground(repositoryRoot, ADAPTIVE_CANVAS),
     ],
     [
       "android-icon-background-nightly.png",
-      yield* renderBackground(repositoryRoot, "nightly", ADAPTIVE_CANVAS),
+      yield* renderNightlyBackground(repositoryRoot, ADAPTIVE_CANVAS),
     ],
     ["android-splash-icon-dev.png", yield* renderSplashIcon(repositoryRoot, "dev")],
     ["android-splash-icon-nightly.png", yield* renderSplashIcon(repositoryRoot, "nightly")],

@@ -4,12 +4,12 @@ import {
   type IssueRef,
   type IssueTrackerConnectionList,
   type RepositoryIdentity,
-} from "@a4code/contracts";
+} from "@t3tools/contracts";
 import {
   LINEAR_HOST,
   LINEAR_KIND,
   parseLinearIssueUrl,
-} from "@a4code/issue-tracker-linear/shared/issueUrl";
+} from "@t3tools/issue-tracker-linear/shared/issueUrl";
 
 import { sourceControlClients } from "./sourceControlClients.ts";
 import type { EnvironmentProject } from "./state/shell.ts";

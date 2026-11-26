@@ -9,7 +9,7 @@ import {
   type SecretReference,
   type ServerProvider,
   type ServerProviderUpdateState,
-} from "@a4code/contracts";
+} from "@t3tools/contracts";
 import * as Cause from "effect/Cause";
 import * as Context from "effect/Context";
 import * as DateTime from "effect/DateTime";
@@ -29,9 +29,9 @@ import * as Scope from "effect/Scope";
 import * as Stream from "effect/Stream";
 import * as Semaphore from "effect/Semaphore";
 import * as ChildProcessSpawner from "effect/process/ChildProcessSpawner";
-import * as HostProcess from "@a4code/shared/HostProcess";
+import * as HostProcess from "@t3tools/shared/HostProcess";
 
-import * as ProviderLatestVersions from "@a4code/provider-core/server/ProviderLatestVersions";
+import * as ProviderLatestVersions from "@t3tools/provider-core/server/ProviderLatestVersions";
 import * as ModelManifest from "./ModelManifest.ts";
 import { applyProviderCompatibility } from "./providerCompatibility.ts";
 import * as ServerConfig from "../config.ts";
@@ -49,12 +49,12 @@ import {
 import type {
   ProviderInstance,
   ProviderWorkspaceSnapshot,
-} from "@a4code/provider-core/server/driver";
+} from "@t3tools/provider-core/server/driver";
 import {
   makeManualOnlyProviderMaintenanceCapabilities,
   type ProviderMaintenanceCapabilities,
   latestProviderVersionCacheKeys,
-} from "@a4code/provider-core/server/maintenanceResolver";
+} from "@t3tools/provider-core/server/maintenanceResolver";
 import type { ProviderSnapshotSource } from "./builtInProviderCatalog.ts";
 
 export type ProviderMaintenanceActionKind = "update";
@@ -150,7 +150,7 @@ export class ProviderRegistry extends Context.Service<
 
     readonly streamChanges: Stream.Stream<ReadonlyArray<ServerProvider>>;
   }
->()("a4code/provider/ProviderRegistry") {}
+>()("t3/provider/ProviderRegistry") {}
 
 const loadProviders = (
   providerSources: ReadonlyArray<ProviderSnapshotSource>,

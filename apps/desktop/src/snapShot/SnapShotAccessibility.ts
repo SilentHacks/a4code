@@ -1,6 +1,9 @@
 // @effect-diagnostics globalTimers:off -- Accessibility timeouts run outside Effect fibers.
 
-import { SNAP_SHOT_ACCESSIBLE_TEXT_MAX_CHARS, type SnapShotAccessibility } from "@a4code/contracts";
+import {
+  SNAP_SHOT_ACCESSIBLE_TEXT_MAX_CHARS,
+  type SnapShotAccessibility,
+} from "@t3tools/contracts";
 import type * as Electron from "electron";
 
 import {

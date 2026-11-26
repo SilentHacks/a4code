@@ -1,16 +1,16 @@
 import {
   managedNightlyDeniedMessage,
   managedUpdatesDenial,
-} from "@a4code/client-runtime/contract-labels";
-import type { ServerUpdateState } from "@a4code/client-runtime/state/server";
+} from "@t3tools/client-runtime/contract-labels";
+import type { ServerUpdateState } from "@t3tools/client-runtime/state/server";
 import {
   type DesktopUpdateChannel,
   type EnvironmentId,
   type ServerConfig,
   type ServerSelfUpdateCapability,
-} from "@a4code/contracts";
-import { cliReleaseChannelOf, desktopUpdateChannelOf } from "@a4code/shared/cliRelease";
-import { compareSemverVersions } from "@a4code/shared/semver";
+} from "@t3tools/contracts";
+import { cliReleaseChannelOf, desktopUpdateChannelOf } from "@t3tools/shared/cliRelease";
+import { compareSemverVersions } from "@t3tools/shared/semver";
 import { msg } from "gt-react";
 
 import { m, type MessageResolver } from "~/i18n/messages";
@@ -404,7 +404,7 @@ export function collectChannelSwitchTargets(
       skip(
         resolve(
           msg("run `{command}` there", {
-            command: `a4code update --channel ${release.channel === "nightly" ? "nightly" : "stable"} --allow-downgrade`,
+            command: `t3 update --channel ${release.channel === "nightly" ? "nightly" : "stable"} --allow-downgrade`,
           }),
         ),
       );

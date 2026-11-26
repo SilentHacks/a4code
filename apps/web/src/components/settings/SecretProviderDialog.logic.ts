@@ -3,11 +3,11 @@ import {
   SecretProviderKind,
   SecretProviderLabel,
   type SecretProviderConfig,
-} from "@a4code/contracts";
+} from "@t3tools/contracts";
 import {
   OnePasswordSecretProviderConfig,
   type OnePasswordAccount,
-} from "@a4code/secret-provider-onepassword/shared/definition";
+} from "@t3tools/secret-provider-onepassword/shared/definition";
 import * as Option from "effect/Option";
 import * as Result from "effect/Result";
 import * as Schema from "effect/Schema";

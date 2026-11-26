@@ -6,9 +6,9 @@ import {
   ThreadId,
   TurnItemId,
   type PreviewAnnotationPayload,
-} from "@a4code/contracts";
+} from "@t3tools/contracts";
 import * as Schema from "effect/Schema";
-import { upgradeLegacyContextMessage } from "@a4code/shared/composerContextLegacy";
+import { upgradeLegacyContextMessage } from "@t3tools/shared/composerContextLegacy";
 
 import {
   formatInlineContextReference,

@@ -1,16 +1,16 @@
 import {
   getPromptControlledTraits,
   getTraitSelectChange,
-} from "@a4code/client-runtime/model-traits";
+} from "@t3tools/client-runtime/model-traits";
 import { T, useGT, useLocale, useMessages } from "gt-react-native";
 import * as Dialog from "../../components/ui/Dialog";
 import { createV5StackNavigator as createNativeStackNavigator } from "../../native/createV5StackNavigator";
 import { useSheetStackOptions } from "../layout/nested-stacks";
-import { DEFAULT_SERVER_SETTINGS, ProviderInstanceId } from "@a4code/contracts";
+import { DEFAULT_SERVER_SETTINGS, ProviderInstanceId } from "@t3tools/contracts";
 import {
   modelPreferencesMigrationPatch,
   resolveModelPreferences,
-} from "@a4code/shared/serverSettings";
+} from "@t3tools/shared/serverSettings";
 import type {
   EnvironmentId,
   ModelSelection,
@@ -20,11 +20,14 @@ import type {
   RuntimeMode,
   ServerSettings,
   ThreadId,
-} from "@a4code/contracts";
+} from "@t3tools/contracts";
 import type { LegendListRenderItemProps } from "@legendapp/list/react-native";
 import { RegistryContext, useAtomMount, useAtomValue } from "@effect/atom-react";
 import { AnimatedLegendList } from "@legendapp/list/reanimated";
-import { getProviderOptionCurrentLabel, getProviderOptionCurrentValue } from "@a4code/shared/model";
+import {
+  getProviderOptionCurrentLabel,
+  getProviderOptionCurrentValue,
+} from "@t3tools/shared/model";
 import {
   useNavigation,
   useRoute,
@@ -69,7 +72,7 @@ import {
   type ProviderGroup,
   withStoredThreadModelOptions,
 } from "../../lib/modelOptions";
-import { groupModelsBySubProvider } from "@a4code/client-runtime/providerSubProviders";
+import { groupModelsBySubProvider } from "@t3tools/client-runtime/providerSubProviders";
 import { applyProviderOptionSelection } from "../../lib/providerOptions";
 import { resolveProviderOptionDescriptors } from "../../lib/providerOptions";
 import {
@@ -122,7 +125,7 @@ import {
   providerSectionIsCollapsed,
   visibleCatalogModels,
 } from "./thread-settings-sheet-state";
-import { formatProviderUpdateRequiredNotice } from "@a4code/client-runtime/providerUpdateRequiredModels";
+import { formatProviderUpdateRequiredNotice } from "@t3tools/client-runtime/providerUpdateRequiredModels";
 import type { MessageResolver } from "../../i18n/messages";
 
 const PRIMARY_PROVIDER_DRIVERS: ReadonlySet<string> = new Set([
@@ -392,7 +395,7 @@ function ThreadSettingsSessionProvider(
     favorites: legacyFavorites,
   }).favorites;
   const saveSettings = useAtomCommand(serverEnvironment.updateSettings, "model favorites update");
-  // oxlint-disable-next-line a4code/no-unreasoned-state-sync -- writes the one-time legacy model favorites migration to server settings once per connection
+  // oxlint-disable-next-line t3code/no-unreasoned-state-sync -- writes the one-time legacy model favorites migration to server settings once per connection
   useEffect(() => {
     if (
       !props.environmentId ||
@@ -1092,7 +1095,7 @@ function ThreadSettingsMainContent(props: {
     if (config?.environment.capabilities.modelCatalogRefresh !== true) return;
     void refreshProvidersCommand({ environmentId, input: { modelCatalogOnly: true } });
   });
-  // oxlint-disable-next-line a4code/no-unreasoned-state-sync -- asks the server for newly released models when the model list opens
+  // oxlint-disable-next-line t3code/no-unreasoned-state-sync -- asks the server for newly released models when the model list opens
   useEffect(() => {
     refreshModelCatalog();
   }, []);
@@ -1188,7 +1191,7 @@ function ThreadSettingsMainContent(props: {
   };
 
   return (
-    // oxlint-disable-next-line a4code/require-registered-list-scroll -- Sheet content; sheets sit outside workspace columns and keep their own header handling.
+    // oxlint-disable-next-line t3code/require-registered-list-scroll -- Sheet content; sheets sit outside workspace columns and keep their own header handling.
     <AnimatedLegendList
       alwaysBounceVertical
       automaticallyAdjustsScrollIndicatorInsets

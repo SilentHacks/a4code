@@ -2,7 +2,7 @@ import {
   AuthEnvironmentMaintainScope,
   type ServerAuthDescriptor,
   type ServerAuthPolicy,
-} from "@a4code/contracts";
+} from "@t3tools/contracts";
 import * as Context from "effect/Context";
 import * as Effect from "effect/Effect";
 import * as Layer from "effect/Layer";
@@ -16,7 +16,7 @@ export class EnvironmentAuthPolicy extends Context.Service<
   {
     readonly getDescriptor: () => Effect.Effect<ServerAuthDescriptor>;
   }
->()("a4code/auth/EnvironmentAuthPolicy") {}
+>()("t3/auth/EnvironmentAuthPolicy") {}
 
 /** The auth policy a server started with `config` runs under. */
 export function resolveServerAuthPolicy(

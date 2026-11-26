@@ -11,8 +11,8 @@ import {
   type ThreadPullRequestLink,
   type ThreadId,
   type ThreadPullRequestWatch,
-} from "@a4code/contracts";
-import { commandIndicatesFailure } from "@a4code/shared/toolOutput";
+} from "@t3tools/contracts";
+import { commandIndicatesFailure } from "@t3tools/shared/toolOutput";
 import {
   changeRequestsClosedBy,
   isChangeRequestCloseCommand,
@@ -40,7 +40,7 @@ import * as Stream from "effect/Stream";
 import {
   type ProviderChangeRequestWatchFingerprint,
   PullRequestProviderError,
-} from "@a4code/source-control-core/server/PullRequestProvider";
+} from "@t3tools/source-control-core/server/PullRequestProvider";
 import * as PullRequestService from "../pullRequest/PullRequestService.ts";
 import { forkParked } from "../serverActivation.ts";
 import * as Orchestrator from "./Orchestrator.ts";
@@ -240,7 +240,7 @@ export class PullRequestWatchReactor extends Context.Service<
     readonly start: () => Effect.Effect<void, never, Scope.Scope>;
     readonly sweep: Effect.Effect<void>;
   }
->()("a4code/orchestration-v2/PullRequestWatchReactor") {}
+>()("t3/orchestration-v2/PullRequestWatchReactor") {}
 
 /** @public */
 export const make = Effect.gen(function* () {

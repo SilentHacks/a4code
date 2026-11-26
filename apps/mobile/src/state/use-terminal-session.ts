@@ -5,14 +5,14 @@ import {
   terminalOutputReplay,
   type KnownTerminalSession,
   type TerminalSessionState,
-} from "@a4code/client-runtime/state/terminal";
+} from "@t3tools/client-runtime/state/terminal";
 import {
   AuthTerminalReadScope,
   AuthTerminalOperateScope,
   ThreadId,
   type EnvironmentId,
   type TerminalAttachInput,
-} from "@a4code/contracts";
+} from "@t3tools/contracts";
 import { useMemo } from "react";
 
 import { useEnvironmentQuery } from "./query";

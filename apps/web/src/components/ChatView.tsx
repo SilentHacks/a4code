@@ -1,5 +1,5 @@
 import { m } from "../i18n/messages";
-import { thrownErrorMessage } from "@a4code/client-runtime/errors";
+import { thrownErrorMessage } from "@t3tools/client-runtime/errors";
 import { useGT, useMessages } from "gt-react";
 import { ChildThreadApprovals } from "./chat/ChildThreadApprovals";
 import {
@@ -7,9 +7,9 @@ import {
   draftSupportedRuntimeModes,
 } from "./chat/runtimeModeConfig";
 import { workspaceAreaProps } from "../lib/workspaceFocus";
-import { sourceControlClients } from "@a4code/client-runtime/source-control-clients";
-import { resolveNewThreadModelSelection } from "@a4code/shared/usageLimits";
-import { queuedRunEditBlockedReason } from "@a4code/client-runtime/queued-run-edit";
+import { sourceControlClients } from "@t3tools/client-runtime/source-control-clients";
+import { resolveNewThreadModelSelection } from "@t3tools/shared/usageLimits";
+import { queuedRunEditBlockedReason } from "@t3tools/client-runtime/queued-run-edit";
 import { ScrollToEndButton, WorkspaceFileDropOverlay } from "./chat/TimelineOverlays";
 import { usePasteToFocusComposer } from "./chat/usePasteToFocusComposer";
 import { useFocusComposerOnThreadOpen } from "./chat/useFocusComposerOnThreadOpen";
@@ -17,7 +17,7 @@ import { configuredHostedAppUrl } from "../hostedPairing";
 import {
   announcedRun,
   isDetailBehindShell,
-} from "@a4code/client-runtime/state/thread-activity-announcement";
+} from "@t3tools/client-runtime/state/thread-activity-announcement";
 import {
   deriveAvailableRevertTurnCounts,
   deriveThreadPendingBackgroundTasks,
@@ -58,10 +58,10 @@ import { useStableCallback } from "../hooks/useStableCallback";
 import { useProjectScriptEditing } from "./chat/useProjectScriptEditing";
 import { RightPanelSurfaceContent } from "./chat/RightPanelSurfaceContent";
 import { usePendingThreadRequests } from "./chat/usePendingThreadRequests";
-import { isScratchProject } from "@a4code/client-runtime/state/projects";
-import { resolveWorktreeRepositorySelection } from "@a4code/client-runtime/state/thread-repositories";
-import { visibleThreadPullRequests } from "@a4code/shared/threadPullRequests";
-import type { UsageLimitSourceSnapshots } from "@a4code/contracts";
+import { isScratchProject } from "@t3tools/client-runtime/state/projects";
+import { resolveWorktreeRepositorySelection } from "@t3tools/client-runtime/state/thread-repositories";
+import { visibleThreadPullRequests } from "@t3tools/shared/threadPullRequests";
+import type { UsageLimitSourceSnapshots } from "@t3tools/contracts";
 import { feedbackBannerItem } from "./chat/ComposerFeedback";
 import { freshSessionBannerItem } from "./chat/ComposerFreshSession";
 import { heldComposerSendBannerItem } from "./chat/ComposerHeldSendBanner";
@@ -91,7 +91,7 @@ import {
   ProviderInteractionMode,
   resolveIdleCompaction,
   RuntimeMode,
-} from "@a4code/contracts";
+} from "@t3tools/contracts";
 import {
   canResumeThread,
   deriveProviderSubagentStatus,
@@ -105,17 +105,17 @@ import {
   presentProviderStarting,
   deriveThreadStructureRuntime,
   limitRecoveryOwnsSnooze,
-} from "@a4code/client-runtime/state/thread-execution";
+} from "@t3tools/client-runtime/state/thread-execution";
 import {
   resolveWorkflowOpening,
   workflowOpeningParentThreadId,
-} from "@a4code/client-runtime/state/subagentRuntime";
+} from "@t3tools/client-runtime/state/subagentRuntime";
 import {
   getUserQueuedThreadRuns,
   threadCanSteer,
   threadSupportsProviderHandoff,
-} from "@a4code/client-runtime/state/thread-workflows";
-import { resolvePendingHandoff } from "@a4code/client-runtime/handoff";
+} from "@t3tools/client-runtime/state/thread-workflows";
+import { resolvePendingHandoff } from "@t3tools/client-runtime/handoff";
 import { HandoffRow } from "./chat/V2LifecycleRow";
 import {
   codexFeedbackMessage,
@@ -123,19 +123,19 @@ import {
   isCompleteTurnItemRow,
   shouldShowLoadEarlierControl,
   type CodexFeedbackSubmission,
-} from "@a4code/client-runtime/state/threads";
+} from "@t3tools/client-runtime/state/threads";
 import {
   parseScopedThreadKey,
   scopedThreadKey,
   scopeProjectRef,
   scopeThreadRef,
-} from "@a4code/client-runtime/environment";
-import { formatModelSlugName, resolveSelectableModel } from "@a4code/shared/model";
-import { projectScriptCwd, resolveProjectScripts } from "@a4code/shared/projectScripts";
-import { resolveProjectSettings } from "@a4code/shared/projectSettings";
-import { orchestrationV2WorktreePending } from "@a4code/shared/orchestrationV2ThreadError";
-import { resolveThreadReferenceCopyTarget } from "@a4code/client-runtime/thread-reference";
-import { resolveTerminalSessionLabel } from "@a4code/shared/terminalLabelsCopy";
+} from "@t3tools/client-runtime/environment";
+import { formatModelSlugName, resolveSelectableModel } from "@t3tools/shared/model";
+import { projectScriptCwd, resolveProjectScripts } from "@t3tools/shared/projectScripts";
+import { resolveProjectSettings } from "@t3tools/shared/projectSettings";
+import { orchestrationV2WorktreePending } from "@t3tools/shared/orchestrationV2ThreadError";
+import { resolveThreadReferenceCopyTarget } from "@t3tools/client-runtime/thread-reference";
+import { resolveTerminalSessionLabel } from "@t3tools/shared/terminalLabelsCopy";
 import { useAtomValue } from "@effect/atom-react";
 import {
   type CSSProperties,
@@ -163,7 +163,7 @@ import {
   mapAtomCommandResult,
   squashAtomCommandFailure,
   type AtomCommandResult,
-} from "@a4code/client-runtime/state/runtime";
+} from "@t3tools/client-runtime/state/runtime";
 import { AsyncResult } from "effect/reactivity";
 import { isElectron } from "../env";
 import { useActiveThreadRef } from "../hooks/useActiveThreadRef";
@@ -220,7 +220,7 @@ import { BranchToolbar, type BranchToolbarHandle } from "./BranchToolbar";
 import { ComposerContextPermissions } from "./ComposerContextPermissions";
 import { makeWorkspaceFileDropHandlers } from "./chat/workspaceFileDrop";
 import { isEditableFocused } from "../lib/editableFocus";
-import { DEFAULT_RESOLVED_KEYBINDINGS } from "@a4code/shared/keybindings";
+import { DEFAULT_RESOLVED_KEYBINDINGS } from "@t3tools/shared/keybindings";
 import { shortcutLabelForCommand } from "../keybindings";
 import { cn } from "~/lib/utils";
 import { COLLAPSED_SIDEBAR_TITLEBAR_INSET_CLASS } from "~/workspaceTitlebar";
@@ -255,7 +255,7 @@ import { draftModelSelectionApplies, threadHasStarted } from "../lib/chatThreadA
 import {
   deriveLogicalProjectKeyFromSettings,
   selectProjectGroupingSettings,
-} from "@a4code/client-runtime/state/project-grouping";
+} from "@t3tools/client-runtime/state/project-grouping";
 import {
   isSameSidebarThreadRef,
   useSidebarPendingFileDropStore,
@@ -282,7 +282,7 @@ import { threadEnvironment } from "../state/threads";
 import {
   resolveProviderSkillsForCwd,
   resolveProvidersForCwd,
-} from "@a4code/client-runtime/providerSkills";
+} from "@t3tools/client-runtime/providerSkills";
 import { chatGitStatusAtom, NO_CHAT_GIT_STATUS_ATOM, vcsEnvironment } from "../state/vcs";
 import {
   type EnvironmentPresentation,
@@ -326,7 +326,7 @@ import { getTriggerDisplayModelName } from "./chat/providerIconUtils";
 import { resolveScrollToEndClearance } from "./composerFooterLayout";
 import { ChatHeader } from "./chat/ChatHeader";
 import { useSideChat } from "./chat/useSideChat";
-import { sideThreadComposer, sideThreadKindOf } from "@a4code/client-runtime/side-thread";
+import { sideThreadComposer, sideThreadKindOf } from "@t3tools/client-runtime/side-thread";
 import { useOpenSurfaceInMainView } from "../hooks/useOpenSurfaceInMainView";
 import { useRemoteOpenState } from "~/remoteOpen";
 import { shouldShowOpenInPicker } from "./chat/OpenInPicker.logic";
@@ -373,7 +373,7 @@ import {
   hasDismissedResumeCompaction,
   latestProviderTurnTokenUsage,
   shouldOfferResumeCompaction,
-} from "@a4code/client-runtime/state/context-window";
+} from "@t3tools/client-runtime/state/context-window";
 import {
   MOBILE_COMPOSER_VIEW_TRANSITION_NAME,
   MOBILE_DRAFT_HEADLINE_VIEW_TRANSITION_NAME,
@@ -396,7 +396,7 @@ import {
 } from "./ChatView.logic";
 import { useLocalStorage } from "~/hooks/useLocalStorage";
 import { useComposerHandleContext } from "../composerHandleContext";
-import { clampFileAttachmentUploadBytes } from "@a4code/client-runtime/state/attachments";
+import { clampFileAttachmentUploadBytes } from "@t3tools/client-runtime/state/attachments";
 import { appAtomRegistry } from "../rpc/atomRegistry";
 import { assetEnvironment } from "../state/assets";
 import { readEnvironmentScope, readPreparedConnection } from "../state/session";
@@ -410,7 +410,7 @@ import { ChatRightPanel } from "./chat/ChatRightPanel";
 import { useDraftEnvironmentRouting } from "./chat/useDraftEnvironmentRouting";
 import { branchMismatchBannerItem, extensionStatusBannerItem } from "./chat/ThreadActivityBanners";
 import { ThreadNow } from "./chat/ThreadNow";
-import { threadRuntimeIsActive, type ThreadStructure } from "@a4code/client-runtime/state/shell";
+import { threadRuntimeIsActive, type ThreadStructure } from "@t3tools/client-runtime/state/shell";
 import { useDelayedStatus } from "../hooks/useDelayedStatus";
 import { useTimelineFollow } from "./chat/useTimelineFollow";
 import {
@@ -436,7 +436,7 @@ const ACTIVE_RUN_STATUSES: ReadonlySet<string> = new Set([
 ]);
 const EMPTY_PROVIDER_MODELS: ServerProvider["models"] = [];
 const EMPTY_USAGE_LIMIT_SOURCES: UsageLimitSourceSnapshots = [];
-import type { CodexArtifactTemplate } from "@a4code/shared/codexArtifactTemplates";
+import type { CodexArtifactTemplate } from "@t3tools/shared/codexArtifactTemplates";
 
 const EMPTY_FEEDBACK_SUBMISSIONS: ReadonlyArray<CodexFeedbackSubmission> = [];
 const EMPTY_PROVIDER_SKILLS: ServerProvider["skills"] = [];
@@ -495,7 +495,7 @@ export default function ChatView(props: ChatViewProps) {
   const routeThreadRef = scopeThreadRef(environmentId, threadId);
   const routeThreadKey = scopedThreadKey(routeThreadRef);
   const currentRouteThreadKeyRef = useRef<string | null>(routeThreadKey);
-  // oxlint-disable-next-line a4code/no-unreasoned-state-sync -- publishes the committed route thread key to a ref that async handlers check before applying results
+  // oxlint-disable-next-line t3code/no-unreasoned-state-sync -- publishes the committed route thread key to a ref that async handlers check before applying results
   useLayoutEffect(() => {
     currentRouteThreadKeyRef.current = routeThreadKey;
     return () => {
@@ -762,7 +762,7 @@ export default function ChatView(props: ChatViewProps) {
     setIsWorkspaceFileDragActive(false);
   }
 
-  // oxlint-disable-next-line a4code/no-unreasoned-state-sync -- window dragend listener that clears the workspace file drag state
+  // oxlint-disable-next-line t3code/no-unreasoned-state-sync -- window dragend listener that clears the workspace file drag state
   useEffect(() => {
     if (!isWorkspaceFileDragActive) return;
     const clearWorkspaceFileDrag = () => setIsWorkspaceFileDragActive(false);
@@ -1286,7 +1286,7 @@ export default function ChatView(props: ChatViewProps) {
   const handleFilePendingChangeStable = useStableCallback(handleFilePendingChange);
   const configuredPreviewUrls = getConfiguredPreviewUrls(activeProjectScripts);
 
-  // oxlint-disable-next-line a4code/no-unreasoned-state-sync -- drops file surfaces from the right panel store once bootstrap shows the thread has no workspace
+  // oxlint-disable-next-line t3code/no-unreasoned-state-sync -- drops file surfaces from the right panel store once bootstrap shows the thread has no workspace
   useEffect(() => {
     if (!activeThreadRef || !activeEnvironmentBootstrapComplete) return;
     useRightPanelStore.getState().reconcileFileSurfaces(activeThreadRef, activeProject !== null);
@@ -1838,7 +1838,7 @@ export default function ChatView(props: ChatViewProps) {
   });
   const [resumeCompactionPermanentlyDismissed, setResumeCompactionPermanentlyDismissed] =
     useLocalStorage(
-      `a4code:resume-compaction-dismissed:${environmentId}:${activeProviderInstanceId ?? "claudeAgent"}`,
+      `t3code:resume-compaction-dismissed:${environmentId}:${activeProviderInstanceId ?? "claudeAgent"}`,
       false,
       Schema.Boolean,
     );
@@ -1850,7 +1850,7 @@ export default function ChatView(props: ChatViewProps) {
         payload: { answers: request.answers },
       })),
   );
-  // oxlint-disable-next-line a4code/no-unreasoned-state-sync -- persists the server-reported resume compaction dismissal to localStorage
+  // oxlint-disable-next-line t3code/no-unreasoned-state-sync -- persists the server-reported resume compaction dismissal to localStorage
   useEffect(() => {
     if (nativeResumeCompactionDismissed && !resumeCompactionPermanentlyDismissed) {
       setResumeCompactionPermanentlyDismissed(true);
@@ -1861,7 +1861,7 @@ export default function ChatView(props: ChatViewProps) {
     setResumeCompactionPermanentlyDismissed,
   ]);
   const [dismissedFallbackWindow, setDismissedFallbackWindow] = useLocalStorage(
-    `a4code:fallback-notice-dismissed:${environmentId}`,
+    `t3code:fallback-notice-dismissed:${environmentId}`,
     null,
     DismissedFallbackWindowSchema,
   );
@@ -1883,7 +1883,7 @@ export default function ChatView(props: ChatViewProps) {
   const activeTerminalLaunchContext =
     terminalUiLaunchContext?.threadId === activeThreadId ? terminalUiLaunchContext : null;
   const liveIsGitRepo = gitStatusQuery.data?.isRepo;
-  // oxlint-disable-next-line a4code/no-unreasoned-state-sync -- records live git repo status in the session cache read while the status query is unavailable
+  // oxlint-disable-next-line t3code/no-unreasoned-state-sync -- records live git repo status in the session cache read while the status query is unavailable
   useEffect(() => {
     if (gitStatusCwd !== null && liveIsGitRepo !== undefined) {
       rememberCheckoutIsRepo(environmentId, gitStatusCwd, liveIsGitRepo);
@@ -2008,7 +2008,7 @@ export default function ChatView(props: ChatViewProps) {
     }
   };
   const onInterruptStable = useStableCallback(onInterrupt);
-  // oxlint-disable-next-line a4code/no-unreasoned-state-sync -- window listener for the desktop snapshot event that focuses the composer
+  // oxlint-disable-next-line t3code/no-unreasoned-state-sync -- window listener for the desktop snapshot event that focuses the composer
   useEffect(
     () => (embedded ? undefined : subscribeSnapShotComposerFocus(focusComposerStable)),
     [embedded, focusComposerStable],
@@ -2185,7 +2185,7 @@ export default function ChatView(props: ChatViewProps) {
     visiblePullRequestCount,
     onDiffPanelOpen,
   });
-  // oxlint-disable-next-line a4code/no-unreasoned-state-sync -- consumes a pending maximize request from the right panel store once the panel can maximize
+  // oxlint-disable-next-line t3code/no-unreasoned-state-sync -- consumes a pending maximize request from the right panel store once the panel can maximize
   useEffect(() => {
     if (!canMaximizeRightPanel) return;
     if (useRightPanelStore.getState().consumeMaximizeRequest(routeThreadRef)) {
@@ -2305,7 +2305,7 @@ export default function ChatView(props: ChatViewProps) {
     isCoarsePointer ? ignoreComposerFocus : focusComposerStable,
   );
 
-  // oxlint-disable-next-line a4code/no-unreasoned-state-sync -- window focus listener that refocuses the composer after the window regains focus on a fine pointer
+  // oxlint-disable-next-line t3code/no-unreasoned-state-sync -- window focus listener that refocuses the composer after the window regains focus on a fine pointer
   useEffect(() => {
     if (
       embedded ||
@@ -2473,7 +2473,7 @@ export default function ChatView(props: ChatViewProps) {
     setScrollToEndClearance(clearance);
   };
   const publishComposerOverlayHeightStable = useStableCallback(publishComposerOverlayHeight);
-  // oxlint-disable-next-line a4code/no-unreasoned-state-sync -- measures the composer overlay element before paint for a new thread or composer mount
+  // oxlint-disable-next-line t3code/no-unreasoned-state-sync -- measures the composer overlay element before paint for a new thread or composer mount
   useLayoutEffect(() => {
     if (!composerOverlayElement) return;
     composerTimelineInsetRef.current = 0;
@@ -2488,7 +2488,7 @@ export default function ChatView(props: ChatViewProps) {
     publishComposerOverlayHeightStable,
   ]);
 
-  // oxlint-disable-next-line a4code/no-unreasoned-state-sync -- observes the composer overlay element's size before paint and publishes its height
+  // oxlint-disable-next-line t3code/no-unreasoned-state-sync -- observes the composer overlay element's size before paint and publishes its height
   useLayoutEffect(() => {
     if (!composerOverlayElement) return;
 
@@ -3010,7 +3010,7 @@ export default function ChatView(props: ChatViewProps) {
   });
 
   // A focused desktop browser page forwards these chords as menu actions.
-  // oxlint-disable-next-line a4code/no-unreasoned-state-sync -- subscribes to desktop bridge menu actions that toggle or close the right panel
+  // oxlint-disable-next-line t3code/no-unreasoned-state-sync -- subscribes to desktop bridge menu actions that toggle or close the right panel
   useEffect(() => {
     if (embedded || backgroundThread) return;
     return window.desktopBridge?.onMenuAction((action) => {
@@ -3257,7 +3257,7 @@ export default function ChatView(props: ChatViewProps) {
     threadKey: routeThreadKey,
     key: pendingGuestMessageKey,
   });
-  // oxlint-disable-next-line a4code/no-unreasoned-state-sync -- scrolls the timeline list to the end when a new pending guest message joins its footer
+  // oxlint-disable-next-line t3code/no-unreasoned-state-sync -- scrolls the timeline list to the end when a new pending guest message joins its footer
   useEffect(() => {
     const previous = previousPendingGuestMessagesRef.current;
     previousPendingGuestMessagesRef.current = {
@@ -3323,7 +3323,7 @@ export default function ChatView(props: ChatViewProps) {
     !activeEnvironmentUnavailable &&
     !activePendingUserInput &&
     !feedbackUploading;
-  // oxlint-disable-next-line a4code/no-unreasoned-state-sync -- switches the draft to local mode, then resends the waiting message once sending is idle
+  // oxlint-disable-next-line t3code/no-unreasoned-state-sync -- switches the draft to local mode, then resends the waiting message once sending is idle
   useEffect(() => {
     if (
       !workLocallyResendReady ||
@@ -3414,7 +3414,7 @@ export default function ChatView(props: ChatViewProps) {
   const consumePendingFileDrop = useSidebarPendingFileDropStore(
     (state) => state.consumePendingFileDrop,
   );
-  // oxlint-disable-next-line a4code/no-unreasoned-state-sync -- hands pending sidebar file drops to the composer's imperative API once it mounts
+  // oxlint-disable-next-line t3code/no-unreasoned-state-sync -- hands pending sidebar file drops to the composer's imperative API once it mounts
   useEffect(() => {
     if (pendingSidebarFileDrops.length === 0) return;
     if (
@@ -4256,7 +4256,7 @@ export default function ChatView(props: ChatViewProps) {
         <ChatRightPanel
           sheet={shouldUsePlanSidebarSheet}
           workspaceLayoutElement={workspaceLayoutElement}
-          widthStorageKey={`a4code:preview-panel-width:${activeThreadKey}`}
+          widthStorageKey={`t3code:preview-panel-width:${activeThreadKey}`}
           sheetAnimationDurationMs={panelAnimationsActive ? panelAnimationDurationMs : 0}
           onCloseSheet={closePreviewPanelStable}
           open={rightPanelOpen}

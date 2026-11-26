@@ -1,16 +1,16 @@
 // @effect-diagnostics nodeBuiltinImport:off - Effect has no incremental digest or free-space query.
-import { expandHomePath } from "@a4code/provider-core/server/pathExpansion";
+import { expandHomePath } from "@t3tools/provider-core/server/pathExpansion";
 import * as ModelManifest from "./ModelManifest.ts";
-import { cliArchiveTarCommand } from "@a4code/shared/cliRelease";
-import { compareSemverVersions } from "@a4code/shared/semver";
+import { cliArchiveTarCommand } from "@t3tools/shared/cliRelease";
+import { compareSemverVersions } from "@t3tools/shared/semver";
 import {
   ProviderDriverKind,
   type ProviderInstallState,
   type ServerProviderCompatibilityAdvisory,
-} from "@a4code/contracts";
-import * as HostProcess from "@a4code/shared/HostProcess";
-import { resolveNodeExecutable, nodeRuntimeUnavailableMessage } from "@a4code/shared/nodeRuntime";
-import { resolveCommandPath } from "@a4code/shared/shell";
+} from "@t3tools/contracts";
+import * as HostProcess from "@t3tools/shared/HostProcess";
+import { resolveNodeExecutable, nodeRuntimeUnavailableMessage } from "@t3tools/shared/nodeRuntime";
+import { resolveCommandPath } from "@t3tools/shared/shell";
 import * as Clock from "effect/Clock";
 import * as Cause from "effect/Cause";
 import * as Context from "effect/Context";
@@ -127,7 +127,7 @@ interface AntigravityInstallationService {
 export class AntigravityInstallation extends Context.Service<
   AntigravityInstallation,
   AntigravityInstallationService
->()("a4code/provider/AntigravityInstallation") {
+>()("t3/provider/AntigravityInstallation") {
   static readonly layer = Layer.effect(
     AntigravityInstallation,
     Effect.gen(function* () {

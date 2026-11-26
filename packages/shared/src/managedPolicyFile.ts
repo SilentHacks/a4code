@@ -2,7 +2,7 @@ import {
   ManagedPolicyClient,
   ManagedPolicyDocument,
   SERVER_EXIT_CODE_MANAGED_POLICY,
-} from "@a4code/contracts";
+} from "@t3tools/contracts";
 import * as Cause from "effect/Cause";
 import * as Context from "effect/Context";
 import * as Duration from "effect/Duration";
@@ -36,13 +36,13 @@ export class ManagedPolicyFileError extends Schema.TaggedError<ManagedPolicyFile
 export function managedPolicyPath(platform: NodeJS.Platform): string {
   switch (platform) {
     case "darwin":
-      return "/Library/Application Support/A4Code/policy.json";
+      return "/Library/Application Support/T3Code/policy.json";
     case "win32":
       // Not ProgramData, where a user can create the folder first and own it; and not
       // %ProgramFiles%, which a user can point somewhere they write.
-      return "C:\\Program Files\\A4Code\\policy.json";
+      return "C:\\Program Files\\T3Code\\policy.json";
     default:
-      return "/etc/a4code/policy.json";
+      return "/etc/t3code/policy.json";
   }
 }
 
@@ -96,8 +96,8 @@ export const readManagedPolicyFile = Effect.fn("readManagedPolicyFile")(function
 
 /** Where a configuration profile's managed preferences land on macOS. */
 export const MACOS_MANAGED_PREFERENCES_PATH =
-  "/Library/Managed Preferences/io.github.silenthacks.a4code.plist";
-const WINDOWS_POLICY_SUBKEY = "SOFTWARE\\Policies\\SilentHacks\\A4Code";
+  "/Library/Managed Preferences/com.t3tools.t3code.plist";
+const WINDOWS_POLICY_SUBKEY = "SOFTWARE\\Policies\\T3Tools\\T3Code";
 /**
  * The registry key Group Policy and Intune write to on Windows. It holds either the Group Policy
  * template's values, one per control, or a `Policy` string with the whole policy as JSON.
@@ -174,7 +174,7 @@ export class WindowsRegistry extends Context.Service<
       subkey: string,
     ) => Effect.Effect<RegistryKey | undefined, WindowsRegistryError>;
   }
->()("@a4code/shared/managedPolicyFile/WindowsRegistry") {}
+>()("@t3tools/shared/managedPolicyFile/WindowsRegistry") {}
 
 // (HKEY)(LONG)0x80000002, sign-extended to 64 bits.
 const HKEY_LOCAL_MACHINE = -0x7ffffffen;
@@ -429,7 +429,7 @@ function windowsPolicyDocument(
     }
     if (Object.hasOwn(WINDOWS_POLICY_GROUPS, value.name)) continue;
     if (!Object.hasOwn(WINDOWS_POLICY_VALUES, value.name)) {
-      return { error: `${value.name} is not an A4 Code policy value` };
+      return { error: `${value.name} is not a A4 Code policy value` };
     }
     const field = WINDOWS_POLICY_VALUES[value.name as keyof typeof WINDOWS_POLICY_VALUES];
     if (field.type === "boolean") {
@@ -563,11 +563,11 @@ const readPlatformPolicy = Effect.fnUntraced(function* (
       const list = Object.keys(WINDOWS_POLICY_LISTS).find(
         (name) => name.toLowerCase() === subkey.toLowerCase(),
       );
-      if (list === undefined) return yield* refuse(`${subkey} is not an A4 Code policy key`);
+      if (list === undefined) return yield* refuse(`${subkey} is not a A4 Code policy key`);
       const checkboxes = yield* readKey(`${WINDOWS_POLICY_SUBKEY}\\${subkey}`);
       if (checkboxes === undefined) continue;
       if (checkboxes.subkeys.length > 0) {
-        return yield* refuse(`${subkey}\\${checkboxes.subkeys[0]} is not an A4 Code policy key`);
+        return yield* refuse(`${subkey}\\${checkboxes.subkeys[0]} is not a A4 Code policy key`);
       }
       values.push(...checkboxes.values.map((value) => ({ ...value, key: list })));
     }

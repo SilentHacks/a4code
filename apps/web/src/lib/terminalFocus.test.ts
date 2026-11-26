@@ -1,5 +1,5 @@
-import { scopeThreadRef } from "@a4code/client-runtime/environment";
-import { EnvironmentId, ThreadId } from "@a4code/contracts";
+import { scopeThreadRef } from "@t3tools/client-runtime/environment";
+import { EnvironmentId, ThreadId } from "@t3tools/contracts";
 import { describe, expect, it, vi } from "vite-plus/test";
 
 import { selectThreadRightPanelState, useRightPanelStore } from "../rightPanelStore";

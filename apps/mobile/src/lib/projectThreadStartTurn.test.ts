@@ -1,4 +1,4 @@
-import { ProjectId, ProviderInstanceId } from "@a4code/contracts";
+import { ProjectId, ProviderInstanceId } from "@t3tools/contracts";
 import { describe, expect, it } from "vite-plus/test";
 
 import { serializeComposerMessageForServer } from "./composerContext";

@@ -1,4 +1,4 @@
-import { OrchestratorMcpFailure } from "@a4code/contracts";
+import { OrchestratorMcpFailure } from "@t3tools/contracts";
 import * as Option from "effect/Option";
 import * as Project from "../../../project/ProjectService.ts";
 import { readThread, unavailable } from "../../threadAccess.ts";

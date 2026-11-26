@@ -2,9 +2,9 @@ import type {
   ComposerContextClipboardFragment,
   ScopedThreadRef,
   ThreadPullRequestLink,
-} from "@a4code/contracts";
-import { threadContextRecord } from "@a4code/shared/composerContextReferences";
-import { hostedThreadLink } from "@a4code/shared/threadLinks";
+} from "@t3tools/contracts";
+import { threadContextRecord } from "@t3tools/shared/composerContextReferences";
+import { hostedThreadLink } from "@t3tools/shared/threadLinks";
 
 import { resolveThreadCurrentPullRequestLink } from "./threadPullRequests.ts";
 import { mFallback, msg } from "gt-i18n";

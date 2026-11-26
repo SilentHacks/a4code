@@ -4,12 +4,12 @@ import {
   ComposerContextId,
   EnvironmentId,
   ThreadId,
-} from "@a4code/contracts";
-import { encodeComposerContextFragment } from "@a4code/shared/composerContextClipboard";
+} from "@t3tools/contracts";
+import { encodeComposerContextFragment } from "@t3tools/shared/composerContextClipboard";
 import {
   collectComposerContextReferences,
   formatComposerContextReference,
-} from "@a4code/shared/composerContextReferences";
+} from "@t3tools/shared/composerContextReferences";
 
 const mocks = vi.hoisted(() => ({
   execute: vi.fn(),
@@ -22,9 +22,6 @@ const mocks = vi.hoisted(() => ({
   sequence: 0,
 }));
 vi.mock("expo", () => ({ requireNativeModule: vi.fn() }));
-vi.mock("expo-constants", () => ({
-  default: { expoConfig: { extra: { hostedAppUrl: "https://app.example.com" } } },
-}));
 vi.mock("expo-file-system", () => ({
   File: class {
     size = 42;
@@ -52,7 +49,7 @@ vi.mock("../state/use-composer-drafts", () => ({
   waitForComposerDraftsLoaded: async () => {},
   findLocalComposerClipboardAttachment: mocks.local,
 }));
-vi.mock("@a4code/client-runtime/state/runtime", () => ({
+vi.mock("@t3tools/client-runtime/state/runtime", () => ({
   executeAtomQuery: mocks.execute,
   squashAtomCommandFailure: () => new Error("offline"),
 }));
@@ -356,7 +353,7 @@ describe("mobile context clipboard imports", () => {
 
   it("pastes a thread link as a chip only where the destination's agent reads its machine", async () => {
     const text = [
-      "https://app.example.com/threads/destination/local-thread",
+      "https://app.t3.codes/threads/destination/local-thread",
       "<t3-thread://v2/source/foreign-thread>",
     ].join(" ");
     const result = await importComposerContextClipboard(

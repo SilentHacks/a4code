@@ -1,8 +1,8 @@
 import type {
   EnvironmentProject,
   EnvironmentThreadShell,
-} from "@a4code/client-runtime/state/shell";
-import { EnvironmentId, ProjectId, ProviderInstanceId, ThreadId } from "@a4code/contracts";
+} from "@t3tools/client-runtime/state/shell";
+import { EnvironmentId, ProjectId, ProviderInstanceId, ThreadId } from "@t3tools/contracts";
 import { describe, expect, it } from "vite-plus/test";
 
 import { buildHomeProjectScopes, findHomeProjectScope } from "./homeThreadList";
@@ -122,33 +122,33 @@ describe("home project scopes", () => {
     const localEnvironmentId = EnvironmentId.make("environment-local");
     const remoteEnvironmentId = EnvironmentId.make("environment-remote");
     const repositoryIdentity = {
-      canonicalKey: "github.com/SilentHacks/a4code",
+      canonicalKey: "github.com/pingdotgg/t3code",
       locator: {
         source: "git-remote" as const,
         remoteName: "origin",
-        remoteUrl: "git@github.com:SilentHacks/a4code.git",
+        remoteUrl: "git@github.com:pingdotgg/t3code.git",
       },
     };
     const projects = [
       makeProject({
         environmentId: localEnvironmentId,
         id: ProjectId.make("project-local"),
-        title: "a4code",
+        title: "t3code",
         repositoryIdentity,
       }),
       makeProject({
         environmentId: remoteEnvironmentId,
         id: ProjectId.make("project-remote-with-identity"),
-        title: "a4code",
-        workspaceRoot: "/remote/a4code",
+        title: "t3code",
+        workspaceRoot: "/remote/t3code",
         repositoryIdentity,
         updatedAt: "2026-06-01T00:00:00.000Z",
       }),
       makeProject({
         environmentId: remoteEnvironmentId,
         id: ProjectId.make("project-remote-fresh"),
-        title: "a4code",
-        workspaceRoot: "/remote/a4code/",
+        title: "t3code",
+        workspaceRoot: "/remote/t3code/",
         updatedAt: "2026-06-02T00:00:00.000Z",
       }),
     ];

@@ -1,4 +1,4 @@
-import { resolveRemotePairingTarget } from "@a4code/shared/remote";
+import { resolveRemotePairingTarget } from "@t3tools/shared/remote";
 import { describe, expect, it } from "vite-plus/test";
 
 import { buildPairingUrl, extractPairingUrlFromQrPayload, parsePairingUrl } from "./pairing";
@@ -41,7 +41,7 @@ describe("extractPairingUrlFromQrPayload", () => {
   it("unwraps mobile deep links that carry an encoded pairing url", () => {
     expect(
       extractPairingUrlFromQrPayload(
-        "a4code://pair?pairingUrl=https%3A%2F%2Fremote.example.com%2Fpair%23token%3Dpairing-token",
+        "t3code://pair?pairingUrl=https%3A%2F%2Fremote.example.com%2Fpair%23token%3Dpairing-token",
       ),
     ).toBe("https://remote.example.com/pair#token=pairing-token");
   });

@@ -2,7 +2,7 @@ import { useIsFocused } from "@react-navigation/native";
 import {
   nextThreadAnnouncement,
   type ThreadAnnouncementMemory,
-} from "@a4code/client-runtime/state/thread-activity-announcement";
+} from "@t3tools/client-runtime/state/thread-activity-announcement";
 import { useEffect, useRef } from "react";
 import { AccessibilityInfo } from "react-native";
 
@@ -46,7 +46,7 @@ export function useThreadStatusAnnouncements({
   const runId = run?.runId ?? null;
   const runStatus = run?.status ?? null;
 
-  // oxlint-disable-next-line a4code/no-unreasoned-state-sync -- speaks committed status changes through the platform screen reader
+  // oxlint-disable-next-line t3code/no-unreasoned-state-sync -- speaks committed status changes through the platform screen reader
   useEffect(() => {
     if (activeKey === null) {
       memoryRef.current = null;

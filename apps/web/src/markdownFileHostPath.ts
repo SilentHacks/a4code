@@ -1,6 +1,6 @@
-import { formatFilePathPosition, resolvePathLinkTarget } from "@a4code/shared/fileLinks";
+import { formatFilePathPosition, resolvePathLinkTarget } from "@t3tools/shared/fileLinks";
 
-import { workspaceRelativeFilePath } from "@a4code/shared/path";
+import { workspaceRelativeFilePath } from "@t3tools/shared/path";
 import type { MarkdownFileLinkMeta } from "./markdown-links";
 
 interface MarkdownFileHostPath {

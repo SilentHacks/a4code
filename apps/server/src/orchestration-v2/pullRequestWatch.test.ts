@@ -2,7 +2,7 @@ import {
   type PullRequestCheck,
   PullRequestComment,
   ThreadPullRequestWatch,
-} from "@a4code/contracts";
+} from "@t3tools/contracts";
 import { assert, describe, it } from "@effect/vitest";
 
 import {
@@ -1329,7 +1329,7 @@ Review triggered.
 });
 
 describe("pullRequestWatchEndMessage", () => {
-  const url = "https://git.cafe/SilentHacks/a4code/pull/7";
+  const url = "https://git.cafe/pingdotgg/t3code/pull/7";
   const end = (overrides: Partial<Parameters<typeof pullRequestWatchEndMessage>[0]["detail"]>) =>
     pullRequestWatchEndMessage({
       number: 7,

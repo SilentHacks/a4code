@@ -5,7 +5,7 @@ import { useId, useState } from "react";
 import {
   resolveOfficialAcpRegistryIconUrl,
   officialAcpRegistryIconUrlForAgentId,
-} from "@a4code/contracts";
+} from "@t3tools/contracts";
 
 import { cn } from "../../lib/utils";
 import { ACPRegistryIcon } from "../Icons";

@@ -5,10 +5,10 @@ import * as Option from "effect/Option";
 import {
   ORCHESTRATION_PROTOCOL_HEADER,
   ORCHESTRATION_PROTOCOL_VERSION_TEXT,
-} from "@a4code/contracts";
+} from "@t3tools/contracts";
 import * as Result from "effect/Result";
 import * as SubscriptionRef from "effect/SubscriptionRef";
-import { withRelayClientTracing } from "@a4code/shared/relayTracing";
+import { withRelayClientTracing } from "@t3tools/shared/relayTracing";
 import { FetchHttpClient, type HttpMethod } from "effect/http";
 
 import * as RemoteEnvironmentAuthorization from "../authorization/service.ts";

@@ -1,11 +1,11 @@
-import { thrownErrorMessage } from "@a4code/client-runtime/errors";
+import { thrownErrorMessage } from "@t3tools/client-runtime/errors";
 import { useAuth } from "@clerk/react";
 import { useAtomValue } from "@effect/atom-react";
 import {
   managedCapabilityDenial,
   managedRuntimeModeDenial,
-} from "@a4code/client-runtime/contract-labels";
-import { offersLinkedEnvironments } from "@a4code/client-runtime/link-request";
+} from "@t3tools/client-runtime/contract-labels";
+import { offersLinkedEnvironments } from "@t3tools/client-runtime/link-request";
 import {
   AuthAccessWriteScope,
   AuthMcpClientAccess,
@@ -14,7 +14,7 @@ import {
   type EnvironmentId,
   mcpClientScopes,
   sessionGrantsScope,
-} from "@a4code/contracts";
+} from "@t3tools/contracts";
 import { useNavigate } from "@tanstack/react-router";
 import { CheckIcon, CopyIcon } from "lucide-react";
 import * as Option from "effect/Option";
@@ -345,7 +345,7 @@ function useGate(environment: EnvironmentPresentation) {
   const checkOnce = useEffectEvent(() => {
     if (check === "idle") void runReachabilityCheck();
   });
-  // oxlint-disable-next-line a4code/no-unreasoned-state-sync -- asks the server to check its tunnel once one exists
+  // oxlint-disable-next-line t3code/no-unreasoned-state-sync -- asks the server to check its tunnel once one exists
   useEffect(() => {
     if (canCheck) queueMicrotask(checkOnce);
   }, [canCheck]);
@@ -353,19 +353,19 @@ function useGate(environment: EnvironmentPresentation) {
   const discoverIfUnasked = useEffectEvent(() => {
     if (!thisMachine && !discovery.listed && !discovery.refreshing) void refreshDiscovery();
   });
-  // oxlint-disable-next-line a4code/no-unreasoned-state-sync -- asks T3 Connect for its machine list once the wizard opens signed in
+  // oxlint-disable-next-line t3code/no-unreasoned-state-sync -- asks T3 Connect for its machine list once the wizard opens signed in
   useEffect(() => {
     if (isSignedIn) discoverIfUnasked();
   }, [isSignedIn]);
   const waiting = gate.kind === "offline" || (connecting && gate.kind === "turn-on");
   const refreshLinkState = useEffectEvent(() => controller.linkState.refresh());
-  // oxlint-disable-next-line a4code/no-unreasoned-state-sync -- polls the server's link state while the tunnel starts; the server has no push for it
+  // oxlint-disable-next-line t3code/no-unreasoned-state-sync -- polls the server's link state while the tunnel starts; the server has no push for it
   useEffect(() => {
     if (!waiting) return;
     const interval = window.setInterval(() => refreshLinkState(), 5_000);
     return () => window.clearInterval(interval);
   }, [waiting]);
-  // oxlint-disable-next-line a4code/no-unreasoned-state-sync -- stops showing Connecting once a started tunnel has had time to come up
+  // oxlint-disable-next-line t3code/no-unreasoned-state-sync -- stops showing Connecting once a started tunnel has had time to come up
   useEffect(() => {
     if (!connecting) return;
     const timeout = window.setTimeout(() => setConnecting(false), 90_000);
@@ -510,7 +510,7 @@ function GateScreen({
             <p className="text-sm text-muted-foreground">{turnOnHere.reason}</p>
           ) : (
             <div className="space-y-2 text-sm">
-              <CommandBlock command="a4code connect link" />
+              <CommandBlock command="t3 connect link" />
               <p>
                 <T>
                   Restart A4 Code on <Var>{name}</Var>.

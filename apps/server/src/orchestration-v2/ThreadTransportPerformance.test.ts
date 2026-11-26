@@ -6,7 +6,7 @@ import {
   type OrchestrationV2DomainEvent,
   type OrchestrationV2ThreadStreamItem,
   type OrchestrationV2TurnItem,
-} from "@a4code/contracts";
+} from "@t3tools/contracts";
 import * as DateTime from "effect/DateTime";
 import * as Schema from "effect/Schema";
 import type * as RpcMessage from "effect/rpc/RpcMessage";

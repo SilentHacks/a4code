@@ -6,7 +6,7 @@ import {
   connectionRoutes,
   hasRelayRoute,
   presentConnectionDiagnosis,
-} from "@a4code/client-runtime/connection";
+} from "@t3tools/client-runtime/connection";
 import * as Option from "effect/Option";
 import { AsyncResult } from "effect/reactivity";
 import { msg, T, useGT, useMessages, Var } from "gt-react";

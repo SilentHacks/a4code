@@ -37,7 +37,7 @@ const layerTest = () =>
   ServerSecretStore.layer.pipe(
     Layer.provide(
       ServerConfig.layerTest(process.cwd(), {
-        prefix: "a4code-cloud-cli-state-test-",
+        prefix: "t3-cloud-cli-state-test-",
       }),
     ),
   );

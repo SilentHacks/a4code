@@ -3,7 +3,7 @@ import {
   EnvironmentId,
   ThreadId,
   type ContextMenuItem,
-} from "@a4code/contracts";
+} from "@t3tools/contracts";
 import { AsyncResult } from "effect/reactivity";
 import { beforeEach, describe, expect, it, vi } from "vite-plus/test";
 
@@ -81,7 +81,7 @@ vi.mock("../localApi", () => ({
     },
   }),
 }));
-vi.mock("@a4code/client-runtime/state/project-grouping", () => ({
+vi.mock("@t3tools/client-runtime/state/project-grouping", () => ({
   deriveLogicalProjectKeyFromSettings: () => "project",
   derivePhysicalProjectKey: () => "project",
   selectProjectGroupingSettings: () => ({}),

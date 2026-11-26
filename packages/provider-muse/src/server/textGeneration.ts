@@ -4,11 +4,11 @@ import {
   type ModelSelection,
   type ServerProviderModel,
   TextGenerationError,
-} from "@a4code/contracts";
+} from "@t3tools/contracts";
 import type { MuseSettings } from "../settings.ts";
-import { sanitizeBranchFragment, sanitizeFeatureBranchName } from "@a4code/shared/git";
-import { getModelSelectionStringOptionValue } from "@a4code/shared/model";
-import { extractJsonObject } from "@a4code/shared/schemaJson";
+import { sanitizeBranchFragment, sanitizeFeatureBranchName } from "@t3tools/shared/git";
+import { getModelSelectionStringOptionValue } from "@t3tools/shared/model";
+import { extractJsonObject } from "@t3tools/shared/schemaJson";
 import * as Effect from "effect/Effect";
 import * as FileSystem from "effect/FileSystem";
 import * as Option from "effect/Option";
@@ -22,23 +22,23 @@ import {
 } from "./sdk.ts";
 import { museModelCapabilities, resolveMuseReasoningEffort } from "./modelCatalog.ts";
 import { isMuseUsageLimitFailure } from "./usageLimits.ts";
-import type { ProviderTextGeneration } from "@a4code/provider-core/server/textGeneration";
+import type { ProviderTextGeneration } from "@t3tools/provider-core/server/textGeneration";
 import {
   generatedThreadTitle,
   investigationUnsupported,
   TranscriptionPostProcessingOutput,
-} from "@a4code/provider-core/server/textGenerationOperations";
+} from "@t3tools/provider-core/server/textGenerationOperations";
 import {
   buildBranchNamePrompt,
   buildCommitMessagePrompt,
   buildPrContentPrompt,
   buildThreadTitlePrompt,
-} from "@a4code/provider-core/server/textGenerationPrompts";
+} from "@t3tools/provider-core/server/textGenerationPrompts";
 import {
   sanitizeCommitSubject,
   sanitizePrTitle,
   toJsonSchemaObject,
-} from "@a4code/provider-core/server/textGenerationUtils";
+} from "@t3tools/provider-core/server/textGenerationUtils";
 
 const SessionStarted = Schema.Struct({ session: Schema.Struct({ sessionId: Schema.String }) });
 const ItemNotification = Schema.Struct({
@@ -103,10 +103,10 @@ function museFailureDetail(cause: unknown): string {
   if (error?.quota !== undefined || isMuseUsageLimitFailure(error?.message))
     return "Muse Code usage limit reached. Try again after it resets.";
   if (error?.kind === "authRequired")
-    return "Muse Code is not signed in. Run `muse login` on this A4 Code server host.";
+    return "Muse Code is not signed in. Run `muse login` on this T3 server host.";
   if (error?.kind === "modelError")
     return "Muse Code's model request failed. Try again or choose another Muse model.";
-  return "Muse Code text generation failed. Check Muse login and availability on this A4 Code server host.";
+  return "Muse Code text generation failed. Check Muse login and availability on this T3 server host.";
 }
 
 async function generateMuseText(
@@ -276,7 +276,7 @@ export const makeMuseTextGeneration = Effect.fn("makeMuseTextGeneration")(functi
     );
     const response = yield* Effect.gen(function* () {
       // Metadata requests already include their context and do not need checkout configuration.
-      const cwd = yield* fileSystem.makeTempDirectoryScoped({ prefix: "a4code-muse-text-" });
+      const cwd = yield* fileSystem.makeTempDirectoryScoped({ prefix: "t3code-muse-text-" });
       const host = yield* Effect.acquireRelease(
         createMuseSdkHostEffect(
           {

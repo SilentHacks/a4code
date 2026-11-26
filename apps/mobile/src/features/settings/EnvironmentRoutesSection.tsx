@@ -13,12 +13,12 @@ import {
   connectionRoutes,
   isLearned,
   pendingRouteOrder,
-} from "@a4code/client-runtime/connection";
-import { type EnvironmentId, sessionGrantsScope } from "@a4code/contracts";
+} from "@t3tools/client-runtime/connection";
+import { type EnvironmentId, sessionGrantsScope } from "@t3tools/contracts";
 import {
   AUTH_SCOPE_OPTIONS,
   sessionPermissionsUnavailableMessage,
-} from "@a4code/shared/authScopeOptions";
+} from "@t3tools/shared/authScopeOptions";
 import { AsyncResult } from "effect/reactivity";
 import * as Option from "effect/Option";
 import { useState } from "react";

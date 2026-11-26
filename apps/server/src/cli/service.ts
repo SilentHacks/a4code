@@ -1,6 +1,6 @@
 import * as NodeUtil from "node:util";
 
-import * as HostProcess from "@a4code/shared/HostProcess";
+import * as HostProcess from "@t3tools/shared/HostProcess";
 import * as Console from "effect/Console";
 import * as Effect from "effect/Effect";
 import * as FileSystem from "effect/FileSystem";
@@ -126,10 +126,10 @@ export const reconcileService = Effect.fn("cli.service.reconcile")(function* (op
     return { changed: false, status } satisfies ServiceReconcileResult;
   }
   if (status.supported && !status.installed) {
-    // A new service listens on this machine only, until `a4code up` opens the local network.
+    // A new service listens on this machine only, until `t3 up` opens the local network.
     const { entries } = yield* readServiceEnv(baseDir);
-    if (entries.A4CODE_LAN === undefined && entries.A4CODE_HOST === undefined) {
-      yield* writeServiceEnv(baseDir, { A4CODE_LAN: "false" });
+    if (entries.T3CODE_LAN === undefined && entries.T3CODE_HOST === undefined) {
+      yield* writeServiceEnv(baseDir, { T3CODE_LAN: "false" });
     }
   }
   if (
@@ -154,9 +154,9 @@ export function formatServiceChange(
   result: Extract<ServiceReconcileResult, { readonly changed: true }>,
 ): string {
   if (result.plan.handedOff === true) {
-    return `Service update to a4code@${packageJson.version} queued. This session will disconnect.\nLog: ${result.plan.logPath}`;
+    return `Service update to t3@${packageJson.version} queued. This session will disconnect.\nLog: ${result.plan.logPath}`;
   }
-  return `Service ${result.previouslyInstalled ? "updated" : "installed"} · a4code@${packageJson.version}\nLog: ${result.plan.logPath}`;
+  return `Service ${result.previouslyInstalled ? "updated" : "installed"} · t3@${packageJson.version}\nLog: ${result.plan.logPath}`;
 }
 
 const MEMORY_CONTROLLER_DISABLED =
@@ -170,8 +170,8 @@ function formatProtection(
     !protection.memoryControllerAvailable
       ? `  Memory protection: unavailable, ${MEMORY_CONTROLLER_DISABLED}`
       : protection.unprotected === undefined
-        ? `  Memory protection: on${protection.setByProtect ? " (a4code service protect)" : ""}`
-        : `  Memory protection: off, ${protection.unprotected} grants none. Run \`a4code service protect\`.`,
+        ? `  Memory protection: on${protection.setByProtect ? " (t3 service protect)" : ""}`
+        : `  Memory protection: off, ${protection.unprotected} grants none. Run \`t3 service protect\`.`,
     ...(protection.oomScoreAdj === undefined ? [] : [`  OOM score: ${protection.oomScoreAdj}`]),
   ];
 }
@@ -191,7 +191,7 @@ function formatServiceStatus(
   if (status.otherBaseDir !== undefined) {
     return [
       "A4 Code service",
-      "  Status: installed for another A4 Code data directory",
+      "  Status: installed for another T3 home",
       `  Base dir: ${status.otherBaseDir}`,
       `  Next: Pass \`${BootService.formatBootServiceBaseDirOption(status.otherBaseDir)}\` to manage it.`,
     ].join("\n");
@@ -207,7 +207,7 @@ function formatServiceStatus(
   ) {
     return [
       "A4 Code service",
-      `  Status: installed · a4code@${installedVersion} (newer than this a4code@${cliVersion} CLI)`,
+      `  Status: installed · t3@${installedVersion} (newer than this t3@${cliVersion} CLI)`,
       `  Unit: ${status.unitPath}`,
       `  Logs: ${status.logPath}`,
       ...formatProtection(protection),
@@ -217,7 +217,7 @@ function formatServiceStatus(
   }
   return [
     "A4 Code service",
-    `  Status: ${status.current ? `installed · a4code@${installedVersion}` : "needs an update or repair"}`,
+    `  Status: ${status.current ? `installed · t3@${installedVersion}` : "needs an update or repair"}`,
     `  Unit: ${status.unitPath}`,
     `  Logs: ${status.logPath}`,
     ...formatProtection(protection),
@@ -245,7 +245,7 @@ const serviceReconcileFlags = {
 
 const serviceInstallCommand = Command.make("install", serviceReconcileFlags).pipe(
   Command.withDescription(
-    "Install A4 Code as a background service for this user. `a4code up` also chooses how your other devices reach it.",
+    "Install A4 Code as a background service for this user. `t3 up` also chooses how your other devices reach it.",
   ),
   Command.withHandler((flags) =>
     runServiceCommand(
@@ -254,7 +254,7 @@ const serviceInstallCommand = Command.make("install", serviceReconcileFlags).pip
         const result = yield* reconcileService({ allowDowngrade: flags.allowDowngrade });
         if (!result.changed) {
           yield* Console.log(
-            `A4 Code service is already installed with a4code@${packageJson.version} (${yield* resolveEntryPath}).`,
+            `A4 Code service is already installed with t3@${packageJson.version} (${yield* resolveEntryPath}).`,
           );
           return;
         }
@@ -269,19 +269,19 @@ const serviceInstallCommand = Command.make("install", serviceReconcileFlags).pip
 );
 
 const serviceUpdateCommand = Command.make("update", serviceReconcileFlags).pipe(
-  Command.withDescription("Deprecated. Run `a4code update` to move to a newer release."),
+  Command.withDescription("Deprecated. Run `t3 update` to move to a newer release."),
   Command.unlisted,
   Command.withHandler((flags) =>
     runServiceCommand(
       flags,
       Effect.gen(function* () {
         yield* Console.log(
-          "`a4code service update` is deprecated: run `a4code update` to move to a newer release, or `a4code service install` to repair the service. Repairing now.",
+          "`t3 service update` is deprecated: run `t3 update` to move to a newer release, or `t3 service install` to repair the service. Repairing now.",
         );
         const result = yield* reconcileService({ allowDowngrade: flags.allowDowngrade });
         if (!result.changed) {
           yield* Console.log(
-            `A4 Code service is already using a4code@${packageJson.version} (${yield* resolveEntryPath}).`,
+            `A4 Code service is already using t3@${packageJson.version} (${yield* resolveEntryPath}).`,
           );
           return;
         }
@@ -293,7 +293,7 @@ const serviceUpdateCommand = Command.make("update", serviceReconcileFlags).pipe(
 
 const serviceRestartCommand = Command.make("restart", projectLocationFlags).pipe(
   Command.withDescription(
-    "Restart the background service. Picks up a version installed by `a4code update` that was not restarted at the time.",
+    "Restart the background service. Picks up a version installed by `t3 update` that was not restarted at the time.",
   ),
   Command.withHandler((flags) =>
     runServiceCommand(
@@ -303,7 +303,7 @@ const serviceRestartCommand = Command.make("restart", projectLocationFlags).pipe
         const status = yield* service.status;
         const outcome = yield* service.restart;
         const onVersion =
-          status.installedVersion === undefined ? "" : ` on a4code@${status.installedVersion}`;
+          status.installedVersion === undefined ? "" : ` on t3@${status.installedVersion}`;
         yield* Console.log(
           outcome === "restarted"
             ? `Restarted the A4 Code service${onVersion}.`
@@ -402,7 +402,7 @@ const serviceProtectCommand = Command.make("protect", {
       // Before resolving config, which creates T3 directories that root would then own.
       if ((yield* HostProcess.UserId) === 0) {
         return yield* Console.log(
-          "Run `a4code service protect` as the user that runs A4 Code, without sudo. It asks for sudo when it needs root.",
+          "Run `t3 service protect` as the user that runs A4 Code, without sudo. It asks for sudo when it needs root.",
         );
       }
       return yield* runServiceCommand(
@@ -439,7 +439,7 @@ const serviceProtectCommand = Command.make("protect", {
             if (!(yield* confirm(flags.yes, "Remove A4 Code service protection?"))) return;
             yield* ServiceProtection.removeProtection(installed);
             return yield* Console.log(
-              "Removed A4 Code service protection. The server's OOM score returns to normal after `a4code service restart`.",
+              "Removed A4 Code service protection. The server's OOM score returns to normal after `t3 service restart`.",
             );
           }
 
@@ -448,7 +448,7 @@ const serviceProtectCommand = Command.make("protect", {
               "Keeps A4 Code running when agents fill this machine's memory:",
               "  - reserves memory for the A4 Code server, so the kernel takes memory from agents first",
               "  - makes the out-of-memory killer pick agents before the server",
-              "It adds systemd drop-in files and changes nothing else. Undo with `a4code service protect --undo`.",
+              "It adds systemd drop-in files and changes nothing else. Undo with `t3 service protect --undo`.",
             ].join("\n"),
           );
           const names = remote.map((unit) => unit.replace(/\.service$/, "")).join(" and ");
@@ -479,8 +479,8 @@ const serviceProtectCommand = Command.make("protect", {
           yield* ServiceProtection.applyProtection(plan);
           yield* Console.log(
             memoryController
-              ? "Protected A4 Code. Memory protection applies now; the server takes its OOM score after `a4code service restart`. Undo with `a4code service protect --undo`."
-              : "Protected A4 Code's OOM score; the server takes it after `a4code service restart`. Memory protection applies once the kernel's memory controller is enabled. Undo with `a4code service protect --undo`.",
+              ? "Protected A4 Code. Memory protection applies now; the server takes its OOM score after `t3 service restart`. Undo with `t3 service protect --undo`."
+              : "Protected A4 Code's OOM score; the server takes it after `t3 service restart`. Memory protection applies once the kernel's memory controller is enabled. Undo with `t3 service protect --undo`.",
           );
         }).pipe(Effect.provide(ProcessRunner.layer)),
       );

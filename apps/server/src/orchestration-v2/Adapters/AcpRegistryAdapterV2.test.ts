@@ -12,9 +12,9 @@ import {
   ProviderInstanceId,
   ProviderSessionId,
   ThreadId,
-} from "@a4code/contracts";
-import { pendingBackgroundTurnItems } from "@a4code/shared/orchestrationV2PendingBackgroundWork";
-import { resolveSelfInvocation, selfInvocationArgs } from "@a4code/shared/nodeRuntime";
+} from "@t3tools/contracts";
+import { pendingBackgroundTurnItems } from "@t3tools/shared/orchestrationV2PendingBackgroundWork";
+import { resolveSelfInvocation, selfInvocationArgs } from "@t3tools/shared/nodeRuntime";
 import * as Exit from "effect/Exit";
 import * as Fiber from "effect/Fiber";
 import * as DateTime from "effect/DateTime";
@@ -32,37 +32,37 @@ import * as HttpClientResponse from "effect/http/HttpClientResponse";
 import * as ChildProcessSpawner from "effect/process/ChildProcessSpawner";
 import * as EffectAcpErrors from "effect-acp/errors";
 
-import { makeProviderFailure } from "@a4code/provider-core/server/failure";
-import * as McpProviderSessions from "@a4code/provider-core/server/McpProviderSessions";
-import * as TestProviderHost from "@a4code/provider-testing/TestProviderHost";
+import { makeProviderFailure } from "@t3tools/provider-core/server/failure";
+import * as McpProviderSessions from "@t3tools/provider-core/server/McpProviderSessions";
+import * as TestProviderHost from "@t3tools/provider-testing/TestProviderHost";
 import {
   makeProviderReplayGate,
   type ProviderReplayGate,
-} from "@a4code/provider-testing/replayGate";
-import type { ProviderContinuationRequest } from "@a4code/provider-core/server/ProviderContinuationRequests";
+} from "@t3tools/provider-testing/replayGate";
+import type { ProviderContinuationRequest } from "@t3tools/provider-core/server/ProviderContinuationRequests";
 import * as ServerSettings from "../../serverSettings.ts";
-import type { AcpRegistryLiveConfiguration } from "@a4code/provider-acp-registry/testing";
-import * as AcpRegistrySupport from "@a4code/provider-acp-registry/server/AcpRegistrySupport";
-import * as AcpRegistryRuntimeCoordinator from "@a4code/provider-acp-registry/server/AcpRegistryRuntimeCoordinator";
-import { ACP_SESSION_MODE_OPTION_ID } from "@a4code/provider-acp/server/sessionConfig";
-import * as AcpSessionRuntime from "@a4code/provider-acp/server/AcpSessionRuntime";
-import { t3AcpPromptWithInstructions } from "@a4code/provider-core/server/orchestrationInstructions";
-import { buildRuntimeInstructions } from "@a4code/provider-core/server/runtimeInstructions";
-import * as IdAllocator from "@a4code/provider-core/server/IdAllocator";
+import type { AcpRegistryLiveConfiguration } from "@t3tools/provider-acp-registry/testing";
+import * as AcpRegistrySupport from "@t3tools/provider-acp-registry/server/AcpRegistrySupport";
+import * as AcpRegistryRuntimeCoordinator from "@t3tools/provider-acp-registry/server/AcpRegistryRuntimeCoordinator";
+import { ACP_SESSION_MODE_OPTION_ID } from "@t3tools/provider-acp/server/sessionConfig";
+import * as AcpSessionRuntime from "@t3tools/provider-acp/server/AcpSessionRuntime";
+import { t3AcpPromptWithInstructions } from "@t3tools/provider-core/server/orchestrationInstructions";
+import { buildRuntimeInstructions } from "@t3tools/provider-core/server/runtimeInstructions";
+import * as IdAllocator from "@t3tools/provider-core/server/IdAllocator";
 import {
   decodeAcpReplayTranscript,
   makeAcpReplayCompletenessAssertion,
   makeAcpReplayRuntime,
   makeTurnInput,
 } from "./AcpAdapterV2.testkit.ts";
-import * as ProviderAdapter from "@a4code/provider-core/server/ProviderAdapter";
-import { AcpRegistryAdapterV2Driver } from "@a4code/provider-acp-registry/server";
+import * as ProviderAdapter from "@t3tools/provider-core/server/ProviderAdapter";
+import { AcpRegistryAdapterV2Driver } from "@t3tools/provider-acp-registry/server";
 import {
   ACP_REGISTRY_PROVIDER,
   makeAcpRegistryAdapterV2,
   acpRegistryPromptFailure,
   acpRegistryProbeResult,
-} from "@a4code/provider-acp-registry/testing";
+} from "@t3tools/provider-acp-registry/testing";
 
 const decodeAcpRegistryAdapterSettings = Schema.decodeUnknownEffect(
   AcpRegistryAdapterV2Driver.configSchema,
@@ -1717,7 +1717,7 @@ describe("AcpRegistryAdapterV2", () => {
         (environment) => environment?.T3_ACP_SESSION_LIFECYCLE === "1",
       );
       assert.isDefined(agentEnvironment, "the agent itself must have been spawned");
-      assert.equal(agentEnvironment?.A4CODE_THREAD_ID, "thread-acp-registry-thread-env");
+      assert.equal(agentEnvironment?.T3CODE_THREAD_ID, "thread-acp-registry-thread-env");
       assert.equal(agentEnvironment?.T3_ACP_MCP_ENDPOINT, endpoint);
       assert.equal(agentEnvironment?.T3_ACP_MCP_AUTHORIZATION, "Bearer thread-env-token");
     }).pipe(Effect.provide(layerTest)),

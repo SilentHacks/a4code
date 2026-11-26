@@ -6,7 +6,7 @@ import * as Effect from "effect/Effect";
 import * as Layer from "effect/Layer";
 import * as Schema from "effect/Schema";
 import * as SqlError from "effect/sql/SqlError";
-import { DEFAULT_MANAGED_TUNNEL_LIMIT, T3CHAT_PLAN_TUNNEL_LIMITS } from "@a4code/contracts/relay";
+import { DEFAULT_MANAGED_TUNNEL_LIMIT, T3CHAT_PLAN_TUNNEL_LIMITS } from "@t3tools/contracts/relay";
 
 import * as RelayDb from "../db.ts";
 import {
@@ -111,7 +111,7 @@ export class ManagedTunnelLimits extends Context.Service<
       readonly userId: string;
     }) => Effect.Effect<number | null, ManagedTunnelLimitPersistenceError>;
   }
->()("a4code-relay/environments/ManagedTunnelLimits") {}
+>()("t3code-relay/environments/ManagedTunnelLimits") {}
 
 const make = Effect.gen(function* () {
   const db = yield* RelayDb.RelayDb;

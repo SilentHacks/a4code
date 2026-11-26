@@ -1,5 +1,5 @@
-import { parseGoalCommand } from "@a4code/contracts";
-import { splitsSurrogatePair } from "@a4code/shared/assistantCitations";
+import { parseGoalCommand } from "@t3tools/contracts";
+import { splitsSurrogatePair } from "@t3tools/shared/assistantCitations";
 import * as Effect from "effect/Effect";
 import * as JsonSchema from "effect/JsonSchema";
 import * as Result from "effect/Result";

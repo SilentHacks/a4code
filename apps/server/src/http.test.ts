@@ -24,13 +24,13 @@ import {
   injectMcpAppDocumentBootstrap,
   injectMcpAppThemeBootstrap,
   MCP_APP_MAX_HTML_BYTES,
-} from "@a4code/shared/mcpApp";
-import { ORCHESTRATION_PROTOCOL_HEADER } from "@a4code/contracts";
+} from "@t3tools/shared/mcpApp";
+import { ORCHESTRATION_PROTOCOL_HEADER } from "@t3tools/contracts";
 import {
   DESKTOP_READINESS_PROOF_PATH,
   isValidDesktopReadinessProof,
-} from "@a4code/shared/desktopReadinessProof";
-import { FILE_PREVIEW_SCROLL_SCRIPT } from "@a4code/shared/htmlRender";
+} from "@t3tools/shared/desktopReadinessProof";
+import { FILE_PREVIEW_SCROLL_SCRIPT } from "@t3tools/shared/htmlRender";
 
 import * as ServerConfig from "./config.ts";
 

@@ -3,7 +3,7 @@ import type {
   ProviderApprovalDecision,
   ProviderApprovalOption,
   RuntimeRequestId,
-} from "@a4code/contracts";
+} from "@t3tools/contracts";
 import {
   type ApprovalTextPart,
   approvalTextParts,
@@ -11,7 +11,7 @@ import {
   fullAccessOverrideExplanation,
   PUSH_HOOKS_APPROVAL_QUESTION,
   pushHooksApprovalRows,
-} from "@a4code/client-runtime/state/thread-requests";
+} from "@t3tools/client-runtime/state/thread-requests";
 import { T, useGT, useMessages } from "gt-react-native";
 import { type ComponentRef, useRef, useState } from "react";
 import { Pressable, ScrollView, View } from "react-native";

@@ -2,7 +2,7 @@ import { pipe } from "effect/Function";
 import * as DocumentText from "../../provider/DocumentText.ts";
 import { brokenRuntimeError } from "../../provider/providerCompatibility.ts";
 import { revertCodexThread } from "../../provider/CodexThreadRevert.ts";
-import { historyResponseItems } from "@a4code/provider-core/server/handoffBudget";
+import { historyResponseItems } from "@t3tools/provider-core/server/handoffBudget";
 import { makeProviderTextDeltaCoalescer } from "./ProviderTextDeltaCoalescer.ts";
 import {
   mcpToolPresentation,
@@ -15,7 +15,7 @@ import {
   completeCodexTurnTokenUsage,
   type CodexTurnTokenUsageState,
 } from "../../provider/CodexTurnTokenUsage.ts";
-import type { ManagedServerProvider } from "@a4code/provider-core/server/snapshot";
+import type { ManagedServerProvider } from "@t3tools/provider-core/server/snapshot";
 import type { CodexEffectiveRuntime } from "../../provider/CodexManagedRuntime.ts";
 import { classifyCodexManagedError } from "../../provider/CodexManagedErrors.ts";
 import {
@@ -47,20 +47,20 @@ import {
   isDelegatedAppThread,
   ThreadId,
   type TurnItemId,
-} from "@a4code/contracts";
-import { SKILL_MENTION_PATTERN } from "@a4code/shared/composerInlineTokens";
-import { AgentScope } from "@a4code/shared/AgentScope";
-import * as HostProcess from "@a4code/shared/HostProcess";
+} from "@t3tools/contracts";
+import { SKILL_MENTION_PATTERN } from "@t3tools/shared/composerInlineTokens";
+import { AgentScope } from "@t3tools/shared/AgentScope";
+import * as HostProcess from "@t3tools/shared/HostProcess";
 import {
   COMPUTER_USE_TOOL_SOURCE,
   dynamicToolSurface,
   dynamicToolTitle,
-} from "@a4code/shared/toolActivity";
-import { getModelSelectionStringOptionValue, modelSelectionsEqual } from "@a4code/shared/model";
-import { appendGeneratedImageEmbeds } from "@a4code/shared/generatedImageMarkdown";
-import { resolveSpawnCommand } from "@a4code/shared/shell";
-import { mcpToolResultOutput } from "@a4code/shared/toolOutput";
-import { oauthCallbackUrl } from "@a4code/shared/oauthCallback";
+} from "@t3tools/shared/toolActivity";
+import { getModelSelectionStringOptionValue, modelSelectionsEqual } from "@t3tools/shared/model";
+import { appendGeneratedImageEmbeds } from "@t3tools/shared/generatedImageMarkdown";
+import { resolveSpawnCommand } from "@t3tools/shared/shell";
+import { mcpToolResultOutput } from "@t3tools/shared/toolOutput";
+import { oauthCallbackUrl } from "@t3tools/shared/oauthCallback";
 import type {
   ChatAttachment,
   OrchestrationV2AppThread,
@@ -87,7 +87,7 @@ import type {
   ProviderTurnId,
   ProviderInstanceId,
   RuntimeMode,
-} from "@a4code/contracts";
+} from "@t3tools/contracts";
 import * as CodexClient from "effect-codex-app-server/client";
 import * as CodexErrors from "effect-codex-app-server/errors";
 import * as CodexSchema from "effect-codex-app-server/schema";
@@ -117,7 +117,7 @@ import { resolveAttachmentPath, resolveAttachmentPathById } from "../../attachme
 import * as PortScanner from "../../preview/PortScanner.ts";
 import { getCodexServiceTierOptionValue } from "../../codexModelOptions.ts";
 import { ServerConfig } from "../../config.ts";
-import { expandHomePath } from "@a4code/provider-core/server/pathExpansion";
+import { expandHomePath } from "@t3tools/provider-core/server/pathExpansion";
 import { buildCodexAdditionalContext } from "../../provider/CodexDeveloperInstructions.ts";
 import {
   describeMcpElicitation,
@@ -132,43 +132,43 @@ import {
   boundProviderEventForLogging,
   shouldPersistProviderEvent,
 } from "../../provider/EventNdjsonLogger.ts";
-import * as ProviderEventLoggers from "@a4code/provider-core/server/ProviderEventLoggers";
+import * as ProviderEventLoggers from "@t3tools/provider-core/server/ProviderEventLoggers";
 import { codexAppServerArgs, resolveCodexLaunchArgs } from "../../provider/codexLaunchArgs.ts";
-import { mergeProviderInstanceEnvironment } from "@a4code/provider-core/server/instanceEnvironment";
-import * as McpProviderSession from "@a4code/provider-core/server/mcpSession";
-import * as McpProviderSessions from "@a4code/provider-core/server/McpProviderSessions";
+import { mergeProviderInstanceEnvironment } from "@t3tools/provider-core/server/instanceEnvironment";
+import * as McpProviderSession from "@t3tools/provider-core/server/mcpSession";
+import * as McpProviderSessions from "@t3tools/provider-core/server/McpProviderSessions";
 import {
   MCP_APP_EXTENSION_ID,
   MCP_APP_MIME_TYPE,
   MCP_APP_OUTPUT_KEY,
   MCP_APP_RESOURCE_SCHEME,
-} from "@a4code/shared/mcpApp";
+} from "@t3tools/shared/mcpApp";
 import { snapshotMcpApp } from "../../mcpApps/McpAppSnapshot.ts";
 import {
   ProviderAdapterDriverCreateError,
   type ProviderAdapterDriverCreateInput,
-} from "@a4code/provider-core/server/adapterDriver";
-import * as ProviderContinuationRequests from "@a4code/provider-core/server/ProviderContinuationRequests";
-import { backgroundWorkNotification } from "@a4code/provider-core/server/notification";
+} from "@t3tools/provider-core/server/adapterDriver";
+import * as ProviderContinuationRequests from "@t3tools/provider-core/server/ProviderContinuationRequests";
+import { backgroundWorkNotification } from "@t3tools/provider-core/server/notification";
 import {
   makeProviderFailure,
   makeProviderFailureTurnItem,
   makeProviderRetryTurnItem,
   PROVIDER_RETRY_BUDGET_MS,
-} from "@a4code/provider-core/server/failure";
-import { turnScopedSelectionTransition } from "@a4code/provider-core/server/selectionTransition";
+} from "@t3tools/provider-core/server/failure";
+import { turnScopedSelectionTransition } from "@t3tools/provider-core/server/selectionTransition";
 import {
   isProviderNativeImageAttachment,
   providerMessageTextWithAttachmentPaths,
-} from "@a4code/provider-core/server/attachmentPrompt";
+} from "@t3tools/provider-core/server/attachmentPrompt";
 import {
   makeSubagentChildThread,
   makeSubagentConversationArtifacts,
   subagentThreadTitle,
-} from "@a4code/provider-core/server/subagentProjection";
-import * as IdAllocator from "@a4code/provider-core/server/IdAllocator";
-import * as ProviderAdapter from "@a4code/provider-core/server/ProviderAdapter";
-import { buildWorkspaceInstructions } from "@a4code/provider-core/server/runtimeInstructions";
+} from "@t3tools/provider-core/server/subagentProjection";
+import * as IdAllocator from "@t3tools/provider-core/server/IdAllocator";
+import * as ProviderAdapter from "@t3tools/provider-core/server/ProviderAdapter";
+import { buildWorkspaceInstructions } from "@t3tools/provider-core/server/runtimeInstructions";
 
 const CODEX_PROVIDER = ProviderDriverKind.make("codex");
 const CODEX_CAPACITY_MAX_RETRIES = 5;
@@ -1667,7 +1667,7 @@ export interface CodexAppServerClientFactoryShape {
 export class CodexAppServerClientFactory extends Context.Service<
   CodexAppServerClientFactory,
   CodexAppServerClientFactoryShape
->()("a4code/orchestration-v2/Adapters/CodexAdapterV2/CodexAppServerClientFactory") {}
+>()("t3/orchestration-v2/Adapters/CodexAdapterV2/CodexAppServerClientFactory") {}
 
 /** MCP startup grace in milliseconds; the 1 s default excludes cold npx/uvx servers from the first model request. */
 export const CODEX_THREAD_CONFIG = {
@@ -2009,7 +2009,7 @@ export const layerAppServerClientFactory: Layer.Layer<
               }),
           ),
         );
-        // Its shells carry each thread's A4CODE_THREAD_ID, so port discovery reads listeners' threads.
+        // Its shells carry each thread's T3CODE_THREAD_ID, so port discovery reads listeners' threads.
         yield* Effect.acquireRelease(Effect.sync(portDiscovery.trackAgent), (release) =>
           Effect.sync(release),
         );

@@ -8,7 +8,7 @@ import {
   type AuthCreatePairingCredentialInput,
   type AuthMcpClientAccess,
   type AuthPairingCredentialResult,
-} from "@a4code/contracts";
+} from "@t3tools/contracts";
 import * as Schema from "effect/Schema";
 import * as Effect from "effect/Effect";
 import type * as HttpClient from "effect/http/HttpClient";
@@ -29,7 +29,7 @@ const PEER_PAIRING_CODE_LABEL = "A4 Code link";
 const MCP_APPROVAL_CODE_LABEL = "App sign-in";
 
 /** Minting failed; the user can still paste a code from the other environment. */
-class PeerPairingCodeError extends Schema.TaggedError<PeerPairingCodeError>()(
+export class PeerPairingCodeError extends Schema.TaggedError<PeerPairingCodeError>()(
   "PeerPairingCodeError",
   {
     reason: Schema.Literals(["not_allowed", "unavailable"]),

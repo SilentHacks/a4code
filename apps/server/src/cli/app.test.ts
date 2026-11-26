@@ -9,10 +9,10 @@ import * as NodePath from "node:path";
 import * as NodeCrypto from "@effect/platform-node/NodeCrypto";
 import * as NodeServices from "@effect/platform-node/NodeServices";
 import { assert, it } from "@effect/vitest";
-import type { DesktopAppActivationRequest } from "@a4code/contracts";
-import { resolveDesktopAppControlAddress } from "@a4code/shared/desktopAppControl";
-import * as HostProcess from "@a4code/shared/HostProcess";
-import * as NetService from "@a4code/shared/Net";
+import type { DesktopAppActivationRequest } from "@t3tools/contracts";
+import { resolveDesktopAppControlAddress } from "@t3tools/shared/desktopAppControl";
+import * as HostProcess from "@t3tools/shared/HostProcess";
+import * as NetService from "@t3tools/shared/Net";
 import * as ConfigProvider from "effect/ConfigProvider";
 import * as Effect from "effect/Effect";
 import * as Layer from "effect/Layer";
@@ -156,7 +156,7 @@ const withTempDirectory = <A, E, R>(
     (root) => Effect.promise(() => NodeFSP.rm(root, { recursive: true, force: true })),
   );
 
-describe("a4code server command safety", () => {
+describe("t3 server command safety", () => {
   it.effect("rejects unknown command words without creating a home or project", () =>
     withTempDirectory("t3-cli-unknown-", (root) =>
       Effect.gen(function* () {
@@ -219,7 +219,7 @@ describe("a4code server command safety", () => {
           [newDirectory],
           ["start", newDirectory],
         ]) {
-          const error = yield* runCli(args, { A4CODE_HOME: baseDir }).pipe(
+          const error = yield* runCli(args, { T3CODE_HOME: baseDir }).pipe(
             Effect.provideService(
               HostProcess.Platform,
               args[0] === "C:new-project" ? "win32" : platform,
@@ -238,7 +238,7 @@ describe("a4code server command safety", () => {
   );
 });
 
-describe("a4code app", () => {
+describe("t3 app", () => {
   it.live.each(["permissions", "owner", "symlink", "missing owner"] as const)(
     "rejects unsafe %s on the socket directory before sending",
     (unsafe) =>
@@ -253,7 +253,7 @@ describe("a4code app", () => {
                 Effect.sync(() => setProcessEnv("TMPDIR", root)),
                 (restore) => Effect.sync(restore),
               );
-              const baseDir = NodePath.join(root, ".a4code");
+              const baseDir = NodePath.join(root, ".t3");
               const userId = yield* HostProcess.UserId;
               assert(userId !== undefined);
               const expectedUserId =
@@ -286,7 +286,7 @@ describe("a4code app", () => {
       }),
   );
 
-  it.effect("uses A4CODE_HOME or --base-dir and sends the default or explicit path", () =>
+  it.effect("uses T3CODE_HOME or --base-dir and sends the default or explicit path", () =>
     withTempDirectory("t3-app-command-test-", (root) =>
       Effect.gen(function* () {
         const baseDir = NodePath.join(root, "t3-home");
@@ -295,7 +295,7 @@ describe("a4code app", () => {
         const workingDirectory = yield* HostProcess.WorkingDirectory;
         const desktop = yield* fakeDesktop({ baseDir });
 
-        yield* runCli(["app"], { A4CODE_HOME: baseDir });
+        yield* runCli(["app"], { T3CODE_HOME: baseDir });
         yield* runCli(["app", explicitPath, "--base-dir", baseDir]);
 
         expect(desktop.received.map((request) => request.workspaceRoot)).toEqual([
@@ -310,7 +310,7 @@ describe("a4code app", () => {
   it.effect("prefers the installed desktop app when a dev desktop is also running", () =>
     withTempDirectory("t3-app-preferred-test-", (root) =>
       Effect.gen(function* () {
-        const baseDir = NodePath.join(root, ".a4code");
+        const baseDir = NodePath.join(root, ".t3");
         const desktop = yield* fakeDesktop({ baseDir });
         const development = yield* fakeDesktop({ baseDir, stateSubdirectory: "dev" });
 
@@ -325,11 +325,11 @@ describe("a4code app", () => {
   it.effect("finds the dev desktop when the default desktop socket is absent", () =>
     withTempDirectory("t3-app-dev-test-", (root) =>
       Effect.gen(function* () {
-        const baseDir = NodePath.join(root, ".a4code");
+        const baseDir = NodePath.join(root, ".t3");
         const development = yield* fakeDesktop({ baseDir, stateSubdirectory: "dev" });
 
         yield* runCli(["app"]);
-        yield* runCli(["app"], { A4CODE_HOME: "   " });
+        yield* runCli(["app"], { T3CODE_HOME: "   " });
 
         expect(development.received).toHaveLength(2);
         expect(yield* pathExists(baseDir)).toBe(false);
@@ -340,11 +340,11 @@ describe("a4code app", () => {
   it.effect("never searches a dev state directory for an explicit T3 home", () =>
     withTempDirectory("t3-app-explicit-test-", (root) =>
       Effect.gen(function* () {
-        const baseDir = NodePath.join(root, ".a4code");
+        const baseDir = NodePath.join(root, ".t3");
         const development = yield* fakeDesktop({ baseDir, stateSubdirectory: "dev" });
 
         const flagError = yield* runCli(["app", "--base-dir", baseDir]).pipe(Effect.flip);
-        const envError = yield* runCli(["app"], { A4CODE_HOME: baseDir }).pipe(Effect.flip);
+        const envError = yield* runCli(["app"], { T3CODE_HOME: baseDir }).pipe(Effect.flip);
 
         expect(flagError).toMatchObject({ _tag: "DesktopAppUnreachableError" });
         expect(envError).toMatchObject({ _tag: "DesktopAppUnreachableError" });
@@ -358,7 +358,7 @@ describe("a4code app", () => {
     (responseKind) =>
       withTempDirectory("t3-app-response-test-", (root) =>
         Effect.gen(function* () {
-          const baseDir = NodePath.join(root, ".a4code");
+          const baseDir = NodePath.join(root, ".t3");
           const desktop = yield* fakeDesktop({
             baseDir,
             reply: (request) =>

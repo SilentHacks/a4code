@@ -18,7 +18,7 @@ import {
   type PullRequestStack,
   type PullRequestRef,
   type RepositoryOrigin,
-} from "@a4code/contracts";
+} from "@t3tools/contracts";
 
 import * as ServerConfig from "../config.ts";
 import * as SqlitePersistence from "../persistence/Sqlite.ts";

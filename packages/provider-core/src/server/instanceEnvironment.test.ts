@@ -1,9 +1,9 @@
 import * as NodeServices from "@effect/platform-node/NodeServices";
 import { describe, expect, it } from "@effect/vitest";
-import { SecretProviderId } from "@a4code/contracts";
+import { SecretProviderId } from "@t3tools/contracts";
 import * as Effect from "effect/Effect";
 import * as Path from "effect/Path";
-import * as HostProcess from "@a4code/shared/HostProcess";
+import * as HostProcess from "@t3tools/shared/HostProcess";
 
 import { mergeProviderInstanceEnvironment } from "./instanceEnvironment.ts";
 
@@ -112,9 +112,9 @@ describe("mergeProviderInstanceEnvironment", () => {
     ({ environment, libraryPath, keptLibraryPath }) =>
       Effect.gen(function* () {
         const merged = yield* mergeProviderInstanceEnvironment(environment, {
-          APPIMAGE: "/home/ada/A4-Code.AppImage",
+          APPIMAGE: "/home/ada/T3-Code.AppImage",
           APPDIR: appDir,
-          ARGV0: "/home/ada/A4-Code.AppImage",
+          ARGV0: "/home/ada/T3-Code.AppImage",
           OWD: "/home/ada",
           PATH: `${appDir}:${appDir}/usr/sbin::/usr/bin`,
           LD_LIBRARY_PATH: libraryPath,

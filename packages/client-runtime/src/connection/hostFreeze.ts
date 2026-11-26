@@ -1,4 +1,4 @@
-import type { ServerEventLoopStall } from "@a4code/contracts";
+import type { ServerEventLoopStall } from "@t3tools/contracts";
 import { mFallback, msg } from "gt-i18n";
 import type { MFunctionType } from "gt-i18n/types";
 

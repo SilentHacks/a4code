@@ -6,10 +6,10 @@ import {
   type ClientConnectionMethod,
   EnvironmentId,
   type ExecutionEnvironmentDescriptor,
-} from "@a4code/contracts";
-import { RelayEnvironmentConnectScope } from "@a4code/contracts/relay";
-import * as KeyedLock from "@a4code/shared/KeyedLock";
-import { withRelayClientTracing } from "@a4code/shared/relayTracing";
+} from "@t3tools/contracts";
+import { RelayEnvironmentConnectScope } from "@t3tools/contracts/relay";
+import * as KeyedLock from "@t3tools/shared/KeyedLock";
+import { withRelayClientTracing } from "@t3tools/shared/relayTracing";
 import {
   exchangeRemoteDpopAccessToken,
   type RemoteEnvironmentAuthError,
@@ -125,7 +125,7 @@ export class RemoteEnvironmentAuthorization extends Context.Service<
       readonly directConnection?: DirectDpopConnection;
     }) => Effect.Effect<void, ConnectionAttemptError>;
   }
->()("@a4code/client-runtime/authorization/service/RemoteEnvironmentAuthorization") {}
+>()("@t3tools/client-runtime/authorization/service/RemoteEnvironmentAuthorization") {}
 
 const CACHED_ENDPOINT_SOCKET_TIMEOUT_MS = 3_000;
 const DPOP_AUTHORIZATION_TIMEOUT_MS = 30_000;

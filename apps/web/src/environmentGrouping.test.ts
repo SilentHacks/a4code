@@ -1,10 +1,10 @@
-import { EnvironmentId, ProjectId, ProviderInstanceId } from "@a4code/contracts";
+import { EnvironmentId, ProjectId, ProviderInstanceId } from "@t3tools/contracts";
 import { describe, expect, it } from "vite-plus/test";
 
 import {
   deriveLogicalProjectKeyFromSettings,
   pickableProjectGroups,
-} from "@a4code/client-runtime/state/project-grouping";
+} from "@t3tools/client-runtime/state/project-grouping";
 import {
   buildSidebarProjectPickerEntries,
   buildSidebarProjectSnapshots,

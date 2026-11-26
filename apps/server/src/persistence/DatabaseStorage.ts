@@ -1,4 +1,4 @@
-import { DatabaseReclaimError, type DatabaseStorageStatus } from "@a4code/contracts";
+import { DatabaseReclaimError, type DatabaseStorageStatus } from "@t3tools/contracts";
 import * as Clock from "effect/Clock";
 import * as Context from "effect/Context";
 import * as Duration from "effect/Duration";
@@ -33,11 +33,11 @@ export class DatabaseStorage extends Context.Service<
     /** Checks free space, then stops the server; its shutdown runs the offline repair. */
     readonly requestReclaim: Effect.Effect<void, DatabaseReclaimError>;
   }
->()("a4code/persistence/DatabaseStorage") {}
+>()("t3/persistence/DatabaseStorage") {}
 
 /** Stops this server so its desktop app or background service starts it again; null when run by hand. */
 export const ServerRestart = Context.Reference<Effect.Effect<void> | null>(
-  "a4code/persistence/DatabaseStorage/ServerRestart",
+  "t3/persistence/DatabaseStorage/ServerRestart",
   { defaultValue: () => null },
 );
 

@@ -8,7 +8,7 @@ import {
   DEFAULT_SERVER_SETTINGS,
   type ManagedPolicySummary,
   type ServerSettings,
-} from "@a4code/contracts";
+} from "@t3tools/contracts";
 import * as NodeNet from "node:net";
 import * as Context from "effect/Context";
 import * as Deferred from "effect/Deferred";

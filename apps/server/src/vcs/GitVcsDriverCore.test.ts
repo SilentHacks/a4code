@@ -6,7 +6,7 @@ import * as NodePath from "node:path";
 import * as NodeURL from "node:url";
 import * as NodeCrypto from "@effect/platform-node/NodeCrypto";
 import * as NodeServices from "@effect/platform-node/NodeServices";
-import * as HostProcess from "@a4code/shared/HostProcess";
+import * as HostProcess from "@t3tools/shared/HostProcess";
 import { assert, it, describe } from "@effect/vitest";
 import { afterAll, vi } from "vite-plus/test";
 import * as Cause from "effect/Cause";
@@ -42,8 +42,8 @@ import {
   type ReviewDiffFileContentsInput,
   type ReviewDiffPreviewResult,
   type WorktreeSubmodules,
-} from "@a4code/contracts";
-import { symlinksSupported } from "@a4code/shared/testing/symlinks";
+} from "@t3tools/contracts";
+import { symlinksSupported } from "@t3tools/shared/testing/symlinks";
 import * as ServerConfig from "../config.ts";
 import {
   isNonRepositoryGitStderr,
@@ -7135,7 +7135,7 @@ it.layer(layerTest)("GitVcsDriver core integration", (it) => {
         const cwd = yield* makeTmpDir();
         yield* initRepoWithCommit(cwd);
         const driver = yield* GitVcsDriver.GitVcsDriver;
-        // A local `a4code` branch is why launches start on the flat `t3-<hex>` temporary branch.
+        // A local `t3` branch is why launches start on the flat `t3-<hex>` temporary branch.
         yield* git(cwd, ["branch", parent]);
         yield* git(cwd, ["checkout", "-b", "t3-abcd1234"]);
         yield* git(cwd, ["branch", "t3-fix-login"]);
@@ -9088,7 +9088,7 @@ it.layer(layerTest)("GitVcsDriver core integration", (it) => {
       Effect.gen(function* () {
         const cwd = yield* makeTmpDir();
         yield* git(cwd, ["init"]);
-        yield* git(cwd, ["remote", "add", "origin", "https://github.com/SilentHacks/a4code.git"]);
+        yield* git(cwd, ["remote", "add", "origin", "https://github.com/pingdotgg/t3code.git"]);
         yield* git(cwd, ["config", "remote.origin.promisor", "true"]);
         yield* git(cwd, ["config", "remote.origin.partialclonefilter", "blob:none"]);
         const driver = yield* GitVcsDriver.GitVcsDriver;
@@ -9096,13 +9096,13 @@ it.layer(layerTest)("GitVcsDriver core integration", (it) => {
         const reused = yield* driver.ensureRemote({
           cwd,
           preferredName: "origin",
-          url: "git@github.com:SilentHacks/a4code.git",
+          url: "git@github.com:pingdotgg/t3code.git",
         });
         assert.equal(reused, "origin");
         const added = yield* driver.ensureRemote({
           cwd,
           preferredName: "origin",
-          url: "https://github.com/another-owner/a4code.git",
+          url: "https://github.com/another-owner/t3code.git",
         });
         assert.equal(added, "origin-1");
       }),
@@ -9186,7 +9186,7 @@ it.layer(layerTest)("GitVcsDriver core integration", (it) => {
           Effect.provideService(ChildProcessSpawner.ChildProcessSpawner, spawner),
           Effect.provide(layerServerConfig),
         );
-        const input = { cwd, preferredName: "fork", url: "https://github.com/fork/a4code.git" };
+        const input = { cwd, preferredName: "fork", url: "https://github.com/fork/t3code.git" };
 
         const names = yield* Effect.all([driver.ensureRemote(input), driver.ensureRemote(input)], {
           concurrency: "unbounded",
@@ -9384,47 +9384,47 @@ it.layer(layerTest)("GitVcsDriver core integration", (it) => {
         yield* initRepoWithCommit(cwd);
         const driver = yield* GitVcsDriver.GitVcsDriver;
 
-        yield* git(cwd, ["remote", "add", "origin", "https://github.com/SilentHacks/a4code.git"]);
+        yield* git(cwd, ["remote", "add", "origin", "https://github.com/pingdotgg/t3code.git"]);
 
         const reusedForSsh = yield* driver.ensureRemote({
           cwd,
           preferredName: "pingdotgg",
-          url: "git@github.com:SilentHacks/a4code.git",
+          url: "git@github.com:pingdotgg/t3code.git",
         });
         assert.equal(reusedForSsh, "origin");
 
         const reusedForSshScheme = yield* driver.ensureRemote({
           cwd,
           preferredName: "pingdotgg",
-          url: "ssh://git@github.com/SilentHacks/a4code",
+          url: "ssh://git@github.com/pingdotgg/t3code",
         });
         assert.equal(reusedForSshScheme, "origin");
 
         const reusedForBareSshScheme = yield* driver.ensureRemote({
           cwd,
           preferredName: "pingdotgg",
-          url: "ssh://github.com/SilentHacks/a4code",
+          url: "ssh://github.com/pingdotgg/t3code",
         });
         assert.equal(reusedForBareSshScheme, "origin");
 
         const reusedForSshPort = yield* driver.ensureRemote({
           cwd,
           preferredName: "pingdotgg",
-          url: "ssh://git@github.com:22/SilentHacks/a4code",
+          url: "ssh://git@github.com:22/pingdotgg/t3code",
         });
         assert.equal(reusedForSshPort, "origin");
 
         const reusedForSshWithPort = yield* driver.ensureRemote({
           cwd,
           preferredName: "pingdotgg",
-          url: "ssh://git@github.com:22/SilentHacks/a4code.git",
+          url: "ssh://git@github.com:22/pingdotgg/t3code.git",
         });
         assert.equal(reusedForSshWithPort, "origin");
 
         const addedForFork = yield* driver.ensureRemote({
           cwd,
           preferredName: "octocat",
-          url: "git@github.com:octocat/a4code.git",
+          url: "git@github.com:octocat/t3code.git",
         });
         assert.equal(addedForFork, "octocat");
         assert.equal(yield* git(cwd, ["remote"]), "octocat\norigin");
@@ -10222,7 +10222,7 @@ it.layer(layerTest)("GitVcsDriver core integration", (it) => {
           cwd,
           path: worktreePath,
           refName: resolvedBase.commitSha,
-          newRefName: "a4code/fetched-origin",
+          newRefName: "t3code/fetched-origin",
           baseRefName: resolvedBase.remoteRefName,
         });
 
@@ -10236,7 +10236,7 @@ it.layer(layerTest)("GitVcsDriver core integration", (it) => {
           remoteHead,
         );
         assert.equal(
-          yield* driver.readConfigValue(worktreePath, "branch.a4code/fetched-origin.remote"),
+          yield* driver.readConfigValue(worktreePath, "branch.t3code/fetched-origin.remote"),
           null,
         );
         const status = yield* driver.statusDetails(worktreePath);

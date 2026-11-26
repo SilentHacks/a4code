@@ -21,14 +21,14 @@ import {
   type RunId,
   type ThreadId,
   TurnItemId,
-} from "@a4code/contracts";
+} from "@t3tools/contracts";
 import * as Context from "effect/Context";
 import * as SecureRandom from "effect/crypto/SecureRandom";
 import * as DateTime from "effect/DateTime";
 import * as Effect from "effect/Effect";
 import * as Layer from "effect/Layer";
 import * as Option from "effect/Option";
-import * as KeyedLock from "@a4code/shared/KeyedLock";
+import * as KeyedLock from "@t3tools/shared/KeyedLock";
 
 import * as McpInvocationContext from "../mcp/McpInvocationContext.ts";
 import * as ThreadManagementService from "../orchestration-v2/ThreadManagementService.ts";
@@ -79,7 +79,7 @@ export class PeerLinkRequests extends Context.Service<
       input: PeerLinkRequestAnswerInput,
     ) => Effect.Effect<void, PeerLinkRequestError>;
   }
->()("a4code/peer/PeerLinkRequests") {}
+>()("t3/peer/PeerLinkRequests") {}
 
 const make = Effect.gen(function* () {
   const threadManagement = yield* ThreadManagementService.ThreadManagementService;

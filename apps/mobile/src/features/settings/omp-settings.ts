@@ -5,7 +5,7 @@ import {
   resolveProviderInstanceEnabled,
   type ServerSettings,
   type ServerSettingsPatch,
-} from "@a4code/contracts";
+} from "@t3tools/contracts";
 import * as Schema from "effect/Schema";
 
 const decodeOmp = Schema.decodeUnknownSync(OmpSettings);

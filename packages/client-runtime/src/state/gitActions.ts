@@ -2,7 +2,7 @@ import type {
   GitRunStackedActionInput,
   GitStackedAction,
   VcsStatusResult,
-} from "@a4code/contracts";
+} from "@t3tools/contracts";
 import { type ChangeRequestTerminology, sourceControlClients } from "../sourceControlClients.ts";
 import { mFallback, msg } from "gt-i18n";
 import type { MFunctionType } from "gt-i18n/types";

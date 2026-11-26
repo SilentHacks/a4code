@@ -3,31 +3,22 @@ import * as NodeFS from "node:fs";
 import * as NodeOS from "node:os";
 import * as NodePath from "node:path";
 
-export function taskCacheEndpoint(root: string, env = process.env): string | undefined {
-  const configured = env.A4CODE_TASK_CACHE_ENDPOINT?.trim();
-  if (configured) return configured.replace(/\/+$/u, "");
+export function remoteCacheUrl(root: string, env = process.env, home = NodeOS.homedir()) {
+  if (env.VP_REMOTE_CACHE_URL) return env.VP_REMOTE_CACHE_URL;
   try {
     const { endpoint } = JSON.parse(
       NodeFS.readFileSync(NodePath.join(root, ".task-cache.json"), "utf8"),
     );
-    return typeof endpoint === "string" && endpoint.trim()
-      ? endpoint.trim().replace(/\/+$/u, "")
-      : undefined;
-  } catch {
-    return undefined;
-  }
-}
-
-export function remoteCacheUrl(root: string, env = process.env, home = NodeOS.homedir()) {
-  if (env.VP_REMOTE_CACHE_URL) return env.VP_REMOTE_CACHE_URL;
-  const endpoint = taskCacheEndpoint(root, env);
-  if (!endpoint) return;
-  try {
     const credentials = JSON.parse(
-      NodeFS.readFileSync(NodePath.join(home, ".config/a4-task-cache/credentials.json"), "utf8"),
+      NodeFS.readFileSync(NodePath.join(home, ".config/t3-task-cache/credentials.json"), "utf8"),
     );
     const credential = credentials[endpoint];
-    if (typeof credential?.name !== "string" || typeof credential.token !== "string") return;
+    if (
+      typeof endpoint !== "string" ||
+      typeof credential?.name !== "string" ||
+      typeof credential.token !== "string"
+    )
+      return;
     const url = new URL(endpoint);
     url.username = credential.name;
     url.password = credential.token;

@@ -32,9 +32,9 @@ config.resolver = {
   ],
   extraNodeModules: {
     ...config.resolver?.extraNodeModules,
-    "@a4code/mobile-third-party-licenses": generatedLicenseModuleRoot,
-    "@a4code/mobile-device-stream": generatedDeviceStreamRoot,
-    "@a4code/mobile-preview-stream": generatedPreviewStreamRoot,
+    "@t3tools/mobile-third-party-licenses": generatedLicenseModuleRoot,
+    "@t3tools/mobile-device-stream": generatedDeviceStreamRoot,
+    "@t3tools/mobile-preview-stream": generatedPreviewStreamRoot,
   },
 };
 

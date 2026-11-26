@@ -5,7 +5,7 @@ import type {
   ProjectId,
   PullRequestReviewGuide,
   TextGenerationError,
-} from "@a4code/contracts";
+} from "@t3tools/contracts";
 import type * as Effect from "effect/Effect";
 
 import type { TextGenerationPolicy } from "./textGenerationPolicy.ts";

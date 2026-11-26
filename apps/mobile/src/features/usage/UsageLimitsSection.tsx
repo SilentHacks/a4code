@@ -1,7 +1,7 @@
-import { errorDisplayMessage } from "@a4code/client-runtime/errors";
+import { errorDisplayMessage } from "@t3tools/client-runtime/errors";
 import * as Dialog from "../../components/ui/Dialog";
 import { RegistryContext, useAtomMount, useAtomValue } from "@effect/atom-react";
-import { normalizeProviderAccentColor } from "@a4code/client-runtime/state/provider-instance-display";
+import { normalizeProviderAccentColor } from "@t3tools/client-runtime/state/provider-instance-display";
 import {
   AuthProvidersManageScope,
   type EnvironmentId,
@@ -10,15 +10,15 @@ import {
   type ServerProvider,
   type ServerProviderResetCredits,
   type ServerProviderUsageWindow,
-} from "@a4code/contracts";
+} from "@t3tools/contracts";
 import {
   type ResetCreditChoice,
   paceOf,
   paceRemainingPercent,
   remainingPercent,
   resetCountdown,
-} from "@a4code/shared/usageLimits";
-import { formatDuration, limitsNotice, resetCreditChoices } from "@a4code/shared/usageLimitsCopy";
+} from "@t3tools/shared/usageLimits";
+import { formatDuration, limitsNotice, resetCreditChoices } from "@t3tools/shared/usageLimitsCopy";
 import { msg, T, useGT, useMessages, Var } from "gt-react-native";
 import { type ReactNode, useContext, useRef, useState } from "react";
 import { Atom } from "effect/reactivity";

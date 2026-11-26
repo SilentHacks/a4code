@@ -13,14 +13,14 @@ import {
   type RuntimeMode,
   ThreadId,
   type OrchestrationV2ThreadShell,
-} from "@a4code/contracts";
+} from "@t3tools/contracts";
 import {
   hasThreadLinks,
   parseThreadLinkHref,
   threadLinkCandidates,
   threadLinkRefs,
-} from "@a4code/shared/threadLinks";
-import { hasPendingBackgroundSubagent } from "@a4code/shared/orchestrationV2PendingBackgroundWork";
+} from "@t3tools/shared/threadLinks";
+import { hasPendingBackgroundSubagent } from "@t3tools/shared/orchestrationV2PendingBackgroundWork";
 import * as SecureRandom from "effect/crypto/SecureRandom";
 import * as Effect from "effect/Effect";
 
@@ -42,15 +42,15 @@ const suggestedThreadId = (threadId: ThreadId) => {
 };
 
 // A pasted link (bare, Markdown, or hosted) names its thread; only this environment's can be read here.
-const candidateThreadIds = (threadId: ThreadId, environmentId: EnvironmentId, origin?: string) => {
-  if (!hasThreadLinks(threadId, origin)) {
+const candidateThreadIds = (threadId: ThreadId, environmentId: EnvironmentId) => {
+  if (!hasThreadLinks(threadId)) {
     const suggested = suggestedThreadId(threadId);
     return suggested === null ? [] : [suggested];
   }
-  const link = parseThreadLinkHref(threadId, origin);
+  const link = parseThreadLinkHref(threadId);
   const refs =
     link === null
-      ? threadLinkRefs(threadId, environmentId, origin)
+      ? threadLinkRefs(threadId, environmentId)
       : threadLinkCandidates(link, environmentId);
   return refs.filter((ref) => ref.environmentId === environmentId).map((ref) => ref.threadId);
 };
@@ -67,16 +67,15 @@ export const threadNotFound = Effect.fn("OrchestratorMcpService.threadNotFound")
   threadId: ThreadId,
   message: string,
 ) {
-  const origin = scope.client?.hostedAppUrl;
   let suggested: ThreadId | null = null;
-  for (const candidate of candidateThreadIds(threadId, scope.environmentId, origin)) {
+  for (const candidate of candidateThreadIds(threadId, scope.environmentId)) {
     const shell = yield* threads.getThreadShell(candidate).pipe(Effect.orElseSucceed(() => null));
     if (shell !== null && shell.deletedAt === null) {
       suggested = candidate;
       break;
     }
   }
-  if (suggested !== null && hasThreadLinks(threadId, origin)) {
+  if (suggested !== null && hasThreadLinks(threadId)) {
     return yield* new OrchestratorMcpFailure({
       code: "thread_not_found",
       message: `\`${threadId}\` is a thread link, not a thread id. Pass \`${suggested}\` instead.`,

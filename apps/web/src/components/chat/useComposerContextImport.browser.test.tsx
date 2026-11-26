@@ -1,11 +1,11 @@
-import { threadContextRecord } from "@a4code/shared/composerContextReferences";
+import { threadContextRecord } from "@t3tools/shared/composerContextReferences";
 import { useEffect } from "react";
 import {
   type ComposerContextRecord,
   ComposerContextId,
   EnvironmentId,
   ThreadId,
-} from "@a4code/contracts";
+} from "@t3tools/contracts";
 import { expect, it, vi } from "vite-plus/test";
 
 import { act, render, stubGlobal } from "../../../test/render";

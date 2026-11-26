@@ -1,6 +1,6 @@
-import { type EnvironmentConnectionPhase } from "@a4code/client-runtime/connection";
-import type { MarkedText } from "@a4code/client-runtime/errors";
-import { EnvironmentId, ThreadId, type ServerConfig } from "@a4code/contracts";
+import { type EnvironmentConnectionPhase } from "@t3tools/client-runtime/connection";
+import type { MarkedText } from "@t3tools/client-runtime/errors";
+import { EnvironmentId, ThreadId, type ServerConfig } from "@t3tools/contracts";
 
 export interface EnvironmentRuntimeState {
   readonly connectionState: EnvironmentConnectionPhase;

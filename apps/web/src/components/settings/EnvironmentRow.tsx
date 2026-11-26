@@ -3,8 +3,8 @@ import {
   connectionRouteId,
   connectionRouteLabelText,
   connectionRoutes,
-} from "@a4code/client-runtime/connection";
-import type { DesktopSshEnvironmentTarget, EnvironmentMachineKind } from "@a4code/contracts";
+} from "@t3tools/client-runtime/connection";
+import type { DesktopSshEnvironmentTarget, EnvironmentMachineKind } from "@t3tools/contracts";
 import * as Option from "effect/Option";
 import { msg, useMessages } from "gt-react";
 import type { ReactNode } from "react";

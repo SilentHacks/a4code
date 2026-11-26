@@ -12,7 +12,7 @@ import {
   type OrchestrationV2ThreadHistoryPage,
   type OrchestrationV2TurnItem,
   type ThreadGuestMessage,
-} from "@a4code/contracts";
+} from "@t3tools/contracts";
 import { msg } from "gt-react";
 
 import { m, type MessageResolver } from "~/i18n/messages";
@@ -21,7 +21,7 @@ import {
   applyThreadStreamItem,
   initialThreadStreamState,
   type ThreadStreamState,
-} from "@a4code/client-runtime/state/thread-stream";
+} from "@t3tools/client-runtime/state/thread-stream";
 import * as Option from "effect/Option";
 import * as Schema from "effect/Schema";
 

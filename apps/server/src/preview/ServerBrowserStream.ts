@@ -4,7 +4,7 @@ import {
   AuthPreviewOperateScope,
   PREVIEW_STREAM_HOST_SETUP_CLOSE_CODE,
   PreviewStreamHostSetup,
-} from "@a4code/contracts";
+} from "@t3tools/contracts";
 import * as Effect from "effect/Effect";
 import * as Option from "effect/Option";
 import * as Queue from "effect/Queue";

@@ -1,9 +1,9 @@
 import {
   type AddProjectRemoteSource,
   type NewProjectPublishTarget,
-} from "@a4code/client-runtime/operations/projects";
-import { sourceControlClients } from "@a4code/client-runtime/source-control-clients";
-import type { SourceControlProviderKind } from "@a4code/contracts";
+} from "@t3tools/client-runtime/operations/projects";
+import { sourceControlClients } from "@t3tools/client-runtime/source-control-clients";
+import type { SourceControlProviderKind } from "@t3tools/contracts";
 import { FolderGit2Icon, LinkIcon } from "lucide-react";
 import { type ReactNode, useState } from "react";
 import { T, useGT } from "gt-react";

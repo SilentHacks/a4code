@@ -1,8 +1,7 @@
-import { runAtomCommand } from "@a4code/client-runtime/state/runtime";
-import { readCodexAuthDelivery } from "@a4code/shared/codexAuthHandoff";
+import { runAtomCommand } from "@t3tools/client-runtime/state/runtime";
+import { readCodexAuthDelivery } from "@t3tools/shared/codexAuthHandoff";
 import { msg } from "gt-react";
 
-import { configuredHostedAppUrl } from "./hostedPairing";
 import { toastManager } from "./components/ui/toast";
 import { m } from "./i18n/messages";
 import { appAtomRegistry } from "./rpc/atomRegistry";
@@ -18,7 +17,7 @@ type ProviderAuthDelivery = NonNullable<ReturnType<typeof readCodexAuthDelivery>
  */
 export function startProviderAuthDelivery(): void {
   if (!window.location.hash.startsWith("#codex-auth=")) return;
-  const delivery = readCodexAuthDelivery(window.location.href, configuredHostedAppUrl());
+  const delivery = readCodexAuthDelivery(window.location.href);
   window.history.replaceState(
     window.history.state,
     "",

@@ -2,7 +2,7 @@ import {
   ANOTHER_ADDRESS,
   type LinkableMachine,
   linkDestination,
-} from "@a4code/client-runtime/link-request";
+} from "@t3tools/client-runtime/link-request";
 import { T, useGT } from "gt-react";
 import { useId } from "react";
 

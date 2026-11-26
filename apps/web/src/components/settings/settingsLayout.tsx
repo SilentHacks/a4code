@@ -1,5 +1,5 @@
 import { SettingsGroup } from "./SettingsGroup";
-import { AuthSettingsWriteScope } from "@a4code/contracts";
+import { AuthSettingsWriteScope } from "@t3tools/contracts";
 import { usePrimaryEnvironmentId, usePrimaryEnvironment } from "../../state/environments";
 import { useEnvironmentScope, useEnvironmentsWithScope } from "../../state/session";
 import { useServerConfigs } from "../../state/entities";
@@ -8,7 +8,7 @@ import {
   DEFAULT_SERVER_SETTINGS,
   isManagedSettingPath,
   type ServerSettings,
-} from "@a4code/contracts";
+} from "@t3tools/contracts";
 import * as Equal from "effect/Equal";
 import { useGT } from "gt-react";
 import { useLocation, useNavigate } from "@tanstack/react-router";

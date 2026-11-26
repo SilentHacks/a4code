@@ -1,6 +1,6 @@
-import type { EnvironmentThreadShell } from "@a4code/client-runtime/state/shell";
-import { threadSupportsProviderHandoff } from "@a4code/client-runtime/state/thread-workflows";
-import type { ThreadStructure } from "@a4code/client-runtime/state/models";
+import type { EnvironmentThreadShell } from "@t3tools/client-runtime/state/shell";
+import { threadSupportsProviderHandoff } from "@t3tools/client-runtime/state/thread-workflows";
+import type { ThreadStructure } from "@t3tools/client-runtime/state/models";
 
 type ThreadStartMarkers = Pick<
   EnvironmentThreadShell,

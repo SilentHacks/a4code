@@ -1,9 +1,9 @@
-import type { EnvironmentCloudLinkStateResult } from "@a4code/contracts";
+import type { EnvironmentCloudLinkStateResult } from "@t3tools/contracts";
 import type {
   RelayManagedEndpoint,
   RelayManagedEndpointProviderKind,
-} from "@a4code/contracts/relay";
-import { parseUrl } from "@a4code/shared/url";
+} from "@t3tools/contracts/relay";
+import { parseUrl } from "@t3tools/shared/url";
 
 // Require managed discovery: stale tunnel config after a publish-only switch causes endpoint_provider_not_managed.
 export function isManagedTunnelActive(

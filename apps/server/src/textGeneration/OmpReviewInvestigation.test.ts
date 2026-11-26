@@ -2,16 +2,16 @@
 import * as NodeChildProcess from "node:child_process";
 import * as NodeServices from "@effect/platform-node/NodeServices";
 import { expect, it } from "@effect/vitest";
-import { ProviderInstanceId } from "@a4code/contracts";
+import { ProviderInstanceId } from "@t3tools/contracts";
 import * as Effect from "effect/Effect";
 import * as FileSystem from "effect/FileSystem";
 import * as Schema from "effect/Schema";
-import * as HostProcess from "@a4code/shared/HostProcess";
+import * as HostProcess from "@t3tools/shared/HostProcess";
 import { runOmpReviewInvestigation } from "./OmpReviewInvestigation.ts";
 
 const reviewCheckout = Effect.fn("reviewCheckout")(function* () {
   const fs = yield* FileSystem.FileSystem;
-  const cwd = yield* fs.makeTempDirectoryScoped({ prefix: "a4code-review-" });
+  const cwd = yield* fs.makeTempDirectoryScoped({ prefix: "t3-omp-review-" });
   const git = (args: readonly string[]) =>
     NodeChildProcess.execFileSync("git", args, {
       cwd,
@@ -120,7 +120,7 @@ it.layer(NodeServices.layer)("OMP read-only review evidence", (it) => {
   it.effect("does not follow tracked symlinks or run external diff commands", () =>
     Effect.gen(function* () {
       const { request, fs, cwd } = yield* reviewCheckout();
-      const outside = yield* fs.makeTempDirectoryScoped({ prefix: "a4code-review-outside-" });
+      const outside = yield* fs.makeTempDirectoryScoped({ prefix: "t3-omp-review-outside-" });
       yield* fs.writeFileString(`${outside}/secret`, "outside-secret-content");
       yield* fs.symlink(`${outside}/secret`, `${cwd}/link`);
       const git = (args: string[]) =>

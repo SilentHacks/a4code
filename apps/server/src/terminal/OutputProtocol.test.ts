@@ -4,7 +4,7 @@ import {
   type TerminalAttachStreamEvent,
   TerminalAttachStreamEvent as TerminalAttachStreamEventSchema,
   WS_METHODS,
-} from "@a4code/contracts";
+} from "@t3tools/contracts";
 import * as Deferred from "effect/Deferred";
 import * as Effect from "effect/Effect";
 import * as Fiber from "effect/Fiber";

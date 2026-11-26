@@ -1,5 +1,5 @@
 import { describe, expect, it } from "@effect/vitest";
-import { totalTokens } from "@a4code/provider-core/server/usage";
+import { totalTokens } from "@t3tools/provider-core/server/usage";
 import { ompUsageFormat } from "./OmpTranscriptUsage.ts";
 
 const parseOmpLine = (line: string, sessionId: string) =>

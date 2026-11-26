@@ -3,7 +3,7 @@ import * as NodeServices from "@effect/platform-node/NodeServices";
 // @effect-diagnostics nodeBuiltinImport:off
 import * as NodeChildProcess from "node:child_process";
 import { it } from "@effect/vitest";
-import { OmpSettings, ProviderInstanceId, TextGenerationError } from "@a4code/contracts";
+import { OmpSettings, ProviderInstanceId, TextGenerationError } from "@t3tools/contracts";
 import * as Deferred from "effect/Deferred";
 import * as Effect from "effect/Effect";
 import * as Fiber from "effect/Fiber";
@@ -14,7 +14,7 @@ import * as Stream from "effect/Stream";
 import * as TestClock from "effect/testing/TestClock";
 import type * as AcpSchema from "effect-acp/compat";
 import { expect, vi } from "vite-plus/test";
-import { AcpSessionRuntime } from "@a4code/provider-acp/server/AcpSessionRuntime";
+import { AcpSessionRuntime } from "@t3tools/provider-acp/server/AcpSessionRuntime";
 import { makeOmpAcpRuntime } from "../provider/acp/OmpAcpSupport.ts";
 import { makeOmpTextGeneration } from "./OmpTextGeneration.ts";
 
@@ -32,7 +32,7 @@ const context = { requestId: "test", method: "test" };
 
 const reviewInput = Effect.fn("ompReviewInput")(function* () {
   const fs = yield* FileSystem.FileSystem;
-  const cwd = yield* fs.makeTempDirectoryScoped({ prefix: "a4code-review-interop-" });
+  const cwd = yield* fs.makeTempDirectoryScoped({ prefix: "t3-omp-review-interop-" });
   const git = (args: string[]) =>
     NodeChildProcess.execFileSync("git", args, {
       cwd,

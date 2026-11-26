@@ -1,5 +1,5 @@
 {
-  "name": "@a4code/provider-acp",
+  "name": "@t3tools/provider-acp",
   "private": true,
   "type": "module",
   "exports": {
@@ -49,9 +49,9 @@
     "test": "vp test run --config ../../vite.config.ts --dir ."
   },
   "dependencies": {
-    "@a4code/contracts": "workspace:*",
-    "@a4code/provider-core": "workspace:*",
-    "@a4code/shared": "workspace:*",
+    "@t3tools/contracts": "workspace:*",
+    "@t3tools/provider-core": "workspace:*",
+    "@t3tools/shared": "workspace:*",
     "diff": "8.0.3",
     "effect": "catalog:"
   },

@@ -3,7 +3,7 @@ import {
   type MilestoneFilter,
   type MilestoneId,
   milestoneMatches,
-} from "@a4code/contracts";
+} from "@t3tools/contracts";
 import * as Clock from "effect/Clock";
 import * as Context from "effect/Context";
 import * as Effect from "effect/Effect";
@@ -11,7 +11,7 @@ import * as Layer from "effect/Layer";
 import * as PubSub from "effect/PubSub";
 import type * as Scope from "effect/Scope";
 import * as Stream from "effect/Stream";
-import { routineSpan } from "@a4code/shared/observability";
+import { routineSpan } from "@t3tools/shared/observability";
 
 // Enough for a client that was away for a while to catch up; older news is in the stores.
 const KEPT = 1_000;
@@ -88,7 +88,7 @@ export class MilestoneHub extends Context.Service<
       Scope.Scope
     >;
   }
->()("a4code/milestones/MilestoneHub") {}
+>()("t3/milestones/MilestoneHub") {}
 
 interface Kept {
   readonly event: MilestoneEvent;

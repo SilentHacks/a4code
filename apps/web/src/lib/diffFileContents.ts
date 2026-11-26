@@ -3,7 +3,7 @@ import type { FileDiffContentsLoader, FileDiffMetadata } from "@pierre/diffs";
 import {
   squashAtomCommandFailure,
   type AtomCommandResult,
-} from "@a4code/client-runtime/state/runtime";
+} from "@t3tools/client-runtime/state/runtime";
 import type {
   EnvironmentId,
   PullRequestDiffFileContentsInput,
@@ -12,7 +12,7 @@ import type {
   ReviewDiffFileContentsInput,
   ReviewDiffFileContentsResult,
   ReviewDiffPreviewSourceKind,
-} from "@a4code/contracts";
+} from "@t3tools/contracts";
 
 import { m } from "../i18n/messages";
 import { resolveFileDiffPath } from "./diffRendering";

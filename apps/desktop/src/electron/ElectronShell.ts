@@ -4,7 +4,7 @@ import {
   REMOTE_CAPABLE_EDITOR_IDS,
   remoteSchemeForEditor,
   type SystemSettingsPane,
-} from "@a4code/contracts";
+} from "@t3tools/contracts";
 import * as Context from "effect/Context";
 import * as Effect from "effect/Effect";
 import * as Layer from "effect/Layer";
@@ -80,7 +80,7 @@ export class ElectronShell extends Context.Service<
     readonly openSystemSettings: (pane: SystemSettingsPane) => Effect.Effect<boolean>;
     readonly copyText: (text: string) => Effect.Effect<void>;
   }
->()("@a4code/desktop/electron/ElectronShell") {}
+>()("@t3tools/desktop/electron/ElectronShell") {}
 
 /** @public */
 export const make = ElectronShell.of({

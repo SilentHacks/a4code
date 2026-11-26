@@ -4,15 +4,14 @@ const test = require("node:test");
 const { main, mergeState, readState, render } = require("./mobile-preview-comment.cjs");
 
 const fingerprint = "c31608b37a8a2dca35ccee39cfd2ec7305042629";
-const projectId = "d763fcb8-d37c-41ea-a773-b54a0ab4a454";
-const run = "https://github.com/SilentHacks/a4code/actions/runs/1";
+const run = "https://github.com/pingdotgg/t3code/actions/runs/1";
 
 test("the comment round-trips its state", () => {
   const state = {
     android: { fingerprint, client: "", group: "8e413a0a" },
     ios: { fingerprint: "ios-fingerprint", client: "https://expo.dev/ios", group: "ios-group" },
   };
-  const body = render(state, run, projectId);
+  const body = render(state, run);
   assert.deepEqual(readState(body), state);
   assert.match(body, /Client unavailable/);
   assert.match(body, /groupId=8e413a0a/);
@@ -94,7 +93,7 @@ test("publishing consolidates platform comments and preserves unrelated comments
       {
         id: 4,
         user: { login: "github-actions[bot]" },
-        body: `<!-- continuous-deploy-fingerprint-projectId:${projectId} -->\nOld Expo preview`,
+        body: "<!-- continuous-deploy-fingerprint-projectId:d763fcb8-d37c-41ea-a773-b54a0ab4a454 -->\nOld Expo preview",
       },
     ],
     [
@@ -108,10 +107,9 @@ test("publishing consolidates platform comments and preserves unrelated comments
   ]);
   await main({
     env: {
-      GITHUB_REPOSITORY: "SilentHacks/a4code",
+      GITHUB_REPOSITORY: "pingdotgg/t3code",
       PR: "1",
       GH_TOKEN: "test",
-      A4CODE_EAS_PROJECT_ID: projectId,
       ANDROID_FINGERPRINT: fingerprint,
       ANDROID_GROUP: "new-group",
     },
@@ -133,14 +131,14 @@ test("publishing consolidates platform comments and preserves unrelated comments
   assert.equal(comments.get(3).user.login, "contributor");
   await main({
     env: {
-      GITHUB_REPOSITORY: "SilentHacks/a4code",
+      GITHUB_REPOSITORY: "pingdotgg/t3code",
       PR: "1",
       GH_TOKEN: "test",
       ANDROID_FINGERPRINT: fingerprint,
       PR_HEAD_SHA: "old-head",
     },
     request: async (path) => {
-      assert.equal(path, "/repos/SilentHacks/a4code/pulls/1");
+      assert.equal(path, "/repos/pingdotgg/t3code/pulls/1");
       return { head: { sha: "new-head" } };
     },
   });

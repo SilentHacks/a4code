@@ -1,4 +1,4 @@
-import { resolveProviderProbeTimeoutMs } from "@a4code/provider-core/server/snapshotProbe";
+import { resolveProviderProbeTimeoutMs } from "@t3tools/provider-core/server/snapshotProbe";
 import {
   AcpRegistryListProvidersResult,
   AcpRegistryOperationError,
@@ -10,7 +10,7 @@ import {
   type ProviderInstanceId,
   type ServerProviderSkill,
   type ServerProviderSlashCommand,
-} from "@a4code/contracts";
+} from "@t3tools/contracts";
 import { AcpRegistrySettings } from "../settings.ts";
 import * as SecureRandom from "effect/crypto/SecureRandom";
 import * as Deferred from "effect/Deferred";
@@ -27,19 +27,19 @@ import * as ChildProcessSpawner from "effect/process/ChildProcessSpawner";
 import type * as EffectAcpErrors from "effect-acp/errors";
 import type * as EffectAcpSchema from "effect-acp/compat";
 
-import * as PtyAdapter from "@a4code/shared/PtyAdapter";
+import * as PtyAdapter from "@t3tools/shared/PtyAdapter";
 import * as AcpRegistrySupport from "./AcpRegistrySupport.ts";
 import {
   findModelConfigOption,
   parseSessionModeState,
-} from "@a4code/provider-acp/server/runtimeModel";
+} from "@t3tools/provider-acp/server/runtimeModel";
 import {
   acpProviderOptionDescriptors,
   flattenSelectChoices,
   isAcpThoughtLevelOption,
-} from "@a4code/provider-acp/server/sessionConfig";
+} from "@t3tools/provider-acp/server/sessionConfig";
 import * as AcpRegistryRuntimeCoordinator from "./AcpRegistryRuntimeCoordinator.ts";
-import * as AcpSessionRuntime from "@a4code/provider-acp/server/AcpSessionRuntime";
+import * as AcpSessionRuntime from "@t3tools/provider-acp/server/AcpSessionRuntime";
 
 const MAX_AUTH_METHODS = 32;
 const MAX_MODELS = 256;

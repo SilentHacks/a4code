@@ -1,13 +1,13 @@
 import {
   getPromptControlledTraits,
   getTraitSelectChange,
-} from "@a4code/client-runtime/model-traits";
+} from "@t3tools/client-runtime/model-traits";
 import {
   ProviderInstanceId,
   type ManagedPolicySummary,
   type ProviderOptionDescriptor,
   type RuntimeMode,
-} from "@a4code/contracts";
+} from "@t3tools/contracts";
 import { describe, expect, it } from "vite-plus/test";
 
 import {

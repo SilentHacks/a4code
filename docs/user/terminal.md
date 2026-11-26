@@ -4,12 +4,12 @@ A4 Code includes integrated terminals running on the environment's host machine,
 
 ## Choose a shell
 
-Set `A4CODE_TERMINAL_SHELL` in the A4 Code server's environment to an executable name or full path (no quotes or arguments) to override the platform default shell for new terminals. This does not affect agent commands or project setup/settle scripts.
+Set `T3CODE_TERMINAL_SHELL` in the T3 server's environment to an executable name or full path (no quotes or arguments) to override the platform default shell for new terminals. This does not affect agent commands or project setup/settle scripts.
 
 Example for Git Bash on Windows (PowerShell, then fully quit and reopen A4 Code):
 
 ```powershell
-[Environment]::SetEnvironmentVariable('A4CODE_TERMINAL_SHELL', 'C:\Program Files\Git\bin\bash.exe', 'User')
+[Environment]::SetEnvironmentVariable('T3CODE_TERMINAL_SHELL', 'C:\Program Files\Git\bin\bash.exe', 'User')
 ```
 
 > Note: Use `bin\bash.exe`, not `git-bash.exe`. Remove with `$null` to restore the default.

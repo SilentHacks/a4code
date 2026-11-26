@@ -12,7 +12,7 @@ import {
   type IssueListResult,
   type IssueRef,
   type IssueScopeRef,
-} from "@a4code/contracts";
+} from "@t3tools/contracts";
 import type * as Cause from "effect/Cause";
 import * as Effect from "effect/Effect";
 import * as Exit from "effect/Exit";

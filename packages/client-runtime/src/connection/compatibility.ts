@@ -7,7 +7,7 @@ import {
   ORCHESTRATION_PROTOCOL_VERSION,
   SETTINGS_SECRET_REFERENCES_CAPABILITY,
   type ExecutionEnvironmentDescriptor,
-} from "@a4code/contracts";
+} from "@t3tools/contracts";
 
 import { ConnectionBlockedError } from "./model.ts";
 

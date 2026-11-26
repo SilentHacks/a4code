@@ -1,6 +1,6 @@
-import { type OmpSettings, TextGenerationError } from "@a4code/contracts";
-import { extractJsonObject } from "@a4code/shared/schemaJson";
-import * as HostProcess from "@a4code/shared/HostProcess";
+import { type OmpSettings, TextGenerationError } from "@t3tools/contracts";
+import { extractJsonObject } from "@t3tools/shared/schemaJson";
+import * as HostProcess from "@t3tools/shared/HostProcess";
 import * as SecureRandom from "effect/crypto/SecureRandom";
 import * as Deferred from "effect/Deferred";
 import * as Effect from "effect/Effect";
@@ -14,9 +14,9 @@ import { AcpRequestError } from "effect-acp/errors";
 import {
   collectSessionConfigOptionValues,
   findSessionConfigOption,
-} from "@a4code/provider-acp/server/runtimeModel";
+} from "@t3tools/provider-acp/server/runtimeModel";
 import { makeOmpAcpRuntime } from "../provider/acp/OmpAcpSupport.ts";
-import * as TextGenerationOperations from "@a4code/provider-core/server/textGenerationOperations";
+import * as TextGenerationOperations from "@t3tools/provider-core/server/textGenerationOperations";
 import { runOmpReviewInvestigation } from "./OmpReviewInvestigation.ts";
 
 const TIMEOUT_MS = 180_000;
@@ -38,7 +38,7 @@ export const makeOmpTextGeneration = Effect.fn("makeOmpTextGeneration")(function
     function* <S extends Schema.Top>(input: TextGenerationOperations.Request<S>) {
       const { operation } = input;
       const fail = (detail: string) => new TextGenerationError({ operation, detail });
-      const cwd = yield* fs.makeTempDirectoryScoped({ prefix: "a4code-text-" });
+      const cwd = yield* fs.makeTempDirectoryScoped({ prefix: "t3-omp-text-" });
       const runtime = yield* makeOmpAcpRuntime({
         ompSettings,
         environment: environment ?? hostEnvironment,

@@ -1,4 +1,4 @@
-import { thrownErrorMessage } from "@a4code/client-runtime/errors";
+import { thrownErrorMessage } from "@t3tools/client-runtime/errors";
 import { msg, T, useMessages } from "gt-react";
 import { useState } from "react";
 
@@ -20,7 +20,7 @@ const FAILURE_TITLES = {
   addToPath: msg("Could not add t3 to PATH"),
 } as const;
 
-/** The desktop `a4code` command's state, and its actions with a toast on failure. */
+/** The desktop `t3` command's state, and its actions with a toast on failure. */
 export function useDesktopCliCommand() {
   const bridge = getDesktopCliCommandBridge();
   const query = useEnvironmentQuery(bridge ? desktopCliCommandStateAtom : null);
@@ -67,7 +67,7 @@ export function CliCommandSettingsRow() {
         }),
       )
     : !installed
-      ? resolve(msg("Run A4 Code's CLI as `a4code` from any terminal."))
+      ? resolve(msg("Run A4 Code's CLI as `t3` from any terminal."))
       : state.onPath
         ? resolve(
             msg("Installed at {path}. Open a new terminal to use it.", {
@@ -89,7 +89,7 @@ export function CliCommandSettingsRow() {
               )
             : resolve(
                 msg(
-                  "Installed at {path}, which is not on your PATH yet. Add its folder to your PATH to run `a4code`.",
+                  "Installed at {path}, which is not on your PATH yet. Add its folder to your PATH to run `t3`.",
                   { path: state.installedPath },
                 ),
               );
@@ -112,8 +112,8 @@ export function CliCommandSettingsRow() {
             onClick={() => run(installed ? "uninstall" : "install")}
           >
             {installed
-              ? resolve(msg("Remove", { $context: "verb, uninstalls the a4code command" }))
-              : resolve(msg("Install", { $context: "verb, installs the a4code command" }))}
+              ? resolve(msg("Remove", { $context: "verb, uninstalls the t3 command" }))
+              : resolve(msg("Install", { $context: "verb, installs the t3 command" }))}
           </Button>
         </div>
       }

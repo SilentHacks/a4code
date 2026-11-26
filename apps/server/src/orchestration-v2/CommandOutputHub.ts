@@ -4,7 +4,7 @@ import {
   type OrchestrationV2CommandOutputFrame,
   type OrchestrationV2SubscribeCommandOutputInput,
   type OrchestrationV2TurnItem,
-} from "@a4code/contracts";
+} from "@t3tools/contracts";
 import {
   appendTerminalOutput,
   EMPTY_TERMINAL_OUTPUT,
@@ -12,8 +12,8 @@ import {
   type TerminalOutputState,
   TERMINAL_OUTPUT_TAIL_CHARS,
   terminalOutputResumeText,
-} from "@a4code/shared/terminalOutput";
-import { commandItemOutput } from "@a4code/shared/commandOutput";
+} from "@t3tools/shared/terminalOutput";
+import { commandItemOutput } from "@t3tools/shared/commandOutput";
 import * as Cause from "effect/Cause";
 import * as Clock from "effect/Clock";
 import * as Context from "effect/Context";
@@ -60,7 +60,7 @@ export interface CommandOutputHubShape {
 }
 
 export class CommandOutputHub extends Context.Service<CommandOutputHub, CommandOutputHubShape>()(
-  "a4code/orchestration-v2/CommandOutputHub",
+  "t3/orchestration-v2/CommandOutputHub",
 ) {}
 
 const isCommandOutputError = Schema.is(OrchestrationV2CommandOutputError);

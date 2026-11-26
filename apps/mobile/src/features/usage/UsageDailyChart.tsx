@@ -1,6 +1,6 @@
 import { View } from "react-native";
 
-import type { DailyTotals } from "@a4code/shared/usageMerge";
+import type { DailyTotals } from "@t3tools/shared/usageMerge";
 
 import { buildChartDays, type UsageChartMetric } from "./usageChartData";
 import { useProviderColors } from "./usageProviders";

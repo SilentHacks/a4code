@@ -1,6 +1,6 @@
 // @effect-diagnostics globalTimers:off globalDate:off - Render clocks for React hooks, outside an Effect runtime.
 
-import type { EnvironmentId } from "@a4code/contracts";
+import type { EnvironmentId } from "@t3tools/contracts";
 
 /**
  * A `useSyncExternalStore`-shaped clock. Snapshots stay cached between

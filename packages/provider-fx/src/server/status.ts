@@ -2,10 +2,10 @@ import {
   type ServerProviderAuth,
   type ServerProviderModel,
   type ServerProviderSubProvider,
-} from "@a4code/contracts";
+} from "@t3tools/contracts";
 import type { FxSettings } from "../settings.ts";
-import { createModelCapabilities } from "@a4code/shared/model";
-import { resolveSpawnCommand } from "@a4code/shared/shell";
+import { createModelCapabilities } from "@t3tools/shared/model";
+import { resolveSpawnCommand } from "@t3tools/shared/shell";
 import * as DateTime from "effect/DateTime";
 import * as Effect from "effect/Effect";
 import * as FileSystem from "effect/FileSystem";
@@ -37,7 +37,7 @@ import {
   providerProbeEnvironment,
   resolveProviderProbeTimeoutMs,
   spawnAndCollect,
-} from "@a4code/provider-core/server/snapshotProbe";
+} from "@t3tools/provider-core/server/snapshotProbe";
 
 const fxPresentation = (fullAccess: boolean) => ({
   displayName: "fx",

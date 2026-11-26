@@ -1,4 +1,4 @@
-import type { OrchestrationV2HistoricalMessage } from "@a4code/contracts";
+import type { OrchestrationV2HistoricalMessage } from "@t3tools/contracts";
 import {
   type AgentFeedbackMode,
   ChatAttachment,
@@ -36,7 +36,7 @@ import {
   RunId,
   ThreadId,
   TurnItemId,
-} from "@a4code/contracts";
+} from "@t3tools/contracts";
 import * as Context from "effect/Context";
 import * as Schema from "effect/Schema";
 import type * as Effect from "effect/Effect";
@@ -913,4 +913,4 @@ export class ProviderAdapterV2 extends Context.Service<
       input: ProviderAdapterV2OpenSessionInput,
     ) => Effect.Effect<ProviderAdapterV2SessionRuntime, ProviderAdapterV2Error, Scope.Scope>;
   }
->()("@a4code/provider-core/server/ProviderAdapter/ProviderAdapterV2") {}
+>()("@t3tools/provider-core/server/ProviderAdapter/ProviderAdapterV2") {}

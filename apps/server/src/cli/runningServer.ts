@@ -1,4 +1,4 @@
-import { type AuthEnvironmentScope, EnvironmentHttpApi } from "@a4code/contracts";
+import { type AuthEnvironmentScope, EnvironmentHttpApi } from "@t3tools/contracts";
 import * as Cause from "effect/Cause";
 import * as Duration from "effect/Duration";
 import * as Effect from "effect/Effect";
@@ -51,7 +51,7 @@ export const serverClient = Effect.fn("RunningServer.serverClient")(function* (
 ) {
   const environmentAuth = yield* EnvironmentAuth.EnvironmentAuth;
   const session = yield* Effect.acquireRelease(
-    environmentAuth.issueSession({ scopes, subject: "cli", label: "a4code cli", ttl: SESSION_TTL }),
+    environmentAuth.issueSession({ scopes, subject: "cli", label: "t3 cli", ttl: SESSION_TTL }),
     ({ sessionId }) => environmentAuth.revokeSession(sessionId).pipe(Effect.ignore({ log: true })),
   );
   return yield* HttpApiClient.make(EnvironmentHttpApi, {

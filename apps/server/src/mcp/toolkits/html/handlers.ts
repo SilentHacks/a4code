@@ -1,7 +1,7 @@
 // @effect-diagnostics nodeBuiltinImport:off
 import * as NodeCrypto from "node:crypto";
-import { CommandId, OrchestratorMcpFailure, TurnItemId } from "@a4code/contracts";
-import { readHtmlRenderReference, type HtmlRenderReference } from "@a4code/shared/htmlRender";
+import { CommandId, OrchestratorMcpFailure, TurnItemId } from "@t3tools/contracts";
+import { readHtmlRenderReference, type HtmlRenderReference } from "@t3tools/shared/htmlRender";
 import * as Effect from "effect/Effect";
 import * as Schema from "effect/Schema";
 

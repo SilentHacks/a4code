@@ -19,9 +19,9 @@ import { ChildProcessSpawner } from "effect/process";
 import * as Metric from "effect/Metric";
 import { assert, it } from "@effect/vitest";
 
-import { CheckpointRef, GitCommandError, VcsProcessExitError } from "@a4code/contracts";
-import * as HostProcess from "@a4code/shared/HostProcess";
-import { symlinksSupported } from "@a4code/shared/testing/symlinks";
+import { CheckpointRef, GitCommandError, VcsProcessExitError } from "@t3tools/contracts";
+import * as HostProcess from "@t3tools/shared/HostProcess";
+import { symlinksSupported } from "@t3tools/shared/testing/symlinks";
 import * as ServerConfig from "../config.ts";
 import { gitCommandDuration, gitCommandsTotal } from "../observability/Metrics.ts";
 import * as CheckpointStore from "../checkpointing/CheckpointStore.ts";
@@ -107,8 +107,8 @@ runVcsDriverContractSuite<GitVcsDriver.GitVcsDriver, GitContractError>({
 
 it.effect.each([
   {
-    fetchUrl: "https://github.com/SilentHacks/a4code.git",
-    pushUrl: "git@github.com:octocat/a4code.git",
+    fetchUrl: "https://github.com/pingdotgg/t3code.git",
+    pushUrl: "git@github.com:octocat/t3code.git",
     lineEnding: "\n",
   },
   { fetchUrl: "../team repos/shared.git", pushUrl: "../team repos/push.git", lineEnding: "\n" },

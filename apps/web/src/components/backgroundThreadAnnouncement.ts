@@ -1,8 +1,8 @@
-import type { OrchestrationV2RunStatus, RunId } from "@a4code/contracts";
+import type { OrchestrationV2RunStatus, RunId } from "@t3tools/contracts";
 import {
   backgroundWorkHoldsCompletion,
   monitorHoldsWakeCompletion,
-} from "@a4code/shared/orchestrationV2PendingBackgroundWork";
+} from "@t3tools/shared/orchestrationV2PendingBackgroundWork";
 
 import { msg } from "gt-react";
 
@@ -11,7 +11,7 @@ import type { SidebarThreadSummary } from "../types";
 import {
   runOutcomeText,
   THREAD_STATUS_TEXT,
-} from "@a4code/client-runtime/state/thread-activity-announcement";
+} from "@t3tools/client-runtime/state/thread-activity-announcement";
 
 export interface BackgroundThreadSnapshot {
   readonly key: string;

@@ -3,7 +3,7 @@ import {
   EnvironmentId,
   type PullRequestListInput,
   type PullRequestListResult,
-} from "@a4code/contracts";
+} from "@t3tools/contracts";
 import { AtomRegistry } from "effect/reactivity";
 import { act, useLayoutEffect } from "react";
 import { createRoot } from "react-dom/client";

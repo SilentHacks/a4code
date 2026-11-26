@@ -2,7 +2,7 @@ import type {
   ExecutionEnvironmentCapabilities,
   ThreadId,
   ThreadPullRequestKey,
-} from "@a4code/contracts";
+} from "@t3tools/contracts";
 import type { EnvironmentThreadShell } from "./state/models.ts";
 import { normalizeThreadPullRequestKey } from "./threadPullRequests.ts";
 

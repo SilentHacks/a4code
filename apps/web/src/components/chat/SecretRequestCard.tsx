@@ -13,19 +13,19 @@ import {
   type SecretRequestItem,
   type SecretRequestReply,
   type SecretRequestSource,
-} from "@a4code/client-runtime/secret-request";
+} from "@t3tools/client-runtime/secret-request";
 import {
   isAtomCommandInterrupted,
   squashAtomCommandFailure,
-} from "@a4code/client-runtime/state/runtime";
+} from "@t3tools/client-runtime/state/runtime";
 import {
   AuthProvidersManageScope,
   type EnvironmentId,
   type OrchestrationV2ProjectedTurnItem,
   type SecretProviderId,
-} from "@a4code/contracts";
+} from "@t3tools/contracts";
 import { useAtomValue } from "@effect/atom-react";
-import { hasFeatureFlag } from "@a4code/client-runtime/state/server";
+import { hasFeatureFlag } from "@t3tools/client-runtime/state/server";
 import { T, useGT, useMessages, Var } from "gt-react";
 import {
   CheckIcon,

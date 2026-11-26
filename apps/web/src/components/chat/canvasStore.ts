@@ -1,4 +1,4 @@
-import type { ScopedThreadRef } from "@a4code/contracts";
+import type { ScopedThreadRef } from "@t3tools/contracts";
 import { createStore } from "zustand";
 import type { ThreadPanelPresentation } from "../../rightPanelLayout";
 import type { DetailsCardMeasurement } from "./ChatCanvasContext";

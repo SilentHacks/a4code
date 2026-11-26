@@ -18,17 +18,17 @@ Lots of apps have gotten bogged down with bad tech decisions and "slop". We have
 
 ### 3. Remote ready
 
-The architecture of A4 Code's websocket layer (`a4code`) enables a lot of awesome remote features. These have become core to the product. Whether users are connecting directly over their local network, using Tailscale, or leaning in fully with T3 Connect (our tunnel solution, also in this repo), we need to make sure new features are properly supported.
+The architecture of A4 Code's websocket layer (`t3`) enables a lot of awesome remote features. These have become core to the product. Whether users are connecting directly over their local network, using Tailscale, or leaning in fully with T3 Connect (our tunnel solution, also in this repo), we need to make sure new features are properly supported.
 
 ### 4. Multi-surface
 
 A4 Code has 3 key app surfaces: **web**, **desktop**, and **mobile**.
 
-**Web** runs from the `a4code` server or from a separately configured hosted client. Both deployment modes should work where reasonable.
+**Web** is kind of two surfaces, as we have the public facing "app.t3.codes" as well as locally hosting the web app through the `t3` command. Both need to be supported by all new features where reasonable.
 
-**Desktop** wraps the web client in Electron and bundles the server. It can also host remote connections from A4 Code web and mobile clients.
+**Desktop** is the main surface most users install first. It's a full Electron app that bundles the server runner as well. The desktop app can also be used as the host server, allowing remote connections from app.t3.codes or the mobile app.
 
-**Mobile** is a React Native app for iOS and Android. Build the fork from source; upstream store apps are not A4 Code clients.
+**Mobile** is a React Native app for both iOS and Android, available on the App Store and Google Play. The mobile app allows for connecting to any A4 Code server to control work remotely.
 
 ## A note from Theo
 
@@ -48,7 +48,7 @@ Of note: Most A4 Code contributions will come from A4 Code itself, often control
 ## The three ways to hurt yourself
 
 1. **Killing by pattern.** Never `pkill -f`, `pgrep | kill`, or `kill` a PID you found by matching a name, path, or worktree string. Your own agent process has this worktree's path in its argv, and this machine runs several other dev servers at once. Kill only a PID you captured at spawn, or the owner of your port from `ss -H -ltnp` after confirming `/proc/<pid>/cwd` is your worktree.
-2. **Writing to the live install.** `~/.a4code/userdata` is the developer's real A4 Code database, in use while you work. Reading or copying from it is fine. Never start a server against it, never open it read-write, never clean it up.
+2. **Writing to the live install.** `~/.t3/userdata` is the developer's real A4 Code database, in use while you work. Reading or copying from it is fine. Never start a server against it, never open it read-write, never clean it up.
 3. **Baking in origins.** Never set `VITE_HTTP_URL` or `VITE_WS_URL` for dev. Dev is single-origin and Vite proxies `/api`, `/ws`, `/oauth`, and `/.well-known`. Setting them bakes localhost into the bundle and silently breaks every remote browser.
 
 ## Hit every surface
@@ -69,7 +69,7 @@ The most common defect in this repo is a change that works on the path you teste
 
 See [00_development.md](docs/operations/00_development.md) for setup, ports, seeding (`vp run migrate-dev-db`), and [reusable dev auth](docs/operations/00_development.md#reusable-dev-credential). Agent-specific rules:
 
-- **Worktree setup:** Wait while `.a4code/setup-running` names a live PID; do not run `vp i` concurrently. If no `.a4code/setup-*` marker exists, run `vp i` yourself.
+- **Worktree setup:** Wait while `.t3/setup-running` names a live PID; do not run `vp i` concurrently. If no `.t3/setup-*` marker exists, run `vp i` yourself.
 - **Process lifecycle:** Start dev servers, Metro, and builds from your own shell so they exit with your session—never detach with `systemd-run`, `nohup`, `setsid`, or `tmux` unless asked. Stop background tasks with your harness's own stop (`vp` does not forward SIGTERM to child Vite/server processes).
 - **Sharing (`vp run dev --share`):** Wait for `pairingUrl:` and hand the full URL to the user. Never wire `tailscale serve` by hand, open the URL yourself, or consume the user's one-time pairing link. Mint another with `node apps/server/src/bin.ts pair` if needed.
 - **Test data:** Always copy in (never symlink) and refresh `statev2.sqlite`, not `state.sqlite`. Bring `secrets` / `settings.json` only if the flow under test needs them.
@@ -132,7 +132,7 @@ Read the matching doc before changing code in that area; code review enforces th
 | Providers & ACP                            | [03_providers.md](docs/internals/03_providers.md)                                                                                                                                                 |
 | Auth, MCP, guest links, assets, security   | [04_environment-auth.md](docs/internals/04_environment-auth.md), [SECURITY.md](SECURITY.md)                                                                                                       |
 | Remote routes, peer links, previews        | [05_remote.md](docs/internals/05_remote.md)                                                                                                                                                       |
-| T3 Connect & relay                         | [06_a4-connect.md](docs/internals/06_a4-connect.md)                                                                                                                                               |
+| T3 Connect & relay                         | [06_t3-connect.md](docs/internals/06_t3-connect.md)                                                                                                                                               |
 | Server updates & crash recovery            | [07_server-updates.md](docs/internals/07_server-updates.md)                                                                                                                                       |
 | Telemetry & analytics                      | [08_product-analytics.md](docs/internals/08_product-analytics.md)                                                                                                                                 |
 | Client connection & sync runtime           | [09_connection-runtime.md](docs/internals/09_connection-runtime.md)                                                                                                                               |
@@ -150,8 +150,8 @@ Read the matching doc before changing code in that area; code review enforces th
 - Server features are Effect services using `Effect.fn("Service.operation")` with thin transport handlers; see [02_effect-services.md](docs/internals/02_effect-services.md).
 - `apps/web/src/components/ui` exports own their look (`shadcn/no-restyle` enforces this); see [10_web-ui.md](docs/internals/10_web-ui.md).
 - Inferred types over annotations. `any` is the enemy.
-- Default to no comment. Write one only for a constraint, external quirk, or invariant the code can't show (1–4 lines max; `a4code/no-low-value-comments` enforces this).
-- React effects are only for synchronizing with external systems. Derive in render and act in handlers; any remaining effect states its reason via `// oxlint-disable-next-line a4code/no-unreasoned-state-sync -- <why>`.
+- Default to no comment. Write one only for a constraint, external quirk, or invariant the code can't show (1–4 lines max; `t3code/no-low-value-comments` enforces this).
+- React effects are only for synchronizing with external systems. Derive in render and act in handlers; any remaining effect states its reason via `// oxlint-disable-next-line t3code/no-unreasoned-state-sync -- <why>`.
 - No continuously repainting animations; they peg the GPU on high-refresh displays.
 - Security matters, but do not over-index on dev-mode or maintainer-only features. Read [SECURITY.md](SECURITY.md) before auditing or triaging reports.
 - If a rule here fights the task in front of you, say so loudly and get a human sign-off before breaking it.

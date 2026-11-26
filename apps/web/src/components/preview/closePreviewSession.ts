@@ -1,10 +1,10 @@
-import type { AtomCommandResult } from "@a4code/client-runtime/state/runtime";
+import type { AtomCommandResult } from "@t3tools/client-runtime/state/runtime";
 import type {
   EnvironmentId,
   PreviewCloseInput,
   PreviewSessionSnapshot,
   ScopedThreadRef,
-} from "@a4code/contracts";
+} from "@t3tools/contracts";
 
 import { rendersServerTabNatively } from "~/browser/previewRuntime";
 import { useClosedViewStore } from "~/closedViewStore";

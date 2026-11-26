@@ -6,15 +6,15 @@ import {
   type OrchestrationV2Subagent,
   type RuntimeRequestId,
   type ThreadId,
-} from "@a4code/contracts";
+} from "@t3tools/contracts";
 import * as Context from "effect/Context";
 import * as Effect from "effect/Effect";
 import * as Layer from "effect/Layer";
 import type * as Scope from "effect/Scope";
 import * as Stream from "effect/Stream";
 
-import { reportLabel } from "@a4code/provider-core/server/notification";
-import * as KeyedLock from "@a4code/shared/KeyedLock";
+import { reportLabel } from "@t3tools/provider-core/server/notification";
+import * as KeyedLock from "@t3tools/shared/KeyedLock";
 
 import { forkParked } from "../serverActivation.ts";
 import * as Orchestrator from "./Orchestrator.ts";
@@ -26,7 +26,7 @@ export class DelegatedTaskQuestionReactor extends Context.Service<
     readonly start: () => Effect.Effect<void, never, Scope.Scope>;
     readonly handle: (event: OrchestrationV2DomainEvent) => Effect.Effect<void>;
   }
->()("a4code/orchestration-v2/DelegatedTaskQuestionReactor") {}
+>()("t3/orchestration-v2/DelegatedTaskQuestionReactor") {}
 
 const make = Effect.gen(function* () {
   const engine = yield* Orchestrator.OrchestratorV2;

@@ -7,7 +7,7 @@ import {
   type PreviewStreamInput,
   type PreviewStreamPointer,
   type PreviewStreamViewport,
-} from "@a4code/client-runtime/preview/server-browser-stream";
+} from "@t3tools/client-runtime/preview/server-browser-stream";
 
 import type { PreviewStreamConfiguration, PreviewStreamMessage } from "./preview-stream-document";
 

@@ -10,7 +10,7 @@ delete process.env.VP_RUN_NODE_CLIENT_PATH;
 
 export default defineConfig({
   site:
-    process.env.A4CODE_MARKETING_SITE_URL ||
+    process.env.T3CODE_MARKETING_SITE_URL ||
     (process.env.VERCEL_PROJECT_PRODUCTION_URL
       ? `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}`
       : "http://localhost:4173"),

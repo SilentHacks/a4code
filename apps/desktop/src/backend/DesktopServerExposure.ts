@@ -1,15 +1,15 @@
 import {
   createAdvertisedEndpoint,
   type CreateAdvertisedEndpointInput,
-} from "@a4code/shared/advertisedEndpoint";
+} from "@t3tools/shared/advertisedEndpoint";
 import {
   DesktopServerExposureModeSchema,
   type AdvertisedEndpoint,
   type AdvertisedEndpointProvider,
   type DesktopServerExposureMode,
   type DesktopServerExposureState,
-} from "@a4code/contracts";
-import { isTailscaleIpv4Address, readTailscaleStatus } from "@a4code/tailscale";
+} from "@t3tools/contracts";
+import { isTailscaleIpv4Address, readTailscaleStatus } from "@t3tools/tailscale";
 import * as Cache from "effect/Cache";
 import * as Context from "effect/Context";
 import * as Duration from "effect/Duration";
@@ -288,7 +288,7 @@ export class DesktopServerExposure extends Context.Service<
     }) => Effect.Effect<DesktopServerExposureChange, DesktopTailscaleServePersistenceError>;
     readonly getAdvertisedEndpoints: Effect.Effect<readonly AdvertisedEndpoint[]>;
   }
->()("@a4code/desktop/backend/DesktopServerExposure") {}
+>()("@t3tools/desktop/backend/DesktopServerExposure") {}
 
 interface RuntimeState {
   readonly requestedMode: DesktopServerExposureMode;

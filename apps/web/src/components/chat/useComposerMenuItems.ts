@@ -2,11 +2,11 @@ import { useGT, useMessages } from "gt-react";
 import {
   legacyThreadPullRequestKey,
   threadPullRequestKeyOf,
-} from "@a4code/client-runtime/thread-pull-requests";
+} from "@t3tools/client-runtime/thread-pull-requests";
 import {
   matchComposerEnvironmentItems,
   matchComposerThreadItems,
-} from "@a4code/client-runtime/composerThreadItems";
+} from "@t3tools/client-runtime/composerThreadItems";
 import { useAtomValue } from "@effect/atom-react";
 import { useState } from "react";
 import type {
@@ -18,13 +18,13 @@ import type {
   ServerProvider,
   ThreadId,
   ThreadPullRequestLink,
-} from "@a4code/contracts";
+} from "@t3tools/contracts";
 import {
   composerPullRequestsFromLinks,
   filterComposerPullRequestMatches,
   withLinkedComposerPullRequestsFirst,
-} from "@a4code/shared/composerPullRequestMatches";
-import { formatProviderSkillDisplayName } from "@a4code/shared/inlineSkills";
+} from "@t3tools/shared/composerPullRequestMatches";
+import { formatProviderSkillDisplayName } from "@t3tools/shared/inlineSkills";
 
 import type { ComposerTrigger } from "../../composer-logic";
 import type { DraftId } from "../../composerDraftStore";
@@ -32,7 +32,7 @@ import { basenameOfPath } from "../../pierre-icons";
 import {
   getProviderSkillsForSlashMenu,
   getProviderSlashCommandsForSlashMenu,
-} from "@a4code/client-runtime/providerSkills";
+} from "@t3tools/client-runtime/providerSkills";
 import { searchProviderSkills } from "../../providerSkillSearch";
 import { useVisibleThreadShells } from "~/state/entities";
 import { useEnvironmentIdentities, useEnvironmentMachines } from "~/state/environments";

@@ -1,8 +1,8 @@
-import { trimOptionalString } from "@a4code/source-control-core/server/pullRequestUtils";
+import { trimOptionalString } from "@t3tools/source-control-core/server/pullRequestUtils";
 import * as DateTime from "effect/DateTime";
 import * as Option from "effect/Option";
 import * as Schema from "effect/Schema";
-import { PositiveInt, TrimmedNonEmptyString } from "@a4code/contracts";
+import { PositiveInt, TrimmedNonEmptyString } from "@t3tools/contracts";
 
 export interface NormalizedBitbucketPullRequestRecord {
   readonly number: number;

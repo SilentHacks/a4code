@@ -6,10 +6,10 @@ import {
   type ProjectMutation,
   type ProjectSnapshot,
   ProjectId,
-} from "@a4code/contracts";
-import { expandHomePath } from "@a4code/provider-core/server/pathExpansion";
-import { splitsSurrogatePair } from "@a4code/shared/assistantCitations";
-import * as HostProcess from "@a4code/shared/HostProcess";
+} from "@t3tools/contracts";
+import { expandHomePath } from "@t3tools/provider-core/server/pathExpansion";
+import { splitsSurrogatePair } from "@t3tools/shared/assistantCitations";
+import * as HostProcess from "@t3tools/shared/HostProcess";
 import * as Console from "effect/Console";
 import * as SecureRandom from "effect/crypto/SecureRandom";
 import * as Effect from "effect/Effect";

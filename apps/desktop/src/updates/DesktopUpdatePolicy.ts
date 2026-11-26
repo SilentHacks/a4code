@@ -9,7 +9,7 @@ import {
   managedUpdatesMessage,
   type ManagedPolicyDocument,
   type ManagedUpdatesMode,
-} from "@a4code/contracts";
+} from "@t3tools/contracts";
 import * as Context from "effect/Context";
 import * as Effect from "effect/Effect";
 import * as Layer from "effect/Layer";
@@ -26,7 +26,7 @@ export interface UpdatePolicy {
 }
 
 export class DesktopUpdatePolicy extends Context.Service<DesktopUpdatePolicy, UpdatePolicy>()(
-  "@a4code/desktop/updates/DesktopUpdatePolicy",
+  "@t3tools/desktop/updates/DesktopUpdatePolicy",
 ) {}
 
 export const unmanagedUpdatePolicy: UpdatePolicy = {

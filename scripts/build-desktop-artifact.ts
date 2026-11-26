@@ -15,10 +15,10 @@ import {
   type DirectoryRecord,
 } from "@electron/asar";
 
-import { fromYaml } from "@a4code/shared/schemaYaml";
-import * as HostProcess from "@a4code/shared/HostProcess";
-import { clerkFrontendApiHostnameFromPublishableKey } from "@a4code/shared/relayAuth";
-import { resolveSpawnCommand } from "@a4code/shared/shell";
+import { fromYaml } from "@t3tools/shared/schemaYaml";
+import * as HostProcess from "@t3tools/shared/HostProcess";
+import { clerkFrontendApiHostnameFromPublishableKey } from "@t3tools/shared/relayAuth";
+import { resolveSpawnCommand } from "@t3tools/shared/shell";
 import rootPackageJson from "../package.json" with { type: "json" };
 import desktopPackageJson from "../apps/desktop/package.json" with { type: "json" };
 import gnomeCaptureBundle from "../apps/desktop/gnome-extension/bundle.json" with { type: "json" };
@@ -63,7 +63,7 @@ import { Command, Flag } from "effect/cli";
 import { ChildProcess, ChildProcessSpawner } from "effect/process";
 
 const LINUX_ICON_SIZES = [16, 22, 24, 32, 48, 64, 128, 256, 512] as const;
-const DESKTOP_APP_ID = "io.github.silenthacks.a4code";
+const DESKTOP_APP_ID = "com.t3tools.t3code";
 const APPLE_TEAM_ID_PATTERN = /^[A-Z0-9]{10}$/u;
 
 const BuildPlatform = Schema.Literals(["mac", "linux", "win"]);
@@ -966,8 +966,8 @@ interface StagePackageJson {
   readonly name: string;
   readonly version: string;
   readonly buildVersion: string;
-  readonly a4codeCommitHash: string;
-  readonly a4codeWebAuthn?: MacWebAuthnEntitlements;
+  readonly t3codeCommitHash: string;
+  readonly t3codeWebAuthn?: MacWebAuthnEntitlements;
   readonly private: true;
   readonly packageManager: string;
   readonly description: string;
@@ -1165,7 +1165,7 @@ export class InvalidAppleTeamIdError extends Schema.TaggedError<InvalidAppleTeam
   },
 ) {
   override get message(): string {
-    return `A4CODE_APPLE_TEAM_ID '${this.teamId}' must be a 10-character Apple Developer Team ID.`;
+    return `T3CODE_APPLE_TEAM_ID '${this.teamId}' must be a 10-character Apple Developer Team ID.`;
   }
 }
 
@@ -1174,7 +1174,7 @@ export class MissingMacPasskeyProvisioningProfileError extends Schema.TaggedErro
   {},
 ) {
   override get message(): string {
-    return "A4CODE_MACOS_PROVISIONING_PROFILE must point to an Associated Domains provisioning profile.";
+    return "T3CODE_MACOS_PROVISIONING_PROFILE must point to an Associated Domains provisioning profile.";
   }
 }
 
@@ -1183,7 +1183,7 @@ export class MissingMacPasskeyDomainConfigurationError extends Schema.TaggedErro
   {},
 ) {
   override get message(): string {
-    return "A4CODE_CLERK_PUBLISHABLE_KEY or A4CODE_CLERK_PASSKEY_RP_DOMAINS is required for signed macOS passkey builds.";
+    return "T3CODE_CLERK_PUBLISHABLE_KEY or T3CODE_CLERK_PASSKEY_RP_DOMAINS is required for signed macOS passkey builds.";
   }
 }
 
@@ -1194,7 +1194,7 @@ export class InvalidMacPasskeyPublishableKeyError extends Schema.TaggedError<Inv
   },
 ) {
   override get message(): string {
-    return "A4CODE_CLERK_PUBLISHABLE_KEY is invalid.";
+    return "T3CODE_CLERK_PUBLISHABLE_KEY is invalid.";
   }
 }
 
@@ -1262,22 +1262,22 @@ function normalizePasskeyRpDomain(value: string): string {
 export function resolveMacPasskeySigningConfiguration(
   env: Readonly<Record<string, string | undefined>>,
 ): MacPasskeySigningConfiguration {
-  const teamId = env.A4CODE_APPLE_TEAM_ID?.trim().toUpperCase() ?? "";
+  const teamId = env.T3CODE_APPLE_TEAM_ID?.trim().toUpperCase() ?? "";
   if (!APPLE_TEAM_ID_PATTERN.test(teamId)) {
     throw new InvalidAppleTeamIdError({ teamId });
   }
 
-  const provisioningProfilePath = env.A4CODE_MACOS_PROVISIONING_PROFILE?.trim() ?? "";
+  const provisioningProfilePath = env.T3CODE_MACOS_PROVISIONING_PROFILE?.trim() ?? "";
   if (provisioningProfilePath.length === 0) {
     throw new MissingMacPasskeyProvisioningProfileError();
   }
 
-  const configuredRpDomains = env.A4CODE_CLERK_PASSKEY_RP_DOMAINS?.trim();
+  const configuredRpDomains = env.T3CODE_CLERK_PASSKEY_RP_DOMAINS?.trim();
   let rpDomains: readonly string[];
   if (configuredRpDomains) {
     rpDomains = configuredRpDomains.split(",").map(normalizePasskeyRpDomain);
   } else {
-    const publishableKey = env.A4CODE_CLERK_PUBLISHABLE_KEY?.trim();
+    const publishableKey = env.T3CODE_CLERK_PUBLISHABLE_KEY?.trim();
     if (!publishableKey) {
       throw new MissingMacPasskeyDomainConfigurationError();
     }
@@ -1649,18 +1649,18 @@ const AzureTrustedSigningOptionsConfig = Config.all({
 });
 
 const BuildEnvConfig = Config.all({
-  platform: Config.schema(BuildPlatform, "A4CODE_DESKTOP_PLATFORM").pipe(Config.option),
-  target: Config.String("A4CODE_DESKTOP_TARGET").pipe(Config.option),
-  arch: Config.schema(BuildArch, "A4CODE_DESKTOP_ARCH").pipe(Config.option),
-  version: Config.String("A4CODE_DESKTOP_VERSION").pipe(Config.option),
-  outputDir: Config.String("A4CODE_DESKTOP_OUTPUT_DIR").pipe(Config.option),
-  skipBuild: Config.Boolean("A4CODE_DESKTOP_SKIP_BUILD").pipe(Config.withDefault(false)),
-  keepStage: Config.Boolean("A4CODE_DESKTOP_KEEP_STAGE").pipe(Config.withDefault(false)),
-  signed: Config.Boolean("A4CODE_DESKTOP_SIGNED").pipe(Config.withDefault(false)),
-  verbose: Config.Boolean("A4CODE_DESKTOP_VERBOSE").pipe(Config.withDefault(false)),
-  mockUpdates: Config.Boolean("A4CODE_DESKTOP_MOCK_UPDATES").pipe(Config.withDefault(false)),
-  mockUpdateServerPort: Config.String("A4CODE_DESKTOP_MOCK_UPDATE_SERVER_PORT").pipe(Config.option),
-  wslRuntime: Config.String("A4CODE_DESKTOP_WSL_RUNTIME").pipe(Config.option),
+  platform: Config.schema(BuildPlatform, "T3CODE_DESKTOP_PLATFORM").pipe(Config.option),
+  target: Config.String("T3CODE_DESKTOP_TARGET").pipe(Config.option),
+  arch: Config.schema(BuildArch, "T3CODE_DESKTOP_ARCH").pipe(Config.option),
+  version: Config.String("T3CODE_DESKTOP_VERSION").pipe(Config.option),
+  outputDir: Config.String("T3CODE_DESKTOP_OUTPUT_DIR").pipe(Config.option),
+  skipBuild: Config.Boolean("T3CODE_DESKTOP_SKIP_BUILD").pipe(Config.withDefault(false)),
+  keepStage: Config.Boolean("T3CODE_DESKTOP_KEEP_STAGE").pipe(Config.withDefault(false)),
+  signed: Config.Boolean("T3CODE_DESKTOP_SIGNED").pipe(Config.withDefault(false)),
+  verbose: Config.Boolean("T3CODE_DESKTOP_VERBOSE").pipe(Config.withDefault(false)),
+  mockUpdates: Config.Boolean("T3CODE_DESKTOP_MOCK_UPDATES").pipe(Config.withDefault(false)),
+  mockUpdateServerPort: Config.String("T3CODE_DESKTOP_MOCK_UPDATE_SERVER_PORT").pipe(Config.option),
+  wslRuntime: Config.String("T3CODE_DESKTOP_WSL_RUNTIME").pipe(Config.option),
 });
 
 const MockUpdateServerPortSchema = Schema.NumberFromString.check(
@@ -1931,11 +1931,11 @@ const rustTargetIsInstalled = Effect.fn("rustTargetIsInstalled")(function* (targ
 export const preflightLinuxDesktopBuild = Effect.fn("preflightLinuxDesktopBuild")(function* (
   arch: typeof BuildArch.Type = "x64",
 ) {
-  const reuseResourceMonitor = yield* Config.Boolean("A4CODE_DESKTOP_REUSE_RESOURCE_MONITOR").pipe(
+  const reuseResourceMonitor = yield* Config.Boolean("T3CODE_DESKTOP_REUSE_RESOURCE_MONITOR").pipe(
     Config.withDefault(false),
   );
   const reuseCaptureHelpers = yield* Config.Boolean(
-    "A4CODE_DESKTOP_REUSE_LINUX_CAPTURE_HELPERS",
+    "T3CODE_DESKTOP_REUSE_LINUX_CAPTURE_HELPERS",
   ).pipe(Config.withDefault(false));
   const needsRust = !reuseResourceMonitor || !reuseCaptureHelpers;
   const rustTarget = resolveResourceMonitorRustTargets("linux", arch)[0]!;
@@ -1972,7 +1972,7 @@ export const preflightMacDesktopBuild = Effect.fn("preflightMacDesktopBuild")(fu
   arch: typeof BuildArch.Type,
 ) {
   const rustTargets = resolveResourceMonitorRustTargets("mac", arch);
-  const reuseResourceMonitor = yield* Config.Boolean("A4CODE_DESKTOP_REUSE_RESOURCE_MONITOR").pipe(
+  const reuseResourceMonitor = yield* Config.Boolean("T3CODE_DESKTOP_REUSE_RESOURCE_MONITOR").pipe(
     Config.withDefault(false),
   );
   const checks = yield* Effect.all(
@@ -2030,7 +2030,7 @@ export const preflightWindowsDesktopBuild = Effect.fn("preflightWindowsDesktopBu
   function* (input: { readonly arch: typeof BuildArch.Type; readonly bundlesWslRuntime: boolean }) {
     const rustTarget = resolveResourceMonitorRustTargets("win", input.arch)[0]!;
     const reuseResourceMonitor = yield* Config.Boolean(
-      "A4CODE_DESKTOP_REUSE_RESOURCE_MONITOR",
+      "T3CODE_DESKTOP_REUSE_RESOURCE_MONITOR",
     ).pipe(Config.withDefault(false));
     const python = yield* resolvePythonForNodeGyp();
     const checks = yield* Effect.all(
@@ -2220,7 +2220,7 @@ export const copyDirectoryPreservingSymlinks = Effect.fn("copyDirectoryPreservin
 export const verifyPackagedBundleIsSelfContained = Effect.fn("verifyPackagedBundleIsSelfContained")(
   function* (input: { readonly asarPath: string; readonly verbose: boolean }) {
     // A PR preview's bundle is untrusted and this job may hold signing secrets, so never run it.
-    if (yield* Config.Boolean("A4CODE_DESKTOP_UNTRUSTED_BUNDLE").pipe(Config.withDefault(false))) {
+    if (yield* Config.Boolean("T3CODE_DESKTOP_UNTRUSTED_BUNDLE").pipe(Config.withDefault(false))) {
       yield* Effect.log(
         "[desktop-artifact] Skipped the bundle self-check for an untrusted bundle.",
       );
@@ -2230,7 +2230,7 @@ export const verifyPackagedBundleIsSelfContained = Effect.fn("verifyPackagedBund
     const path = yield* Path.Path;
 
     const probeRoot = yield* fs.makeTempDirectoryScoped({
-      prefix: "a4code-bundle-selfcheck-",
+      prefix: "t3code-bundle-selfcheck-",
     });
     const extractedApp = path.join(probeRoot, "extracted");
     const probeApp = path.join(probeRoot, "app");
@@ -2311,14 +2311,14 @@ export const stageLinuxCaptureHelper = Effect.fn("stageLinuxCaptureHelper")(func
   const path = yield* Path.Path;
   const [rustTarget] = resolveResourceMonitorRustTargets("linux", input.arch);
   // CI skips Rust on helper-cache hits; allow reuse without rebuilding.
-  const reuseHelpers = yield* Config.Boolean("A4CODE_DESKTOP_REUSE_LINUX_CAPTURE_HELPERS").pipe(
+  const reuseHelpers = yield* Config.Boolean("T3CODE_DESKTOP_REUSE_LINUX_CAPTURE_HELPERS").pipe(
     Config.withDefault(false),
   );
   const binaryPath = path.join(
     input.repoRoot,
     `native/${input.backend}-snap-shot/target`,
     rustTarget!,
-    `release/a4code-${input.backend}-snap-shot`,
+    `release/t3-${input.backend}-snap-shot`,
   );
   if (!reuseHelpers) {
     const spawnCommand = yield* resolveSpawnCommand("cargo", [
@@ -2350,7 +2350,7 @@ export const stageLinuxCaptureHelper = Effect.fn("stageLinuxCaptureHelper")(func
   }
   const destination = path.join(input.stageResourcesDir, `${input.backend}-capture`);
   yield* fs.makeDirectory(destination, { recursive: true });
-  const executable = path.join(destination, `a4code-${input.backend}-snap-shot`);
+  const executable = path.join(destination, `t3-${input.backend}-snap-shot`);
   yield* fs.copyFile(binaryPath, executable);
   yield* fs.chmod(executable, 0o755);
   if (input.backend === "hyprland") {
@@ -2374,7 +2374,7 @@ export const stageResourceMonitor = Effect.fn("stageResourceMonitor")(function* 
   const manifestPath = path.join(input.repoRoot, "native/resource-monitor/Cargo.toml");
   const executableName = resourceMonitorExecutableName(input.platform);
   const rustTargets = resolveResourceMonitorRustTargets(input.platform, input.arch);
-  const reuseResourceMonitor = yield* Config.Boolean("A4CODE_DESKTOP_REUSE_RESOURCE_MONITOR").pipe(
+  const reuseResourceMonitor = yield* Config.Boolean("T3CODE_DESKTOP_REUSE_RESOURCE_MONITOR").pipe(
     Config.withDefault(false),
   );
   const builtBinaries: string[] = [];
@@ -2550,7 +2550,7 @@ const stageMacIcons = Effect.fn("build-desktop-artifact.stageMacIcons")(function
   }
 
   const tmpRoot = yield* fs.makeTempDirectoryScoped({
-    prefix: "a4code-icon-build-",
+    prefix: "t3code-icon-build-",
   });
 
   const iconPngPath = path.join(stageResourcesDir, "icon.png");
@@ -2732,7 +2732,7 @@ export const resolveGitHubPublishConfig = Effect.fn("resolveGitHubPublishConfig"
   updateChannel: "latest" | "nightly",
 ) {
   const env = yield* Config.all({
-    updateRepository: Config.String("A4CODE_DESKTOP_UPDATE_REPOSITORY").pipe(Config.option),
+    updateRepository: Config.String("T3CODE_DESKTOP_UPDATE_REPOSITORY").pipe(Config.option),
     githubRepository: Config.String("GITHUB_REPOSITORY").pipe(Config.option),
   });
   const rawRepo = (
@@ -2823,9 +2823,9 @@ export const createBuildConfig = Effect.fn("createBuildConfig")(function* (
     afterPack: (yield* Path.Path).join(yield* RepoRoot, "scripts/prepare-server-compile-cache.cjs"),
     appId: DESKTOP_APP_ID,
     productName: resolveDesktopProductName(version),
-    artifactName: "A4-Code-${version}-${arch}.${ext}",
+    artifactName: "T3-Code-${version}-${arch}.${ext}",
     electronLanguages: [...DESKTOP_ELECTRON_LANGUAGES],
-    // runAsNode stays on: the app starts its server, helpers and the `a4code` shim by running this
+    // runAsNode stays on: the app starts its server, helpers and the `t3` shim by running this
     // binary as Node, and that mode still accepts inspector flags.
     electronFuses: {
       enableNodeCliInspectArguments: false,
@@ -2915,7 +2915,7 @@ export const createBuildConfig = Effect.fn("createBuildConfig")(function* (
       protocols: [
         {
           name: "A4 Code",
-          schemes: ["a4code", "a4code-dev"],
+          schemes: ["t3code", "t3code-dev"],
         },
         {
           name: "Web site URL",
@@ -2960,21 +2960,21 @@ export const createBuildConfig = Effect.fn("createBuildConfig")(function* (
     buildConfig.afterPack = path.join(repoRoot, "scripts/linux-after-pack.ts");
     buildConfig.linux = {
       target: target === "AppImage" ? [target, "deb"] : [target],
-      executableName: "a4code",
+      executableName: "t3code",
       icon: "icons",
       category: "Development",
       synopsis: "Desktop GUI for coding agents",
-      maintainer: "SilentHacks <26593675+SilentHacks@users.noreply.github.com>",
+      maintainer: "T3 Tools <hello@t3.codes>",
       protocols: [
         {
           name: "A4 Code",
-          schemes: ["a4code", "a4code-dev"],
+          schemes: ["t3code", "t3code-dev"],
         },
       ],
       desktop: {
         entry: {
           // Match Electron's WM_CLASS from setDesktopName so docks use this launcher.
-          StartupWMClass: "io.github.silenthacks.a4code",
+          StartupWMClass: "com.t3tools.T3Code",
         },
       },
     };
@@ -2982,14 +2982,14 @@ export const createBuildConfig = Effect.fn("createBuildConfig")(function* (
     if (buildConfig.publish) {
       buildConfig.appImage = {
         artifactName:
-          updateChannel === "nightly" ? "A4-Code-Nightly-${arch}.${ext}" : "A4-Code-${arch}.${ext}",
+          updateChannel === "nightly" ? "T3-Code-Nightly-${arch}.${ext}" : "T3-Code-${arch}.${ext}",
       };
     }
     buildConfig.deb = {
       // FPM runs outside the staged app directory, so source paths must be absolute.
       fpm: [
-        `${path.join(repoRoot, "apps/desktop/resources/linux/io.github.silenthacks.a4code.metainfo.xml")}=/usr/share/metainfo/io.github.silenthacks.a4code.metainfo.xml`,
-        `${path.join(repoRoot, "LICENSE")}=/usr/share/doc/a4code/copyright`,
+        `${path.join(repoRoot, "apps/desktop/resources/linux/com.t3tools.t3code.metainfo.xml")}=/usr/share/metainfo/com.t3tools.t3code.metainfo.xml`,
+        `${path.join(repoRoot, "LICENSE")}=/usr/share/doc/t3code/copyright`,
       ],
       // Debian 13 and Ubuntu 24.04 use 64-bit-time names; retain old-name fallbacks.
       depends: [
@@ -3089,7 +3089,7 @@ export const stageWslRuntimeArchive = Effect.fn("stageWslRuntimeArchive")(functi
 
 // Match cliArchiveStem without its circular import. WSL uses the Windows host's architecture.
 export const wslRuntimeArchiveStem = (version: string, arch: typeof BuildArch.Type): string =>
-  `a4code-${version}-linux-${arch}`;
+  `t3-${version}-linux-${arch}`;
 
 export const parseWslRuntimeArchiveMembers = (listing: string): ReadonlyArray<string> =>
   listing
@@ -3174,7 +3174,7 @@ export const stageWindowsServerSidecar = Effect.fn("stageWindowsServerSidecar")(
     sidecarDependencies,
   );
   const sidecarPackageJson = {
-    name: "a4code-server",
+    name: "t3code-server",
     version: input.appVersion,
     private: true,
     packageManager: rootPackageJson.packageManager,
@@ -3293,7 +3293,7 @@ export const verifyWindowsPrimaryFffNativeLoad = Effect.fn(
   if (hostPlatform !== "win32" || hostArchitecture !== input.targetArch) return;
 
   const probeRoot = yield* fs.makeTempDirectoryScoped({
-    prefix: "a4code-windows-primary-native-probe-",
+    prefix: "t3code-windows-primary-native-probe-",
   });
   const fffEntryPath = path.join(input.asarPath, "node_modules/@ff-labs/fff-node/dist/index.js");
   const probeEnv = { ...process.env };
@@ -3550,7 +3550,7 @@ export const validateWindowsPackagedPayload = Effect.fn(
         ),
       );
     }
-    const requiredMembers = [`${stem}/a4code`, `${stem}/client`, `${stem}/node_modules`];
+    const requiredMembers = [`${stem}/t3`, `${stem}/client`, `${stem}/node_modules`];
     const missingMembers = requiredMembers.filter((member) => !members.includes(member));
     const ptyCandidates = [
       `${stem}/node_modules/node-pty/build/Release/pty.node`,
@@ -3744,7 +3744,7 @@ const buildDesktopArtifactUnlocked = Effect.fn("buildDesktopArtifactUnlocked")(f
   const commitHash = yield* resolveGitCommitHash(repoRoot);
   const mkdir = options.keepStage ? fs.makeTempDirectory : fs.makeTempDirectoryScoped;
   const stageRoot = yield* mkdir({
-    prefix: `a4code-desktop-${options.platform}-stage-`,
+    prefix: `t3code-desktop-${options.platform}-stage-`,
   });
 
   const stageAppDir = path.join(stageRoot, "app");
@@ -3965,19 +3965,19 @@ const buildDesktopArtifactUnlocked = Effect.fn("buildDesktopArtifactUnlocked")(f
       ? path.join(stageAppDir, WINDOWS_SERVER_RESOURCE_SOURCE_DIR, WINDOWS_SERVER_ASAR_RESOURCE)
       : undefined;
   const stagePackageJson: StagePackageJson = {
-    name: "a4code",
+    name: "t3code",
     version: appVersion,
     buildVersion: appVersion,
-    a4codeCommitHash: commitHash,
+    t3codeCommitHash: commitHash,
     // Read by apps/desktop/src/preview/Passkeys.ts; must match the signed entitlements.
-    ...(macWebAuthn ? { a4codeWebAuthn: macWebAuthn } : {}),
+    ...(macWebAuthn ? { t3codeWebAuthn: macWebAuthn } : {}),
     private: true,
     packageManager: rootPackageJson.packageManager,
     description:
       "A4 Code is an open-source desktop app for coding agents. Work with your existing agent subscriptions, review code changes, and run commands in your projects. Connect from desktop, web, or mobile to continue working remotely.",
     license: "MIT",
-    homepage: "https://github.com/SilentHacks/a4code",
-    author: "SilentHacks",
+    homepage: "https://t3.codes",
+    author: "T3 Tools",
     main: "apps/desktop/dist-electron/boot.cjs",
     build: yield* createBuildConfig(
       options.platform,
@@ -4120,7 +4120,7 @@ const buildDesktopArtifactUnlocked = Effect.fn("buildDesktopArtifactUnlocked")(f
   const builderArgs = [
     "exec",
     "--filter",
-    "@a4code/desktop",
+    "@t3tools/desktop",
     "--",
     "electron-builder",
     "--projectDir",
@@ -4138,7 +4138,7 @@ const buildDesktopArtifactUnlocked = Effect.fn("buildDesktopArtifactUnlocked")(f
       shell: builderCommand.shell,
     }),
     {
-      label: `vp exec --filter @a4code/desktop -- electron-builder --projectDir ${stageAppDir} ${platformConfig.cliFlag} --${options.arch} --publish never`,
+      label: `vp exec --filter @t3tools/desktop -- electron-builder --projectDir ${stageAppDir} ${platformConfig.cliFlag} --${options.arch} --publish never`,
       verbose: options.verbose,
     },
   );
@@ -4243,61 +4243,61 @@ export const copyDesktopBuildArtifacts = Effect.fn("copyDesktopBuildArtifacts")(
 
 const buildDesktopArtifactCli = Command.make("build-desktop-artifact", {
   platform: Flag.Literals("platform", BuildPlatform.literals).pipe(
-    Flag.withDescription("Build platform (env: A4CODE_DESKTOP_PLATFORM)."),
+    Flag.withDescription("Build platform (env: T3CODE_DESKTOP_PLATFORM)."),
     Flag.optional,
   ),
   target: Flag.String("target").pipe(
     Flag.withDescription(
-      "Artifact target, for example dmg/AppImage/nsis (env: A4CODE_DESKTOP_TARGET).",
+      "Artifact target, for example dmg/AppImage/nsis (env: T3CODE_DESKTOP_TARGET).",
     ),
     Flag.optional,
   ),
   arch: Flag.Literals("arch", BuildArch.literals).pipe(
-    Flag.withDescription("Build arch, for example arm64/x64/universal (env: A4CODE_DESKTOP_ARCH)."),
+    Flag.withDescription("Build arch, for example arm64/x64/universal (env: T3CODE_DESKTOP_ARCH)."),
     Flag.optional,
   ),
   buildVersion: Flag.String("build-version").pipe(
     Flag.withDescription(
-      "Compiled bundle and desktop package version (env: A4CODE_DESKTOP_VERSION).",
+      "Compiled bundle and desktop package version (env: T3CODE_DESKTOP_VERSION).",
     ),
     Flag.optional,
   ),
   outputDir: Flag.String("output-dir").pipe(
-    Flag.withDescription("Output directory for artifacts (env: A4CODE_DESKTOP_OUTPUT_DIR)."),
+    Flag.withDescription("Output directory for artifacts (env: T3CODE_DESKTOP_OUTPUT_DIR)."),
     Flag.optional,
   ),
   skipBuild: Flag.Boolean("skip-build").pipe(
     Flag.withDescription(
-      "Skip `vp run build:desktop` and use existing dist artifacts (env: A4CODE_DESKTOP_SKIP_BUILD).",
+      "Skip `vp run build:desktop` and use existing dist artifacts (env: T3CODE_DESKTOP_SKIP_BUILD).",
     ),
     Flag.optional,
   ),
   keepStage: Flag.Boolean("keep-stage").pipe(
-    Flag.withDescription("Keep temporary staging files (env: A4CODE_DESKTOP_KEEP_STAGE)."),
+    Flag.withDescription("Keep temporary staging files (env: T3CODE_DESKTOP_KEEP_STAGE)."),
     Flag.optional,
   ),
   signed: Flag.Boolean("signed").pipe(
     Flag.withDescription(
-      "Enable signing/notarization discovery; Windows uses Azure Trusted Signing (env: A4CODE_DESKTOP_SIGNED).",
+      "Enable signing/notarization discovery; Windows uses Azure Trusted Signing (env: T3CODE_DESKTOP_SIGNED).",
     ),
     Flag.optional,
   ),
   verbose: Flag.Boolean("verbose").pipe(
-    Flag.withDescription("Stream subprocess stdout (env: A4CODE_DESKTOP_VERBOSE)."),
+    Flag.withDescription("Stream subprocess stdout (env: T3CODE_DESKTOP_VERBOSE)."),
     Flag.optional,
   ),
   mockUpdates: Flag.Boolean("mock-updates").pipe(
-    Flag.withDescription("Enable mock updates (env: A4CODE_DESKTOP_MOCK_UPDATES)."),
+    Flag.withDescription("Enable mock updates (env: T3CODE_DESKTOP_MOCK_UPDATES)."),
     Flag.optional,
   ),
   mockUpdateServerPort: Flag.Int("mock-update-server-port").pipe(
     Flag.withSchema(Schema.Int.check(Schema.isBetween({ minimum: 1, maximum: 65535 }))),
-    Flag.withDescription("Mock update server port (env: A4CODE_DESKTOP_MOCK_UPDATE_SERVER_PORT)."),
+    Flag.withDescription("Mock update server port (env: T3CODE_DESKTOP_MOCK_UPDATE_SERVER_PORT)."),
     Flag.optional,
   ),
   wslRuntime: Flag.String("wsl-runtime").pipe(
     Flag.withDescription(
-      "Path to the Linux CLI release archive (t3-<version>-linux-x64.tar.gz) to embed as the WSL runtime of a Windows build (env: A4CODE_DESKTOP_WSL_RUNTIME).",
+      "Path to the Linux CLI release archive (t3-<version>-linux-x64.tar.gz) to embed as the WSL runtime of a Windows build (env: T3CODE_DESKTOP_WSL_RUNTIME).",
     ),
     Flag.optional,
   ),

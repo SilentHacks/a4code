@@ -13,9 +13,9 @@ import {
   RunAttemptId,
   RunId,
   ThreadId,
-} from "@a4code/contracts";
-import * as HostProcess from "@a4code/shared/HostProcess";
-import { resolveSelfInvocation } from "@a4code/shared/nodeRuntime";
+} from "@t3tools/contracts";
+import * as HostProcess from "@t3tools/shared/HostProcess";
+import { resolveSelfInvocation } from "@t3tools/shared/nodeRuntime";
 import * as SecureRandom from "effect/crypto/SecureRandom";
 import * as DateTime from "effect/DateTime";
 import * as Effect from "effect/Effect";
@@ -25,11 +25,11 @@ import * as Path from "effect/Path";
 import * as Schema from "effect/Schema";
 import * as Stream from "effect/Stream";
 
-import * as AcpSessionRuntime from "@a4code/provider-acp/server/AcpSessionRuntime";
-import * as IdAllocator from "@a4code/provider-core/server/IdAllocator";
-import * as McpProviderSessions from "@a4code/provider-core/server/McpProviderSessions";
-import * as ProviderAdapter from "@a4code/provider-core/server/ProviderAdapter";
-import * as TestProviderHost from "@a4code/provider-testing/TestProviderHost";
+import * as AcpSessionRuntime from "@t3tools/provider-acp/server/AcpSessionRuntime";
+import * as IdAllocator from "@t3tools/provider-core/server/IdAllocator";
+import * as McpProviderSessions from "@t3tools/provider-core/server/McpProviderSessions";
+import * as ProviderAdapter from "@t3tools/provider-core/server/ProviderAdapter";
+import * as TestProviderHost from "@t3tools/provider-testing/TestProviderHost";
 import { GrokSettings } from "../settings.ts";
 import { makeGrokAcpAdapterFlavor, makeGrokAdapterV2 } from "./adapter.ts";
 

@@ -7,16 +7,16 @@ import {
   ServerProviderResetCredits,
   ServerProviderUsageWindow,
   UsageProviderKind,
-} from "@a4code/contracts";
+} from "@t3tools/contracts";
 import { useAtomValue } from "@effect/atom-react";
-import { normalizeProviderAccentColor } from "@a4code/client-runtime/state/provider-instance-display";
+import { normalizeProviderAccentColor } from "@t3tools/client-runtime/state/provider-instance-display";
 import {
   type LimitPace,
   paceOf,
   paceRemainingPercent,
   remainingPercent,
   type ResetCreditChoice,
-} from "@a4code/shared/usageLimits";
+} from "@t3tools/shared/usageLimits";
 import { GaugeIcon, TrendingDownIcon, TrendingUpIcon } from "lucide-react";
 import { msg, T, useGT, useMessages } from "gt-react";
 import { Fragment, useLayoutEffect, useState } from "react";
@@ -39,7 +39,7 @@ import {
 } from "../ui/alert-dialog";
 import { Button } from "../ui/button";
 import { UsageLimitsPooled } from "./UsageLimitsPooled";
-import { formatResetsIn, resetCreditChoices } from "@a4code/shared/usageLimitsCopy";
+import { formatResetsIn, resetCreditChoices } from "@t3tools/shared/usageLimitsCopy";
 import { PROVIDER_PRESENTATION } from "./usageProviders";
 import { SharedTooltipTrigger } from "../ui/shared-tooltip";
 
@@ -109,7 +109,7 @@ function paceMarkStyles(timeLeft: number | null) {
 export function usePaceMark(timeLeft: number | null) {
   const [bar, setBar] = useState<HTMLElement | null>(null);
   const [roomy, setRoomy] = useState(false);
-  // oxlint-disable-next-line a4code/no-unreasoned-state-sync -- measures the bar DOM width before paint and remeasures through a ResizeObserver
+  // oxlint-disable-next-line t3code/no-unreasoned-state-sync -- measures the bar DOM width before paint and remeasures through a ResizeObserver
   useLayoutEffect(() => {
     if (!bar) return;
     const measure = () => setRoomy(bar.getBoundingClientRect().width >= 6);

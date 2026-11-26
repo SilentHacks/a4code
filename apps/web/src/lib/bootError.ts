@@ -1,9 +1,9 @@
-import type { DesktopBridge, DesktopUpdateState } from "@a4code/contracts";
+import type { DesktopBridge, DesktopUpdateState } from "@t3tools/contracts";
 
 const FALLBACK_TRIAGE_COMMAND = "npx t3 triage";
-const DOWNLOAD_URL = "https://github.com/SilentHacks/a4code/releases";
-const ISSUE_URL = "https://github.com/SilentHacks/a4code/issues/new";
-const LAST_FAILURE_KEY = "a4code:boot-failed-at";
+const DOWNLOAD_URL = "https://t3.codes/download";
+const ISSUE_URL = "https://github.com/pingdotgg/t3code/issues/new";
+const LAST_FAILURE_KEY = "t3code:boot-failed-at";
 const REPEAT_FAILURE_MS = 5 * 60_000;
 const MAX_CAUSES = 3;
 const MAX_ERROR_CHARS = 6_000;
@@ -300,11 +300,11 @@ export function showBootError(error: unknown) {
   const copyCommand = element("button", {
     className: "boot-error-icon",
     type: "button",
-    // oxlint-disable-next-line a4code/no-untranslated-copy -- boot failure page renders before the i18n runtime loads
+    // oxlint-disable-next-line t3code/no-untranslated-copy -- boot failure page renders before the i18n runtime loads
     title: "Copy command",
     innerHTML: COPY_ICON,
   });
-  // oxlint-disable-next-line a4code/no-untranslated-copy -- boot failure page renders before the i18n runtime loads
+  // oxlint-disable-next-line t3code/no-untranslated-copy -- boot failure page renders before the i18n runtime loads
   copyCommand.setAttribute("aria-label", "Copy command");
   copyCommand.addEventListener("click", () =>
     copyText(
@@ -312,9 +312,9 @@ export function showBootError(error: unknown) {
       () => {
         copyCommand.innerHTML = CHECK_ICON;
         copyCommand.title = "Copied";
-        // oxlint-disable-next-line a4code/no-untranslated-copy -- boot failure page renders before the i18n runtime loads
+        // oxlint-disable-next-line t3code/no-untranslated-copy -- boot failure page renders before the i18n runtime loads
         copyCommand.setAttribute("aria-label", "Copied");
-        // oxlint-disable-next-line a4code/no-untranslated-copy -- boot failure page renders before the i18n runtime loads
+        // oxlint-disable-next-line t3code/no-untranslated-copy -- boot failure page renders before the i18n runtime loads
         announce("Copied to clipboard.");
       },
       (hint) => {
@@ -340,7 +340,7 @@ export function showBootError(error: unknown) {
       details,
       () => {
         copyDetails.textContent = "Copied";
-        // oxlint-disable-next-line a4code/no-untranslated-copy -- boot failure page renders before the i18n runtime loads
+        // oxlint-disable-next-line t3code/no-untranslated-copy -- boot failure page renders before the i18n runtime loads
         announce("Copied to clipboard.");
       },
       (hint) => {

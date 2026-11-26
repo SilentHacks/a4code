@@ -1,7 +1,7 @@
 # Environment authentication
 
 The environment issues its own sessions and enforces their capabilities. Cloud identity and relay
-credentials belong to a separate trust boundary, described in [T3 Connect](./06_a4-connect.md). A relay
+credentials belong to a separate trust boundary, described in [T3 Connect](./06_t3-connect.md). A relay
 token is never an environment login. See [SECURITY.md](../../SECURITY.md) for the overall threat
 model.
 
@@ -13,9 +13,9 @@ model.
   returns a credential to the caller requires `access:write` and every scope that credential
   carries: a pairing link, an MCP sign-in approval, a link code from a linked environment, and a
   guest link (which reads a thread). Revoking is not capped by the caller's scopes. Admitting a
-  T3 Connect device is not delegation; see [T3 Connect](./06_a4-connect.md).
+  T3 Connect device is not delegation; see [T3 Connect](./06_t3-connect.md).
 - **Why the default grant includes management scopes.** `terminal:operate` and
-  `orchestration:operate` already grant OS-user execution (which can invoke `a4code auth session issue`),
+  `orchestration:operate` already grant OS-user execution (which can invoke `t3 auth session issue`),
   so withholding access or relay management from the default grant would not be a real boundary.
   Narrower clients receive explicit scopes.
 - **No recoverable secrets in read models.** Only the creation response returns a raw pairing
@@ -64,7 +64,7 @@ model.
   client session holding `terminal:operate` approved its exact text for that project.
   [`TaskFolders`](../../apps/server/src/workspace/TaskFolders.ts) is the only place they run and
   checks the approval, managed policy, and who asked at every run. Recording an approval is a
-  client RPC only: `a4code/no-layout-command-approval-writes` keeps the write side out of every
+  client RPC only: `t3code/no-layout-command-approval-writes` keeps the write side out of every
   other module, MCP tools included. For an agent's own worktree request, a thread below Full access
   gets neither these commands nor the project's setup script, approved or not. The asking thread's
   modes are read when each is about to run, a thread recorded above the administrator's
@@ -127,14 +127,14 @@ model.
   What those files go on to run, such as a package script or a file they source, is not part of
   the digest, so an approval is for the named files and not for everything the push executes.
 - **Peer-link client pairing.** Only a full-access peer link may mint a one-time client pairing on
-  the linked environment (since full-access agents can already run `a4code auth pairing create`). The
+  the linked environment (since full-access agents can already run `t3 auth pairing create`). The
   linked side enforces this itself, and the operation stays a human-triggered RPC/HTTP route rather
   than an MCP tool. The same route mints a code that links another environment at a chosen access
   level, and the linking side's RPC requires the caller to hold that level's scopes.
 
 ### Reusable dev credential
 
-Web development servers can accept a fixed `A4CODE_DEV_AUTH_TOKEN` across worktrees and ports on one
+Web development servers can accept a fixed `T3CODE_DEV_AUTH_TOKEN` across worktrees and ports on one
 hostname (see the [development runbook](../operations/00_development.md#reusable-dev-credential)). It
 grants administrative access and is ignored by desktop and non-development servers.
 

@@ -1,4 +1,4 @@
-import { errorDisplayMessage } from "@a4code/client-runtime/errors";
+import { errorDisplayMessage } from "@t3tools/client-runtime/errors";
 import {
   ClientSettingsSchema,
   type ClientSettingsPatch,
@@ -14,15 +14,15 @@ import {
   ServerSettings,
   type T3ProjectFile,
   type ServerSettingsPatch,
-} from "@a4code/contracts";
-import type { EnvironmentConnectionPhase } from "@a4code/client-runtime/connection";
+} from "@t3tools/contracts";
+import type { EnvironmentConnectionPhase } from "@t3tools/client-runtime/connection";
 import {
   clearProjectSettingsOverrides,
   resolveProjectSettings,
   resolveWorktreeCleanup,
   type ProjectSettingSource,
-} from "@a4code/shared/projectSettings";
-import { applyServerSettingsPatch } from "@a4code/shared/serverSettings";
+} from "@t3tools/shared/projectSettings";
+import { applyServerSettingsPatch } from "@t3tools/shared/serverSettings";
 import * as Equal from "effect/Equal";
 import * as Cause from "effect/Cause";
 import { Atom } from "effect/reactivity";

@@ -2,7 +2,7 @@ import {
   type EnvironmentCloudLinkStateResult,
   type EnvironmentCloudPreferencesRequest,
   type EnvironmentCloudRelayConfigResult,
-} from "@a4code/contracts";
+} from "@t3tools/contracts";
 import {
   RelayCloudEnvironmentHealthProofPayload,
   type RelayCloudEnvironmentHealthRequest,
@@ -24,8 +24,8 @@ import {
   RelayManagedEndpointRecoveryResponse,
   type RelayManagedEndpointRuntimeConfig,
   RelayOkResponse,
-} from "@a4code/contracts/relay";
-import { withRelayClientTracing } from "@a4code/shared/relayTracing";
+} from "@t3tools/contracts/relay";
+import { withRelayClientTracing } from "@t3tools/shared/relayTracing";
 import {
   decodeRelayJwt,
   normalizeRelayIssuer,
@@ -36,8 +36,8 @@ import {
   RELAY_MINT_REQUEST_TYP,
   RELAY_MINT_RESPONSE_TYP,
   verifyRelayJwt,
-} from "@a4code/shared/relayJwt";
-import { isSecureRelayUrl, normalizeSecureRelayUrl } from "@a4code/shared/relayUrl";
+} from "@t3tools/shared/relayJwt";
+import { isSecureRelayUrl, normalizeSecureRelayUrl } from "@t3tools/shared/relayUrl";
 import * as Context from "effect/Context";
 import * as Digest from "effect/crypto/Digest";
 import * as SecureRandom from "effect/crypto/SecureRandom";
@@ -186,7 +186,7 @@ export class CloudLinkAuthorizationMissingError extends Schema.TaggedError<Cloud
   {},
 ) {
   override get message(): string {
-    return "Run `a4code connect link` to authorize this environment.";
+    return "Run `t3 connect link` to authorize this environment.";
   }
 }
 
@@ -235,7 +235,7 @@ export class CloudLinkEndpointUnavailableError extends Schema.TaggedError<CloudL
 
 const INTERNAL_OPERATION_MESSAGES = {
   "relay-url-unconfigured":
-    "A4CODE_RELAY_URL must be configured as a secure absolute HTTPS origin.",
+    "T3CODE_RELAY_URL must be configured as a secure absolute HTTPS origin.",
   "generate-link-proof": "Could not generate environment link proof.",
   "persist-relay-config": "Could not persist environment relay configuration.",
   "register-endpoint-origin": "Could not register the managed endpoint origin.",
@@ -508,7 +508,7 @@ export class CloudLink extends Context.Service<
       | HttpClientError.HttpClientError
     >;
   }
->()("a4code/cloud/CloudLink") {}
+>()("t3/cloud/CloudLink") {}
 
 const make = Effect.gen(function* () {
   const secrets = yield* ServerSecretStore.ServerSecretStore;

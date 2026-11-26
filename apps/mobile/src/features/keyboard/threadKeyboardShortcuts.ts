@@ -1,5 +1,5 @@
-import type { EnvironmentThreadShell } from "@a4code/client-runtime/state/shell";
-import { THREAD_JUMP_KEYBINDING_COMMANDS } from "@a4code/contracts";
+import type { EnvironmentThreadShell } from "@t3tools/client-runtime/state/shell";
+import { THREAD_JUMP_KEYBINDING_COMMANDS } from "@t3tools/contracts";
 
 import type { PendingNewTask } from "../../state/pending-new-tasks-model";
 import type { ThreadListV2ListItem } from "../threads/threadListV2";

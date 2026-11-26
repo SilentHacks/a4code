@@ -27,7 +27,7 @@ import type {
 } from "@anthropic-ai/claude-agent-sdk/sdk-tools";
 import * as NodeCrypto from "@effect/platform-node/NodeCrypto";
 import * as NodeServices from "@effect/platform-node/NodeServices";
-import { toolOutputImages } from "@a4code/shared/toolOutput";
+import { toolOutputImages } from "@t3tools/shared/toolOutput";
 import {
   ChatAttachmentId,
   type ChatAttachment,
@@ -54,8 +54,8 @@ import {
   RunAttemptId,
   RunId,
   ThreadId,
-} from "@a4code/contracts";
-import { mcpAppFromToolItem } from "@a4code/shared/toolOutput";
+} from "@t3tools/contracts";
+import { mcpAppFromToolItem } from "@t3tools/shared/toolOutput";
 import { assert, describe, it } from "@effect/vitest";
 import * as Cause from "effect/Cause";
 import * as Context from "effect/Context";
@@ -79,19 +79,19 @@ import * as Scope from "effect/Scope";
 import * as Stream from "effect/Stream";
 import * as TestClock from "effect/testing/TestClock";
 import { Tool } from "effect/ai";
-import { formatClaudeResumeCompactionQuestion } from "@a4code/shared/claudeCompaction";
-import { backgroundWorkHoldsCompletion } from "@a4code/shared/orchestrationV2PendingBackgroundWork";
-import * as HostProcess from "@a4code/shared/HostProcess";
-import { getModelSelectionStringOptionValue } from "@a4code/shared/model";
-import { SpawnExecutableResolution } from "@a4code/shared/shell";
+import { formatClaudeResumeCompactionQuestion } from "@t3tools/shared/claudeCompaction";
+import { backgroundWorkHoldsCompletion } from "@t3tools/shared/orchestrationV2PendingBackgroundWork";
+import * as HostProcess from "@t3tools/shared/HostProcess";
+import { getModelSelectionStringOptionValue } from "@t3tools/shared/model";
+import { SpawnExecutableResolution } from "@t3tools/shared/shell";
 
 import * as PortScanner from "../../preview/PortScanner.ts";
 import { attachmentRelativePath } from "../../attachmentStore.ts";
 import { WorkflowAgentTranscriptReadObserver } from "../workflowAgentTranscript.ts";
 import * as ServerConfig from "../../config.ts";
-import * as McpProviderSession from "@a4code/provider-core/server/mcpSession";
-import { A4_CODE_DEVICE_TOOL_INSTRUCTIONS_WITH_TOOL_SEARCH } from "@a4code/provider-core/server/orchestrationInstructions";
-import * as McpProviderSessions from "@a4code/provider-core/server/McpProviderSessions";
+import * as McpProviderSession from "@t3tools/provider-core/server/mcpSession";
+import { T3_CODE_DEVICE_TOOL_INSTRUCTIONS_WITH_TOOL_SEARCH } from "@t3tools/provider-core/server/orchestrationInstructions";
+import * as McpProviderSessions from "@t3tools/provider-core/server/McpProviderSessions";
 import { PreviewControlsToolkit } from "../../mcp/toolkits/previewControls/tools.ts";
 import { HtmlToolkit } from "../../mcp/toolkits/html/tools.ts";
 import { MessageToolkit } from "../../mcp/toolkits/message/tools.ts";
@@ -114,16 +114,16 @@ import {
   resolveClaudeModelSettingsKey,
 } from "../../provider/ClaudeCodeModelRoutes.ts";
 import { resolveProviderCatalog } from "../../provider/ModelManifest.ts";
-import * as ProviderEventLoggers from "@a4code/provider-core/server/ProviderEventLoggers";
-import { AGENT_FEEDBACK_INSTRUCTIONS } from "@a4code/provider-core/server/runtimeInstructions";
-import * as ProviderAdapter from "@a4code/provider-core/server/ProviderAdapter";
-import type * as ProviderContinuationRequests from "@a4code/provider-core/server/ProviderContinuationRequests";
+import * as ProviderEventLoggers from "@t3tools/provider-core/server/ProviderEventLoggers";
+import { AGENT_FEEDBACK_INSTRUCTIONS } from "@t3tools/provider-core/server/runtimeInstructions";
+import * as ProviderAdapter from "@t3tools/provider-core/server/ProviderAdapter";
+import type * as ProviderContinuationRequests from "@t3tools/provider-core/server/ProviderContinuationRequests";
 import {
   makeProviderFailure,
   PROVIDER_RETRY_BUDGET_MS,
-} from "@a4code/provider-core/server/failure";
+} from "@t3tools/provider-core/server/failure";
 import * as ClaudeAdapterV2 from "./ClaudeAdapterV2.ts";
-import * as IdAllocator from "@a4code/provider-core/server/IdAllocator";
+import * as IdAllocator from "@t3tools/provider-core/server/IdAllocator";
 import * as ProviderInstallationGate from "../../provider/ProviderInstallationGate.ts";
 import { ClaudeOrchestratorReplayHarness } from "./ClaudeAdapterV2.testkit.ts";
 import { withInlineContext } from "../ContextHandoffDelivery.ts";
@@ -978,7 +978,7 @@ describe("ClaudeAdapterV2 T3 tool instructions", () => {
 
   it("gives a session with device access the device block and the ToolSearch line to load it", () => {
     const text = append({ mcp: true, deviceToolsAvailable: true });
-    assert.include(text, A4_CODE_DEVICE_TOOL_INSTRUCTIONS_WITH_TOOL_SEARCH);
+    assert.include(text, T3_CODE_DEVICE_TOOL_INSTRUCTIONS_WITH_TOOL_SEARCH);
     assert.include(text, "Use `delegate_task`");
   });
 
@@ -1023,7 +1023,7 @@ describe("ClaudeAdapterV2 T3 tool instructions", () => {
       {
         hookSpecificOutput: {
           hookEventName: "SubagentStart",
-          additionalContext: A4_CODE_DEVICE_TOOL_INSTRUCTIONS_WITH_TOOL_SEARCH,
+          additionalContext: T3_CODE_DEVICE_TOOL_INSTRUCTIONS_WITH_TOOL_SEARCH,
         },
       },
     ]);

@@ -14,8 +14,8 @@ import {
   type OrchestratorMcpThreadRun,
   type OrchestratorMcpThreadStatus,
   type OrchestratorMcpThreadTimelineItem,
-} from "@a4code/contracts";
-import * as HostProcess from "@a4code/shared/HostProcess";
+} from "@t3tools/contracts";
+import * as HostProcess from "@t3tools/shared/HostProcess";
 import * as Console from "effect/Console";
 import * as Effect from "effect/Effect";
 import * as FileSystem from "effect/FileSystem";
@@ -212,7 +212,7 @@ const makeThreadTools = (session: McpToolSession, origin: string) => {
   const unexpected = (tool: string) =>
     new ThreadToolFailedError({
       tool,
-      detail: `The server sent an unexpected ${tool} result. Update the a4code CLI to match the server.`,
+      detail: `The server sent an unexpected ${tool} result. Update the t3 CLI to match the server.`,
     });
   return {
     call: Effect.fn("cli.thread.callTool")(function* <S extends Schema.Decoder<unknown>>(
@@ -270,7 +270,7 @@ export const withThreadTools = Effect.fn("cli.thread.withThreadTools")(function*
     const environmentAuth = yield* EnvironmentAuth.EnvironmentAuth;
     const issued = yield* Effect.acquireRelease(
       environmentAuth.issueMcpClientSession({
-        label: flags.clientLabel ?? "a4code thread cli",
+        label: flags.clientLabel ?? "t3 thread cli",
         // The CLI runs as the machine's owner. New threads still start at
         // the project's default mode, never at this ceiling by default.
         access: "full-access",

@@ -1,18 +1,18 @@
-import { errorDisplayMessage } from "@a4code/client-runtime/errors";
+import { errorDisplayMessage } from "@t3tools/client-runtime/errors";
 import { T, useGT, Var } from "gt-react-native";
 import * as Dialog from "../../components/ui/Dialog";
 import {
   isAtomCommandInterrupted,
   squashAtomCommandFailure,
   type AtomCommandResult,
-} from "@a4code/client-runtime/state/runtime";
+} from "@t3tools/client-runtime/state/runtime";
 import {
   AuthProvidersManageScope,
   isManagedDriverAllowed,
   ProviderDriverKind,
   type ProviderAuthResponse,
   type ServerProvider,
-} from "@a4code/contracts";
+} from "@t3tools/contracts";
 import { useAtomValue } from "@effect/atom-react";
 import { useRef, useState } from "react";
 import { Pressable, ScrollView, TextInput, useWindowDimensions, View } from "react-native";

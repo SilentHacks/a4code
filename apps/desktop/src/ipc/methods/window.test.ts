@@ -1,11 +1,11 @@
 import { assert, describe, it } from "@effect/vitest";
 import * as NodeServices from "@effect/platform-node/NodeServices";
-import type { ManagedPolicyLimits } from "@a4code/contracts";
-import { EDITORS, REMOTE_CAPABLE_EDITOR_IDS } from "@a4code/contracts";
-import { resolveEditorCommand } from "@a4code/shared/editor";
-import * as HostProcess from "@a4code/shared/HostProcess";
-import { makePathDirectoryListings, PathDirectoryListings } from "@a4code/shared/shell";
-import { ManagedPolicyFileError } from "@a4code/shared/managedPolicyFile";
+import type { ManagedPolicyLimits } from "@t3tools/contracts";
+import { EDITORS, REMOTE_CAPABLE_EDITOR_IDS } from "@t3tools/contracts";
+import { resolveEditorCommand } from "@t3tools/shared/editor";
+import * as HostProcess from "@t3tools/shared/HostProcess";
+import { makePathDirectoryListings, PathDirectoryListings } from "@t3tools/shared/shell";
+import { ManagedPolicyFileError } from "@t3tools/shared/managedPolicyFile";
 import * as FileSystem from "effect/FileSystem";
 import * as Path from "effect/Path";
 import * as Effect from "effect/Effect";
@@ -308,7 +308,7 @@ describe("installRelayTelemetryEnabled", () => {
 
   it.effect("reads the desktop host opt-out before returning the renderer policy", () =>
     Effect.gen(function* () {
-      assert.deepEqual(yield* relayTelemetryEnabled({ A4CODE_TELEMETRY_ENABLED: "false" }), {
+      assert.deepEqual(yield* relayTelemetryEnabled({ T3CODE_TELEMETRY_ENABLED: "false" }), {
         beforeDiscovery: false,
         afterDiscovery: false,
       });
@@ -318,7 +318,7 @@ describe("installRelayTelemetryEnabled", () => {
         afterDiscovery: true,
       });
       assert.deepEqual(
-        yield* relayTelemetryEnabled({}, undefined, { A4CODE_TELEMETRY_ENABLED: "false" }),
+        yield* relayTelemetryEnabled({}, undefined, { T3CODE_TELEMETRY_ENABLED: "false" }),
         { beforeDiscovery: null, afterDiscovery: false },
       );
     }),

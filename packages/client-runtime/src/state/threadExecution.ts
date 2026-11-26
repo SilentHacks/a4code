@@ -5,7 +5,7 @@ import {
   latestUnheldRun,
   threadErrorSummary,
   usageLimitRunPresentedAsLatest,
-} from "@a4code/shared/orchestrationV2ThreadError";
+} from "@t3tools/shared/orchestrationV2ThreadError";
 import {
   isOrchestrationV2WorkActive,
   isProviderNativeSubagentThread,
@@ -27,11 +27,11 @@ import {
   orchestrationV2RunWorkStartedAt,
   type RunId,
   type ThreadId,
-} from "@a4code/contracts";
+} from "@t3tools/contracts";
 import {
   backgroundWorkHoldsCompletion,
   derivePendingBackgroundWork,
-} from "@a4code/shared/orchestrationV2PendingBackgroundWork";
+} from "@t3tools/shared/orchestrationV2PendingBackgroundWork";
 import {
   DEFAULT_VARIANT_CHOICE_ID,
   getModelSelectionStringOptionValue,
@@ -39,9 +39,9 @@ import {
   getProviderOptionStatedValue,
   resolveSelectableModel,
   withLegacyUltracodeEffort,
-} from "@a4code/shared/model";
-import { unsentManualContinuationSource } from "@a4code/shared/orchestrationV2ManualContinuation";
-import { formatDuration } from "@a4code/shared/orchestrationTiming";
+} from "@t3tools/shared/model";
+import { unsentManualContinuationSource } from "@t3tools/shared/orchestrationV2ManualContinuation";
+import { formatDuration } from "@t3tools/shared/orchestrationTiming";
 import * as DateTime from "effect/DateTime";
 
 import {

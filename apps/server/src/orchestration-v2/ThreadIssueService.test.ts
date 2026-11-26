@@ -1,4 +1,4 @@
-import { IssueTrackerKind, ThreadId } from "@a4code/contracts";
+import { IssueTrackerKind, ThreadId } from "@t3tools/contracts";
 import { describe, expect, it } from "@effect/vitest";
 import * as SecureRandom from "effect/crypto/SecureRandom";
 import * as Effect from "effect/Effect";
@@ -20,7 +20,7 @@ describe("ThreadIssueService", () => {
           key: {
             tracker: IssueTrackerKind.make("github"),
             host: "github.com",
-            scope: "SilentHacks/a4code",
+            scope: "t3tools/t3code",
             key: "7",
           },
         })

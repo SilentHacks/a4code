@@ -17,7 +17,7 @@ export class MacPermissions extends Context.Service<
       isGranted?: () => boolean | Promise<boolean>,
     ) => Effect.Effect<void>;
   }
->()("@a4code/desktop/permissions/MacPermissions") {}
+>()("@t3tools/desktop/permissions/MacPermissions") {}
 
 class MacPermissionHelperError extends Schema.TaggedError<MacPermissionHelperError>()(
   "MacPermissionHelperError",

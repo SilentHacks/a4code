@@ -21,7 +21,7 @@ clients read declared capabilities, never provider names.
   `ProviderAdapterV2` adapters are only for non-ACP protocols.
 - **Package boundaries.** Providers live in `packages/provider-<name>` (see
   [Pi](../../packages/provider-pi) as reference). Server code imports only
-  `@a4code/provider-core/server/*`, contracts, and shared, reaching host capabilities through
+  `@t3tools/provider-core/server/*`, contracts, and shared, reaching host capabilities through
   `ProviderHost` rather than `apps/server`. Client definitions (`./client`) must stay browser- and
   React Native-safe.
 

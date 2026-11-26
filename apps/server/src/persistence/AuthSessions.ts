@@ -1,5 +1,5 @@
 import * as Context from "effect/Context";
-import * as NodeSqliteClient from "@a4code/shared/nodeSqliteClient";
+import * as NodeSqliteClient from "@t3tools/shared/nodeSqliteClient";
 import * as Effect from "effect/Effect";
 import * as Layer from "effect/Layer";
 import * as Option from "effect/Option";
@@ -12,7 +12,7 @@ import {
   AuthEnvironmentScopes,
   AuthSessionId,
   ServerAuthSessionMethod,
-} from "@a4code/contracts";
+} from "@t3tools/contracts";
 
 import {
   type AuthSessionRepositoryError,
@@ -146,7 +146,7 @@ export class AuthSessionRepository extends Context.Service<
       input: RevokeAuthSessionsByProofKeyInput,
     ) => Effect.Effect<ReadonlyArray<AuthSessionId>, AuthSessionRepositoryError>;
   }
->()("a4code/persistence/AuthSessions/AuthSessionRepository") {}
+>()("t3/persistence/AuthSessions/AuthSessionRepository") {}
 
 const AuthSessionDbRow = Schema.Struct({
   sessionId: AuthSessionId,

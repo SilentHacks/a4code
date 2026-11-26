@@ -1,18 +1,18 @@
-import { thrownErrorMessage } from "@a4code/client-runtime/errors";
+import { thrownErrorMessage } from "@t3tools/client-runtime/errors";
 import {
   parseScopedThreadKey,
   scopeProjectRef,
   scopeThreadRef,
   scopedThreadKey,
-} from "@a4code/client-runtime/environment";
-import { settlePromise, squashAtomCommandFailure } from "@a4code/client-runtime/state/runtime";
+} from "@t3tools/client-runtime/environment";
+import { settlePromise, squashAtomCommandFailure } from "@t3tools/client-runtime/state/runtime";
 import {
   canSnooze,
   canSettleAndStartNewThread,
   threadWokeAt,
   runSettleAndNewThread,
-} from "@a4code/client-runtime/state/thread-settled";
-import { threadRuntimeCanArchive } from "@a4code/client-runtime/state/models";
+} from "@t3tools/client-runtime/state/thread-settled";
+import { threadRuntimeCanArchive } from "@t3tools/client-runtime/state/models";
 import {
   AuthOrchestrationOperateScope,
   AuthSourceControlWriteScope,
@@ -21,8 +21,8 @@ import {
   type ScopedThreadRef,
   ThreadId,
   sessionGrantsScope,
-} from "@a4code/contracts";
-import { resolveWorktreeCleanup } from "@a4code/shared/projectSettings";
+} from "@t3tools/contracts";
+import { resolveWorktreeCleanup } from "@t3tools/shared/projectSettings";
 import * as Cause from "effect/Cause";
 import * as Schema from "effect/Schema";
 import { AsyncResult } from "effect/reactivity";
@@ -35,7 +35,7 @@ import { useComposerDraftStore } from "../composerDraftStore";
 import { environmentSession, readEnvironmentScope } from "../state/session";
 import { appAtomRegistry } from "../rpc/atomRegistry";
 import { environmentServerConfigsAtom } from "../state/server";
-import { isScratchProject } from "@a4code/client-runtime/state/projects";
+import { isScratchProject } from "@t3tools/client-runtime/state/projects";
 import { orchestrationEnvironment } from "../state/orchestration";
 import { projectEnvironment } from "../state/projects";
 import { threadEnvironment } from "../state/threads";
@@ -65,7 +65,7 @@ import { buildThreadRouteParams, resolveThreadRouteRef } from "../threadRoutes";
 import { formatWorktreePathForDisplay, getOrphanedWorktreePathForThread } from "../worktreeCleanup";
 import { stackedThreadToast, toastManager } from "../components/ui/toast";
 import { useClientSettings } from "./useSettings";
-import * as ThreadUndo from "@a4code/client-runtime/state/thread-undo";
+import * as ThreadUndo from "@t3tools/client-runtime/state/thread-undo";
 import { showThreadUndoNotice } from "./showThreadUndoNotice";
 import { useAtomCommand } from "../state/use-atom-command";
 import { threadTriagePermitted, useOrchestrationCommand } from "../state/use-orchestration-command";

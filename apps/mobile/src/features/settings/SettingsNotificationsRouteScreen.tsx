@@ -1,12 +1,12 @@
-import { errorDisplayMessage } from "@a4code/client-runtime/errors";
+import { errorDisplayMessage } from "@t3tools/client-runtime/errors";
 import { msg, useGT, useMessages } from "gt-react-native";
 import * as Dialog from "../../components/ui/Dialog";
-import { managedCapabilityDenial } from "@a4code/client-runtime/contract-labels";
+import { managedCapabilityDenial } from "@t3tools/client-runtime/contract-labels";
 import {
   AuthRelayConfigureScope,
   AuthRelayWriteScope,
   type EnvironmentId,
-} from "@a4code/contracts";
+} from "@t3tools/contracts";
 import { readEnvironmentScope } from "../../state/session";
 import { appAtomRegistry } from "../../state/atom-registry";
 import { serverEnvironment } from "../../state/server";
@@ -33,7 +33,7 @@ import {
   settleAsyncResult,
   settlePromise,
   squashAtomCommandFailure,
-} from "@a4code/client-runtime/state/runtime";
+} from "@t3tools/client-runtime/state/runtime";
 import { supportsAgentAwarenessPush } from "../agent-awareness/capabilities";
 import {
   openAndroidLiveUpdateSettings,

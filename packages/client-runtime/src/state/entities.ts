@@ -4,10 +4,10 @@ import {
   ThreadId,
   type ScopedProjectRef,
   type ScopedThreadRef,
-} from "@a4code/contracts";
+} from "@t3tools/contracts";
 import * as Schema from "effect/Schema";
 
-class InvalidScopedProjectKeyError extends Schema.TaggedError<InvalidScopedProjectKeyError>()(
+export class InvalidScopedProjectKeyError extends Schema.TaggedError<InvalidScopedProjectKeyError>()(
   "InvalidScopedProjectKeyError",
   {
     key: Schema.String,
@@ -18,7 +18,7 @@ class InvalidScopedProjectKeyError extends Schema.TaggedError<InvalidScopedProje
   }
 }
 
-class InvalidScopedThreadKeyError extends Schema.TaggedError<InvalidScopedThreadKeyError>()(
+export class InvalidScopedThreadKeyError extends Schema.TaggedError<InvalidScopedThreadKeyError>()(
   "InvalidScopedThreadKeyError",
   {
     key: Schema.String,
@@ -29,7 +29,7 @@ class InvalidScopedThreadKeyError extends Schema.TaggedError<InvalidScopedThread
   }
 }
 
-class InvalidScopedProjectRefCollectionKeyError extends Schema.TaggedError<InvalidScopedProjectRefCollectionKeyError>()(
+export class InvalidScopedProjectRefCollectionKeyError extends Schema.TaggedError<InvalidScopedProjectRefCollectionKeyError>()(
   "InvalidScopedProjectRefCollectionKeyError",
   {
     key: Schema.String,

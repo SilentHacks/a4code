@@ -1,8 +1,8 @@
 import {
   t3ConnectTroubleshootingUrl,
   type T3ConnectTroubleshootingSection,
-} from "@a4code/contracts";
-import type { RelayEnvironmentStatusResponse } from "@a4code/contracts/relay";
+} from "@t3tools/contracts";
+import type { RelayEnvironmentStatusResponse } from "@t3tools/contracts/relay";
 import * as DateTime from "effect/DateTime";
 
 import type {
@@ -169,7 +169,7 @@ function steps(
   resolve: MFunctionType,
 ): string[] {
   const checkHost = resolve(
-    msg("On {host}, check Settings > Sharing & access or run `a4code connect status`.", { host }),
+    msg("On {host}, check Settings > Sharing & access or run `t3 connect status`.", { host }),
   );
   switch (located.cause) {
     case "offline":
@@ -197,7 +197,7 @@ function steps(
               ),
             ),
         resolve(
-          msg("Or run `a4code auth connect-device approve {code}` on {host}.", {
+          msg("Or run `t3 auth connect-device approve {code}` on {host}.", {
             code: code ?? "<code>",
             host,
           }),

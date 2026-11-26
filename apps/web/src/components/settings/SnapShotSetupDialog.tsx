@@ -4,7 +4,7 @@ import {
   isModifierPairShortcut,
   type DesktopSnapShotSetupAction,
   type DesktopSnapShotState,
-} from "@a4code/contracts";
+} from "@t3tools/contracts";
 import { useState, type ReactNode } from "react";
 import { MacAccessibilityIcon, MacScreenRecordingIcon } from "../Icons";
 import { CaptureShortcutConfig } from "./CaptureShortcutConfig";

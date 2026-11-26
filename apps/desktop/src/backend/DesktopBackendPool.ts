@@ -1,7 +1,7 @@
 import {
   DESKTOP_UPDATE_IN_PROGRESS_MARKER_FILE,
   DESKTOP_UPDATE_IN_PROGRESS_TTL_MS,
-} from "@a4code/contracts";
+} from "@t3tools/contracts";
 import * as Context from "effect/Context";
 import * as Deferred from "effect/Deferred";
 import * as Duration from "effect/Duration";
@@ -108,7 +108,7 @@ export class DesktopBackendPool extends Context.Service<
       id: BackendInstanceId,
     ) => Effect.Effect<void, DesktopBackendPoolCannotUnregisterPrimaryError>;
   }
->()("@a4code/desktop/backend/DesktopBackendPool") {}
+>()("@t3tools/desktop/backend/DesktopBackendPool") {}
 
 export type BackendInstanceFactoryRequirements =
   | FileSystem.FileSystem
@@ -287,7 +287,7 @@ export const layer = Layer.effect(
         DesktopHomeOwner.readLiveHomeOwner().pipe(
           Effect.flatMap((owner) =>
             electronDialog.showErrorBox(
-              m(msg("This A4 Code data directory is unavailable")),
+              m(msg("This T3 home is unavailable")),
               DesktopHomeOwner.homeOwnedMessage(owner),
             ),
           ),

@@ -2,10 +2,14 @@ import * as NodeCrypto from "@effect/platform-node/NodeCrypto";
 import * as NodeServices from "@effect/platform-node/NodeServices";
 import * as NodePath from "@effect/platform-node/NodePath";
 import { describe, expect, it } from "@effect/vitest";
-import { DEFAULT_SERVER_SETTINGS, ProviderDriverKind, ProviderInstanceId } from "@a4code/contracts";
+import {
+  DEFAULT_SERVER_SETTINGS,
+  ProviderDriverKind,
+  ProviderInstanceId,
+} from "@t3tools/contracts";
 import { AcpRegistrySettings } from "../settings.ts";
-import * as HostProcess from "@a4code/shared/HostProcess";
-import { SpawnExecutableResolution } from "@a4code/shared/shell";
+import * as HostProcess from "@t3tools/shared/HostProcess";
+import { SpawnExecutableResolution } from "@t3tools/shared/shell";
 import * as Deferred from "effect/Deferred";
 import * as Effect from "effect/Effect";
 import * as FileSystem from "effect/FileSystem";
@@ -21,7 +25,7 @@ import * as ChildProcessSpawner from "effect/process/ChildProcessSpawner";
 
 import * as AcpRegistrySupport from "./AcpRegistrySupport.ts";
 import { prefersHttpMcpTransport } from "./mcpTransport.ts";
-import * as TestProviderHost from "@a4code/provider-testing/TestProviderHost";
+import * as TestProviderHost from "@t3tools/provider-testing/TestProviderHost";
 
 const registryUrl = "https://registry.test/registry.json";
 const archiveUrl = "https://registry.test/example-agent.bin";

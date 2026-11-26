@@ -5,7 +5,7 @@ import {
   ProviderInstanceId,
   ScheduledTaskId,
   type ScheduledTask,
-} from "@a4code/contracts";
+} from "@t3tools/contracts";
 import { Atom } from "effect/reactivity";
 import { act, type ReactNode } from "react";
 import { createRoot, type Root } from "react-dom/client";

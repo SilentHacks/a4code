@@ -39,10 +39,10 @@ import {
   type VcsStatusInput,
   type VcsStatusResult,
   type WorktreeSubmodules,
-} from "@a4code/contracts";
-import { isMissingExecutable } from "@a4code/source-control-core/server/discovery";
-import * as HostProcess from "@a4code/shared/HostProcess";
-import { quoteGitPatchPath } from "@a4code/shared/gitPatchPath";
+} from "@t3tools/contracts";
+import { isMissingExecutable } from "@t3tools/source-control-core/server/discovery";
+import * as HostProcess from "@t3tools/shared/HostProcess";
+import { quoteGitPatchPath } from "@t3tools/shared/gitPatchPath";
 import {
   makeGitVcsDriverCore,
   PATCH_RENDER_PREFIX_ARGS,
@@ -349,7 +349,7 @@ export interface GitRemoteStatusOptions {
  * slow status fetch land. Its status read waits for a running fetch instead of using the last
  * fetched references after five seconds. The fetch keeps its own safety limit.
  */
-export const AwaitStatusFetch = Context.Reference<boolean>("a4code/vcs/AwaitStatusFetch", {
+export const AwaitStatusFetch = Context.Reference<boolean>("t3/vcs/AwaitStatusFetch", {
   defaultValue: () => false,
 });
 
@@ -397,15 +397,12 @@ export type RepositoryHooksPolicy =
   | { readonly _tag: "none" }
   | { readonly _tag: "approved-push"; readonly digest: string | null };
 
-export const RepositoryHooks = Context.Reference<RepositoryHooksPolicy>(
-  "a4code/vcs/RepositoryHooks",
-  {
-    defaultValue: () => ({ _tag: "all" }),
-  },
-);
+export const RepositoryHooks = Context.Reference<RepositoryHooksPolicy>("t3/vcs/RepositoryHooks", {
+  defaultValue: () => ({ _tag: "all" }),
+});
 
 /** Set by background discovery so its Git commands run in their own small lane, not the user's. */
-export const BackgroundGitWork = Context.Reference<boolean>("a4code/vcs/BackgroundGitWork", {
+export const BackgroundGitWork = Context.Reference<boolean>("t3/vcs/BackgroundGitWork", {
   defaultValue: () => false,
 });
 
@@ -573,7 +570,7 @@ export class GitVcsDriver extends Context.Service<
     readonly invalidateRefs: (cwd: string) => Effect.Effect<void>;
     readonly listLocalBranchNames: (cwd: string) => Effect.Effect<string[], GitCommandError>;
   }
->()("a4code/vcs/GitVcsDriver") {}
+>()("t3/vcs/GitVcsDriver") {}
 
 const WORKSPACE_FILES_MAX_OUTPUT_BYTES = 16 * 1024 * 1024;
 const FLAGGED_INDEX_ENTRIES_MAX_BYTES = 1024 * 1024;
@@ -1212,10 +1209,10 @@ export const makeVcsDriverShape = Effect.fn("makeGitVcsDriverShape")(function* (
     (excludePaths ?? []).map((relativePath) => `:(exclude,literal)${relativePath}`);
 
   const checkpointIdentity: NodeJS.ProcessEnv = {
-    GIT_AUTHOR_NAME: "A4 Code",
-    GIT_AUTHOR_EMAIL: "a4code@users.noreply.github.com",
-    GIT_COMMITTER_NAME: "A4 Code",
-    GIT_COMMITTER_EMAIL: "a4code@users.noreply.github.com",
+    GIT_AUTHOR_NAME: "T3 Code",
+    GIT_AUTHOR_EMAIL: "t3code@users.noreply.github.com",
+    GIT_COMMITTER_NAME: "T3 Code",
+    GIT_COMMITTER_EMAIL: "t3code@users.noreply.github.com",
   };
 
   // Index files known to hold no assume-unchanged or skip-worktree entry, by their stat. Setting
@@ -1414,10 +1411,10 @@ export const makeVcsDriverShape = Effect.fn("makeGitVcsDriverShape")(function* (
         GIT_ALTERNATE_OBJECT_DIRECTORIES: quotedObjects.startsWith('"')
           ? quotedObjects
           : `"${quotedObjects}"`,
-        GIT_AUTHOR_NAME: "A4 Code",
-        GIT_AUTHOR_EMAIL: "a4code@users.noreply.github.com",
-        GIT_COMMITTER_NAME: "A4 Code",
-        GIT_COMMITTER_EMAIL: "a4code@users.noreply.github.com",
+        GIT_AUTHOR_NAME: "T3 Code",
+        GIT_AUTHOR_EMAIL: "t3code@users.noreply.github.com",
+        GIT_COMMITTER_NAME: "T3 Code",
+        GIT_COMMITTER_EMAIL: "t3code@users.noreply.github.com",
         // Any command on the scratch index can run the clean filter, not just add.
         ...VcsProcess.gitConfigEnv(hostEnv, "lfs.storage", privateLfs, hostPlatform),
       };

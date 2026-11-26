@@ -3,7 +3,7 @@ import {
   AuthRelayWriteScope,
   type EnvironmentId,
   managedCapabilityDenial,
-} from "@a4code/contracts";
+} from "@t3tools/contracts";
 
 import { useManagedPolicy } from "../state/managedPolicy";
 import { useEnvironmentCanConfigureRelay, useEnvironmentScope } from "../state/session";

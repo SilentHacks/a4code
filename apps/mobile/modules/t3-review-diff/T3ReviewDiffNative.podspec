@@ -7,9 +7,9 @@ Pod::Spec.new do |s|
   s.version = package['version']
   s.summary = 'Native review diff debug surface for A4 Code mobile.'
   s.description = 'Native iOS review diff renderer used to prototype fast mobile review scrolling.'
-  s.homepage = 'https://github.com/SilentHacks/a4code'
+  s.homepage = 'https://t3tools.com'
   s.license = { :type => 'UNLICENSED' }
-  s.author = { 'A4 Code contributors' => '26593675+SilentHacks@users.noreply.github.com' }
+  s.author = { 'T3 Tools' => 'hello@t3tools.com' }
   s.platforms = { :ios => '16.1' }
   s.source = { :path => '.' }
   s.source_files = 'ios/**/*.{h,m,mm,swift}'

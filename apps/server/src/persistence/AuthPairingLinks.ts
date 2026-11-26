@@ -1,5 +1,5 @@
 import * as Context from "effect/Context";
-import * as NodeSqliteClient from "@a4code/shared/nodeSqliteClient";
+import * as NodeSqliteClient from "@t3tools/shared/nodeSqliteClient";
 import * as Effect from "effect/Effect";
 import * as Layer from "effect/Layer";
 import * as Option from "effect/Option";
@@ -7,7 +7,7 @@ import * as Schema from "effect/Schema";
 import * as SqlClient from "effect/sql/SqlClient";
 import * as SqlSchema from "effect/sql/SqlSchema";
 
-import { AuthClientMetadata, AuthEnvironmentScopes } from "@a4code/contracts";
+import { AuthClientMetadata, AuthEnvironmentScopes } from "@t3tools/contracts";
 
 import {
   type AuthPairingLinkRepositoryError,
@@ -168,7 +168,7 @@ export class AuthPairingLinkRepository extends Context.Service<
       input: RevokeUnspentByProofKeyInput,
     ) => Effect.Effect<ReadonlyArray<string>, AuthPairingLinkRepositoryError>;
   }
->()("a4code/persistence/AuthPairingLinks/AuthPairingLinkRepository") {}
+>()("t3/persistence/AuthPairingLinks/AuthPairingLinkRepository") {}
 
 function toPersistenceSqlOrDecodeError(
   sqlOperation: string,

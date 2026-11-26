@@ -1,11 +1,11 @@
-import { thrownErrorMessage } from "@a4code/client-runtime/errors";
+import { thrownErrorMessage } from "@t3tools/client-runtime/errors";
 import { useAtomValue } from "@effect/atom-react";
 import {
   AuthEnvironmentMaintainScope,
   type AuthSessionState,
   sessionGrantsScope,
-} from "@a4code/contracts";
-import { managedUpdatesDenial } from "@a4code/client-runtime/contract-labels";
+} from "@t3tools/contracts";
+import { managedUpdatesDenial } from "@t3tools/client-runtime/contract-labels";
 import type { AsyncResult } from "effect/reactivity";
 import { environmentSession } from "~/state/session";
 import type {
@@ -13,17 +13,17 @@ import type {
   EnvironmentId,
   ServerInstallation,
   ServerSelfUpdateCapability,
-} from "@a4code/contracts";
+} from "@t3tools/contracts";
 import {
   serverUpdateFailureText,
   type ServerUpdateStage,
   type ServerUpdateState,
-} from "@a4code/client-runtime/state/server";
+} from "@t3tools/client-runtime/state/server";
 import {
   isAtomCommandInterrupted,
   settlePromise,
   squashAtomCommandFailure,
-} from "@a4code/client-runtime/state/runtime";
+} from "@t3tools/client-runtime/state/runtime";
 import { CircleArrowUpIcon } from "lucide-react";
 import { type ComponentProps, useRef, useState } from "react";
 import { msg, T, useGT, useMessages } from "gt-react";
@@ -39,7 +39,7 @@ import { useManagedPolicy } from "~/state/managedPolicy";
 import { environmentPresentations } from "~/state/presentation";
 import { ManagedControl } from "./ManagedPolicy";
 import { manualServerUpdateCommand } from "~/versionSkew";
-import { crossesReleaseTrack } from "@a4code/shared/cliRelease";
+import { crossesReleaseTrack } from "@t3tools/shared/cliRelease";
 import { Button } from "./ui/button";
 import { toastManager } from "./ui/toast";
 import { SharedTooltipTrigger } from "./ui/shared-tooltip";
@@ -179,7 +179,7 @@ export function useServerUpdate() {
                   version: result.value.targetVersion,
                 }),
               )
-            : m(msg("Reconnected on a4code@{version}.", { version: result.value.targetVersion })),
+            : m(msg("Reconnected on t3@{version}.", { version: result.value.targetVersion })),
       });
     }
     return { status: "updated" };
@@ -328,7 +328,7 @@ export function ServerUpdateAction({
               serverLabel,
             })
           : gt(
-              "Stop t3 on {serverLabel}, then relaunch with `{command}` using the same subcommand and options. This does not update an installed a4code command.",
+              "Stop t3 on {serverLabel}, then relaunch with `{command}` using the same subcommand and options. This does not update an installed t3 command.",
               { command, serverLabel },
             ),
       });
@@ -479,9 +479,7 @@ export function OutdatedServerUpdateAction({
     toastManager.add({
       type: "success",
       title: m(msg("{serverLabel} updated", { serverLabel })),
-      description: m(
-        msg("Reconnected on a4code@{version}.", { version: result.value.targetVersion }),
-      ),
+      description: m(msg("Reconnected on t3@{version}.", { version: result.value.targetVersion })),
     });
   };
   if (fromVersion !== undefined && crossesReleaseTrack(fromVersion, targetVersion)) {

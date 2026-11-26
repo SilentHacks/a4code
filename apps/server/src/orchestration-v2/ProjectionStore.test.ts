@@ -32,7 +32,7 @@ import {
   type ThreadPullRequestLink,
   isLiveSubagentShell,
   isListedThreadLineage,
-} from "@a4code/contracts";
+} from "@t3tools/contracts";
 import * as DateTime from "effect/DateTime";
 import * as Effect from "effect/Effect";
 import * as Deferred from "effect/Deferred";
@@ -43,8 +43,8 @@ import * as Schema from "effect/Schema";
 import * as Tracer from "effect/Tracer";
 import * as SqlClient from "effect/sql/SqlClient";
 import * as Statement from "effect/sql/Statement";
-import { projectThreadAwarenessV2 } from "@a4code/shared/agentAwareness";
-import { MCP_APP_OUTPUT_KEY } from "@a4code/shared/mcpApp";
+import { projectThreadAwarenessV2 } from "@t3tools/shared/agentAwareness";
+import { MCP_APP_OUTPUT_KEY } from "@t3tools/shared/mcpApp";
 
 import * as SqlitePersistence from "../persistence/Sqlite.ts";
 import { createAttachmentId } from "../attachmentStore.ts";
@@ -3353,7 +3353,7 @@ it.effect("SQL shells read a subagent family and a worktree's threads", () =>
     const store = yield* ProjectionStore.ProjectionStoreV2;
     const now = yield* DateTime.now;
     const projectId = ProjectId.make("project:family");
-    const worktreePath = "/repo/.a4code/worktrees/family";
+    const worktreePath = "/repo/.t3/worktrees/family";
     const id = (name: string) => ThreadId.make(`thread:family:${name}`);
     const payloadOf = (input: {
       readonly name: string;
@@ -12205,9 +12205,9 @@ it.layer(layerTest)("ProjectionStoreV2", (it) => {
       });
       const link = {
         host: "github.com",
-        repository: "SilentHacks/a4code",
+        repository: "pingdotgg/t3code",
         number: 7,
-        url: "https://github.com/SilentHacks/a4code/pull/7",
+        url: "https://github.com/pingdotgg/t3code/pull/7",
         source: "agent" as const,
         linkedAt: DateTime.formatIso(at),
         snapshot: null,
@@ -12251,7 +12251,7 @@ it.layer(layerTest)("ProjectionStoreV2", (it) => {
       ]);
       assert.deepEqual((yield* store.getThreadShell(threadId))?.pendingBackgroundTasks, [
         {
-          taskId: "pull-request-watch:github.com/SilentHacks/a4code#7",
+          taskId: "pull-request-watch:github.com/pingdotgg/t3code#7",
           description: "Watching pull request #7",
           kind: "monitor",
           awaited: true,

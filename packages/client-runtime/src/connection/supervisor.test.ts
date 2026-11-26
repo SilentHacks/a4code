@@ -3,9 +3,9 @@ import {
   EnvironmentId,
   type ServerConfig,
   type ServerConfigStreamEvent,
-} from "@a4code/contracts";
+} from "@t3tools/contracts";
 import { describe, expect, it } from "@effect/vitest";
-import { RelayClientTracer } from "@a4code/shared/relayTracing";
+import { RelayClientTracer } from "@t3tools/shared/relayTracing";
 import * as Cause from "effect/Cause";
 import * as Deferred from "effect/Deferred";
 import * as Effect from "effect/Effect";
@@ -2823,7 +2823,7 @@ describe("EnvironmentSupervisor routes", () => {
                         }
                       : {}),
                     learned: true,
-                    authorization: "a4-connect",
+                    authorization: "t3-connect",
                   }),
                 ),
                 alternateRoutes: [{ target: RELAY_TARGET, profile: Option.none() }],

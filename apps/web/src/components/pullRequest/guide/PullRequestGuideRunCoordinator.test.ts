@@ -4,7 +4,7 @@ import {
   ProjectId,
   type PullRequestRef,
   type PullRequestReviewGuideResult,
-} from "@a4code/contracts";
+} from "@t3tools/contracts";
 import { AsyncResult, Atom, AtomRegistry } from "effect/reactivity";
 import { expect, it, vi } from "vite-plus/test";
 

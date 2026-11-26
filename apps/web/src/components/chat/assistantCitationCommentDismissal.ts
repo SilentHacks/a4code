@@ -1,4 +1,4 @@
-import { ASSISTANT_CITATION_MAX_COMMENT_LENGTH } from "@a4code/contracts";
+import { ASSISTANT_CITATION_MAX_COMMENT_LENGTH } from "@t3tools/contracts";
 
 type AssistantCitationCommentDismissal =
   | { kind: "commit"; comment: string }

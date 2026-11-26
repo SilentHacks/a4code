@@ -8,7 +8,7 @@ import {
   type ResolvedKeybindingRule,
   type ResolvedKeybindingsConfig,
   THREAD_JUMP_KEYBINDING_COMMANDS,
-} from "@a4code/contracts";
+} from "@t3tools/contracts";
 
 export {
   EVENT_CODE_SHORTCUT_KEYS,

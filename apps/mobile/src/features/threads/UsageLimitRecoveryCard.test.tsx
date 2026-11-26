@@ -1,9 +1,9 @@
-import type { EnvironmentThreadShell } from "@a4code/client-runtime/state/shell";
-import type { EnvironmentId } from "@a4code/contracts";
+import type { EnvironmentThreadShell } from "@t3tools/client-runtime/state/shell";
+import type { EnvironmentId } from "@t3tools/contracts";
 import {
   CHATGPT_USAGE_LIMIT_CODE,
   CHATGPT_WORKSPACE_USAGE_LIMIT_CODE,
-} from "@a4code/shared/usageLimits";
+} from "@t3tools/shared/usageLimits";
 import * as Clipboard from "expo-clipboard";
 import type { ReactNode } from "react";
 import { act } from "react";

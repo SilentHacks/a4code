@@ -31,7 +31,7 @@ import {
   PullRequestOperationError,
   PullRequestSummary,
   type VcsStatusResult,
-} from "@a4code/contracts";
+} from "@t3tools/contracts";
 import * as Effect from "effect/Effect";
 import * as Schema from "effect/Schema";
 import { persistPullRequestStats } from "./pullRequestStatsPersistence.ts";
@@ -60,7 +60,10 @@ import { parsePullRequestQuery } from "../pullRequestQuery.ts";
 import { reuseUnchanged } from "./serverConfigProjection.ts";
 import { createEnvironmentSessionAtoms } from "./session.ts";
 
-export type { PullRequestDiffLoadError } from "./pullRequestDiffHttp.ts";
+export {
+  type PullRequestDiffLoadError,
+  PullRequestDiffCredentialRejectedError,
+} from "./pullRequestDiffHttp.ts";
 export * as PullRequestDiffLoader from "./pullRequestDiffHttp.ts";
 
 /** @public Required to name the error in consumers' inferred pull request results. */

@@ -1,5 +1,8 @@
-import { mapAtomCommandResult, type AtomCommandResult } from "@a4code/client-runtime/state/runtime";
-import type { PreviewSessionSnapshot, ScopedThreadRef } from "@a4code/contracts";
+import {
+  mapAtomCommandResult,
+  type AtomCommandResult,
+} from "@t3tools/client-runtime/state/runtime";
+import type { PreviewSessionSnapshot, ScopedThreadRef } from "@t3tools/contracts";
 
 import type { BrowserSettingsReadError, OpenPreviewMutation } from "~/browser/openFileInPreview";
 import { selectThreadRightPanelState, useRightPanelStore } from "~/rightPanelStore";

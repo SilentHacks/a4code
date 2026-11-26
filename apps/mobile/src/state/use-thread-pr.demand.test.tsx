@@ -5,8 +5,8 @@ import {
   ThreadId,
   WS_METHODS,
   type PullRequestRef,
-} from "@a4code/contracts";
-import type { EnvironmentThreadShell } from "@a4code/client-runtime/state/shell";
+} from "@t3tools/contracts";
+import type { EnvironmentThreadShell } from "@t3tools/client-runtime/state/shell";
 import {
   EnvironmentRegistry,
   EnvironmentSupervisor,
@@ -15,8 +15,8 @@ import {
   type SupervisorConnectionState,
   type PreparedConnection,
   type ConnectionCatalogEntry,
-} from "@a4code/client-runtime/connection";
-import type { RpcSession } from "@a4code/client-runtime/rpc";
+} from "@t3tools/client-runtime/connection";
+import type { RpcSession } from "@t3tools/client-runtime/rpc";
 import * as Effect from "effect/Effect";
 import * as Latch from "effect/Latch";
 import * as Option from "effect/Option";
@@ -48,7 +48,7 @@ vi.mock("react-native", () => ({
 vi.mock("../connection/runtime", async () => {
   const { Atom } = await import("effect/reactivity");
   const Layer = await import("effect/Layer");
-  const { EnvironmentRegistry } = await import("@a4code/client-runtime/connection");
+  const { EnvironmentRegistry } = await import("@t3tools/client-runtime/connection");
   return {
     connectionAtomRuntime: Atom.runtime(
       Layer.suspend(() =>

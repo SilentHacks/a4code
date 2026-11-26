@@ -1,10 +1,10 @@
 import { RegistryContext } from "@effect/atom-react";
-import { EnvironmentId } from "@a4code/contracts";
+import { EnvironmentId } from "@t3tools/contracts";
 import {
   EnvironmentRegistry,
   PrimaryConnectionTarget,
   type ConnectionCatalogEntry,
-} from "@a4code/client-runtime/connection";
+} from "@t3tools/client-runtime/connection";
 import * as Effect from "effect/Effect";
 import * as Option from "effect/Option";
 import * as SubscriptionRef from "effect/SubscriptionRef";
@@ -26,7 +26,7 @@ const fixture = vi.hoisted(() => ({
 vi.mock("../../connection/runtime", async () => {
   const { Atom } = await import("effect/reactivity");
   const Layer = await import("effect/Layer");
-  const { EnvironmentRegistry } = await import("@a4code/client-runtime/connection");
+  const { EnvironmentRegistry } = await import("@t3tools/client-runtime/connection");
   return {
     connectionAtomRuntime: Atom.runtime(
       Layer.suspend(() =>

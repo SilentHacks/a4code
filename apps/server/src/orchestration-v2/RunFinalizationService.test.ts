@@ -9,7 +9,7 @@ import {
   type OrchestrationV2ThreadShell,
   type Project,
   type RepositoryIdentity,
-} from "@a4code/contracts";
+} from "@t3tools/contracts";
 import * as Deferred from "effect/Deferred";
 import * as Effect from "effect/Effect";
 import * as Fiber from "effect/Fiber";

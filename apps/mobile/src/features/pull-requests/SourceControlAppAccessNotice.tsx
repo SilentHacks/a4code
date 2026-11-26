@@ -1,8 +1,8 @@
-import { EnvironmentId } from "@a4code/contracts";
+import { EnvironmentId } from "@t3tools/contracts";
 import {
   readHostCredentialSettings,
   sourceControlClients,
-} from "@a4code/client-runtime/source-control-clients";
+} from "@t3tools/client-runtime/source-control-clients";
 import { T, Var } from "gt-react-native";
 import { Pressable, View } from "react-native";
 import { tryOpenExternalUrl } from "../../lib/openExternalUrl";

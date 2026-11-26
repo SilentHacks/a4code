@@ -1,4 +1,4 @@
-import { normalizeProviderAccentColor } from "@a4code/client-runtime/state/provider-instance-display";
+import { normalizeProviderAccentColor } from "@t3tools/client-runtime/state/provider-instance-display";
 import {
   collectLimitAccounts,
   collectLimitPools,
@@ -6,7 +6,7 @@ import {
   type LimitAccount,
   type LimitPoolWindow,
   type LimitPresentations,
-} from "@a4code/shared/usageLimits";
+} from "@t3tools/shared/usageLimits";
 import { msg } from "gt-react-native";
 
 import { m, type MessageResolver } from "../i18n/messages";
@@ -174,7 +174,7 @@ function subscriptionUsageText(
     asOf: resolve(msg("As of {time}", { time: "{time}" })),
     tapToConnect: resolve(msg("Tap to connect in {app}", { app: "A4 Code" })),
     providerAccessibility: resolve(
-      // oxlint-disable-next-line a4code/no-untranslated-copy -- placeholders the widget fills in
+      // oxlint-disable-next-line t3code/no-untranslated-copy -- placeholders the widget fills in
       msg("{provider}. {detail}.", { provider: "{provider}", detail: "{detail}" }),
     ),
     windowAccessibility: resolve(
@@ -183,7 +183,7 @@ function subscriptionUsageText(
         window: "{window}",
         remaining: "{remaining}",
         reset: "{reset}",
-        // oxlint-disable-next-line a4code/no-untranslated-copy -- placeholders the widget fills in
+        // oxlint-disable-next-line t3code/no-untranslated-copy -- placeholders the widget fills in
         detail: "{detail}",
       }),
     ),

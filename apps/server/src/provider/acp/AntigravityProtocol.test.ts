@@ -19,9 +19,9 @@ import {
 import {
   mergeToolCallState,
   parseSessionUpdateEvent,
-} from "@a4code/provider-acp/server/runtimeModel";
-import { acpToolCallDiffPatch } from "@a4code/provider-acp/server/adapter";
-import { acpChangedPathsOfToolCall } from "@a4code/provider-acp/server/clientPolicy";
+} from "@t3tools/provider-acp/server/runtimeModel";
+import { acpToolCallDiffPatch } from "@t3tools/provider-acp/server/adapter";
+import { acpChangedPathsOfToolCall } from "@t3tools/provider-acp/server/clientPolicy";
 
 const isSessionNotification = Schema.is(AcpWireSchema.SessionNotification);
 

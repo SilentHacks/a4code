@@ -12,7 +12,7 @@ import {
   ProjectId,
   ProviderInstanceId,
   ThreadId,
-} from "@a4code/contracts";
+} from "@t3tools/contracts";
 import { describe, expect, it } from "@effect/vitest";
 import { afterEach, beforeEach, vi } from "vite-plus/test";
 

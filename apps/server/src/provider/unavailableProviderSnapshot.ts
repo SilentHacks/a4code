@@ -2,11 +2,11 @@ import {
   ProviderDriverKind,
   type ProviderInstanceId,
   type ServerProvider,
-} from "@a4code/contracts";
+} from "@t3tools/contracts";
 import * as DateTime from "effect/DateTime";
 import * as Effect from "effect/Effect";
 
-import { buildServerProvider } from "@a4code/provider-core/server/snapshotProbe";
+import { buildServerProvider } from "@t3tools/provider-core/server/snapshotProbe";
 
 export interface UnavailableProviderSnapshotInput {
   readonly driverKind: ProviderDriverKind | string;

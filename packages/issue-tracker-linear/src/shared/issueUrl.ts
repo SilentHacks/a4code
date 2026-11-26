@@ -1,4 +1,4 @@
-import { IssueTrackerKind } from "@a4code/contracts";
+import { IssueTrackerKind } from "@t3tools/contracts";
 
 export const LINEAR_KIND = IssueTrackerKind.make("linear");
 export const LINEAR_HOST = "linear.app";

@@ -6,7 +6,7 @@ import {
   type VoiceInputControllerDependencies,
   type VoiceInputPhase,
   type VoiceInputState,
-} from "@a4code/client-runtime/voice-input";
+} from "@t3tools/client-runtime/voice-input";
 
 import { m } from "../../i18n/messages";
 import { normalizeVoiceInputDecibels, VOICE_WAVEFORM_SAMPLE_COUNT } from "./voiceInputMetering";

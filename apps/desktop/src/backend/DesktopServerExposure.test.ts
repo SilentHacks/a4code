@@ -85,7 +85,7 @@ function layerEnvironmentFor(baseDir: string, env: Record<string, string | undef
       Layer.mergeAll(
         NodeServices.layer,
         NodeCrypto.layer,
-        DesktopConfig.layerTest({ A4CODE_HOME: baseDir, ...env }),
+        DesktopConfig.layerTest({ T3CODE_HOME: baseDir, ...env }),
       ),
     ),
   );
@@ -99,7 +99,7 @@ function layer(input: {
   readonly desktopSettingsLayer?: Layer.Layer<DesktopAppSettings.DesktopAppSettings>;
   readonly managedPolicyLayer?: Layer.Layer<DesktopManagedPolicy.DesktopManagedPolicy>;
 }) {
-  const env = { A4CODE_HOME: input.baseDir, ...input.env };
+  const env = { T3CODE_HOME: input.baseDir, ...input.env };
   const layerEnvironment = layerEnvironmentFor(input.baseDir, env);
   const layerNetwork = Layer.succeed(DesktopNetworkInterfaces.DesktopNetworkInterfaces, {
     read: Effect.succeed(input.networkInterfaces ?? emptyNetworkInterfaces),
@@ -512,8 +512,8 @@ describe("DesktopServerExposure", () => {
         );
       }),
       {
-        A4CODE_DESKTOP_LAN_HOST: "100.90.1.2",
-        A4CODE_DESKTOP_HTTPS_ENDPOINTS: "https://public.example.test",
+        T3CODE_DESKTOP_LAN_HOST: "100.90.1.2",
+        T3CODE_DESKTOP_HTTPS_ENDPOINTS: "https://public.example.test",
       },
     ),
   );

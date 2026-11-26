@@ -1,9 +1,9 @@
-import type { ResolvedKeybindingsConfig } from "@a4code/contracts";
+import type { ResolvedKeybindingsConfig } from "@t3tools/contracts";
 import {
   parseScopedThreadKey,
   scopedThreadKey,
   scopeThreadRef,
-} from "@a4code/client-runtime/environment";
+} from "@t3tools/client-runtime/environment";
 import { useState } from "react";
 import { useShallow } from "zustand/react/shallow";
 import { useComposerDraftStore } from "../../composerDraftStore";

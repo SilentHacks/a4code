@@ -1,8 +1,8 @@
-import { EnvironmentAuthInvalidError } from "@a4code/contracts";
+import { EnvironmentAuthInvalidError } from "@t3tools/contracts";
 import {
   RelayEnvironmentEndpointUnavailableError,
   type RelayProtectedError,
-} from "@a4code/contracts/relay";
+} from "@t3tools/contracts/relay";
 import { describe, expect, it } from "@effect/vitest";
 
 import { presentConnectionDiagnosis } from "./diagnosis.ts";
@@ -161,7 +161,7 @@ describe("presentConnectionDiagnosis", () => {
       ),
     );
     expect(diagnosis?.headline).toBe("Mac mini is waiting for someone to approve this device");
-    expect(diagnosis?.steps.join(" ")).toContain("a4code auth connect-device approve K7QM-2XFD");
+    expect(diagnosis?.steps.join(" ")).toContain("t3 auth connect-device approve K7QM-2XFD");
   });
 
   it("tells a host that refused this device's login to sign in again, not to start A4 Code", () => {

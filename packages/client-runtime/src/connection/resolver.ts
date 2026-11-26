@@ -3,8 +3,8 @@ import { translatableDetail } from "../errors/translatable.ts";
 import type {
   AuthClientPresentationMetadata,
   ExecutionEnvironmentDescriptor,
-} from "@a4code/contracts";
-import { withRelayClientTracing } from "@a4code/shared/relayTracing";
+} from "@t3tools/contracts";
+import { withRelayClientTracing } from "@t3tools/shared/relayTracing";
 import * as Context from "effect/Context";
 import * as Effect from "effect/Effect";
 import * as Layer from "effect/Layer";
@@ -71,7 +71,7 @@ export class ConnectionResolver extends Context.Service<
       ConnectionAttemptError
     >;
   }
->()("@a4code/client-runtime/connection/resolver/ConnectionResolver") {}
+>()("@t3tools/client-runtime/connection/resolver/ConnectionResolver") {}
 
 const isBearerProfile = Schema.is(BearerConnectionProfile);
 const isSshProfile = Schema.is(SshConnectionProfile);
@@ -151,7 +151,7 @@ const makeBearerBroker = Effect.fn("clientRuntime.connection.broker.makeBearer")
         actual: profile.environmentId,
       });
     }
-    if (profile.authorization === "a4-connect") {
+    if (profile.authorization === "t3-connect") {
       const authorized = yield* remote.authorizeDpop({
         expectedEnvironmentId: target.environmentId,
         directEndpoint: { httpBaseUrl: profile.httpBaseUrl, wsBaseUrl: profile.wsBaseUrl },

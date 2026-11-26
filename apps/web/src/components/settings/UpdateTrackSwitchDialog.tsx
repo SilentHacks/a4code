@@ -1,10 +1,10 @@
-import { thrownErrorMessage } from "@a4code/client-runtime/errors";
+import { thrownErrorMessage } from "@t3tools/client-runtime/errors";
 import { m as resolveMessage } from "~/i18n/messages";
 import { useAtomValue } from "@effect/atom-react";
-import { settlePromise, squashAtomCommandFailure } from "@a4code/client-runtime/state/runtime";
-import type { DesktopUpdateChannel } from "@a4code/contracts";
-import { acceptsTrackSwitchRelease, desktopUpdateChannelOf } from "@a4code/shared/cliRelease";
-import { isMacPlatform } from "@a4code/shared/keybindings";
+import { settlePromise, squashAtomCommandFailure } from "@t3tools/client-runtime/state/runtime";
+import type { DesktopUpdateChannel } from "@t3tools/contracts";
+import { acceptsTrackSwitchRelease, desktopUpdateChannelOf } from "@t3tools/shared/cliRelease";
+import { isMacPlatform } from "@t3tools/shared/keybindings";
 import { T, useGT, useMessages, Var } from "gt-react";
 import { useState } from "react";
 import { AsyncResult } from "effect/reactivity";

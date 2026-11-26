@@ -5,7 +5,7 @@ import {
   DesktopPreviewAnnotationVoiceEventSchema,
   DesktopPreviewRecordingInputSchema,
   DESKTOP_PREVIEW_RECORDING_CAPTURE_TRIGGER,
-} from "@a4code/contracts";
+} from "@t3tools/contracts";
 import type {
   DesktopPreviewAnnotationTheme,
   DesktopPreviewAnnotationVoiceConfig,
@@ -25,10 +25,10 @@ import type {
   DesktopPreviewTabDefaults,
   PreviewForwardedShortcut,
   PreviewAutomationLoadError,
-} from "@a4code/contracts";
-import * as HostProcess from "@a4code/shared/HostProcess";
-import { matchesKeybindingShortcut } from "@a4code/shared/keybindings";
-import { normalizePreviewUrl } from "@a4code/shared/preview";
+} from "@t3tools/contracts";
+import * as HostProcess from "@t3tools/shared/HostProcess";
+import { matchesKeybindingShortcut } from "@t3tools/shared/keybindings";
+import { normalizePreviewUrl } from "@t3tools/shared/preview";
 import {
   BrowserWindow,
   ClipboardItem,
@@ -4053,7 +4053,7 @@ export class PreviewManager extends Context.Service<
       listener: RecordingInputListener,
     ) => Effect.Effect<void, never, Scope.Scope>;
   }
->()("@a4code/desktop/preview/Manager/PreviewManager") {}
+>()("@t3tools/desktop/preview/Manager/PreviewManager") {}
 
 /** @public */
 export const make = Effect.gen(function* PreviewManagerMake() {

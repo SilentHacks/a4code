@@ -2,21 +2,21 @@ import {
   buildProjectGroups,
   pickableProjectGroups,
   resolveScratchProjectScopeKey,
-} from "@a4code/client-runtime/state/project-grouping";
+} from "@t3tools/client-runtime/state/project-grouping";
 import type {
   EnvironmentProject,
   EnvironmentThreadShell,
-} from "@a4code/client-runtime/state/shell";
+} from "@t3tools/client-runtime/state/shell";
 import {
   getThreadSortTimestamp,
   toSortableTimestamp,
-} from "@a4code/client-runtime/state/thread-sort";
+} from "@t3tools/client-runtime/state/thread-sort";
 import type {
   EnvironmentId,
   ScopedProjectRef,
   SidebarProjectGroupingMode,
   SidebarProjectSortOrder,
-} from "@a4code/contracts";
+} from "@t3tools/contracts";
 import * as Arr from "effect/Array";
 import * as Order from "effect/Order";
 

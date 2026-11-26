@@ -5,8 +5,8 @@ import {
   ATTACHMENT_UPLOAD_URL_TTL_MS,
   type AttachmentCreateUploadUrlInput,
   AttachmentUploadSigningKeyError,
-} from "@a4code/contracts";
-import { isSvgAttachment } from "@a4code/shared/image";
+} from "@t3tools/contracts";
+import { isSvgAttachment } from "@t3tools/shared/image";
 import * as Clock from "effect/Clock";
 import * as SecureRandom from "effect/crypto/SecureRandom";
 import * as Effect from "effect/Effect";

@@ -2,7 +2,7 @@ import type {
   PullRequestComment,
   PullRequestDetail,
   PullRequestReviewThread,
-} from "@a4code/contracts";
+} from "@t3tools/contracts";
 
 type EditingSubject = Pick<
   PullRequestDetail,

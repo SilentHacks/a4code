@@ -1,4 +1,4 @@
-import { type EnvironmentContextRecord, resolveEnvironmentMachineKind } from "@a4code/contracts";
+import { type EnvironmentContextRecord, resolveEnvironmentMachineKind } from "@t3tools/contracts";
 
 import { useGT } from "gt-react";
 

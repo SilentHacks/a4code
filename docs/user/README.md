@@ -4,7 +4,7 @@ Welcome to A4 Code. This guide explains how A4 Code works, what you need before 
 
 ## How A4 Code works
 
-A4 Code is an open-source control plane for coding agents. It gives the coding agents already installed on your computer (or server) one fast, unified interface across **desktop**, **web** (the hosted web client or local), and **mobile** (iOS and Android).
+A4 Code is an open-source control plane for coding agents. It gives the coding agents already installed on your computer (or server) one fast, unified interface across **desktop**, **web** (`app.t3.codes` or local), and **mobile** (iOS and Android).
 
 ### Core concepts
 
@@ -18,7 +18,7 @@ A4 Code is an open-source control plane for coding agents. It gives the coding a
 
 - **Bring your own subscription or API keys**: A4 Code is free and does not resell tokens. You need at least **one installed, authenticated provider** on the host machine before starting a thread (Codex via ChatGPT and Google Antigravity can install and sign in directly from A4 Code).
 - **Code stays on your machine**: Your code and prompts go directly from your host machine to your chosen provider—never through A4 Code servers.
-- **Your host must stay awake**: Your phone and the hosted web client are remote controls. If the host machine sleeps or shuts down, agents pause until it wakes. Use the [background service](./background-service.md) for always-on hosts.
+- **Your host must stay awake**: Your phone and `app.t3.codes` are remote controls. If the host machine sleeps or shuts down, agents pause until it wakes. Use the [background service](./background-service.md) for always-on hosts.
 - **Git is optional but unlocks the best features**: Branching, isolated worktrees, turn diffs, and one-click PRs require a Git repository (and a signed-in host CLI or token for PRs/issues).
 - **No local-model focus**: A4 Code is designed for frontier coding agents (though OpenAI-compatible local endpoints like Ollama can be used for lightweight [text generation](./text-generation.md) like thread titles).
 - **Device vs. server settings**: Appearance, keybinding preferences, and saved PR views live per device; provider configs, thread rules, worktree cleanup, and scheduled tasks live on each server environment (with per-project overrides).
@@ -28,7 +28,7 @@ A4 Code is an open-source control plane for coding agents. It gives the coding a
 1. **Install A4 Code** on the machine where your agents will run ([Install A4 Code](./install.md)).
 2. **Set up at least one agent** via the [Welcome page](./welcome-page.md) or **Settings → Providers** (for example, `claude auth login` or `codex login`).
 3. **Open or clone a project** and start a thread ([Working with threads](./thread-sidebar.md)).
-4. **Optional — connect your phone or another computer**: Run `a4code up` on the host or enable **T3 Connect** in **Settings → Sharing & access** ([Remote access](./remote-access.md)).
+4. **Optional — connect your phone or another computer**: Run `t3 up` on the host or enable **T3 Connect** in **Settings → Sharing & access** ([Remote access](./remote-access.md)).
 
 ---
 
@@ -36,7 +36,7 @@ A4 Code is an open-source control plane for coding agents. It gives the coding a
 
 ### Getting started
 
-- [Install A4 Code](./install.md) — Desktop app, `a4code` CLI, mobile app, WSL, and provider setup.
+- [Install A4 Code](./install.md) — Desktop app, `t3` CLI, mobile app, WSL, and provider setup.
 - [Welcome page](./welcome-page.md) — First-run setup and importing existing Claude, Codex, and Pi sessions.
 - [FAQ](./faq.md) — Common questions on pricing, subscriptions, privacy, limits, and troubleshooting.
 - [Threads from older A4 Code versions](./thread-migration.md) — V1 → V2 database migration and recovery backups.
@@ -68,7 +68,7 @@ A4 Code is an open-source control plane for coding agents. It gives the coding a
 ### Projects, automation & customization
 
 - [Settings and project overrides](./project-settings.md) — Scope inheritance, pinning/archiving projects, worktree cleanup, scheduled tasks, and webhooks.
-- [Project configuration (`t3.json`) and actions](./a4-json.md) — Checked-in repo config, setup/dev/settle scripts, and schema reference.
+- [Project configuration (`t3.json`) and actions](./t3-json.md) — Checked-in repo config, setup/dev/settle scripts, and schema reference.
 - [Projects with several repositories](./multi-repo-projects.md) — Multi-repo folders, external folders, submodules, and custom worktree layouts.
 - [Workflows](./workflows.md) — Durable multi-stage TypeScript workflows (Labs) with schedules, webhooks, and approvals.
 - [Text generation models](./text-generation.md) — Fast/cheap API models for titles, commits, PR descriptions, and voice cleanup.
@@ -93,21 +93,21 @@ A4 Code is an open-source control plane for coding agents. It gives the coding a
 ### Remote, mobile & integrations
 
 - [Remote access](./remote-access.md) — T3 Connect, LAN/Tailscale pairing, desktop SSH, multi-route failover, load balancing, and linked environments.
-- [T3 Connect troubleshooting](./a4-connect-troubleshooting.md) — Diagnosing tunnel, port 7844, DNS, clock, and account errors.
+- [T3 Connect troubleshooting](./t3-connect-troubleshooting.md) — Diagnosing tunnel, port 7844, DNS, clock, and account errors.
 - [Mobile notifications](./mobile-notifications.md) — Push alerts, iOS Live Activities/widgets, and Android Live Updates.
 - [Guest links](./guest-links.md) — Sharing a live thread with a teammate in their browser (no account needed).
-- [Outside agents](./outside-agents.md) — Connecting Claude Code, Codex, ChatGPT, or bots to A4 Code over MCP, plus `a4code thread` host scripting.
+- [Outside agents](./outside-agents.md) — Connecting Claude Code, Codex, ChatGPT, or bots to A4 Code over MCP, plus `t3 thread` host scripting.
 - [Secrets](./secrets.md) — 1Password CLI references and private in-thread agent secret cards.
 - [1Password service account](./secrets-1password-service-account.md) — Headless 1Password setup with a service account token.
 - [1Password Connect](./secrets-1password-connect.md) — Headless 1Password setup with a Connect server.
 
 ### Operations, monitoring & admin
 
-- [Running A4 Code in the background](./background-service.md) — Background user service, `service.env`, Linux OOM protection, and `a4code doctor`.
+- [Running A4 Code in the background](./background-service.md) — Background user service, `service.env`, Linux OOM protection, and `t3 doctor`.
 - [Updating A4 Code](./updating.md) — Updating desktop, servers, providers, Stable/Nightly tracks, and restart continuation.
 - [Usage and limits](./usage.md) — Token/cost tracking, custom model pricing, pooled subscription quotas, CLIProxyAPI hubs, and HTTP quota sources.
 - [Maintenance, power, and diagnostics](./diagnostics.md) — Background activity profiles, keep awake, Diagnostics UI, and `t3 trace`.
-- [CLI reference (`a4code`)](./cli.md) — Complete overview of `a4code` subcommands.
+- [CLI reference (`t3`)](./cli.md) — Complete overview of `t3` subcommands.
 - [Product usage data and diagnostics](./telemetry.md) — Telemetry opt-outs, agent feedback, mobile diagnostics, and OTLP export.
 - [Triage an issue](./triage.md) — Letting an agent investigate a A4 Code bug and draft an issue.
 - [Managed policy](./managed-policy.md) — Machine-wide enterprise configuration via JSON, macOS profiles, and Windows GPO/registry.

@@ -2,7 +2,7 @@ import {
   AuthDiagnosticsReadScope,
   sessionGrantsScope,
   type SessionGrantInput,
-} from "@a4code/contracts";
+} from "@t3tools/contracts";
 
 import type { EnvironmentConnectionPhase } from "../connection/presentation.ts";
 import { mFallback, msg } from "gt-i18n";

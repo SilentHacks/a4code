@@ -6,7 +6,7 @@ import {
   MessageId,
   ProjectId,
   ThreadId,
-} from "@a4code/contracts";
+} from "@t3tools/contracts";
 import type { QueuedThreadMessage } from "../../state/thread-outbox-model";
 import {
   appendAcceptedThreadMessages,

@@ -3,9 +3,9 @@ import {
   linkableMachines,
   linkedEnvironmentNames,
   offersLinkedEnvironments,
-} from "@a4code/client-runtime/link-request";
-import { createPeerLinkEnvironmentAtoms } from "@a4code/client-runtime/state/peerLinks";
-import type { EnvironmentId } from "@a4code/contracts";
+} from "@t3tools/client-runtime/link-request";
+import { createPeerLinkEnvironmentAtoms } from "@t3tools/client-runtime/state/peerLinks";
+import type { EnvironmentId } from "@t3tools/contracts";
 import { useContext, useEffect, useEffectEvent, useMemo } from "react";
 
 import { connectionAtomRuntime } from "../connection/runtime";
@@ -45,7 +45,7 @@ export function useLinkedEnvironments(
   const refreshLacking = useEffectEvent(() => {
     if (queried !== null) peerLinkEnvironment.refreshNamesLacking(registry, queried, missing);
   });
-  // oxlint-disable-next-line a4code/no-unreasoned-state-sync -- links made outside this app are not pushed, so meeting an unknown machine asks the server again
+  // oxlint-disable-next-line t3code/no-unreasoned-state-sync -- links made outside this app are not pushed, so meeting an unknown machine asks the server again
   useEffect(() => {
     if (refreshKey !== "") refreshLacking();
   }, [refreshKey]);
@@ -71,7 +71,7 @@ export function useLinkableMachines(environmentId: EnvironmentId, enabled: boole
   const discoverIfUnasked = useEffectEvent(() => {
     if (discovery.environments.size === 0 && !discovery.refreshing) void refreshDiscovery();
   });
-  // oxlint-disable-next-line a4code/no-unreasoned-state-sync -- discovery follows the picker's visibility, which a card's mount or a dialog's open sets
+  // oxlint-disable-next-line t3code/no-unreasoned-state-sync -- discovery follows the picker's visibility, which a card's mount or a dialog's open sets
   useEffect(() => {
     if (enabled) discoverIfUnasked();
   }, [enabled]);

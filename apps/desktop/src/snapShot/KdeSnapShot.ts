@@ -6,7 +6,7 @@ import * as NodeOS from "node:os";
 import * as NodePath from "node:path";
 import * as NodeURL from "node:url";
 import * as Schema from "effect/Schema";
-import type { DesktopCaptureHelperState } from "@a4code/contracts";
+import type { DesktopCaptureHelperState } from "@t3tools/contracts";
 
 import { escapeDesktopEntryExecArgument } from "../app/DesktopLinuxUrlHandler.ts";
 import type { LinuxWindowSnapshot } from "./LinuxSnapShot.ts";
@@ -15,8 +15,8 @@ import { startNativeCaptureFeedback } from "./NativeCaptureFeedback.ts";
 export { isKdeCaptureSession } from "./linuxCaptureSession.ts";
 
 export const KDE_CAPTURE_EXECUTABLE = "t3-kde-snap-shot";
-const DESKTOP_FILE = "io.github.silenthacks.a4code.KdeCapture.desktop";
-const MARKER = "X-A4Code-Capture-Helper=true";
+const DESKTOP_FILE = "com.t3tools.T3Code.KdeCapture.desktop";
+const MARKER = "X-T3Code-Capture-Helper=true";
 const decodeCapabilities = Schema.decodeUnknownSync(
   Schema.fromJsonString(Schema.Struct({ feedbackAvailable: Schema.optional(Schema.Boolean) })),
 );
@@ -24,7 +24,7 @@ export type KdeCapturePaths = { readonly bundle: string; readonly dataHome: stri
 
 export function kdeCapturePaths(paths: KdeCapturePaths) {
   return {
-    executable: NodePath.join(paths.dataHome, "a4code", "kde-capture", KDE_CAPTURE_EXECUTABLE),
+    executable: NodePath.join(paths.dataHome, "t3code", "kde-capture", KDE_CAPTURE_EXECUTABLE),
     desktop: NodePath.join(paths.dataHome, "applications", DESKTOP_FILE),
   };
 }

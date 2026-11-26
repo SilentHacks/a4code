@@ -1,5 +1,5 @@
 import * as Schema from "effect/Schema";
-import { EnvironmentId, PastedTextAttachmentSource } from "@a4code/contracts";
+import { EnvironmentId, PastedTextAttachmentSource } from "@t3tools/contracts";
 
 export const DraftComposerImageAttachmentSchema = Schema.Struct({
   id: Schema.String,

@@ -2,7 +2,7 @@ import { useGT } from "gt-react-native";
 import {
   MAX_SIDEBAR_AUTO_SETTLE_AFTER_DAYS,
   MIN_SIDEBAR_AUTO_SETTLE_AFTER_DAYS,
-} from "@a4code/contracts";
+} from "@t3tools/contracts";
 import type { ComponentProps } from "react";
 import { NumberField } from "../../../components/ui/NumberField";
 

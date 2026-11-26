@@ -2,22 +2,22 @@ import { applyThreadPullRequestLinkUpdate } from "../threadPullRequests.ts";
 import {
   applyOrchestrationV2ThreadVisit,
   isQueuedProviderThreadPlaceholder,
-} from "@a4code/contracts";
+} from "@t3tools/contracts";
 import type {
   OrchestrationV2DomainEvent,
   OrchestrationV2Run,
   OrchestrationV2ThreadProjection,
   OrchestrationV2TurnItem,
-} from "@a4code/contracts";
+} from "@t3tools/contracts";
 import {
   restoreSubagentBodies,
   restoreTurnItemBodies,
   type DedupedBodySource,
-} from "@a4code/shared/orchestrationV2DedupedBodies";
+} from "@t3tools/shared/orchestrationV2DedupedBodies";
 import {
   createOrchestrationV2TurnItemVisibility,
   isOrchestrationV2TurnItemVisible,
-} from "@a4code/shared/orchestrationV2Timeline";
+} from "@t3tools/shared/orchestrationV2Timeline";
 
 export type ApplyOrchestrationV2ProjectionEventOptions = {
   readonly partialTimeline?: boolean;

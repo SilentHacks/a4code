@@ -26,7 +26,7 @@ import * as HttpRouter from "effect/http/HttpRouter";
 import * as HttpServerRequest from "effect/http/HttpServerRequest";
 import * as HttpServerResponse from "effect/http/HttpServerResponse";
 
-import { buildConnectAuthorizeRequestUrl } from "@a4code/shared/connectAuth";
+import { buildConnectAuthorizeRequestUrl } from "@t3tools/shared/connectAuth";
 
 import * as ServerSecretStore from "../auth/ServerSecretStore.ts";
 import * as ExternalLauncher from "../process/externalLauncher.ts";
@@ -218,7 +218,7 @@ export class CloudCliCredentialRefreshError extends Schema.TaggedError<CloudCliC
     return this.requiresLogin
       ? `Could not refresh the T3 Connect CLI credential${
           this.oauthErrorCode === undefined ? "" : ` (OAuth error: ${this.oauthErrorCode})`
-        }. Run \`a4code connect login\` to authorize again.`
+        }. Run \`t3 connect login\` to authorize again.`
       : "Could not refresh the T3 Connect CLI credential.";
   }
 }
@@ -284,7 +284,7 @@ export class CloudCliTokenManager extends Context.Service<
     readonly store: (token: PersistedToken) => Effect.Effect<void, CloudCliTokenManagerError>;
     readonly clear: Effect.Effect<void, CloudCliTokenManagerError>;
   }
->()("a4code/cloud/CliTokenManager/CloudCliTokenManager") {}
+>()("t3/cloud/CliTokenManager/CloudCliTokenManager") {}
 
 function stringToBytes(value: string): Uint8Array {
   return new TextEncoder().encode(value);

@@ -10,8 +10,8 @@ import * as NodeHttpClient from "@effect/platform-node/NodeHttpClient";
 import * as NodeHttpServer from "@effect/platform-node/NodeHttpServer";
 import * as NodeRuntime from "@effect/platform-node/NodeRuntime";
 import * as NodeServices from "@effect/platform-node/NodeServices";
-import * as HostProcess from "@a4code/shared/HostProcess";
-import { fromJsonStringPretty } from "@a4code/shared/schemaJson";
+import * as HostProcess from "@t3tools/shared/HostProcess";
+import { fromJsonStringPretty } from "@t3tools/shared/schemaJson";
 import * as Console from "effect/Console";
 import * as DateTime from "effect/DateTime";
 import * as Duration from "effect/Duration";
@@ -131,7 +131,7 @@ const buildWeb = Effect.fn("clientMetrics.buildWeb")(function* (checkout: string
     Object.entries(environment).filter(
       (entry): entry is [string, string] =>
         entry[1] !== undefined &&
-        !["A4CODE_WEB_SOURCEMAP", "VITE_HTTP_URL", "VITE_WS_URL"].includes(entry[0]),
+        !["T3CODE_WEB_SOURCEMAP", "VITE_HTTP_URL", "VITE_WS_URL"].includes(entry[0]),
     ),
   );
   yield* run("vp", minify ? ["build"] : ["build", "--minify", "false"], { cwd: web, env });
@@ -234,7 +234,7 @@ const startSeededApp = Effect.fn("clientMetrics.startSeededApp")(function* (
   }
   yield* forge.setupProject(project);
 
-  const dropped = new Set(["A4CODE_HOME", "XDG_CONFIG_HOME", "VITE_HTTP_URL", "VITE_WS_URL"]);
+  const dropped = new Set(["T3CODE_HOME", "XDG_CONFIG_HOME", "VITE_HTTP_URL", "VITE_WS_URL"]);
   const env: Record<string, string> = {
     ...Object.fromEntries(
       Object.entries(hostEnvironment).filter(
@@ -245,8 +245,8 @@ const startSeededApp = Effect.fn("clientMetrics.startSeededApp")(function* (
     USERPROFILE: home,
     PATH: [path.join(baseDir, "bin"), hostEnvironment.PATH ?? ""].join(":"),
     OTEL_SDK_DISABLED: "true",
-    A4CODE_DEV_SEED: "0",
-    A4CODE_AUTO_BOOTSTRAP_PROJECT_FROM_CWD: "0",
+    T3CODE_DEV_SEED: "0",
+    T3CODE_AUTO_BOOTSTRAP_PROJECT_FROM_CWD: "0",
     ...SCENARIO_MACHINE_ENV,
     ...forge.env,
     // The fake GitHub's proxy only tunnels its host; the Browser case's headless shell downloads direct.

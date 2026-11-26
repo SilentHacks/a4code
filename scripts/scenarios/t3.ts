@@ -1,4 +1,4 @@
-// `test` for web scenarios: e2e's web test plus `a4code`, which seeds state and opens the signed-in
+// `test` for web scenarios: e2e's web test plus `t3`, which seeds state and opens the signed-in
 // app. `t3-mobile.ts` is the same for the iOS app.
 import * as NodeCrypto from "@effect/platform-node/NodeCrypto";
 import * as NodeServices from "@effect/platform-node/NodeServices";
@@ -11,8 +11,8 @@ import {
   type ProjectMutation,
   ProjectId,
   WsRpcGroup,
-} from "@a4code/contracts";
-import * as HostProcess from "@a4code/shared/HostProcess";
+} from "@t3tools/contracts";
+import * as HostProcess from "@t3tools/shared/HostProcess";
 import * as Clock from "effect/Clock";
 import * as SecureRandom from "effect/crypto/SecureRandom";
 import * as Effect from "effect/Effect";

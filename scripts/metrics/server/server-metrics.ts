@@ -6,9 +6,9 @@ import * as NodeHttpClient from "@effect/platform-node/NodeHttpClient";
 import * as NodeRuntime from "@effect/platform-node/NodeRuntime";
 import * as NodeServices from "@effect/platform-node/NodeServices";
 import * as NodeSocket from "@effect/platform-node/NodeSocket";
-import * as HostProcess from "@a4code/shared/HostProcess";
-import * as NodeSqliteClient from "@a4code/shared/nodeSqliteClient";
-import { fromJsonStringPretty } from "@a4code/shared/schemaJson";
+import * as HostProcess from "@t3tools/shared/HostProcess";
+import * as NodeSqliteClient from "@t3tools/shared/nodeSqliteClient";
+import { fromJsonStringPretty } from "@t3tools/shared/schemaJson";
 import * as Cause from "effect/Cause";
 import * as Console from "effect/Console";
 import * as DateTime from "effect/DateTime";
@@ -37,7 +37,7 @@ import {
   ORCHESTRATION_PROTOCOL_VERSION_TEXT,
   ThreadId,
   WsRpcGroup,
-} from "@a4code/contracts";
+} from "@t3tools/contracts";
 import {
   HttpClient,
   HttpClientRequest,
@@ -807,7 +807,7 @@ const startServer = Effect.fn("serverMetrics.startServer")(function* (
   );
   const dropped = new Set([
     "ANTHROPIC_AUTH_TOKEN",
-    "A4CODE_HOME",
+    "T3CODE_HOME",
     "CLAUDE_CONFIG_DIR",
     ...(environment.noAgentScope ? ["XDG_RUNTIME_DIR"] : []),
   ]);
@@ -823,7 +823,7 @@ const startServer = Effect.fn("serverMetrics.startServer")(function* (
     ANTHROPIC_API_KEY: "sk-bench",
     CLAUDE_CODE_DISABLE_NONESSENTIAL_TRAFFIC: "1",
     OTEL_SDK_DISABLED: "true",
-    A4CODE_DEV_SEED: "0",
+    T3CODE_DEV_SEED: "0",
     ...options.forge?.env,
   };
   const port = yield* freePort;

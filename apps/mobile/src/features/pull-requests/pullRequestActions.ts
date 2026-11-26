@@ -1,13 +1,13 @@
 import {
   sourceControlClients,
   type ChangeRequestTerminology,
-} from "@a4code/client-runtime/source-control-clients";
+} from "@t3tools/client-runtime/source-control-clients";
 import type {
   PullRequestAction,
   PullRequestDetail,
   PullRequestMergeMethod,
   SourceControlProviderKind,
-} from "@a4code/contracts";
+} from "@t3tools/contracts";
 import { msg } from "gt-react-native";
 
 import type { AppSymbolName } from "../../components/ui/AppSymbol";

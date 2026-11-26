@@ -8,7 +8,7 @@ import {
   type OrchestrationGetTurnDiffResult as OrchestrationGetTurnDiffResultType,
   type ThreadId,
   type ThreadTurnRepositoryDiff,
-} from "@a4code/contracts";
+} from "@t3tools/contracts";
 import * as Context from "effect/Context";
 import * as Digest from "effect/crypto/Digest";
 import * as Effect from "effect/Effect";
@@ -69,7 +69,7 @@ export class CheckpointDiffQuery extends Context.Service<
       input: OrchestrationGetFullThreadDiffInput,
     ) => Effect.Effect<OrchestrationGetFullThreadDiffResult, CheckpointServiceError>;
   }
->()("a4code/checkpointing/CheckpointDiffQuery") {}
+>()("t3/checkpointing/CheckpointDiffQuery") {}
 
 const isTurnDiffResult = Schema.is(OrchestrationGetTurnDiffResult);
 

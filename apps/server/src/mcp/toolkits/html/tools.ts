@@ -1,4 +1,4 @@
-import { OrchestratorMcpFailure } from "@a4code/contracts";
+import { OrchestratorMcpFailure } from "@t3tools/contracts";
 import {
   HTML_RENDER_COLUMN_WIDTH,
   HTML_RENDER_LAYOUT_GUIDE,
@@ -8,7 +8,7 @@ import {
   HTML_RENDER_MIN_HEIGHT,
   HTML_RENDER_THEME_GUIDE,
   HTML_RENDER_TOOL_NAME,
-} from "@a4code/shared/htmlRender";
+} from "@t3tools/shared/htmlRender";
 import * as Schema from "effect/Schema";
 import { McpSchema, Tool, Toolkit } from "effect/ai";
 

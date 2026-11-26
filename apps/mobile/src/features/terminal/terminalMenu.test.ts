@@ -1,8 +1,8 @@
 import { describe, expect, it } from "vite-plus/test";
 
-import { DEFAULT_TERMINAL_ID } from "@a4code/contracts";
+import { DEFAULT_TERMINAL_ID } from "@t3tools/contracts";
 
-import { getTerminalLabel } from "@a4code/shared/terminalLabels";
+import { getTerminalLabel } from "@t3tools/shared/terminalLabels";
 
 import {
   nextOpenTerminalId,

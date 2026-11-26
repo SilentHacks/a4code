@@ -7,7 +7,7 @@ import {
   type ServerSelfUpdateInput,
   type ServerSelfUpdateResult,
   WS_METHODS,
-} from "@a4code/contracts";
+} from "@t3tools/contracts";
 import * as Duration from "effect/Duration";
 import * as Effect from "effect/Effect";
 import * as Layer from "effect/Layer";

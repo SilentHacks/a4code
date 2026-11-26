@@ -4,8 +4,8 @@ import {
   type DiscoveredLocalServer,
   type EnvironmentId,
   type ThreadId,
-} from "@a4code/contracts";
-import { isLoopbackHost } from "@a4code/shared/preview";
+} from "@t3tools/contracts";
+import { isLoopbackHost } from "@t3tools/shared/preview";
 
 import { previewEnvironment } from "./state/preview";
 import { useEnvironmentQuery } from "./state/query";

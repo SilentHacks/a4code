@@ -1,7 +1,7 @@
 import { classifyCodexManagedError } from "../provider/CodexManagedErrors.ts";
-import { modelSelectionsEqual } from "@a4code/shared/model";
-import { projectComposerContextForProvider } from "@a4code/shared/composerContextReferences";
-import { expandAssistantCitationsForProvider } from "@a4code/shared/assistantCitations";
+import { modelSelectionsEqual } from "@t3tools/shared/model";
+import { projectComposerContextForProvider } from "@t3tools/shared/composerContextReferences";
+import { expandAssistantCitationsForProvider } from "@t3tools/shared/assistantCitations";
 import {
   CommandId,
   PROVIDER_SEND_TURN_MAX_INPUT_CHARS,
@@ -21,7 +21,7 @@ import {
   RunAttemptId,
   NodeId,
   ThreadId,
-} from "@a4code/contracts";
+} from "@t3tools/contracts";
 import * as Cause from "effect/Cause";
 import * as Context from "effect/Context";
 import * as DateTime from "effect/DateTime";
@@ -64,23 +64,23 @@ import {
   contextUsageForHandoff,
   historicalMessage,
   latestNativeContextUsage,
-} from "@a4code/provider-core/server/handoffBudget";
+} from "@t3tools/provider-core/server/handoffBudget";
 import {
   deliverContextHandoffs,
   isSlashCommandMessage,
   withInlineContext,
 } from "./ContextHandoffDelivery.ts";
 import { isProviderCommand, outputInstructions } from "./runOutput.ts";
-import * as ProviderAdapter from "@a4code/provider-core/server/ProviderAdapter";
-import * as IdAllocator from "@a4code/provider-core/server/IdAllocator";
+import * as ProviderAdapter from "@t3tools/provider-core/server/ProviderAdapter";
+import * as IdAllocator from "@t3tools/provider-core/server/IdAllocator";
 import * as ProjectionStore from "./ProjectionStore.ts";
-import { unsentManualContinuationSource } from "@a4code/shared/orchestrationV2ManualContinuation";
+import { unsentManualContinuationSource } from "@t3tools/shared/orchestrationV2ManualContinuation";
 import * as ProviderSessionManager from "./ProviderSessionManager.ts";
 import {
   ContextHandoffBackgroundWorkError,
   knownProviderFailureMessage,
   makeProviderFailure,
-} from "@a4code/provider-core/server/failure";
+} from "@t3tools/provider-core/server/failure";
 import * as RunExecutionService from "./RunExecutionService.ts";
 import * as RuntimePolicy from "./RuntimePolicy.ts";
 import * as TurnItemPositionStore from "./TurnItemPositionStore.ts";
@@ -328,7 +328,7 @@ export interface ProviderTurnStartServiceV2Shape {
 export class ProviderTurnStartServiceV2 extends Context.Service<
   ProviderTurnStartServiceV2,
   ProviderTurnStartServiceV2Shape
->()("a4code/orchestration-v2/ProviderTurnStartService/ProviderTurnStartServiceV2") {}
+>()("t3/orchestration-v2/ProviderTurnStartService/ProviderTurnStartServiceV2") {}
 
 export const layer: Layer.Layer<
   ProviderTurnStartServiceV2,

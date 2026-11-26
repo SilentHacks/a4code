@@ -1,4 +1,4 @@
-import type { RelayClientDeviceRecord } from "@a4code/contracts/relay";
+import type { RelayClientDeviceRecord } from "@t3tools/contracts/relay";
 import { msg } from "gt-react";
 
 import { m, type MessageResolver } from "~/i18n/messages";

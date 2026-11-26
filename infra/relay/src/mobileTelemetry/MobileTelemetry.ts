@@ -15,7 +15,7 @@ import * as HttpClientRequest from "effect/http/HttpClientRequest";
 import type * as HttpServerRequest from "effect/http/HttpServerRequest";
 import * as HttpServerResponse from "effect/http/HttpServerResponse";
 import * as HttpApiBuilder from "effect/http-api/HttpApiBuilder";
-import { RelayApi, type RelayMobileTelemetrySignal } from "@a4code/contracts/relay";
+import { RelayApi, type RelayMobileTelemetrySignal } from "@t3tools/contracts/relay";
 
 import {
   applySymbolication,
@@ -62,12 +62,12 @@ export class MobileTelemetrySettings extends Context.Service<
     readonly axiomToken: Redacted.Redacted<string>;
     readonly destinations: Readonly<Record<RelayMobileTelemetrySignal, AxiomDestination>>;
   }
->()("a4code-relay/mobileTelemetry/MobileTelemetry/MobileTelemetrySettings") {}
+>()("t3code-relay/mobileTelemetry/MobileTelemetry/MobileTelemetrySettings") {}
 
 export class MobileTelemetryRateLimiter extends Context.Service<
   MobileTelemetryRateLimiter,
   { readonly allow: (key: string) => Effect.Effect<boolean> }
->()("a4code-relay/mobileTelemetry/MobileTelemetry/MobileTelemetryRateLimiter") {}
+>()("t3code-relay/mobileTelemetry/MobileTelemetry/MobileTelemetryRateLimiter") {}
 
 export class SourceMapObjectError extends Schema.TaggedError<SourceMapObjectError>()(
   "SourceMapObjectError",
@@ -90,14 +90,14 @@ export class SourceMaps extends Context.Service<
   {
     readonly find: (key: string) => Effect.Effect<FoundSourceMap | SourceMapMiss>;
   }
->()("a4code-relay/mobileTelemetry/MobileTelemetry/SourceMaps") {}
+>()("t3code-relay/mobileTelemetry/MobileTelemetry/SourceMaps") {}
 
 export class SourceMapObjects extends Context.Service<
   SourceMapObjects,
   {
     readonly get: (key: string) => Effect.Effect<StoredSourceMap | undefined, SourceMapObjectError>;
   }
->()("a4code-relay/mobileTelemetry/MobileTelemetry/SourceMapObjects") {}
+>()("t3code-relay/mobileTelemetry/MobileTelemetry/SourceMapObjects") {}
 
 const makeSourceMaps = Effect.gen(function* () {
   const objects = yield* SourceMapObjects;
@@ -156,7 +156,7 @@ export class MobileTelemetry extends Context.Service<
       params: { readonly projectId: string; readonly signal: RelayMobileTelemetrySignal },
     ) => Effect.Effect<HttpServerResponse.HttpServerResponse>;
   }
->()("a4code-relay/mobileTelemetry/MobileTelemetry") {}
+>()("t3code-relay/mobileTelemetry/MobileTelemetry") {}
 
 class BodyTooLarge extends Schema.TaggedError<BodyTooLarge>()("BodyTooLarge", {}) {}
 

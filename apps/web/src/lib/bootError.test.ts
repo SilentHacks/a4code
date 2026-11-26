@@ -1,4 +1,4 @@
-import type { DesktopBridge, DesktopCliCommandState, DesktopUpdateState } from "@a4code/contracts";
+import type { DesktopBridge, DesktopCliCommandState, DesktopUpdateState } from "@t3tools/contracts";
 import { describe, expect, it, vi } from "vite-plus/test";
 
 import {
@@ -20,27 +20,25 @@ const notOnPath = (launcherPath: string | null): DesktopCliCommandState => ({
 
 describe("resolveTriageCommand", () => {
   it("prefers t3 on PATH, then the desktop launcher", async () => {
-    const onPath = { ...notOnPath("/home/me/.a4code/bin/a4code"), onPath: true };
+    const onPath = { ...notOnPath("/home/me/.t3/bin/t3"), onPath: true };
     await expect(resolveTriageCommand(desktopWith(async () => onPath))).resolves.toBe("t3 triage");
     await expect(
-      resolveTriageCommand(desktopWith(async () => notOnPath("/home/me/.a4code/bin/a4code"))),
-    ).resolves.toBe("/home/me/.a4code/bin/a4code triage");
+      resolveTriageCommand(desktopWith(async () => notOnPath("/home/me/.t3/bin/t3"))),
+    ).resolves.toBe("/home/me/.t3/bin/t3 triage");
   });
 
   it("quotes launcher paths for the shell that runs them", async () => {
     await expect(
-      resolveTriageCommand(desktopWith(async () => notOnPath("/Users/O'Neil/.a4code/bin/a4code"))),
-    ).resolves.toBe(`'/Users/O'"'"'Neil/.a4code/bin/a4code' triage`);
+      resolveTriageCommand(desktopWith(async () => notOnPath("/Users/O'Neil/.t3/bin/t3"))),
+    ).resolves.toBe(`'/Users/O'"'"'Neil/.t3/bin/t3' triage`);
+    await expect(
+      resolveTriageCommand(desktopWith(async () => notOnPath("C:\\Users\\Me\\.t3\\bin\\t3.cmd"))),
+    ).resolves.toBe("C:\\Users\\Me\\.t3\\bin\\t3.cmd triage");
     await expect(
       resolveTriageCommand(
-        desktopWith(async () => notOnPath("C:\\Users\\Me\\.t3\\bin\\a4code.cmd")),
+        desktopWith(async () => notOnPath("C:\\Users\\Jo O'Neil\\.t3\\bin\\t3.cmd")),
       ),
-    ).resolves.toBe("C:\\Users\\Me\\.t3\\bin\\a4code.cmd triage");
-    await expect(
-      resolveTriageCommand(
-        desktopWith(async () => notOnPath("C:\\Users\\Jo O'Neil\\.t3\\bin\\a4code.cmd")),
-      ),
-    ).resolves.toBe("& 'C:\\Users\\Jo O''Neil\\.t3\\bin\\a4code.cmd' triage");
+    ).resolves.toBe("& 'C:\\Users\\Jo O''Neil\\.t3\\bin\\t3.cmd' triage");
   });
 
   it("falls back to npx without a usable desktop launcher", async () => {

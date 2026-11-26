@@ -3,7 +3,7 @@ import { Atom } from "effect/reactivity";
 import {
   ATTACHMENT_ONLY_BOOTSTRAP_PROMPT,
   restoreAttachmentOnlyBootstrapPrompt,
-} from "@a4code/shared/composerContextReferences";
+} from "@t3tools/shared/composerContextReferences";
 import {
   ChatAttachmentId,
   ComposerContextId,
@@ -14,7 +14,7 @@ import {
   RunId,
   type ChatAttachment,
   type OrchestrationMessageContext,
-} from "@a4code/contracts";
+} from "@t3tools/contracts";
 
 import { selectThreadModel } from "./thread-model-selection";
 import { scopedThreadKey } from "../lib/scopedEntities";

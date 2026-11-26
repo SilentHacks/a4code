@@ -6,9 +6,9 @@ import {
   type ProviderInstanceId,
   type ServerProvider,
   type ServerProviderCompatibilityAdvisory,
-} from "@a4code/contracts";
-import { brokenVersionDetail } from "@a4code/provider-core/server/compatibility";
-import { compareSemverVersions, satisfiesSemverRange } from "@a4code/shared/semver";
+} from "@t3tools/contracts";
+import { brokenVersionDetail } from "@t3tools/provider-core/server/compatibility";
+import { compareSemverVersions, satisfiesSemverRange } from "@t3tools/shared/semver";
 import * as Schema from "effect/Schema";
 import packageJson from "../../package.json" with { type: "json" };
 

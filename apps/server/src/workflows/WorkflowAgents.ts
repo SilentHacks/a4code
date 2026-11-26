@@ -3,8 +3,8 @@ import type {
   OrchestrationV2ThreadLaunchWorkspaceStrategy,
   ProviderInteractionMode,
   RuntimeMode,
-} from "@a4code/contracts";
-import { isWindowsDrivePath } from "@a4code/shared/path";
+} from "@t3tools/contracts";
+import { isWindowsDrivePath } from "@t3tools/shared/path";
 import * as Context from "effect/Context";
 import type * as Duration from "effect/Duration";
 import type * as Effect from "effect/Effect";
@@ -116,4 +116,4 @@ export class WorkflowAgents extends Context.Service<
       readonly turnId?: string | undefined;
     }) => Effect.Effect<"stopped" | "ended", WorkflowAgentError>;
   }
->()("a4code/workflows/WorkflowAgents") {}
+>()("t3/workflows/WorkflowAgents") {}

@@ -1,5 +1,5 @@
-import { type EnvironmentId, SourceControlProviderKind } from "@a4code/contracts";
-import { runAtomCommand } from "@a4code/client-runtime/state/runtime";
+import { type EnvironmentId, SourceControlProviderKind } from "@t3tools/contracts";
+import { runAtomCommand } from "@t3tools/client-runtime/state/runtime";
 import * as Schema from "effect/Schema";
 import { msg } from "gt-react";
 import { StarIcon } from "lucide-react";
@@ -12,9 +12,9 @@ import { sourceControlEnvironment } from "../state/sourceControl";
 import { toastManager } from "./ui/toast";
 
 // Separate keys so a count written by another tab can never undo a dismissal.
-const SENT_KEY = "a4code:github-star-prompt:sent";
-const DISMISSED_KEY = "a4code:github-star-prompt:dismissed";
-const REPOSITORY = "SilentHacks/a4code";
+const SENT_KEY = "t3code:github-star-prompt:sent";
+const DISMISSED_KEY = "t3code:github-star-prompt:dismissed";
+const REPOSITORY = "pingdotgg/t3code";
 const PROMPTS_BEFORE_ASKING = 5;
 const IDLE_MS = 30_000;
 // User-driven actions (send, navigate, type, scroll) start with one of these; touch fires pointerdown.

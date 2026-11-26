@@ -1,7 +1,7 @@
-import { TextGenerationError } from "@a4code/contracts";
-import { collectUint8StreamText } from "@a4code/provider-core/server/collectStreamText";
-import type { Request } from "@a4code/provider-core/server/textGenerationOperations";
-import * as HostProcess from "@a4code/shared/HostProcess";
+import { TextGenerationError } from "@t3tools/contracts";
+import { collectUint8StreamText } from "@t3tools/provider-core/server/collectStreamText";
+import type { Request } from "@t3tools/provider-core/server/textGenerationOperations";
+import * as HostProcess from "@t3tools/shared/HostProcess";
 import * as Effect from "effect/Effect";
 import * as Schema from "effect/Schema";
 import { ChildProcess, ChildProcessSpawner } from "effect/process";

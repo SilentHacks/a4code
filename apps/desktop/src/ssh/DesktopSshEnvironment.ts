@@ -2,12 +2,12 @@ import type {
   DesktopDiscoveredSshHost,
   DesktopSshEnvironmentBootstrap,
   DesktopSshEnvironmentTarget,
-} from "@a4code/contracts";
-import { CLI_RELEASE_BASE_URL_ENV } from "@a4code/shared/cliRelease";
-import * as NetService from "@a4code/shared/Net";
-import * as SshAuth from "@a4code/ssh/auth";
-import { resolveSshTarget } from "@a4code/ssh/command";
-import { discoverSshHosts } from "@a4code/ssh/config";
+} from "@t3tools/contracts";
+import { CLI_RELEASE_BASE_URL_ENV } from "@t3tools/shared/cliRelease";
+import * as NetService from "@t3tools/shared/Net";
+import * as SshAuth from "@t3tools/ssh/auth";
+import { resolveSshTarget } from "@t3tools/ssh/command";
+import { discoverSshHosts } from "@t3tools/ssh/config";
 import {
   SshCommandError,
   SshHostDiscoveryError,
@@ -16,8 +16,8 @@ import {
   SshPairingError,
   SshPasswordPromptError,
   SshReadinessError,
-} from "@a4code/ssh/errors";
-import * as SshTunnel from "@a4code/ssh/tunnel";
+} from "@t3tools/ssh/errors";
+import * as SshTunnel from "@t3tools/ssh/tunnel";
 import * as Context from "effect/Context";
 import type * as Digest from "effect/crypto/Digest";
 import * as SecureRandom from "effect/crypto/SecureRandom";
@@ -72,7 +72,7 @@ export class DesktopSshEnvironment extends Context.Service<
     ) => Effect.Effect<void, DesktopSshEnvironmentOperationError>;
     readonly closeAllTunnels: Effect.Effect<void>;
   }
->()("@a4code/desktop/ssh/DesktopSshEnvironment") {}
+>()("@t3tools/desktop/ssh/DesktopSshEnvironment") {}
 
 export interface DesktopSshEnvironmentLayerOptions {
   readonly resolveCliRunner?: Effect.Effect<SshTunnel.RemoteT3RunnerOptions>;

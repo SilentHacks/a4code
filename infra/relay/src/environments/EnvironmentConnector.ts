@@ -4,8 +4,8 @@ import {
   EnvironmentHttpForbiddenError,
   EnvironmentHttpInternalServerError,
   EnvironmentHttpUnauthorizedError,
-} from "@a4code/contracts";
-import { makeEnvironmentHttpApiClient } from "@a4code/client-runtime/rpc";
+} from "@t3tools/contracts";
+import { makeEnvironmentHttpApiClient } from "@t3tools/client-runtime/rpc";
 import {
   RelayCloudEnvironmentHealthProofPayload,
   RelayEnvironmentHealthResponse,
@@ -18,7 +18,7 @@ import {
   type RelayEnvironmentConnectResponse,
   type RelayEnvironmentStatusResponse,
   type RelayManagedEndpoint,
-} from "@a4code/contracts/relay";
+} from "@t3tools/contracts/relay";
 import {
   normalizeRelayIssuer,
   RELAY_HEALTH_REQUEST_TYP,
@@ -26,8 +26,8 @@ import {
   RELAY_MINT_REQUEST_TYP,
   RELAY_MINT_RESPONSE_TYP,
   verifyRelayJwt,
-} from "@a4code/shared/relayJwt";
-import { stableStringify } from "@a4code/shared/relaySigning";
+} from "@t3tools/shared/relayJwt";
+import { stableStringify } from "@t3tools/shared/relaySigning";
 import * as Context from "effect/Context";
 import * as SecureRandom from "effect/crypto/SecureRandom";
 import * as Signature from "effect/crypto/Signature";
@@ -149,7 +149,7 @@ export class EnvironmentConnector extends Context.Service<
       readonly environmentId: string;
     }) => Effect.Effect<RelayEnvironmentStatusResponse, EnvironmentConnectorError>;
   }
->()("a4code-relay/environments/EnvironmentConnector") {}
+>()("t3code-relay/environments/EnvironmentConnector") {}
 
 const isEnvironmentHealthError = Schema.is(
   Schema.Union([

@@ -1,12 +1,12 @@
 import * as Context from "effect/Context";
-import * as NodeSqliteClient from "@a4code/shared/nodeSqliteClient";
+import * as NodeSqliteClient from "@t3tools/shared/nodeSqliteClient";
 import * as Effect from "effect/Effect";
 import * as Layer from "effect/Layer";
 import * as Schema from "effect/Schema";
 import * as SqlClient from "effect/sql/SqlClient";
 import * as SqlSchema from "effect/sql/SqlSchema";
 
-import { AuthClientMetadata } from "@a4code/contracts";
+import { AuthClientMetadata } from "@t3tools/contracts";
 
 import { type AuthPairingLinkRepositoryError, PersistenceSqlError } from "./Errors.ts";
 
@@ -51,7 +51,7 @@ export class AuthConnectDeviceRepository extends Context.Service<
       keepProofKeyThumbprint: string | null,
     ) => Effect.Effect<number, AuthPairingLinkRepositoryError>;
   }
->()("a4code/persistence/AuthConnectDevices/AuthConnectDeviceRepository") {}
+>()("t3/persistence/AuthConnectDevices/AuthConnectDeviceRepository") {}
 
 const sqlError = (operation: string) => (cause: unknown) =>
   new PersistenceSqlError({ operation, cause });

@@ -15,7 +15,7 @@ import {
   type RuntimeMode,
   type OrchestrationV2ThreadShell,
   ThreadId,
-} from "@a4code/contracts";
+} from "@t3tools/contracts";
 import * as NodeCrypto from "@effect/platform-node/NodeCrypto";
 import * as NodeServices from "@effect/platform-node/NodeServices";
 import * as Cause from "effect/Cause";

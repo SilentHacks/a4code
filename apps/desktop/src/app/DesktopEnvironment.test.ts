@@ -68,8 +68,8 @@ describe("DesktopEnvironment", () => {
       );
       const production = yield* makeEnvironment();
 
-      assert.equal(development.stateDir, "/Users/alice/.a4code/dev");
-      assert.equal(production.stateDir, "/Users/alice/.a4code/userdata");
+      assert.equal(development.stateDir, "/Users/alice/.t3/dev");
+      assert.equal(production.stateDir, "/Users/alice/.t3/userdata");
     }),
   );
 });

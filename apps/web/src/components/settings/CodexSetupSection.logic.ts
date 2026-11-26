@@ -2,7 +2,7 @@ import type {
   ChatGptHandoffState,
   ProviderAuthState,
   ProviderInstallState,
-} from "@a4code/contracts";
+} from "@t3tools/contracts";
 
 export function readCodexSetupMode(config: unknown): "managed" | "existing" {
   return config !== null &&

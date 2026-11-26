@@ -18,13 +18,13 @@ import {
   type IssueTemplate,
   type IssueViewerPermissions,
   type StandaloneIssueTrackerDescriptor,
-} from "@a4code/contracts";
+} from "@t3tools/contracts";
 import {
   IssueTrackerError,
   type IssueInvolvementFilter,
   type StandaloneIssueTrackerApi,
   type TrackerIssueSummary,
-} from "@a4code/source-control-core/server/IssueTracker";
+} from "@t3tools/source-control-core/server/IssueTracker";
 
 import { LINEAR_HOST, parseLinearIssueUrl } from "../shared/issueUrl.ts";
 import * as LinearApi from "./LinearApi.ts";

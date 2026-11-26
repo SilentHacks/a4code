@@ -8,51 +8,62 @@ You need at least one installed, authenticated coding agent (provider) before st
 
 ## Command line
 
-Install the `a4code` command to `~/.local/bin`:
+Install the `t3` command to `~/.local/bin`:
 
 ```bash
 # macOS / Linux
-curl -fsSL https://raw.githubusercontent.com/SilentHacks/a4code/main/scripts/install.sh | sh
+curl -fsSL https://t3.codes/install.sh | sh
 ```
 
 ```powershell
 # Windows (PowerShell)
-irm https://raw.githubusercontent.com/SilentHacks/a4code/main/scripts/install.ps1 | iex
+irm https://t3.codes/install.ps1 | iex
 ```
 
-Once CLI artifacts are published, set `A4CODE_CHANNEL=nightly` for nightly builds or `A4CODE_VERSION=<ver>` to pin a version. For an Ubuntu source build, use the [A4 Code server installer](../../scripts/install-fork-server.sh).
+Set `T3CODE_CHANNEL=nightly` for nightly builds or `T3CODE_VERSION=<ver>` to pin a version. To try once without installing, run `npx t3@latest` (requires Node.js; always runs the latest stable release).
 
-| Task                          | Command                                                                     |
-| ----------------------------- | --------------------------------------------------------------------------- |
-| Start server and open web app | `a4code` (or `a4code ./my-project`)                                         |
-| Start server without browser  | `a4code serve`                                                              |
-| Set up remote access          | `a4code up` ([Remote access](./remote-access.md))                           |
-| Run in the background         | `a4code service install` ([Background service](./background-service.md))    |
-| Update                        | `a4code update`                                                             |
-| Reclaim database space        | `a4code doctor` ([Details](./background-service.md#reclaim-database-space)) |
-| Uninstall                     | `a4code uninstall`                                                          |
+| Task                          | Command                                                                 |
+| ----------------------------- | ----------------------------------------------------------------------- |
+| Start server and open web app | `t3` (or `t3 ./my-project`)                                             |
+| Start server without browser  | `t3 serve`                                                              |
+| Set up remote access          | `t3 up` ([Remote access](./remote-access.md))                           |
+| Run in the background         | `t3 service install` ([Background service](./background-service.md))    |
+| Update                        | `t3 update`                                                             |
+| Reclaim database space        | `t3 doctor` ([Details](./background-service.md#reclaim-database-space)) |
+| Uninstall                     | `t3 uninstall`                                                          |
 
-If `a4code` reports a server is already running, connect with `a4code pair` or pass a separate `--base-dir`. Run `a4code --help` for all commands.
+If `t3` reports a server is already running, connect with `t3 pair` or pass a separate `--base-dir`. Run `t3 --help` for all commands.
 
 ### Intel Macs
 
-There is no standalone `a4code` binary for Intel Macs—use the desktop app, or build a server from source with `vp` ([development runbook](../operations/00_development.md#first-checkout)):
+There is no standalone `t3` binary for Intel Macs—use the desktop app, or build a server from source with `vp` ([development runbook](../operations/00_development.md#first-checkout)):
 
 ```bash
-git clone https://github.com/SilentHacks/a4code
-cd a4code && vp i && vp run build:desktop
+git clone https://github.com/pingdotgg/t3code
+cd t3code && vp i && vp run build:desktop
 node apps/server/dist/bin.mjs
 ```
 
 ## Desktop app
 
-Use [GitHub Releases](https://github.com/SilentHacks/a4code/releases) when a build is available, or [build from source](../../README.md#build-the-mac-arm64-app). On Linux, install the release `.deb` or mark the AppImage executable before opening it.
+Download from [GitHub Releases](https://github.com/pingdotgg/t3code/releases) or install via a package manager:
 
-### The `a4code` command
+| Platform                | Command                                                          |
+| ----------------------- | ---------------------------------------------------------------- |
+| macOS                   | `brew install --cask t3-code`                                    |
+| Windows                 | `winget install T3Tools.T3Code` or `scoop install extras/t3code` |
+| Debian / Ubuntu         | `sudo apt install ./T3-Code-*.deb`                               |
+| Arch Linux              | `yay -S t3code-bin` (or `yay -S t3code-nightly-bin`)             |
+| Nix (flakes, Nix 2.30+) | `nix profile add github:NixOS/nixpkgs/nixos-unstable#t3code`     |
 
-The desktop app bundles `a4code` and sets it up on first launch (manage anytime under **Settings → About → a4code command**). Use **Add to PATH** if needed, then open a new terminal.
+- **Linux AppImage**: `chmod +x ./T3-Code-*.AppImage && ./T3-Code-*.AppImage` (x86_64 and ARM64). `.deb` self-updates with a password prompt; update AUR packages via your AUR helper (`yay -Syu`).
+- **NixOS / Home Manager**: Add `pkgs.t3code` to `environment.systemPackages` or `home.packages` (`t3code-desktop` launches the app; `t3` is included). Update via Nix rather than the in-app updater.
 
-- **Open a folder in the running desktop app**: Run `a4code app` (or `a4code app ../my-project`) from a terminal, or drag folders from your file manager onto the desktop sidebar.
+### The `t3` command
+
+The desktop app bundles `t3` and sets it up on first launch (manage anytime under **Settings → About → t3 command**). Use **Add to PATH** if needed, then open a new terminal.
+
+- **Open a folder in the running desktop app**: Run `t3 app` (or `t3 app ../my-project`) from a terminal, or drag folders from your file manager onto the desktop sidebar.
 
 ### Windows Subsystem for Linux
 
@@ -60,8 +71,9 @@ Select a WSL distro in **Settings → Sharing & access** to run agents and proje
 
 ## Mobile app
 
-Build the mobile client for [iOS or Android from source](../../apps/mobile/README.md) and pair it with your server using [remote access](./remote-access.md).
+Install from the [App Store](https://apps.apple.com/us/app/t3-code-remote-claude-more/id6787819824) or [Google Play](https://play.google.com/store/apps/details?id=com.t3tools.t3code) (QR codes are also in **Settings → About → Mobile app**). The mobile app connects to a server on another machine via [remote access](./remote-access.md).
 
+- Store builds work with both Stable and Nightly servers. Optional Android beta APKs are under [Android beta releases](https://github.com/pingdotgg/t3code/releases?q=android-beta-).
 - If the mobile app crashes on launch, open **Settings → Diagnostics** on the next launch to copy recent startup crash reports.
 
 ## Providers
@@ -91,22 +103,22 @@ Open **Settings → Providers** (web or desktop), select the environment, and en
 If a working CLI times out during A4 Code's readiness check, increase its probe deadline (in milliseconds) in the server's environment (or systemd override / `service.env`) and restart:
 
 ```bash
-A4CODE_CODEX_PROBE_TIMEOUT_MS=60000 A4CODE_CLAUDE_PROBE_TIMEOUT_MS=60000 a4code serve
+T3CODE_CODEX_PROBE_TIMEOUT_MS=60000 T3CODE_CLAUDE_PROBE_TIMEOUT_MS=60000 t3 serve
 ```
 
 | Provider     | Environment variable                   |
 | ------------ | -------------------------------------- |
-| Codex        | `A4CODE_CODEX_PROBE_TIMEOUT_MS`        |
-| Claude       | `A4CODE_CLAUDE_PROBE_TIMEOUT_MS`       |
-| Cursor       | `A4CODE_CURSOR_PROBE_TIMEOUT_MS`       |
-| Antigravity  | `A4CODE_ANTIGRAVITY_PROBE_TIMEOUT_MS`  |
-| Grok         | `A4CODE_GROK_PROBE_TIMEOUT_MS`         |
-| Kiro         | `A4CODE_KIRO_PROBE_TIMEOUT_MS`         |
-| fx           | `A4CODE_FX_PROBE_TIMEOUT_MS`           |
-| Pi           | `A4CODE_PI_PROBE_TIMEOUT_MS`           |
-| Muse Code    | `A4CODE_MUSE_PROBE_TIMEOUT_MS`         |
-| OpenCode     | `A4CODE_OPENCODE_PROBE_TIMEOUT_MS`     |
-| ACP Registry | `A4CODE_ACP_REGISTRY_PROBE_TIMEOUT_MS` |
+| Codex        | `T3CODE_CODEX_PROBE_TIMEOUT_MS`        |
+| Claude       | `T3CODE_CLAUDE_PROBE_TIMEOUT_MS`       |
+| Cursor       | `T3CODE_CURSOR_PROBE_TIMEOUT_MS`       |
+| Antigravity  | `T3CODE_ANTIGRAVITY_PROBE_TIMEOUT_MS`  |
+| Grok         | `T3CODE_GROK_PROBE_TIMEOUT_MS`         |
+| Kiro         | `T3CODE_KIRO_PROBE_TIMEOUT_MS`         |
+| fx           | `T3CODE_FX_PROBE_TIMEOUT_MS`           |
+| Pi           | `T3CODE_PI_PROBE_TIMEOUT_MS`           |
+| Muse Code    | `T3CODE_MUSE_PROBE_TIMEOUT_MS`         |
+| OpenCode     | `T3CODE_OPENCODE_PROBE_TIMEOUT_MS`     |
+| ACP Registry | `T3CODE_ACP_REGISTRY_PROBE_TIMEOUT_MS` |
 
 ## Next steps
 

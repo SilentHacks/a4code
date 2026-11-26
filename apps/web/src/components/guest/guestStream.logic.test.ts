@@ -10,7 +10,7 @@ import {
   type GuestStreamEvent,
   type OrchestrationV2TurnItem,
   type ThreadGuestMessage,
-} from "@a4code/contracts";
+} from "@t3tools/contracts";
 import * as DateTime from "effect/DateTime";
 import { describe, expect, it } from "vite-plus/test";
 

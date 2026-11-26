@@ -1,4 +1,4 @@
-import { OrchestratorMcpFailure } from "@a4code/contracts";
+import { OrchestratorMcpFailure } from "@t3tools/contracts";
 import * as SecureRandom from "effect/crypto/SecureRandom";
 import * as Effect from "effect/Effect";
 

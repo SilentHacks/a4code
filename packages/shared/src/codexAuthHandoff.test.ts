@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vite-plus/test";
-import { EnvironmentId, ProviderInstanceId } from "@a4code/contracts";
+import { EnvironmentId, ProviderInstanceId } from "@t3tools/contracts";
 import {
   codexAuthorizationRequest,
   codexAuthDeliveryUrl,
@@ -21,10 +21,9 @@ const authorizationUrl = () => {
   }).toString();
   return url.toString();
 };
-const trustedOrigin = "https://app.example.test";
 const input = {
   authorizationUrl: authorizationUrl(),
-  returnUrl: `${trustedOrigin}/welcome#agents:remote-environment`,
+  returnUrl: "https://app.t3.codes/welcome#agents:remote-environment",
   environmentId: EnvironmentId.make("remote-environment"),
   instanceId: ProviderInstanceId.make("work-codex"),
   flowId: "flow-one",
@@ -33,10 +32,10 @@ const callbackUrl = `http://127.0.0.1:54213/auth/callback?state=${"a".repeat(43)
 
 describe("Codex desktop handoff", () => {
   it("keeps the hosted return route, account, and environment with the code in a fragment", () => {
-    expect(readCodexAuthHandoff(codexAuthHandoffUrl(input), false, trustedOrigin)).toEqual(input);
-    const delivery = codexAuthDeliveryUrl(input, callbackUrl, trustedOrigin);
+    expect(readCodexAuthHandoff(codexAuthHandoffUrl(input), false)).toEqual(input);
+    const delivery = codexAuthDeliveryUrl(input, callbackUrl);
     expect(new URL(delivery).search).toBe("");
-    expect(readCodexAuthDelivery(delivery, trustedOrigin)).toEqual({
+    expect(readCodexAuthDelivery(delivery)).toEqual({
       callbackUrl,
       environmentId: input.environmentId,
       instanceId: input.instanceId,
@@ -47,16 +46,12 @@ describe("Codex desktop handoff", () => {
   });
   it("rejects other handlers, schemes, arbitrary return sites, and non-OpenAI authorization", () => {
     const link = codexAuthHandoffUrl(input);
-    expect(readCodexAuthHandoff(link, true, trustedOrigin)).toBeUndefined();
-    expect(readCodexAuthHandoff(link, false)).toBeUndefined();
-    expect(
-      readCodexAuthHandoff(link.replace("auth/codex", "auth/other"), false, trustedOrigin),
-    ).toBeUndefined();
+    expect(readCodexAuthHandoff(link, true)).toBeUndefined();
+    expect(readCodexAuthHandoff(link.replace("auth/codex", "auth/other"), false)).toBeUndefined();
     expect(
       readCodexAuthHandoff(
         codexAuthHandoffUrl({ ...input, returnUrl: "https://attacker.example/welcome" }),
         false,
-        trustedOrigin,
       ),
     ).toBeUndefined();
     expect(
@@ -66,7 +61,6 @@ describe("Codex desktop handoff", () => {
           authorizationUrl: input.authorizationUrl.replace("auth.openai.com", "attacker.example"),
         }),
         false,
-        trustedOrigin,
       ),
     ).toBeUndefined();
   });

@@ -1,10 +1,10 @@
-import type { ManagedPolicyDocument } from "@a4code/contracts";
+import type { ManagedPolicyDocument } from "@t3tools/contracts";
 import {
   WINDOWS_POLICY_KEY,
   WINDOWS_POLICY_GROUPS,
   WINDOWS_POLICY_LISTS,
   WINDOWS_POLICY_VALUES,
-} from "@a4code/shared/managedPolicyFile";
+} from "@t3tools/shared/managedPolicyFile";
 
 import { knownDriverLabels } from "./managedProviders.ts";
 
@@ -96,7 +96,7 @@ const policies = (): ReadonlyArray<Policy> => [
         kind: "checkbox",
         list: "Clients",
         name: "remote",
-        label: "Remote: phones, other computers, configured hosted web",
+        label: "Remote: phones, other computers, app.t3.codes",
         defaultChecked: false,
       },
     ],
@@ -176,7 +176,7 @@ const policies = (): ReadonlyArray<Policy> => [
   {
     id: "Settings",
     title: "Managed settings (JSON)",
-    help: 'Defaults and locks for server settings, as the "settings" object of a A4 Code policy. Each key is a setting path; each value is {"value": ..., "locked": true|false}.\n\nExample: {"enableAgentBrowserAccess": {"value": false, "locked": true}}\n\nRun "a4code policy check" on a policy file with the same object to validate it first.',
+    help: 'Defaults and locks for server settings, as the "settings" object of a A4 Code policy. Each key is a setting path; each value is {"value": ..., "locked": true|false}.\n\nExample: {"enableAgentBrowserAccess": {"value": false, "locked": true}}\n\nRun "t3 policy check" on a policy file with the same object to validate it first.',
     elements: [{ kind: "text", name: "Settings", label: "Settings JSON", json: true }],
   },
   {
@@ -230,7 +230,7 @@ const admxElement = (element: Element) => {
 export function windowsAdmx(): string {
   const body = policies().map((policy) => {
     const head = `<policy name="${policy.id}" class="Machine" displayName="$(string.${policy.id})" explainText="$(string.${policy.id}_Help)" key="${ADMX_KEY}"`;
-    const common = `<parentCategory ref="A4Code" />\n      <supportedOn ref="SUPPORTED_T3Code" />`;
+    const common = `<parentCategory ref="T3Code" />\n      <supportedOn ref="SUPPORTED_T3Code" />`;
     if (policy.toggle !== undefined) {
       return `    ${head} valueName="${policy.toggle}">
       ${common}
@@ -249,7 +249,7 @@ export function windowsAdmx(): string {
   return `<?xml version="1.0" encoding="utf-8"?>
 <policyDefinitions xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" revision="1.0" schemaVersion="1.0" xmlns="http://schemas.microsoft.com/GroupPolicy/2006/07/PolicyDefinitions">
   <policyNamespaces>
-    <target prefix="a4code" namespace="SilentHacks.Policies.A4Code" />
+    <target prefix="t3code" namespace="T3Tools.Policies.T3Code" />
   </policyNamespaces>
   <resources minRequiredRevision="1.0" />
   <supportedOn>
@@ -258,7 +258,7 @@ export function windowsAdmx(): string {
     </definitions>
   </supportedOn>
   <categories>
-    <category name="A4Code" displayName="$(string.A4Code)" />
+    <category name="T3Code" displayName="$(string.T3Code)" />
   </categories>
   <policies>
 ${body.join("\n")}
@@ -282,7 +282,7 @@ const presentationElement = (element: Element) => {
 /** The en-US strings and dialog layouts for `windowsAdmx`. */
 export function windowsAdml(): string {
   const strings: Array<readonly [string, string]> = [
-    ["A4Code", "A4 Code"],
+    ["T3Code", "A4 Code"],
     ["SUPPORTED_T3Code", "A4 Code with managed policy support"],
   ];
   const presentations: Array<string> = [];
@@ -349,7 +349,7 @@ const nullPath = (
   return undefined;
 };
 
-/** A device configuration profile that installs `document` for `io.github.silenthacks.a4code`. */
+/** A device configuration profile that installs `document` for `com.t3tools.t3code`. */
 export function macosProfile(
   document: ManagedPolicyDocument,
   uuids: { readonly profile: string; readonly payload: string },
@@ -370,8 +370,8 @@ export function macosProfile(
     PayloadContent: [
       {
         PayloadDisplayName: "A4 Code policy",
-        PayloadIdentifier: `io.github.silenthacks.a4code.policy.${uuids.payload}`,
-        PayloadType: "io.github.silenthacks.a4code",
+        PayloadIdentifier: `com.t3tools.t3code.policy.${uuids.payload}`,
+        PayloadType: "com.t3tools.t3code",
         PayloadUUID: uuids.payload,
         PayloadVersion: 1,
         ...document,
@@ -379,7 +379,7 @@ export function macosProfile(
     ],
     PayloadDescription: "Configures A4 Code for every user on this Mac.",
     PayloadDisplayName: `A4 Code policy for ${document.organization}`,
-    PayloadIdentifier: `io.github.silenthacks.a4code.policy`,
+    PayloadIdentifier: `com.t3tools.t3code.policy`,
     PayloadOrganization: document.organization,
     PayloadScope: "System",
     PayloadType: "Configuration",

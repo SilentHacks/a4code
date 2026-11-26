@@ -5,7 +5,7 @@ import {
   DesktopPendingSnapShot,
   type ClientSettings,
   type DesktopSnapShotEvent,
-} from "@a4code/contracts";
+} from "@t3tools/contracts";
 import * as SecureRandom from "effect/crypto/SecureRandom";
 import * as Effect from "effect/Effect";
 import * as Fiber from "effect/Fiber";
@@ -495,7 +495,7 @@ const layerTest = (
             platform,
             displayName: "A4 Code (Dev)",
             stateDir: "/state",
-            linuxDesktopEntryName: "io.github.silenthacks.a4code.desktop",
+            linuxDesktopEntryName: "com.t3tools.T3Code.desktop",
             appRoot: "/repo",
             linuxApplicationsDir: "/test-data/applications",
           } as DesktopEnvironment.DesktopEnvironment["Service"]),
@@ -1503,8 +1503,8 @@ it.each([
 );
 
 it.each([
-  { names: ["⠙ a4code"], expected: "Verified text" },
-  { names: ["⠋ a4code", "⠙ a4code"], expected: undefined },
+  { names: ["⠙ t3code"], expected: "Verified text" },
+  { names: ["⠋ t3code", "⠙ t3code"], expected: undefined },
 ])("reads a changing Wayland title only when unambiguous: $names", async ({ names, expected }) => {
   vi.stubEnv("XDG_SESSION_TYPE", "wayland");
   const tree = vi.fn(async () => ({ value: "Verified text", children: [] }));
@@ -1520,12 +1520,12 @@ it.each([
     assert.strictEqual(
       await readAccessibleWindowText(
         {
-          title: "⠋ a4code",
+          title: "⠋ t3code",
           bounds: { x: 479, y: 342, width: 700, height: 520 },
           owner: { processId: 123 },
         },
         "linux",
-        "⠋ a4code",
+        "⠋ t3code",
       ),
       expected,
     );
@@ -1540,7 +1540,7 @@ it.each([
   ["com.google.Chrome", "Google Chrome – Profile"],
   ["org.chromium.Chromium", "Chromium"],
 ])("reads macOS %s page context with an accessibility title suffix", async (bundleId, suffix) => {
-  const title = "Issues · SilentHacks/a4code";
+  const title = "Issues · pingdotgg/t3code";
   const bounds = { x: 0, y: 33, width: 1470, height: 857 };
   const window = {
     role: "window",
@@ -1570,7 +1570,7 @@ it.each([
 });
 
 it("does not borrow another Chrome process context when the captured PID has no windows", async () => {
-  const title = "Issues · SilentHacks/a4code";
+  const title = "Issues · pingdotgg/t3code";
   const bounds = { x: 0, y: 33, width: 1470, height: 857 };
   const otherWindow = {
     role: "window",

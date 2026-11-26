@@ -2,7 +2,7 @@ import {
   ORCHESTRATION_V2_WORKSPACE_PREPARATION_FAILURE_CODE,
   type OrchestrationV2Run,
   type OrchestrationV2TurnItem,
-} from "@a4code/contracts";
+} from "@t3tools/contracts";
 
 import type { ThreadStructureTurnItem } from "./models.ts";
 

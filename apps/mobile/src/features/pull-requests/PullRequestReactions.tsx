@@ -7,12 +7,12 @@ import {
   pullRequestReactionName,
   pullRequestReactionTooltip,
   pullRequestReactionsSignature,
-} from "@a4code/client-runtime/pull-request-reactions";
+} from "@t3tools/client-runtime/pull-request-reactions";
 import type {
   PullRequestComment,
   PullRequestReaction,
   PullRequestReactionContent,
-} from "@a4code/contracts";
+} from "@t3tools/contracts";
 import { AsyncResult } from "effect/reactivity";
 import { T, useGT, useLocale, useMessages } from "gt-react-native";
 import { useState } from "react";

@@ -5,7 +5,7 @@ import {
   EditorId,
   type EnvironmentId,
   type ResolvedKeybindingsConfig,
-} from "@a4code/contracts";
+} from "@t3tools/contracts";
 import { T, useGT, useMessages, Var } from "gt-react";
 import { memo, use, useRef } from "react";
 import { BackgroundThreadContext } from "./backgroundThread";

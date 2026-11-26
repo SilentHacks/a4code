@@ -11,18 +11,18 @@ import {
   type ServerProviderModel,
   type ServerSettings,
   type ServerProviderState,
-} from "@a4code/contracts";
+} from "@t3tools/contracts";
 import {
   normalizeProviderAccentColor,
   resolveProviderInstanceDisplayName,
   shouldShowInstanceBadge,
-} from "@a4code/client-runtime/state/provider-instance-display";
+} from "@t3tools/client-runtime/state/provider-instance-display";
 
 export { normalizeProviderAccentColor, shouldShowInstanceBadge };
 
 /** Placeholder for untargetable drafts. Never persist or dispatch it; disable send until replaced. */
 export const NO_PROVIDER_MODEL_SELECTION: ModelSelection = {
-  instanceId: ProviderInstanceId.make("a4code_no_provider"),
+  instanceId: ProviderInstanceId.make("t3code_no_provider"),
   model: "",
 };
 

@@ -213,7 +213,7 @@ describe("headlessServeOutput", () => {
             Layer.mock(HttpServer.HttpServer)({
               address: NetAddress.inetAddressFromIpStringUnsafe("127.0.0.1", 3773),
             }),
-            ServerConfig.layerTest(process.cwd(), { prefix: "a4code-startup-access-test-" }).pipe(
+            ServerConfig.layerTest(process.cwd(), { prefix: "t3code-startup-access-test-" }).pipe(
               Layer.provide(NodeServices.layer),
             ),
           ),
@@ -240,7 +240,7 @@ describe("headlessServeOutput", () => {
         [
           "A4 Code server is ready.",
           "Connection string: http://127.0.0.1:3773",
-          "Run `a4code pair` on this machine to connect a device.",
+          "Run `t3 pair` on this machine to connect a device.",
           "",
         ].join("\n"),
       );

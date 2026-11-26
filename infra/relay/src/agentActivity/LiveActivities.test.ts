@@ -1,7 +1,7 @@
 import type {
   RelayAgentActivityAggregateState,
   RelayLiveActivityRegistrationRequest,
-} from "@a4code/contracts/relay";
+} from "@t3tools/contracts/relay";
 import { describe, expect, it } from "@effect/vitest";
 import * as Effect from "effect/Effect";
 import * as Layer from "effect/Layer";
@@ -11,7 +11,7 @@ import { relayLiveActivities } from "../persistence/schema.ts";
 import * as LiveActivities from "./LiveActivities.ts";
 
 const aggregate: RelayAgentActivityAggregateState = {
-  title: "A4 Code",
+  title: "T3 Code",
   subtitle: "Agent work in progress",
   activeCount: 1,
   updatedAt: "2026-05-25T00:00:00.000Z",

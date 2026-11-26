@@ -3,7 +3,7 @@ import {
   type PeerLinkSummary,
   type PeerLinkThreadInput,
   WS_METHODS,
-} from "@a4code/contracts";
+} from "@t3tools/contracts";
 import * as DateTime from "effect/DateTime";
 import * as Duration from "effect/Duration";
 import * as Effect from "effect/Effect";

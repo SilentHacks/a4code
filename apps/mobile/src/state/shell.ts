@@ -1,13 +1,13 @@
-import { enabledEnvironmentIds } from "@a4code/client-runtime/state/connections";
+import { enabledEnvironmentIds } from "@t3tools/client-runtime/state/connections";
 import {
   createEnvironmentShellAtoms,
   createEnvironmentShellSummaryAtom,
   createEnvironmentSnapshotAtom,
   EMPTY_SHELL_STATE,
   type EnvironmentShellState,
-} from "@a4code/client-runtime/state/shell";
+} from "@t3tools/client-runtime/state/shell";
 import { useAtomValue } from "@effect/atom-react";
-import type { EnvironmentId } from "@a4code/contracts";
+import type { EnvironmentId } from "@t3tools/contracts";
 import * as Option from "effect/Option";
 import { Atom } from "effect/reactivity";
 

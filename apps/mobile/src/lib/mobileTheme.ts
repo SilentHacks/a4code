@@ -1,19 +1,19 @@
 import {
   BUILT_IN_THEMES,
   T3_CHAT_THEME,
-  A4_CODE_LIGHT_THEME_COLORS,
-  A4_CODE_DARK_THEME_COLORS,
+  T3_CODE_LIGHT_THEME_COLORS,
+  T3_CODE_DARK_THEME_COLORS,
   getThemeColorsForAppearance,
   MOBILE_DEFAULT_THEME_ID,
   MOBILE_THEME_IDS as SHARED_MOBILE_THEME_IDS,
   type MobileThemeId as SharedMobileThemeId,
   type ThemeAppearance,
   type ThemeColors,
-} from "@a4code/shared/themePalettes";
+} from "@t3tools/shared/themePalettes";
 import {
   STANDARD_THEME_PREVIEW_COLORS,
   type ThemePreviewColors,
-} from "@a4code/shared/themePreview";
+} from "@t3tools/shared/themePreview";
 
 export const DEFAULT_MOBILE_THEME_ID = MOBILE_DEFAULT_THEME_ID;
 export const MOBILE_THEME_IDS = [...SHARED_MOBILE_THEME_IDS, "material-you"] as const;
@@ -453,7 +453,7 @@ export function getMobileThemeColors(
   appearance: MobileThemeAppearance,
 ): ThemeColors {
   if (themeId === DEFAULT_MOBILE_THEME_ID) {
-    return appearance === "dark" ? A4_CODE_DARK_THEME_COLORS : A4_CODE_LIGHT_THEME_COLORS;
+    return appearance === "dark" ? T3_CODE_DARK_THEME_COLORS : T3_CODE_LIGHT_THEME_COLORS;
   }
   const theme = BUILT_IN_THEMES.find((candidate) => candidate.id === themeId) ?? T3_CHAT_THEME;
   return getThemeColorsForAppearance(theme, appearance) ?? theme.colors;

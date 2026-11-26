@@ -5,7 +5,7 @@ import * as Deferred from "effect/Deferred";
 import * as Effect from "effect/Effect";
 import * as FileSystem from "effect/FileSystem";
 import * as Path from "effect/Path";
-import * as HostProcess from "@a4code/shared/HostProcess";
+import * as HostProcess from "@t3tools/shared/HostProcess";
 import { autoUpdater } from "electron-updater";
 import type * as NodeChildProcess from "node:child_process";
 import * as NodeModule from "node:module";
@@ -54,8 +54,8 @@ describe.skipIf(HostProcess.Platform.defaultValue() !== "linux")(
         const fileSystem = yield* FileSystem.FileSystem;
         const path = yield* Path.Path;
         const dir = yield* fileSystem.makeTempDirectoryScoped({ prefix: "t3-appimage-install-" });
-        const appImagePath = path.join(dir, "A4-Code.AppImage");
-        const stagedPath = path.join(dir, "A4-Code-1.0.1.AppImage");
+        const appImagePath = path.join(dir, "T3-Code.AppImage");
+        const stagedPath = path.join(dir, "T3-Code-1.0.1.AppImage");
         const fdReportPath = path.join(dir, "relaunched-fds.txt");
         yield* fileSystem.writeFileString(appImagePath, "old AppImage");
         yield* fileSystem.writeFileString(

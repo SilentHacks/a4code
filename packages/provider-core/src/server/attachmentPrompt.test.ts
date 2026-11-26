@@ -3,7 +3,7 @@ import {
   ChatFileAttachment,
   ChatImageAttachment,
   PROVIDER_SEND_TURN_MAX_INPUT_CHARS,
-} from "@a4code/contracts";
+} from "@t3tools/contracts";
 import { assert, describe, it } from "@effect/vitest";
 import * as Effect from "effect/Effect";
 

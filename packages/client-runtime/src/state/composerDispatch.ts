@@ -1,5 +1,5 @@
-import { isClearComposerCommand, parseSideChatCommand } from "@a4code/shared/composerTrigger";
-import { isUsageLimitsCommand } from "@a4code/shared/usageLimits";
+import { isClearComposerCommand, parseSideChatCommand } from "@t3tools/shared/composerTrigger";
+import { isUsageLimitsCommand } from "@t3tools/shared/usageLimits";
 
 import { parseCodexFeedbackCommand } from "./threadFeedback.ts";
 

@@ -21,7 +21,7 @@ import {
   OrchestratorMcpFailure,
   SourceControlCloneRepositoryInput,
   SourceControlCloneRepositoryResult,
-} from "@a4code/contracts";
+} from "@t3tools/contracts";
 import * as FileSystem from "effect/FileSystem";
 import * as DocumentText from "../../../provider/DocumentText.ts";
 import * as ServerConfig from "../../../config.ts";

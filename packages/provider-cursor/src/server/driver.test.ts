@@ -12,7 +12,7 @@ import {
   RunAttemptId,
   RunId,
   ThreadId,
-} from "@a4code/contracts";
+} from "@t3tools/contracts";
 import * as DateTime from "effect/DateTime";
 import * as Fiber from "effect/Fiber";
 import * as FileSystem from "effect/FileSystem";
@@ -28,15 +28,15 @@ import * as Deferred from "effect/Deferred";
 import {
   DEFAULT_HANDOFF_TOKEN_CAP,
   handoffBudget,
-} from "@a4code/provider-core/server/handoffBudget";
-import * as ProviderEventLoggers from "@a4code/provider-core/server/ProviderEventLoggers";
-import * as TestProviderHost from "@a4code/provider-testing/TestProviderHost";
+} from "@t3tools/provider-core/server/handoffBudget";
+import * as ProviderEventLoggers from "@t3tools/provider-core/server/ProviderEventLoggers";
+import * as TestProviderHost from "@t3tools/provider-testing/TestProviderHost";
 import { CursorDriver } from "./driver.ts";
 import * as CursorAgentSdk from "./CursorAgentSdk.ts";
 import * as CursorSdk from "./CursorSdk.ts";
-import * as IdAllocator from "@a4code/provider-core/server/IdAllocator";
-import * as McpProviderSessions from "@a4code/provider-core/server/McpProviderSessions";
-import * as ProviderAdapter from "@a4code/provider-core/server/ProviderAdapter";
+import * as IdAllocator from "@t3tools/provider-core/server/IdAllocator";
+import * as McpProviderSessions from "@t3tools/provider-core/server/McpProviderSessions";
+import * as ProviderAdapter from "@t3tools/provider-core/server/ProviderAdapter";
 import { loadCursorSdk } from "./sdk.ts";
 
 const { Cursor } = loadCursorSdk();

@@ -8,12 +8,12 @@ import type {
   ResourceMonitorProcessTableEntry,
   ResourceMonitorSnapshotEvent,
   ResourceTelemetrySourceStatus,
-} from "@a4code/contracts";
+} from "@t3tools/contracts";
 import {
   RESOURCE_MONITOR_PROTOCOL_VERSION,
   ResourceMonitorCommand as ResourceMonitorCommandSchema,
   ResourceMonitorEvent as ResourceMonitorEventSchema,
-} from "@a4code/contracts";
+} from "@t3tools/contracts";
 import * as Cause from "effect/Cause";
 import * as Context from "effect/Context";
 import * as SecureRandom from "effect/crypto/SecureRandom";
@@ -214,7 +214,7 @@ export class NativeTelemetryClient extends Context.Service<
       Scope.Scope
     >;
   }
->()("a4code/resourceTelemetry/NativeTelemetryClient") {}
+>()("t3/resourceTelemetry/NativeTelemetryClient") {}
 
 interface ClientState {
   readonly status: ResourceTelemetrySourceStatus;

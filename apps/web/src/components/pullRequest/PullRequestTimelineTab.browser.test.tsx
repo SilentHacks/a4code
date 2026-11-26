@@ -4,7 +4,7 @@ import {
   SourceControlProviderKind,
   ThreadId,
   type PullRequestDetailView,
-} from "@a4code/contracts";
+} from "@t3tools/contracts";
 import { expect, it, vi } from "vite-plus/test";
 import { userEvent } from "vite-plus/test/browser";
 

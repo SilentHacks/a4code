@@ -1,5 +1,5 @@
-import { removeAgentCredits } from "@a4code/source-control-core/server/mergeMessage";
-import { SourceControlProviderKind } from "@a4code/contracts";
+import { removeAgentCredits } from "@t3tools/source-control-core/server/mergeMessage";
+import { SourceControlProviderKind } from "@t3tools/contracts";
 import * as Cache from "effect/Cache";
 import * as Duration from "effect/Duration";
 import * as Effect from "effect/Effect";
@@ -10,7 +10,7 @@ import type {
   PullRequestReaction,
   PullRequestThreadComment,
   PullRequestViewerPermissions,
-} from "@a4code/contracts";
+} from "@t3tools/contracts";
 
 import * as GitLabPullRequestCli from "./GitLabPullRequestCli.ts";
 import type { GitLabDiffRefs, GitLabMergeRequestListState } from "./gitLabMergeRequestJson.ts";
@@ -20,7 +20,7 @@ import {
   type ProviderChangeRequestActivity,
   type ProviderChangeRequestDetail,
   type PullRequestProviderApi,
-} from "@a4code/source-control-core/server/PullRequestProvider";
+} from "@t3tools/source-control-core/server/PullRequestProvider";
 import { definition } from "../shared/definition.ts";
 
 const CAPABILITIES: PullRequestCapabilities = {

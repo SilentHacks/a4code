@@ -12,22 +12,22 @@ disk and at least 4 GB of RAM/swap for building. Run it as the user who will run
 ```sh
 sudo apt-get update
 sudo apt-get install -y git curl ca-certificates build-essential python3 pkg-config libsecret-1-dev
-curl -fsSL https://raw.githubusercontent.com/SilentHacks/a4code/main/scripts/install-fork-server.sh -o install-a4code.sh
-bash install-a4code.sh --systemd
+curl -fsSL https://raw.githubusercontent.com/SilentHacks/t3code/main/scripts/install-fork-server.sh -o install-t3-omp.sh
+bash install-t3-omp.sh --systemd
 ```
 
 It builds the fork with the production public Connect configuration and installs a separate
-`~/.local/bin/a4code` launcher. It leaves stock `a4code` and `~/.a4code` untouched; the fork uses
-`~/.a4code`. To deliberately reuse another T3 home, set `A4CODE_FORK_HOME` before installation.
+`~/.local/bin/t3-omp` launcher. It leaves stock `t3` and `~/.t3` untouched; the fork uses
+`~/.t3-omp`. To deliberately reuse another T3 home, set `T3CODE_FORK_HOME` before installation.
 Do not run two servers against the same home. The fork listens on port 3774 instead of stock
-T3's 3773; override it with `A4CODE_FORK_PORT` or an explicit `--port`.
+T3's 3773; override it with `T3CODE_FORK_PORT` or an explicit `--port`.
 
 Authorize the VPS using your usual T3 Connect account, then start the fork service:
 
 ```sh
-~/.local/bin/a4code connect link --headless
+~/.local/bin/t3-omp connect link --headless
 systemctl --user daemon-reload
-systemctl --user enable --now a4code.service
+systemctl --user enable --now t3-omp.service
 sudo loginctl enable-linger "$USER"
 ```
 
@@ -35,15 +35,15 @@ Open the rebuilt fork's Mac client, sign into the same Connect account, and sele
 Install and authenticate OMP **on the VPS**, then add it under **Settings → Providers**.
 The stock hosted client is not replaced by this installer; use the fork client for the full OMP UI.
 
-Without `--systemd`, run `~/.local/bin/a4code serve` after linking. The server establishes the
+Without `--systemd`, run `~/.local/bin/t3-omp serve` after linking. The server establishes the
 normal managed Connect tunnel; no public listener or port-forwarding setup is necessary.
-Inspect the service with `journalctl --user -u a4code.service -f`.
+Inspect the service with `journalctl --user -u t3-omp.service -f`.
 
 To update, download a fresh copy of the fork installer and rerun it with your original
-`A4CODE_FORK_*` overrides, then restart `a4code.service` only after installation succeeds.
+`T3CODE_FORK_*` overrides, then restart `t3-omp.service` only after installation succeeds.
 Saved installer copies do not update themselves. The installer uses the checked-out revision's
 Node version and leaves the running service alone; failed builds retain the existing launcher.
-Do not use the upstream installer, `a4code update`, or the stock background-service installer:
+Do not use the upstream installer, `t3 update`, or the stock background-service installer:
 those can download a runtime without OMP. Previous fork builds are retained for rollback.
 
 ## Set up OMP

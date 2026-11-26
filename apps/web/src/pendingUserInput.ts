@@ -4,19 +4,19 @@ import type {
   ReviewCommentContextRecord,
   ThreadContextRecord,
   UserInputQuestion,
-} from "@a4code/contracts";
+} from "@t3tools/contracts";
 import {
   projectComposerContextForProvider,
   replaceComposerContextReferences,
-} from "@a4code/shared/composerContextReferences";
-import { formatThreadLink } from "@a4code/shared/threadLinks";
+} from "@t3tools/shared/composerContextReferences";
+import { formatThreadLink } from "@t3tools/shared/threadLinks";
 import {
   buildPendingUserInputAnswers,
   normalizeSelectedOptionValues,
   resolvePendingUserInputAnswer,
   type PendingUserInputAnswer,
   type PendingUserInputDraftAnswer,
-} from "@a4code/client-runtime/state/pending-user-input";
+} from "@t3tools/client-runtime/state/pending-user-input";
 
 import { collectInlineContextIds } from "./lib/composerContextReferences";
 import {

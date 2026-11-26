@@ -1,6 +1,6 @@
 import { useAtomValue } from "@effect/atom-react";
-import { errorDisplayMessage } from "@a4code/client-runtime/errors";
-import { videoMimeType } from "@a4code/shared/video";
+import { errorDisplayMessage } from "@t3tools/client-runtime/errors";
+import { videoMimeType } from "@t3tools/shared/video";
 import * as Effect from "effect/Effect";
 import { msg } from "gt-react-native";
 import { m } from "../i18n/messages";

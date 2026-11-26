@@ -4,12 +4,12 @@ import {
   DesktopBackendBootstrap,
   type DesktopBackendBootstrap as DesktopBackendBootstrapValue,
   DesktopTelemetryControlMessage,
-} from "@a4code/contracts";
+} from "@t3tools/contracts";
 import {
   DATABASE_MIGRATION_PROGRESS_MESSAGE,
   DATABASE_MIGRATIONS_FINISHED_MESSAGE,
   DATABASE_MIGRATIONS_STARTED_MESSAGE,
-} from "@a4code/shared/databaseMigrationLog";
+} from "@t3tools/shared/databaseMigrationLog";
 import { assert, describe, it } from "@effect/vitest";
 import * as Clock from "effect/Clock";
 import * as Deferred from "effect/Deferred";

@@ -4,7 +4,7 @@ import {
   type EnvironmentId,
   type PreviewRuntime,
   type PreviewSessionSnapshot,
-} from "@a4code/contracts";
+} from "@t3tools/contracts";
 import { Atom } from "effect/reactivity";
 
 import { environmentCatalog } from "~/connection/catalog";

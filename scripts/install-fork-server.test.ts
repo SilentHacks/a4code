@@ -34,11 +34,11 @@ async function withFixture(test: (env: NodeJS.ProcessEnv, root: string) => Promi
     );
     await NodeFSP.writeFile(
       NodePath.join(fixture, ".env.example"),
-      "A4CODE_CLERK_PUBLISHABLE_KEY=pk_live_fixture\nA4CODE_CLERK_JWT_TEMPLATE=t3-relay\nA4CODE_CLERK_CLI_OAUTH_CLIENT_ID=fixture-oauth\nA4CODE_RELAY_URL=https://relay.example.com\n",
+      "T3CODE_CLERK_PUBLISHABLE_KEY=pk_live_fixture\nT3CODE_CLERK_JWT_TEMPLATE=t3-relay\nT3CODE_CLERK_CLI_OAUTH_CLIENT_ID=fixture-oauth\nT3CODE_RELAY_URL=https://relay.example.com\n",
     );
     await NodeFSP.writeFile(
       NodePath.join(fixture, "bin.mjs"),
-      "// pk_live_fixture fixture-oauth https://relay.example.com\nconsole.log(JSON.stringify({args:process.argv.slice(2),home:process.env.A4CODE_HOME,port:process.env.A4CODE_PORT}));\n",
+      "// pk_live_fixture fixture-oauth https://relay.example.com\nconsole.log(JSON.stringify({args:process.argv.slice(2),home:process.env.T3CODE_HOME,port:process.env.T3CODE_PORT}));\n",
     );
     const commands: Record<string, string> = {
       uname:
@@ -99,7 +99,7 @@ esac`,
     }
     const env = { ...process.env };
     for (const key of Object.keys(env)) {
-      if (key.startsWith("A4CODE_") || key.startsWith("VITE_") || key.startsWith("EXPO_PUBLIC_")) {
+      if (key.startsWith("T3CODE_") || key.startsWith("VITE_") || key.startsWith("EXPO_PUBLIC_")) {
         delete env[key];
       }
     }
@@ -110,11 +110,11 @@ esac`,
         PATH: `${tools}:${process.env.PATH}`,
         TEST_FIXTURE: fixture,
         TEST_NODE_VERSION: engines.node,
-        A4CODE_HOME: NodePath.join(home, ".a4code"),
-        A4CODE_FORK_REF: "fixture-ref",
-        A4CODE_FORK_HOME: NodePath.join(home, ".a4code"),
-        A4CODE_FORK_INSTALL_DIR: NodePath.join(home, ".local/share/a4code"),
-        A4CODE_FORK_BIN_DIR: NodePath.join(home, ".local/bin"),
+        T3CODE_HOME: NodePath.join(home, ".t3"),
+        T3CODE_FORK_REF: "fixture-ref",
+        T3CODE_FORK_HOME: NodePath.join(home, ".t3-omp"),
+        T3CODE_FORK_INSTALL_DIR: NodePath.join(home, ".local/share/t3-omp"),
+        T3CODE_FORK_BIN_DIR: NodePath.join(home, ".local/bin"),
         XDG_CONFIG_HOME: NodePath.join(home, ".config"),
       },
       root,
@@ -166,7 +166,7 @@ describe("fork server installer", () => {
       }
       const result = run("bash", [installer], { ...env, TEST_REAL_GIT: "1", TEST_GIT: git });
       expect(result.status, `${result.stdout}\n${result.stderr}`).toBe(0);
-      const releases = NodePath.join(env.A4CODE_FORK_INSTALL_DIR!, "releases");
+      const releases = NodePath.join(env.T3CODE_FORK_INSTALL_DIR!, "releases");
       const [build] = await NodeFSP.readdir(releases);
       const release = NodePath.join(releases, build!);
       const manifest = await generateThirdPartyLicenseManifest({
@@ -199,38 +199,38 @@ describe("fork server installer", () => {
         if (configStyle === "Vite aliases") {
           await NodeFSP.writeFile(
             NodePath.join(env.TEST_FIXTURE!, ".env.example"),
-            "VITE_CLERK_PUBLISHABLE_KEY=pk_live_fixture\nVITE_CLERK_JWT_TEMPLATE=t3-relay\nVITE_CLERK_CLI_OAUTH_CLIENT_ID=fixture-oauth\nVITE_A4CODE_RELAY_URL=https://relay.example.com\n",
+            "VITE_CLERK_PUBLISHABLE_KEY=pk_live_fixture\nVITE_CLERK_JWT_TEMPLATE=t3-relay\nVITE_CLERK_CLI_OAUTH_CLIENT_ID=fixture-oauth\nVITE_T3CODE_RELAY_URL=https://relay.example.com\n",
           );
         }
-        const bin = env.A4CODE_FORK_BIN_DIR!;
+        const bin = env.T3CODE_FORK_BIN_DIR!;
         await NodeFSP.mkdir(bin, { recursive: true });
-        await NodeFSP.mkdir(env.A4CODE_HOME!, { recursive: true });
+        await NodeFSP.mkdir(env.T3CODE_HOME!, { recursive: true });
         await NodeFSP.writeFile(NodePath.join(bin, "t3"), "stock t3");
-        await NodeFSP.writeFile(NodePath.join(env.A4CODE_HOME!, "keep"), "live state");
+        await NodeFSP.writeFile(NodePath.join(env.T3CODE_HOME!, "keep"), "live state");
         const result = run("bash", [installer, "--systemd"], env);
         expect(result.stderr, result.stdout).toBe("");
         expect(result.status, result.stdout).toBe(0);
         expect(await NodeFSP.readFile(NodePath.join(bin, "t3"), "utf8")).toBe("stock t3");
-        expect(await NodeFSP.readFile(NodePath.join(env.A4CODE_HOME!, "keep"), "utf8")).toBe(
+        expect(await NodeFSP.readFile(NodePath.join(env.T3CODE_HOME!, "keep"), "utf8")).toBe(
           "live state",
         );
-        const launcher = NodePath.join(bin, "a4code");
+        const launcher = NodePath.join(bin, "t3-omp");
         const invocation = run(launcher, ["serve", "--host", "value with spaces"], env);
         expect(invocation.status).toBe(0);
         expect(JSON.parse(invocation.stdout)).toEqual({
           args: ["serve", "--host", "value with spaces"],
-          home: env.A4CODE_FORK_HOME,
+          home: env.T3CODE_FORK_HOME,
           port: "3774",
         });
         const defaultEnv = { ...env };
-        delete defaultEnv.A4CODE_FORK_HOME;
+        delete defaultEnv.T3CODE_FORK_HOME;
         expect(JSON.parse(run(launcher, ["serve"], defaultEnv).stdout).home).toBe(
-          env.A4CODE_FORK_HOME,
+          env.T3CODE_FORK_HOME,
         );
         const override = NodePath.join(env.HOME!, "other state");
         expect(
           JSON.parse(
-            run(launcher, ["connect", "link", "--headless"], { ...env, A4CODE_FORK_HOME: override })
+            run(launcher, ["connect", "link", "--headless"], { ...env, T3CODE_FORK_HOME: override })
               .stdout,
           ).home,
         ).toBe(override);
@@ -243,10 +243,10 @@ describe("fork server installer", () => {
           expect(run(launcher, args, env).status).toBe(1);
         }
         const unit = await NodeFSP.readFile(
-          NodePath.join(env.XDG_CONFIG_HOME!, "systemd/user/a4code.service"),
+          NodePath.join(env.XDG_CONFIG_HOME!, "systemd/user/t3-omp.service"),
           "utf8",
         );
-        expect(unit).toContain("a4code");
+        expect(unit).toContain("t3-omp");
         expect(unit).toContain("$$dollars");
         expect(unit).toContain("KillMode=mixed");
         expect(unit).toContain("WorkingDirectory=%h");
@@ -266,7 +266,7 @@ describe("fork server installer", () => {
       const result = run("bash", [installer], { ...env, ...failure });
       expect(result.status).not.toBe(0);
       await expect(
-        NodeFSP.access(NodePath.join(env.A4CODE_FORK_BIN_DIR!, "a4code")),
+        NodeFSP.access(NodePath.join(env.T3CODE_FORK_BIN_DIR!, "t3-omp")),
       ).rejects.toThrow();
     }),
   );
@@ -278,9 +278,9 @@ describe("fork server installer", () => {
   ])("retains the installed launcher, service and release when an update fails (%o)", (failure) =>
     withFixture(async (env) => {
       expect(run("bash", [installer, "--systemd"], env).status).toBe(0);
-      const launcher = NodePath.join(env.A4CODE_FORK_BIN_DIR!, "a4code");
-      const unit = NodePath.join(env.XDG_CONFIG_HOME!, "systemd/user/a4code.service");
-      const releases = NodePath.join(env.A4CODE_FORK_INSTALL_DIR!, "releases");
+      const launcher = NodePath.join(env.T3CODE_FORK_BIN_DIR!, "t3-omp");
+      const unit = NodePath.join(env.XDG_CONFIG_HOME!, "systemd/user/t3-omp.service");
+      const releases = NodePath.join(env.T3CODE_FORK_INSTALL_DIR!, "releases");
       const previousLauncher = await NodeFSP.readFile(launcher, "utf8");
       const previousUnit = await NodeFSP.readFile(unit, "utf8");
       const previousReleases = await NodeFSP.readdir(releases);
@@ -295,8 +295,8 @@ describe("fork server installer", () => {
 
   it("refuses to replace an unmanaged fork launcher", () =>
     withFixture(async (env) => {
-      await NodeFSP.mkdir(env.A4CODE_FORK_BIN_DIR!, { recursive: true });
-      const launcher = NodePath.join(env.A4CODE_FORK_BIN_DIR!, "a4code");
+      await NodeFSP.mkdir(env.T3CODE_FORK_BIN_DIR!, { recursive: true });
+      const launcher = NodePath.join(env.T3CODE_FORK_BIN_DIR!, "t3-omp");
       await NodeFSP.writeFile(launcher, "custom launcher");
       const result = run("bash", [installer], env);
       expect(result.status).toBe(1);

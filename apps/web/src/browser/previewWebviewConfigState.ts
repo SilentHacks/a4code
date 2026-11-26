@@ -3,7 +3,7 @@ import type {
   DesktopPreviewBridge,
   DesktopPreviewWebviewConfig,
   EnvironmentId,
-} from "@a4code/contracts";
+} from "@t3tools/contracts";
 import * as Effect from "effect/Effect";
 import * as Schema from "effect/Schema";
 import { AsyncResult, Atom } from "effect/reactivity";

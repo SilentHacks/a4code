@@ -1,4 +1,4 @@
-import { MessageId } from "@a4code/contracts";
+import { MessageId } from "@t3tools/contracts";
 import { describe, expect, it, vi } from "vite-plus/test";
 
 import { pendingThreadMessageJump, requestThreadMessageJump } from "./threadMessageJump";

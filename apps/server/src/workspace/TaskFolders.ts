@@ -19,13 +19,13 @@ import {
   type WorkspaceLayoutCommandsResult,
   type WorktreeLayoutCommandKind,
   T3_PROJECT_FILE_NAME,
-} from "@a4code/contracts";
-import { resolveProjectSettings } from "@a4code/shared/projectSettings";
-import { flattenTemporaryWorktreeBranchName, isTemporaryWorktreeBranch } from "@a4code/shared/git";
-import * as HostProcess from "@a4code/shared/HostProcess";
-import { windowsSystem32Path } from "@a4code/shared/windowsSystem";
-import * as KeyedLock from "@a4code/shared/KeyedLock";
-import { parseT3ProjectFile } from "@a4code/shared/t3ProjectFile";
+} from "@t3tools/contracts";
+import { resolveProjectSettings } from "@t3tools/shared/projectSettings";
+import { flattenTemporaryWorktreeBranchName, isTemporaryWorktreeBranch } from "@t3tools/shared/git";
+import * as HostProcess from "@t3tools/shared/HostProcess";
+import { windowsSystem32Path } from "@t3tools/shared/windowsSystem";
+import * as KeyedLock from "@t3tools/shared/KeyedLock";
+import { parseT3ProjectFile } from "@t3tools/shared/t3ProjectFile";
 import * as Cause from "effect/Cause";
 import * as Context from "effect/Context";
 import * as Digest from "effect/crypto/Digest";
@@ -208,7 +208,7 @@ export class TaskFolders extends Context.Service<
       projectId: ProjectId,
     ) => Effect.Effect<WorkspaceLayoutCommandsResult, TaskFolderError>;
   }
->()("a4code/workspace/TaskFolders") {}
+>()("t3/workspace/TaskFolders") {}
 
 const isTaskFolderError = Schema.is(TaskFolderError);
 

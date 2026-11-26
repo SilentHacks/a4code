@@ -11,7 +11,7 @@ import {
   type RunId,
   type ThreadId,
   type TurnItemId,
-} from "@a4code/contracts";
+} from "@t3tools/contracts";
 import * as DateTime from "effect/DateTime";
 import * as Cause from "effect/Cause";
 import * as Option from "effect/Option";

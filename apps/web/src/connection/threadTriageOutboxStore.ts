@@ -1,10 +1,10 @@
 import {
   makeThreadTriageOutboxStore,
   ThreadTriageOutboxStorageError,
-} from "@a4code/client-runtime/platform";
+} from "@t3tools/client-runtime/platform";
 import * as Effect from "effect/Effect";
 
-const KEY = "a4code:thread-triage-outbox";
+const KEY = "t3code:thread-triage-outbox";
 
 /** In localStorage, so tabs share it and clearing the environment cache keeps unsynced changes. */
 export const browserThreadTriageOutboxStore = makeThreadTriageOutboxStore((next) =>

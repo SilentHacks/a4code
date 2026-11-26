@@ -9,7 +9,7 @@ import type {
   SourceControlProviderDiscoveryItem,
   VcsDriverKind,
   VcsDiscoveryItem,
-} from "@a4code/contracts";
+} from "@t3tools/contracts";
 import { useSettingsScope } from "./SettingsScopeContext";
 import { ProjectDefaultsSettings } from "./ProjectDefaultsSettings";
 import { useLiveRefresh } from "../../hooks/useLiveRefresh";
@@ -50,9 +50,9 @@ import {
 } from "./settingsLayout";
 import { useSearchableSetting, sourceControlHostSettingsSearchId } from "./settingsSearch";
 import { PullRequestGlyph } from "~/components/pullRequest/pullRequestIcons";
-import { sourceControlInstallHintText } from "@a4code/client-runtime/contract-labels";
-import { isSourceControlProviderOffered } from "@a4code/client-runtime/operations/projects";
-import { sourceControlClients } from "@a4code/client-runtime/source-control-clients";
+import { sourceControlInstallHintText } from "@t3tools/client-runtime/contract-labels";
+import { isSourceControlProviderOffered } from "@t3tools/client-runtime/operations/projects";
+import { sourceControlClients } from "@t3tools/client-runtime/source-control-clients";
 import { sourceControlIcon } from "~/sourceControlPresentation";
 import { SharedTooltipTrigger } from "../ui/shared-tooltip";
 

@@ -1,5 +1,5 @@
 import * as Path from "effect/Path";
-import { PROVIDER_SEND_TURN_MAX_IMAGE_BYTES } from "@a4code/contracts";
+import { PROVIDER_SEND_TURN_MAX_IMAGE_BYTES } from "@t3tools/contracts";
 import { OpenCode, type OpenCodeClient } from "@opencode/client/effect";
 import { OpenCodeEvent } from "@opencode/protocol/groups/event";
 import * as Context from "effect/Context";
@@ -98,7 +98,7 @@ export interface OpenCode2Api {
   readonly client: OpenCodeClient;
   readonly usageLimits: (
     directory: string | undefined,
-  ) => Effect.Effect<import("@a4code/contracts").ServerProviderUsageLimits | undefined>;
+  ) => Effect.Effect<import("@t3tools/contracts").ServerProviderUsageLimits | undefined>;
   readonly shellJobs?: (
     sessionID: string,
   ) => Effect.Effect<typeof ShellJobs.Type, HttpClientError.HttpClientError | Schema.SchemaError>;
@@ -127,7 +127,7 @@ export class OpenCode2Client extends Context.Service<
       readonly password: string | Redacted.Redacted;
     }) => Effect.Effect<OpenCode2Api>;
   }
->()("@a4code/provider-opencode/server/v2/OpenCode2Client") {}
+>()("@t3tools/provider-opencode/server/v2/OpenCode2Client") {}
 
 // Heartbeats arrive every 10-15 seconds; longer silence means stuck, not idle.
 const SILENT_STREAM_TIMEOUT = "45 seconds";

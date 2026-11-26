@@ -1,5 +1,5 @@
-import * as HostProcess from "@a4code/shared/HostProcess";
-import * as NodeSqliteClient from "@a4code/shared/nodeSqliteClient";
+import * as HostProcess from "@t3tools/shared/HostProcess";
+import * as NodeSqliteClient from "@t3tools/shared/nodeSqliteClient";
 import * as Context from "effect/Context";
 import * as Effect from "effect/Effect";
 import * as FileSystem from "effect/FileSystem";
@@ -131,7 +131,7 @@ export class DatabaseMaintenance extends Context.Service<
       DatabaseInUseError | LegacyDatabaseRemoveError | LegacyDatabaseHasUnmigratedRecordsError
     >;
   }
->()("a4code/persistence/DatabaseMaintenance") {}
+>()("t3/persistence/DatabaseMaintenance") {}
 
 const isDomainError = Schema.is(Schema.Union([DatabaseMissingError, DatabaseInUseError]));
 

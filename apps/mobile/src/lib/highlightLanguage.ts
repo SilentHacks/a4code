@@ -1,4 +1,4 @@
-import "@a4code/client-runtime/assembly-highlighting";
+import "@t3tools/client-runtime/assembly-highlighting";
 import {
   getFiletypeFromFileName,
   setCustomExtension,

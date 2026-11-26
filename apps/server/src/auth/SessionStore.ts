@@ -9,7 +9,7 @@ import {
   AuthWebSocketTicketUse,
   RuntimeMode,
   type ServerAuthSessionMethod,
-} from "@a4code/contracts";
+} from "@t3tools/contracts";
 import * as Context from "effect/Context";
 import * as SecureRandom from "effect/crypto/SecureRandom";
 import * as DateTime from "effect/DateTime";
@@ -486,7 +486,7 @@ export class SessionStore extends Context.Service<
     readonly markConnected: (sessionId: AuthSessionId) => Effect.Effect<void, never>;
     readonly markDisconnected: (sessionId: AuthSessionId) => Effect.Effect<void, never>;
   }
->()("a4code/auth/SessionStore") {}
+>()("t3/auth/SessionStore") {}
 
 const SIGNING_SECRET_NAME = "server-signing-key";
 const DEFAULT_SESSION_TTL = Duration.days(30);

@@ -1,12 +1,12 @@
 import { useAtom, useAtomSet, useAtomValue } from "@effect/atom-react";
-import { scopedThreadKey, scopeThreadRef } from "@a4code/client-runtime/environment";
-import type { SideThreadOpenIntent } from "@a4code/client-runtime/side-thread";
+import { scopedThreadKey, scopeThreadRef } from "@t3tools/client-runtime/environment";
+import type { SideThreadOpenIntent } from "@t3tools/client-runtime/side-thread";
 import {
   connectLinkedEnvironment,
   type LinkedThreadOpen,
   resolveLinkedThreadOpen,
-} from "@a4code/client-runtime/linked-thread";
-import type { EnvironmentId, ScopedThreadRef, ThreadId } from "@a4code/contracts";
+} from "@t3tools/client-runtime/linked-thread";
+import type { EnvironmentId, ScopedThreadRef, ThreadId } from "@t3tools/contracts";
 import { useNavigate, useRouter } from "@tanstack/react-router";
 import { AsyncResult, Atom } from "effect/reactivity";
 

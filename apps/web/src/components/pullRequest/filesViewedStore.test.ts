@@ -3,7 +3,7 @@ import {
   ProjectId,
   type PullRequestFilesViewedResult,
   type PullRequestRef,
-} from "@a4code/contracts";
+} from "@t3tools/contracts";
 import { Cause } from "effect";
 import { AsyncResult } from "effect/reactivity";
 import { describe, expect, it, vi } from "vite-plus/test";

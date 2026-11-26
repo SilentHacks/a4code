@@ -1,11 +1,11 @@
 import { describe, expect, it } from "vite-plus/test";
-import { EnvironmentId, MessageId, ThreadId } from "@a4code/contracts";
-import { serializeAssistantCitation } from "@a4code/shared/assistantCitations";
+import { EnvironmentId, MessageId, ThreadId } from "@t3tools/contracts";
+import { serializeAssistantCitation } from "@t3tools/shared/assistantCitations";
 import {
   ATTACHMENT_ONLY_BOOTSTRAP_PROMPT,
   formatComposerContextReference,
   toComposerContextId,
-} from "@a4code/shared/composerContextReferences";
+} from "@t3tools/shared/composerContextReferences";
 
 import { deriveTimelineMinimapItems, resolveTimelineMinimapPreview } from "./timelineMinimapItems";
 

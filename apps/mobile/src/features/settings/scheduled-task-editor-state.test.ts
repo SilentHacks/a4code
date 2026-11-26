@@ -1,4 +1,4 @@
-import { EnvironmentId } from "@a4code/contracts";
+import { EnvironmentId } from "@t3tools/contracts";
 import { afterEach, describe, expect, it } from "vite-plus/test";
 
 import { appAtomRegistry } from "../../state/atom-registry";

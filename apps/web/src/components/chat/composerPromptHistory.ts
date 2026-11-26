@@ -1,13 +1,13 @@
-import { resolveUserMessagePresentation } from "@a4code/client-runtime/user-message";
+import { resolveUserMessagePresentation } from "@t3tools/client-runtime/user-message";
 import {
   EnvironmentContextRecord,
   type OrchestrationMessageContext,
   ThreadContextRecord,
-} from "@a4code/contracts";
+} from "@t3tools/contracts";
 import {
   ATTACHMENT_ONLY_BOOTSTRAP_PROMPT,
   collectComposerContextReferences,
-} from "@a4code/shared/composerContextReferences";
+} from "@t3tools/shared/composerContextReferences";
 import { Schema } from "effect";
 import { PLAN_IMPLEMENTATION_PROMPT_PREFIX } from "../../proposedPlan";
 

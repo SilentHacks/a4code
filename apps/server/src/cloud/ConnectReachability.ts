@@ -4,8 +4,8 @@ import {
   connectReachabilityHelpUrl,
   type EnvironmentConnectReachability,
   formatConnectReachable,
-} from "@a4code/contracts";
-import { readTailscaleExitNode, type TailscaleExitNode } from "@a4code/tailscale";
+} from "@t3tools/contracts";
+import { readTailscaleExitNode, type TailscaleExitNode } from "@t3tools/tailscale";
 import * as Clock from "effect/Clock";
 import * as Context from "effect/Context";
 import * as DateTime from "effect/DateTime";
@@ -84,14 +84,14 @@ export function classifyReachability(
     fix: string,
     hint: string | null = null,
   ): Unreachable => ({ status: "unreachable", checkedAt, cause, reason, hint, fix });
-  const restart = "Restart A4 Code. If it stays, run `a4code connect` again.";
+  const restart = "Restart A4 Code. If it stays, run `t3 connect` again.";
 
   if (!facts.managedTunnelConfigured) {
-    // A running server reads the link `a4code connect` stores only at startup.
+    // A running server reads the link `t3 connect` stores only at startup.
     return fail(
       "not_linked",
       "The server has not set up a T3 Connect tunnel.",
-      "Run `a4code connect`, then restart A4 Code so it applies the link.",
+      "Run `t3 connect`, then restart A4 Code so it applies the link.",
     );
   }
   if (connector === null) {
@@ -130,7 +130,7 @@ export function classifyReachability(
   if (status === 502) {
     return fail(
       "origin_unreachable",
-      "The tunnel is up, but it cannot reach the A4 Code server on this machine.",
+      "The tunnel is up, but it cannot reach the T3 server on this machine.",
       "Restart A4 Code so the tunnel uses the port the server listens on.",
     );
   }
@@ -155,7 +155,7 @@ export function classifyReachability(
     return fail(
       "dns_failed",
       "The T3 Connect address no longer points to this machine's tunnel (Cloudflare error 1016). T3 Connect may have removed this environment.",
-      "Link this environment again. Turn T3 Connect off and on in Settings > Sharing & access, or run `a4code connect link` and then restart A4 Code.",
+      "Link this environment again. Turn T3 Connect off and on in Settings > Sharing & access, or run `t3 connect link` and then restart A4 Code.",
     );
   }
   if (status !== null) {
@@ -250,7 +250,7 @@ export class ConnectReachability extends Context.Service<
     readonly check: Effect.Effect<EnvironmentConnectReachability>;
     readonly latest: Effect.Effect<Option.Option<EnvironmentConnectReachability>>;
   }
->()("a4code/cloud/ConnectReachability") {}
+>()("t3/cloud/ConnectReachability") {}
 
 const make = Effect.gen(function* () {
   const runtime = yield* ManagedEndpointRuntime.CloudManagedEndpointRuntime;

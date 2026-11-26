@@ -6,7 +6,7 @@ import {
   connectionErrorText,
   type EnvironmentConnectionPhase,
   type EnvironmentConnectionPresentation,
-} from "@a4code/client-runtime/connection";
+} from "@t3tools/client-runtime/connection";
 import { SymbolView } from "../../components/ui/AppSymbol";
 import { View } from "react-native";
 

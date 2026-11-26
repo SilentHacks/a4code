@@ -5,17 +5,17 @@ import {
   type ScopedThreadRef,
   type ThreadId,
   PROVIDER_SEND_TURN_MAX_ATTACHMENTS,
-} from "@a4code/contracts";
+} from "@t3tools/contracts";
 import {
   wasBootstrapThreadDeleted,
   wasBootstrapThreadNotCreated,
-} from "@a4code/client-runtime/errors";
+} from "@t3tools/client-runtime/errors";
 import { Atom } from "effect/reactivity";
 import { msg } from "gt-react";
 import {
   squashAtomCommandFailure,
   type AtomCommandResult,
-} from "@a4code/client-runtime/state/runtime";
+} from "@t3tools/client-runtime/state/runtime";
 import { m } from "../../i18n/messages";
 import { readLocalApi } from "../../localApi";
 import {
@@ -34,8 +34,8 @@ import {
   useComposerDraftStore,
   DraftId,
 } from "../../composerDraftStore";
-import { ATTACHMENT_ONLY_BOOTSTRAP_PROMPT } from "@a4code/shared/composerContextReferences";
-import { createModelSelection } from "@a4code/shared/model";
+import { ATTACHMENT_ONLY_BOOTSTRAP_PROMPT } from "@t3tools/shared/composerContextReferences";
+import { createModelSelection } from "@t3tools/shared/model";
 import type { ProviderInstanceEntry } from "../../providerInstances";
 import { getComposerPromptInjectionState, getComposerProviderState } from "./composerProviderState";
 import {

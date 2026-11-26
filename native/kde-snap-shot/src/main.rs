@@ -71,12 +71,12 @@ struct Bounds {
     height: u32,
 }
 
-const REPLY: &str = "/io/github/silenthacks/a4code/KdeCapture";
+const REPLY: &str = "/com/t3tools/KdeCapture";
 
 /// KWin's bus name and the channel of the script call in flight. `None` between calls.
 #[derive(Default)]
 struct ScriptReply(Option<(String, mpsc::SyncSender<String>)>);
-#[zbus::interface(name = "io.github.silenthacks.a4code.KdeCapture")]
+#[zbus::interface(name = "com.t3tools.KdeCapture")]
 impl ScriptReply {
     fn reply(
         &self,
@@ -128,7 +128,7 @@ fn script(connection: &Connection, directory: &Path, body: &str) -> Result<Strin
             .as_str(),
     )?;
     let source = format!(
-        "function reply(value) {{ callDBus({destination}, '/io/github/silenthacks/a4code/KdeCapture', 'io.github.silenthacks.a4code.KdeCapture', 'Reply', JSON.stringify(value)); }}\ntry {{ {body} }} catch (error) {{ reply({{error: String(error)}}); }}"
+        "function reply(value) {{ callDBus({destination}, '/com/t3tools/KdeCapture', 'com.t3tools.KdeCapture', 'Reply', JSON.stringify(value)); }}\ntry {{ {body} }} catch (error) {{ reply({{error: String(error)}}); }}"
     );
     std::fs::write(&path, source)?;
     let scripting = Proxy::new(

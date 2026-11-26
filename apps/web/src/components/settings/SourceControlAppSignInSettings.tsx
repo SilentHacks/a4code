@@ -1,11 +1,11 @@
-import { thrownErrorMessage } from "@a4code/client-runtime/errors";
+import { thrownErrorMessage } from "@t3tools/client-runtime/errors";
 import { m } from "~/i18n/messages";
-import type { EnvironmentId, SourceControlSignInPrompt } from "@a4code/contracts";
+import type { EnvironmentId, SourceControlSignInPrompt } from "@t3tools/contracts";
 import {
   readHostCredentialSettings,
   type SourceControlAppSignIn,
   type SourceControlDefinition,
-} from "@a4code/client-runtime/source-control-clients";
+} from "@t3tools/client-runtime/source-control-clients";
 import { useAtomValue } from "@effect/atom-react";
 import * as Cause from "effect/Cause";
 import { msg, T, useGT, Var } from "gt-react";

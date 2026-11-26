@@ -3,7 +3,7 @@ import type {
   ProviderInstanceConfigMap,
   ProviderInstanceId,
   SecretReference,
-} from "@a4code/contracts";
+} from "@t3tools/contracts";
 import * as Context from "effect/Context";
 import type * as Effect from "effect/Effect";
 
@@ -26,4 +26,4 @@ export interface ProviderInstanceRegistryMutatorShape {
 export class ProviderInstanceRegistryMutator extends Context.Service<
   ProviderInstanceRegistryMutator,
   ProviderInstanceRegistryMutatorShape
->()("a4code/provider/ProviderInstanceRegistryMutator") {}
+>()("t3/provider/ProviderInstanceRegistryMutator") {}

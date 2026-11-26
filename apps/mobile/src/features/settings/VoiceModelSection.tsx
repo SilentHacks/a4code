@@ -1,4 +1,4 @@
-import { errorDisplayMessage } from "@a4code/client-runtime/errors";
+import { errorDisplayMessage } from "@t3tools/client-runtime/errors";
 import { T, useGT, useLocale, Var } from "gt-react-native";
 import { useAtomRefresh, useAtomValue } from "@effect/atom-react";
 import { useNavigation } from "@react-navigation/native";
@@ -6,13 +6,13 @@ import {
   cancelEnvironmentSpeechModelDownload,
   installEnvironmentSpeechModel,
   selectEnvironmentSpeechModel,
-} from "@a4code/client-runtime/voice-input";
+} from "@t3tools/client-runtime/voice-input";
 import {
   AuthSettingsWriteScope,
   type EnvironmentId,
   type EnvironmentSpeechModel,
-} from "@a4code/contracts";
-import { speechModelDownloadPercent } from "@a4code/shared/speech";
+} from "@t3tools/contracts";
+import { speechModelDownloadPercent } from "@t3tools/shared/speech";
 import { AsyncResult } from "effect/reactivity";
 import { type ReactNode, useEffect, useState } from "react";
 import { Platform, Text as NativeText, View } from "react-native";
@@ -53,7 +53,7 @@ export function useVoiceModels(environmentId: EnvironmentId, label: string) {
   const models = AsyncResult.getOrElse(modelsResult, () => null)?.models ?? [];
   const downloading = requested !== null || models.some(isDownloading);
 
-  // oxlint-disable-next-line a4code/no-unreasoned-state-sync -- polls the environment's download progress while one runs
+  // oxlint-disable-next-line t3code/no-unreasoned-state-sync -- polls the environment's download progress while one runs
   useEffect(() => {
     if (!downloading) return;
     const timer = setInterval(refreshModels, 1_000);

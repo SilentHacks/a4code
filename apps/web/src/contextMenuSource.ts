@@ -1,4 +1,4 @@
-import type { ContextMenuSource } from "@a4code/contracts";
+import type { ContextMenuSource } from "@t3tools/contracts";
 
 // Menus opened by openContextMenuFromKeyboard; a script-made event cannot keep button -1.
 const keyboardContextMenus = new WeakSet<Event>();

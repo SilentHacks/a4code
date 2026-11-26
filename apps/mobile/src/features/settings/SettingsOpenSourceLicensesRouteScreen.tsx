@@ -10,7 +10,7 @@ import {
   formatLicenseBundles,
   thirdPartyLicenseEntryKey,
   type ThirdPartyLicenseEntry,
-} from "@a4code/shared/thirdPartyLicenses";
+} from "@t3tools/shared/thirdPartyLicenses";
 import { useMemo, useState } from "react";
 import { Platform, Pressable, View } from "react-native";
 import { tryOpenExternalUrl } from "../../lib/openExternalUrl";

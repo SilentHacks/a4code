@@ -39,7 +39,7 @@ vi.mock("expo-file-system", () => ({
   },
 }));
 
-import type { EnvironmentId } from "@a4code/contracts";
+import type { EnvironmentId } from "@t3tools/contracts";
 import { AsyncResult, AtomRegistry } from "effect/reactivity";
 
 import type { DraftComposerImageAttachment } from "./composerImages";

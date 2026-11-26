@@ -5,7 +5,7 @@ import * as Layer from "effect/Layer";
 import * as Schema from "effect/Schema";
 import { developerIdentity } from "./developerAuth.ts";
 
-export const routePrefix = "/projects/a4code/native-clients/";
+export const routePrefix = "/projects/t3code/native-clients/";
 
 export class NativeClientsError extends Schema.TaggedError<NativeClientsError>()(
   "NativeClientsError",
@@ -21,12 +21,12 @@ export class Bindings extends Context.Service<
     readonly readLimit: Cloudflare.RateLimit;
     readonly storeLimit: Cloudflare.RateLimit;
   }
->()("@a4code/task-cache/NativeClients/Bindings") {}
+>()("@t3tools/task-cache/NativeClients/Bindings") {}
 
 export class NativeClients extends Context.Service<
   NativeClients,
   { readonly handle: (request: Request) => Effect.Effect<Response> }
->()("@a4code/task-cache/NativeClients") {}
+>()("@t3tools/task-cache/NativeClients") {}
 
 const CompleteBody = Schema.fromJsonString(
   Schema.Struct({
@@ -56,7 +56,7 @@ const make = Effect.gen(function* () {
   const limit = Effect.fn("NativeClients.limit")(function* (writing: boolean) {
     const allowed = yield* r2(() =>
       (writing ? bindings.storeLimit : bindings.readLimit).limit({
-        key: writing ? "a4code:native-store" : "a4code:native-read",
+        key: writing ? "t3code:native-store" : "t3code:native-read",
       }),
     );
     if (!allowed.success)

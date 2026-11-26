@@ -1,9 +1,9 @@
-import { decodeComposerContextFragment } from "@a4code/shared/composerContextClipboard";
+import { decodeComposerContextFragment } from "@t3tools/shared/composerContextClipboard";
 import {
   collectComposerContextReferences,
   formatComposerContextHref,
   formatComposerContextReference,
-} from "@a4code/shared/composerContextReferences";
+} from "@t3tools/shared/composerContextReferences";
 import {
   markdownForNativeRendering,
   markdownWithFileEmbeds,

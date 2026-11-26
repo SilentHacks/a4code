@@ -1,5 +1,5 @@
-import { Discovery } from "@a4code/client-runtime/relay";
-import type { EnvironmentId } from "@a4code/contracts";
+import { Discovery } from "@t3tools/client-runtime/relay";
+import type { EnvironmentId } from "@t3tools/contracts";
 import { T, useGT, Var } from "gt-react";
 import { useState } from "react";
 

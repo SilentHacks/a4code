@@ -16,11 +16,11 @@ import {
   RunId,
   ThreadId,
   TurnItemId,
-} from "@a4code/contracts";
+} from "@t3tools/contracts";
 import * as Context from "effect/Context";
 import * as DateTime from "effect/DateTime";
 import * as Deferred from "effect/Deferred";
-import type * as ProviderAdapter from "@a4code/provider-core/server/ProviderAdapter";
+import type * as ProviderAdapter from "@t3tools/provider-core/server/ProviderAdapter";
 import * as Effect from "effect/Effect";
 import * as Exit from "effect/Exit";
 import * as FileSystem from "effect/FileSystem";
@@ -122,7 +122,7 @@ const layerCleanup = Layer.effect(
 class RecordedAnalytics extends Context.Service<
   RecordedAnalytics,
   Ref.Ref<ReadonlyArray<Readonly<Record<string, unknown>>>>
->()("a4code/guest/GuestShareService.test/RecordedAnalytics") {}
+>()("t3/guest/GuestShareService.test/RecordedAnalytics") {}
 const layerAnalytics = Layer.effectContext(
   Effect.gen(function* () {
     const recorded = yield* Ref.make<ReadonlyArray<Readonly<Record<string, unknown>>>>([]);

@@ -11,7 +11,7 @@ import {
   OrchestrationV2ThreadBoundedSnapshot,
   OrchestrationV2ThreadTranscript,
   type OrchestrationV2ThreadHistoryPage,
-} from "@a4code/contracts";
+} from "@t3tools/contracts";
 import * as Cause from "effect/Cause";
 import * as Effect from "effect/Effect";
 import * as Exit from "effect/Exit";

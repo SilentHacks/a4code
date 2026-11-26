@@ -4,12 +4,12 @@ import {
   scopeProjectRef,
   scopedThreadKey,
   scopeThreadRef,
-} from "@a4code/client-runtime/environment";
+} from "@t3tools/client-runtime/environment";
 import { useSupportsMultiplePullRequests } from "~/hooks/useSupportsMultiplePullRequests";
 import { useStableCallback } from "~/hooks/useStableCallback";
 
-import { pullRequestDetailToVcsStatus } from "@a4code/client-runtime/state/pull-requests";
-import type { EnvironmentThreadShell } from "@a4code/client-runtime/state/shell";
+import { pullRequestDetailToVcsStatus } from "@t3tools/client-runtime/state/pull-requests";
+import type { EnvironmentThreadShell } from "@t3tools/client-runtime/state/shell";
 import {
   resolveEnvironmentMachineKind,
   type EnvironmentId,
@@ -17,7 +17,7 @@ import {
   type ThreadLinkedPullRequest,
   type ThreadPullRequestLink,
   type VcsStatusResult,
-} from "@a4code/contracts";
+} from "@t3tools/contracts";
 import { msg, T, useGT, useMessages, Var } from "gt-react";
 import { TerminalIcon } from "lucide-react";
 import { m, type MessageResolver } from "../i18n/messages";
@@ -31,7 +31,7 @@ import {
   resolveThreadPullRequestChains,
   type ThreadPullRequestBadge,
   visibleThreadPullRequests,
-} from "@a4code/client-runtime/thread-pull-requests";
+} from "@t3tools/client-runtime/thread-pull-requests";
 import { useRender } from "@base-ui/react/use-render";
 import {
   type ComponentType,
@@ -49,7 +49,7 @@ import { linkedPullRequestDetailAtom, useSharedPullRequestSummary } from "../sta
 import { useThreadRunningTerminalIds } from "../state/terminalSessions";
 import { vcsEnvironment } from "../state/vcs";
 import { useUiStateStore } from "../uiStateStore";
-import { sourceControlClients } from "@a4code/client-runtime/source-control-clients";
+import { sourceControlClients } from "@t3tools/client-runtime/source-control-clients";
 import {
   pullRequestMatchesSearchQuery,
   resolveThreadLastVisitedAt,
@@ -199,7 +199,7 @@ export function linkedPullRequestSnapshotStatus(
 export {
   resolveThreadPullRequestBadge,
   type ThreadPullRequestBadge,
-} from "@a4code/client-runtime/thread-pull-requests";
+} from "@t3tools/client-runtime/thread-pull-requests";
 
 export interface ThreadPullRequestBadgePresentation {
   readonly Icon: PullRequestGlyphIcon;

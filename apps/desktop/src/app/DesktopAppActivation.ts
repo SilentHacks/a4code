@@ -11,9 +11,9 @@ import {
   DESKTOP_APP_ACTIVATION_PROTOCOL_VERSION,
   DesktopAppActivationRequest,
   type DesktopAppActivationResponse,
-} from "@a4code/contracts";
-import { resolveDesktopAppControlAddress } from "@a4code/shared/desktopAppControl";
-import * as HostProcess from "@a4code/shared/HostProcess";
+} from "@t3tools/contracts";
+import { resolveDesktopAppControlAddress } from "@t3tools/shared/desktopAppControl";
+import * as HostProcess from "@t3tools/shared/HostProcess";
 import * as Context from "effect/Context";
 import * as Effect from "effect/Effect";
 import * as Layer from "effect/Layer";
@@ -290,7 +290,7 @@ export class DesktopAppActivation extends Context.Service<
     readonly setRendererReady: (ready: boolean) => Effect.Effect<void>;
     readonly complete: (response: DesktopAppActivationResponse) => Effect.Effect<void>;
   }
->()("@a4code/desktop/app/DesktopAppActivation") {}
+>()("@t3tools/desktop/app/DesktopAppActivation") {}
 
 const { logWarning } = makeComponentLogger("desktop-app-activation");
 

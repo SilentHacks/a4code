@@ -16,15 +16,15 @@ import {
   EnvironmentHttpUnauthorizedError,
   EnvironmentId,
   WS_METHODS,
-} from "@a4code/contracts";
+} from "@t3tools/contracts";
 import {
   type RelayEnvironmentLinkResponse,
   type RelayManagedEndpointProviderKind,
-} from "@a4code/contracts/relay";
-import { EnvironmentRegistry, EnvironmentSupervisor } from "@a4code/client-runtime/connection";
-import { request, runStream } from "@a4code/client-runtime/rpc";
-import { ManagedRelay, relayRequestFailureDetail } from "@a4code/client-runtime/relay";
-import { executeConnectedEnvironmentHttpRequest } from "@a4code/client-runtime/state/environmentHttpAuth";
+} from "@t3tools/contracts/relay";
+import { EnvironmentRegistry, EnvironmentSupervisor } from "@t3tools/client-runtime/connection";
+import { request, runStream } from "@t3tools/client-runtime/rpc";
+import { ManagedRelay, relayRequestFailureDetail } from "@t3tools/client-runtime/relay";
+import { executeConnectedEnvironmentHttpRequest } from "@t3tools/client-runtime/state/environmentHttpAuth";
 
 import { m } from "../i18n/messages";
 import { resolveCloudPublicConfig } from "./publicConfig";
@@ -398,7 +398,7 @@ export const linkEnvironmentToCloud: (input: {
   const configuredRelayUrl = relayUrl();
   if (!configuredRelayUrl) {
     return yield* new CloudEnvironmentLinkError({
-      message: m(msg("{name} is not configured.", { name: "A4CODE_RELAY_URL" })),
+      message: m(msg("{name} is not configured.", { name: "T3CODE_RELAY_URL" })),
     });
   }
   const managedTunnelsEnabled = (input.mode ?? "managed") === "managed";

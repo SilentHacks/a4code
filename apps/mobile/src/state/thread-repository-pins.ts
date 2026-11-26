@@ -3,8 +3,8 @@ import {
   pinThreadRepository,
   unpinThreadRepository,
   type PinnedThreadRepository,
-} from "@a4code/client-runtime/state/thread-repositories";
-import type { ScopedThreadRef } from "@a4code/contracts";
+} from "@t3tools/client-runtime/state/thread-repositories";
+import type { ScopedThreadRef } from "@t3tools/contracts";
 import { Atom } from "effect/reactivity";
 
 import { appAtomRegistry } from "./atom-registry";

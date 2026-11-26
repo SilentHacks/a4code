@@ -9,7 +9,7 @@ import {
   type PeerLinkClientPairingResult,
   PeerLinkError,
   type PeerLinkLinkPairingInput,
-} from "@a4code/contracts";
+} from "@t3tools/contracts";
 import * as Context from "effect/Context";
 import * as DateTime from "effect/DateTime";
 import * as Duration from "effect/Duration";
@@ -57,7 +57,7 @@ export class PeerClientPairingIssuer extends Context.Service<
       PeerClientPairingRefused | EnvironmentAuth.ServerAuthInternalError
     >;
   }
->()("a4code/peer/PeerClientPairing/PeerClientPairingIssuer") {}
+>()("t3/peer/PeerClientPairing/PeerClientPairingIssuer") {}
 
 /**
  * The linking side: gets a client of this environment a pairing credential for an environment
@@ -82,7 +82,7 @@ export class PeerClientPairing extends Context.Service<
       client: { readonly sessionId: AuthSessionId },
     ) => Effect.Effect<PeerLinkClientPairingResult, PeerLinkError>;
   }
->()("a4code/peer/PeerClientPairing") {}
+>()("t3/peer/PeerClientPairing") {}
 
 const makeIssuer = Effect.gen(function* () {
   const auth = yield* EnvironmentAuth.EnvironmentAuth;
@@ -103,7 +103,7 @@ const makeIssuer = Effect.gen(function* () {
       });
     }
     // A full-access link's agents already run as this machine's user and could run
-    // `a4code auth pairing create` themselves, so minting here adds no power. Any lower link would
+    // `t3 auth pairing create` themselves, so minting here adds no power. Any lower link would
     // gain more than it holds, and so would one an administrator's ceiling holds below full access.
     if (
       !caller.peerLink ||

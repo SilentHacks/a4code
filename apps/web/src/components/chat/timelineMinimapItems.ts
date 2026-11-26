@@ -1,13 +1,12 @@
-import { configuredHostedAppUrl } from "~/hostedPairing";
 import {
   assistantCitationsToPlainText,
   splitsSurrogatePair,
-} from "@a4code/shared/assistantCitations";
-import { parseThreadLinkHref } from "@a4code/shared/threadLinks";
+} from "@t3tools/shared/assistantCitations";
+import { parseThreadLinkHref } from "@t3tools/shared/threadLinks";
 import {
   isAttachmentOnlyBootstrapPrompt,
   replaceComposerContextReferences,
-} from "@a4code/shared/composerContextReferences";
+} from "@t3tools/shared/composerContextReferences";
 import type { Nodes } from "hast";
 
 import { markdownTree } from "~/markdown/wordsHast";
@@ -90,9 +89,7 @@ function markdownNodeText(node: Nodes): string {
   const separator = node.type === "element" && INLINE_PARENTS.has(node.tagName) ? "" : " ";
   const text = node.children.map(markdownNodeText).join(separator);
   // A thread autolink's only text is its URL.
-  return node.type === "element" &&
-    node.tagName === "a" &&
-    parseThreadLinkHref(text, configuredHostedAppUrl()) !== null
+  return node.type === "element" && node.tagName === "a" && parseThreadLinkHref(text) !== null
     ? "a thread"
     : text;
 }

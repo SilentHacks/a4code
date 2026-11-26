@@ -1,5 +1,5 @@
 import { msg, useGT } from "gt-react";
-import { thrownErrorMessage } from "@a4code/client-runtime/errors";
+import { thrownErrorMessage } from "@t3tools/client-runtime/errors";
 import { m } from "~/i18n/messages";
 import { useLoadBalancedEnvironment } from "../../hooks/useLoadBalancedEnvironment";
 import { useLogicalProjectEnvironments } from "../../hooks/useLogicalProjectEnvironments";
@@ -12,17 +12,17 @@ import {
   resolveProjectProviderInstanceEnabled,
   type ScopedProjectRef,
   type ThreadContextRecord,
-} from "@a4code/contracts";
+} from "@t3tools/contracts";
 import {
   scopedThreadKey,
   scopeProjectRef,
   scopeThreadRef,
-} from "@a4code/client-runtime/environment";
+} from "@t3tools/client-runtime/environment";
 import {
   isAtomCommandInterrupted,
   squashAtomCommandFailure,
-} from "@a4code/client-runtime/state/runtime";
-import { isTriagePrompt, replaceTriagePlaybookLink } from "@a4code/shared/triagePrompt";
+} from "@t3tools/client-runtime/state/runtime";
+import { isTriagePrompt, replaceTriagePlaybookLink } from "@t3tools/shared/triagePrompt";
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { flushSync } from "react-dom";
 import { shallow } from "zustand/shallow";
@@ -30,7 +30,7 @@ import { stackedThreadToast, toastManager } from "../ui/toast";
 import {
   deriveLogicalProjectKeyFromSettings,
   selectProjectGroupingSettings,
-} from "@a4code/client-runtime/state/project-grouping";
+} from "@t3tools/client-runtime/state/project-grouping";
 import { useComposerDraftStore, DraftId } from "../../composerDraftStore";
 import { type EnvironmentPresentation, useEnvironmentProviders } from "../../state/environments";
 import { currentClientMetadata } from "../../connection/platform";
@@ -169,7 +169,7 @@ export function useDraftEnvironmentRouting(input: DraftEnvironmentRoutingInput) 
     loadBalancingSettings.loadBalancingWeights,
   );
   const mountedRoutingScope = useRef<object | null>(null);
-  // oxlint-disable-next-line a4code/no-unreasoned-state-sync -- invalidates send preparation when the draft or project scope closes
+  // oxlint-disable-next-line t3code/no-unreasoned-state-sync -- invalidates send preparation when the draft or project scope closes
   useLayoutEffect(() => {
     mountedRoutingScope.current = { draftId, activeProjectKey };
     return () => {
@@ -301,7 +301,7 @@ export function useDraftEnvironmentRouting(input: DraftEnvironmentRoutingInput) 
   } | null>(null);
   const isEnvironmentChanging = busyEnvironmentChange?.scope === environmentChangeScope;
 
-  // oxlint-disable-next-line a4code/no-unreasoned-state-sync -- writes the resolved load-balanced environment into the draft store once the async pick settles
+  // oxlint-disable-next-line t3code/no-unreasoned-state-sync -- writes the resolved load-balanced environment into the draft store once the async pick settles
   useEffect(() => {
     if (
       !needsLoadBalancing ||
@@ -354,12 +354,12 @@ export function useDraftEnvironmentRouting(input: DraftEnvironmentRoutingInput) 
     readonly scope: string;
   } | null>(null);
   const environmentChangeScopeRef = useRef("");
-  // oxlint-disable-next-line a4code/no-unreasoned-state-sync -- mirrors the current change scope into a ref that async environment switches compare against
+  // oxlint-disable-next-line t3code/no-unreasoned-state-sync -- mirrors the current change scope into a ref that async environment switches compare against
   useLayoutEffect(() => {
     environmentChangeScopeRef.current = environmentChangeScope;
   });
   // Leaving the scope, or unmounting, abandons a change still in flight.
-  // oxlint-disable-next-line a4code/no-unreasoned-state-sync -- abandons an in-flight environment change when the draft or project scope changes or unmounts
+  // oxlint-disable-next-line t3code/no-unreasoned-state-sync -- abandons an in-flight environment change when the draft or project scope changes or unmounts
   useLayoutEffect(
     () => () => {
       if (environmentChangeRef.current?.scope === environmentChangeScope) {

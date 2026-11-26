@@ -1,12 +1,12 @@
 import { msg, T, useGT, useLocale, useMessages, Var } from "gt-react-native";
-import { managedCapabilityDenial } from "@a4code/client-runtime/contract-labels";
+import { managedCapabilityDenial } from "@t3tools/client-runtime/contract-labels";
 import * as Dialog from "../../components/ui/Dialog";
 import { useAtomValue } from "@effect/atom-react";
 import {
   AuthOrchestrationOperateScope,
   clampManagedRuntimeMode,
   resolveProjectProviderInstanceEnabled,
-} from "@a4code/contracts";
+} from "@t3tools/contracts";
 import { readEnvironmentScope } from "../../state/session";
 import type {
   EnvironmentId,
@@ -14,13 +14,13 @@ import type {
   ScheduledTask,
   ScheduledTaskThreadMode,
   ScheduledTaskUpsertInput,
-} from "@a4code/contracts";
+} from "@t3tools/contracts";
 import {
   MAX_WEBHOOK_DELIVERY_AGE_MINUTES,
   MAX_WEBHOOK_FILTERS,
   resolveEnvironmentMachineKind,
   scheduledTaskThreadMode,
-} from "@a4code/contracts";
+} from "@t3tools/contracts";
 import { useSelectWorkspaceDetail } from "../layout/workspace/useSelectWorkspaceDetail";
 import type { MenuAction } from "@react-native-menu/menu";
 import { DateTimePicker } from "@expo/ui/community/datetime-picker";
@@ -28,8 +28,8 @@ import {
   isAtomCommandInterrupted,
   squashAtomCommandFailure,
   type AtomCommandResult,
-} from "@a4code/client-runtime/state/runtime";
-import { resolvePastedPath } from "@a4code/shared/path";
+} from "@t3tools/client-runtime/state/runtime";
+import { resolvePastedPath } from "@t3tools/shared/path";
 import {
   DEFAULT_WEBHOOK_PROMPT,
   emptyWebhookFilterDraft,
@@ -38,9 +38,9 @@ import {
   removeWebhookFilterDraft,
   WEBHOOK_FILTER_OPS,
   type WebhookFilterDraft,
-} from "@a4code/client-runtime/scheduled-task-webhook";
-import { scheduledTaskWorktreeBaseRef } from "@a4code/client-runtime/scheduled-task-worktree";
-import { scheduleTimeZoneLabel } from "@a4code/client-runtime/scheduled-task-time-zone";
+} from "@t3tools/client-runtime/scheduled-task-webhook";
+import { scheduledTaskWorktreeBaseRef } from "@t3tools/client-runtime/scheduled-task-worktree";
+import { scheduleTimeZoneLabel } from "@t3tools/client-runtime/scheduled-task-time-zone";
 import type { MessageResolver } from "../../i18n/messages";
 import { useRef, useState, type ReactNode } from "react";
 import { useFocusEffect, useNavigation, usePreventRemove } from "@react-navigation/native";
@@ -60,7 +60,7 @@ import type { ComposerEditorSelection } from "../../components/ComposerEditor";
 import { ScreenScrollView as ScrollView } from "../../components/ui/ScreenScrollView";
 import { SegmentedControl } from "../../components/ui/SegmentedControl";
 import { ThemedSwitch } from "../../components/ui/ThemedSwitch";
-import { webhookAddress } from "@a4code/client-runtime/webhook-address";
+import { webhookAddress } from "@t3tools/client-runtime/webhook-address";
 import { tryCopyTextWithHaptic } from "../../lib/copyTextWithHaptic";
 import { usePreparedConnection } from "../../state/session";
 import { buildModelOptions } from "../../lib/modelOptions";
@@ -354,7 +354,7 @@ function WebhookFilterRows(props: {
             <FormField
               label={filter.op === "in" ? gt("Values, comma-separated") : gt("Value")}
               value={filter.value}
-              // oxlint-disable-next-line a4code/no-untranslated-copy -- webhook action values
+              // oxlint-disable-next-line t3code/no-untranslated-copy -- webhook action values
               placeholder={filter.op === "in" ? "opened, reopened" : "opened"}
               disabled={props.disabled}
               onChange={(value) => update(filter.id, { value })}

@@ -3,13 +3,13 @@ import {
   deriveRunlessWorkStartedAt,
   deriveThreadActivityRun,
   deriveThreadStructureRuntime,
-} from "@a4code/client-runtime/state/thread-execution";
-import { createQuestionHistoryProjector } from "@a4code/client-runtime/state/thread-requests";
+} from "@t3tools/client-runtime/state/thread-execution";
+import { createQuestionHistoryProjector } from "@t3tools/client-runtime/state/thread-requests";
 import {
   EnvironmentId,
   type OrchestrationV2ProjectedTurnItem,
   type OrchestrationV2ThreadProjection,
-} from "@a4code/contracts";
+} from "@t3tools/contracts";
 import { useRef, useState, type ReactNode } from "react";
 
 import { useIncrementalTimelineEntries } from "~/hooks/useIncrementalTimelineEntries";

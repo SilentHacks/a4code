@@ -4,8 +4,8 @@ import {
   type ConnectionCatalogEntry,
   type ConnectionRoute,
   mergeLearnedRoutes,
-} from "@a4code/client-runtime/connection";
-import { EnvironmentId } from "@a4code/contracts";
+} from "@t3tools/client-runtime/connection";
+import { EnvironmentId } from "@t3tools/contracts";
 import * as Option from "effect/Option";
 import { expect, it, vi } from "vite-plus/test";
 import { userEvent } from "vite-plus/test/browser";

@@ -4,8 +4,8 @@ import {
   ProviderDriverKind,
   type ModelSelection,
   type ServerProvider,
-} from "@a4code/contracts";
-import type { ProviderInstance } from "@a4code/provider-core/server/driver";
+} from "@t3tools/contracts";
+import type { ProviderInstance } from "@t3tools/provider-core/server/driver";
 import * as ProviderInstallationGate from "../provider/ProviderInstallationGate.ts";
 import * as ProviderInstanceRegistry from "../provider/ProviderInstanceRegistry.ts";
 import * as ServerSettings from "../serverSettings.ts";
@@ -21,17 +21,17 @@ import * as Layer from "effect/Layer";
 import * as Path from "effect/Path";
 import * as Schema from "effect/Schema";
 import * as Scope from "effect/Scope";
-import { createModelSelection } from "@a4code/shared/model";
+import { createModelSelection } from "@t3tools/shared/model";
 import { expect } from "vite-plus/test";
 
-import { CodexSettings, ProviderInstanceId } from "@a4code/contracts";
+import { CodexSettings, ProviderInstanceId } from "@t3tools/contracts";
 
 import * as ServerConfig from "../config.ts";
 import { makeProcessProbe, processProbeSource } from "../testUtils/processProbe.ts";
 import * as TextGeneration from "./TextGeneration.ts";
 import * as TextGenerators from "./TextGenerators.ts";
 import { makeCodexTextGeneration } from "./CodexTextGeneration.ts";
-import { writeFakeCli } from "@a4code/provider-testing/fakeCli";
+import { writeFakeCli } from "@t3tools/provider-testing/fakeCli";
 const decodeCodexSettings = Schema.decodeSync(CodexSettings);
 
 const DEFAULT_TEST_MODEL_SELECTION = createModelSelection(
@@ -40,7 +40,7 @@ const DEFAULT_TEST_MODEL_SELECTION = createModelSelection(
 );
 
 const layerCodexTextGenerationTest = ServerConfig.ServerConfig.layerTest(process.cwd(), {
-  prefix: "a4code-codex-text-generation-test-",
+  prefix: "t3code-codex-text-generation-test-",
 }).pipe(Layer.provideMerge(NodeServices.layer));
 
 interface FakeCodexInput {
@@ -216,7 +216,7 @@ function withFakeCodexEnv<A, E, R>(
 ) {
   return Effect.gen(function* () {
     const fs = yield* FileSystem.FileSystem;
-    const tempDir = yield* fs.makeTempDirectoryScoped({ prefix: "a4code-codex-text-" });
+    const tempDir = yield* fs.makeTempDirectoryScoped({ prefix: "t3code-codex-text-" });
     const codexPath = yield* makeFakeCodexBinary(tempDir, input);
     const config = decodeCodexSettings({
       binaryPath: codexPath,
@@ -526,9 +526,9 @@ it.layer(layerCodexTextGenerationTest)("CodexTextGeneration", (it) => {
     ),
   );
 
-  it.effect("identifies codex exec as A4 Code", () =>
+  it.effect("identifies codex exec as T3 Code", () =>
     withFakeCodexEnv(
-      { output: JSON.stringify({ title: "Live title" }), requireOriginator: "A4 Code" },
+      { output: JSON.stringify({ title: "Live title" }), requireOriginator: "T3 Code" },
       (textGeneration) =>
         Effect.gen(function* () {
           const result = yield* textGeneration.generateThreadTitle({

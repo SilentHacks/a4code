@@ -5,10 +5,10 @@ A managed policy lets an administrator set defaults, lock settings, and restrict
 ## Roll out a policy
 
 1. Author a JSON policy (see [Write a policy](#write-a-policy)). Do **not** include secrets—all local users can read the policy.
-2. Validate it: `a4code policy check policy.json`.
+2. Validate it: `t3 policy check policy.json`.
 3. Deploy via MDM/GPO or a file to [one supported location](#where-the-policy-goes).
 4. Restart A4 Code on the machine (policies load at startup only).
-5. Verify with `a4code policy show`.
+5. Verify with `t3 policy show`.
 
 ## Write a policy
 
@@ -35,25 +35,25 @@ A managed policy lets an administrator set defaults, lock settings, and restrict
 
 Use **one** source per machine (having both a native policy and a policy file prevents A4 Code from starting):
 
-| OS          | Native policy                                                                         | Policy file (admin-writable only)                 |
-| ----------- | ------------------------------------------------------------------------------------- | ------------------------------------------------- |
-| **macOS**   | Device configuration profile for `io.github.silenthacks.a4code`                       | `/Library/Application Support/A4Code/policy.json` |
-| **Windows** | GPO template or `Policy` (`REG_SZ`) under `HKLM\SOFTWARE\Policies\SilentHacks\A4Code` | `C:\Program Files\A4Code\policy.json`             |
-| **Linux**   | —                                                                                     | `/etc/a4code/policy.json`                         |
+| OS          | Native policy                                                                     | Policy file (admin-writable only)                 |
+| ----------- | --------------------------------------------------------------------------------- | ------------------------------------------------- |
+| **macOS**   | Device configuration profile for `com.t3tools.t3code`                             | `/Library/Application Support/T3Code/policy.json` |
+| **Windows** | GPO template or `Policy` (`REG_SZ`) under `HKLM\SOFTWARE\Policies\T3Tools\T3Code` | `C:\Program Files\T3Code\policy.json`             |
+| **Linux**   | —                                                                                 | `/etc/t3code/policy.json`                         |
 
-- **macOS profile**: Generate `macos/a4code.mobileconfig` with `a4code policy templates <dir> --policy policy.json` (or `plutil -convert xml1 -o io.github.silenthacks.a4code.plist policy.json`). Deploy as a single device profile (profiles cannot represent `null`; use a policy file if needed).
-- **Windows GPO**: Generate `windows/a4code.admx` and `windows/en-US/a4code.adml` with `a4code policy templates <dir>`, import into `PolicyDefinitions`/Intune under **Computer Configuration → Administrative Templates → A4 Code**, set **Organization**, run `gpupdate /target:computer /force`, and restart A4 Code.
+- **macOS profile**: Generate `macos/t3code.mobileconfig` with `t3 policy templates <dir> --policy policy.json` (or `plutil -convert xml1 -o com.t3tools.t3code.plist policy.json`). Deploy as a single device profile (profiles cannot represent `null`; use a policy file if needed).
+- **Windows GPO**: Generate `windows/t3code.admx` and `windows/en-US/t3code.adml` with `t3 policy templates <dir>`, import into `PolicyDefinitions`/Intune under **Computer Configuration → Administrative Templates → A4 Code**, set **Organization**, run `gpupdate /target:computer /force`, and restart A4 Code.
 - **Windows registry**: Set `Policy` (`REG_SZ`) to single-line JSON (do not mix with GPO template values).
 
 ## Check what the server loaded
 
-Run `a4code policy show` as the user running A4 Code to inspect the installed policy, fingerprint, and whether the running server has loaded it. After any policy change or removal, restart the desktop app or run `a4code service restart`. Removing a policy restores the user's own saved settings.
+Run `t3 policy show` as the user running A4 Code to inspect the installed policy, fingerprint, and whether the running server has loaded it. After any policy change or removal, restart the desktop app or run `t3 service restart`. Removing a policy restores the user's own saved settings.
 
-> Note: A4 Code **refuses to start** if a policy is unreadable, invalid, uses unknown keys from a newer version, or conflicts with another policy source. Always validate with `a4code policy check` and upgrade A4 Code before deploying newer keys.
+> Note: A4 Code **refuses to start** if a policy is unreadable, invalid, uses unknown keys from a newer version, or conflicts with another policy source. Always validate with `t3 policy check` and upgrade A4 Code before deploying newer keys.
 
 ## Settings
 
-Run `a4code policy settings` to list every manageable path from `settings.json` and its default.
+Run `t3 policy settings` to list every manageable path from `settings.json` and its default.
 
 - `"locked": false` sets a default (users can override).
 - `"locked": true` enforces the value across Settings and project overrides.
@@ -89,7 +89,7 @@ Key constraints:
         }
       }
     },
-    "updates": { "mode": "auto", "feedUrl": "https://updates.example.com/a4code/" }
+    "updates": { "mode": "auto", "feedUrl": "https://updates.example.com/t3code/" }
   }
 }
 ```
@@ -104,7 +104,7 @@ When `maxRuntimeMode` is set, users cannot modify provider launch settings (`bin
 
 `clients` allows any subset of `desktop`, `local-browser`, and `remote` (keep `desktop` on desktop machines).
 
-- Omitting `remote` restricts the server to loopback, revokes paired devices, disables LAN/Tailscale Serve/T3 Connect, and refuses startup if a Tailscale Serve route still forwards to A4 Code (or if a legacy service has LAN enabled—run `a4code up --no-lan`).
+- Omitting `remote` restricts the server to loopback, revokes paired devices, disables LAN/Tailscale Serve/T3 Connect, and refuses startup if a Tailscale Serve route still forwards to A4 Code (or if a legacy service has LAN enabled—run `t3 up --no-lan`).
 - Set `"connect": false` to disable T3 Connect while allowing LAN/Tailscale remote access.
 
 ### Other capabilities
@@ -113,7 +113,7 @@ When `maxRuntimeMode` is set, users cannot modify provider launch settings (`bin
 - `browserCookieImport: false`: Disables importing cookies from other browsers.
 - `previewTunnel: false`: Disables remote `localhost` tunneling and port forwarding (streams tabs instead).
 - `worktreeLayoutCommands: false`: Disables `t3.json` `worktreeLayout` `create`/`remove` commands.
-- `telemetry: false`: Disables product usage data and relay tracing for the server, desktop app, and server-opened browsers (does not control the hosted web client or mobile).
+- `telemetry: false`: Disables product usage data and relay tracing for the server, desktop app, and server-opened browsers (does not control `app.t3.codes` or mobile).
 
 ### Providers
 
@@ -123,11 +123,11 @@ When `maxRuntimeMode` is set, users cannot modify provider launch settings (`bin
 ### Updates
 
 - `mode`: `"auto"` or `"off"` (when updates are managed externally).
-- `feedUrl`: Custom update mirror matching GitHub Release layout (`latest*.yml` and installers at root; `a4code-*` archives and `SHA256SUMS` under `v<version>/`).
+- `feedUrl`: Custom update mirror matching GitHub Release layout (`latest*.yml` and installers at root; `t3-*` archives and `SHA256SUMS` under `v<version>/`).
 - `allowNightly: false`: Disables the nightly channel.
 
 ## What a policy does not cover
 
 - **Provider CLIs**: Restrict underlying CLIs with their own managed settings (e.g., Claude Code managed settings).
-- **WSL**: Managed Windows desktop disables its WSL environment; a server started manually inside WSL reads `/etc/a4code/policy.json` in that distro.
+- **WSL**: Managed Windows desktop disables its WSL environment; a server started manually inside WSL reads `/etc/t3code/policy.json` in that distro.
 - **Local admins / port forwarding**: Administrators can modify policies or A4 Code binaries, and users can still port-forward loopback sockets with external tools. Use OS/MDM controls for binary integrity and network isolation.

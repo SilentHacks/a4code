@@ -1,5 +1,5 @@
-import type { DesktopAppleSpeechResult } from "@a4code/contracts";
-import * as HostProcess from "@a4code/shared/HostProcess";
+import type { DesktopAppleSpeechResult } from "@t3tools/contracts";
+import * as HostProcess from "@t3tools/shared/HostProcess";
 import * as Context from "effect/Context";
 import * as Duration from "effect/Duration";
 import * as Effect from "effect/Effect";
@@ -70,7 +70,7 @@ export class AppleSpeech extends Context.Service<
       pcm: Uint8Array,
     ) => Effect.Effect<DesktopAppleSpeechResult>;
   }
->()("@a4code/desktop/speech/AppleSpeech") {}
+>()("@t3tools/desktop/speech/AppleSpeech") {}
 
 const unavailable: DesktopAppleSpeechResult = { ok: false, code: "unavailable" };
 const failed: DesktopAppleSpeechResult = { ok: false, code: "failed" };

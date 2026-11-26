@@ -2,7 +2,7 @@ import {
   type EnvironmentId,
   type ProviderInstanceId,
   type ServerProvider,
-} from "@a4code/contracts";
+} from "@t3tools/contracts";
 import { useAtomValue } from "@effect/atom-react";
 import { msg, T, useGT, useMessages } from "gt-react";
 import { memo, useRef, useState, useSyncExternalStore } from "react";

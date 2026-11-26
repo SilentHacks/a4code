@@ -1,4 +1,4 @@
-import { resolveQueuedEditExit } from "@a4code/client-runtime/queued-run-edit";
+import { resolveQueuedEditExit } from "@t3tools/client-runtime/queued-run-edit";
 import type {
   ChatAttachment,
   ChatFileAttachment,
@@ -9,7 +9,7 @@ import type {
   ModelSelection,
   OrchestrationMessageContext,
   ResponseContextRecord,
-} from "@a4code/contracts";
+} from "@t3tools/contracts";
 import * as Equal from "effect/Equal";
 import {
   composerDraftHasUserContent,

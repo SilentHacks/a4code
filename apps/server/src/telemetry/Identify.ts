@@ -5,8 +5,8 @@ import * as Option from "effect/Option";
 import * as PlatformError from "effect/PlatformError";
 import * as Schema from "effect/Schema";
 
-import { writeFileStringAtomically } from "@a4code/shared/atomicWrite";
-import { hashTelemetryId } from "@a4code/shared/telemetryId";
+import { writeFileStringAtomically } from "@t3tools/shared/atomicWrite";
+import { hashTelemetryId } from "@t3tools/shared/telemetryId";
 import * as ServerSecretStore from "../auth/ServerSecretStore.ts";
 import { CLOUD_LINKED_USER_ID } from "../cloud/config.ts";
 import * as ServerConfig from "../config.ts";

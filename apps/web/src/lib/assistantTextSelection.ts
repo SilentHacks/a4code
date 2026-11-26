@@ -1,18 +1,18 @@
-import { type AssistantCitation } from "@a4code/contracts";
+import { type AssistantCitation } from "@t3tools/contracts";
 
 import { mathWrapperOf } from "../markdown-clipboard";
 
 export {
   createAssistantTextSelector,
   findAssistantCitationText,
-} from "@a4code/shared/assistantCitations";
+} from "@t3tools/shared/assistantCitations";
 import {
   createAssistantTextSelector,
   findAssistantCitationText,
   splitsSurrogatePair,
   type AssistantTextSelector,
-} from "@a4code/shared/assistantCitations";
-export type { AssistantTextSelector } from "@a4code/shared/assistantCitations";
+} from "@t3tools/shared/assistantCitations";
+export type { AssistantTextSelector } from "@t3tools/shared/assistantCitations";
 
 export type AssistantCitationSourceAnchor = {
   source: HTMLElement;

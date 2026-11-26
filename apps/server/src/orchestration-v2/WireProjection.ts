@@ -10,18 +10,18 @@ import type {
   OrchestrationV2ThreadProjection,
   OrchestrationV2ThreadStreamItem,
   OrchestrationV2TurnItem,
-} from "@a4code/contracts";
+} from "@t3tools/contracts";
 import {
   dedupeSubagentBodies,
   dedupeTurnItemBodies,
-} from "@a4code/shared/orchestrationV2DedupedBodies";
-import { MCP_APP_OUTPUT_KEY, readMcpAppReference } from "@a4code/shared/mcpApp";
+} from "@t3tools/shared/orchestrationV2DedupedBodies";
+import { MCP_APP_OUTPUT_KEY, readMcpAppReference } from "@t3tools/shared/mcpApp";
 import {
   commandIndicatesFailure,
   compactDynamicToolOutput,
   omitToolOutputImageData,
   toolOutputImages,
-} from "@a4code/shared/toolOutput";
+} from "@t3tools/shared/toolOutput";
 
 // A checkpoint over vendored or generated trees can list 15k+ files; the card needs a prefix.
 const MAX_WIRE_CHECKPOINT_FILES = 200;

@@ -4,7 +4,7 @@ import {
   AuthSourceControlWriteScope,
   type EnvironmentId,
   type ScopedThreadRef,
-} from "@a4code/contracts";
+} from "@t3tools/contracts";
 
 import { cn } from "~/lib/utils";
 import { readEnvironmentScope, useEnvironmentScope } from "~/state/session";

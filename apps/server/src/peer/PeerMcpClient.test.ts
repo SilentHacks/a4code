@@ -5,7 +5,7 @@ import {
   OrchestrationV2LinkedSender,
   OrchestratorMcpFailure,
   ThreadId,
-} from "@a4code/contracts";
+} from "@t3tools/contracts";
 import * as Context from "effect/Context";
 import * as DateTime from "effect/DateTime";
 import * as Deferred from "effect/Deferred";

@@ -7,8 +7,7 @@ import type { ProjectScopedServerSettingKey, ServerSettings } from "./settings.t
 
 export const T3_PROJECT_FILE_NAME = "t3.json";
 
-export const T3_PROJECT_FILE_SCHEMA_URL =
-  "https://raw.githubusercontent.com/SilentHacks/a4code/main/packages/contracts/schema/t3.json";
+export const T3_PROJECT_FILE_SCHEMA_URL = "https://t3.codes/schema/t3.json";
 
 const T3_PROJECT_FILE_PATH_MAX_LENGTH = 512;
 const T3_PROJECT_FILE_COMMAND_MAX_LENGTH = 4096;
@@ -137,7 +136,7 @@ export const T3ProjectFile = Schema.Struct({
     trimmedNonEmpty(
       {
         description:
-          'Repository-relative path to a git sparse-checkout pattern file in non-cone syntax (e.g. ".a4code/sparse-checkout"). New worktrees check out only the files it matches. Both files are read from the branch being checked out; a missing pattern file fails the worktree instead of checking out everything.',
+          'Repository-relative path to a git sparse-checkout pattern file in non-cone syntax (e.g. ".t3/sparse-checkout"). New worktrees check out only the files it matches. Both files are read from the branch being checked out; a missing pattern file fails the worktree instead of checking out everything.',
       },
       T3_PROJECT_FILE_PATH_MAX_LENGTH,
     ),
@@ -150,9 +149,9 @@ export const T3ProjectFile = Schema.Struct({
       .check(Schema.isMaxLength(T3_PROJECT_FILE_MAX_SCRIPTS)),
   ),
 }).annotate({
-  title: "A4 project file",
+  title: "T3 project file",
   description:
-    "Checked-in project configuration for A4 Code (t3.json at the repository root). See https://github.com/SilentHacks/a4code for documentation.",
+    "Checked-in project configuration for A4 Code (t3.json at the repository root). See https://t3.codes for documentation.",
 });
 export type T3ProjectFile = typeof T3ProjectFile.Type;
 

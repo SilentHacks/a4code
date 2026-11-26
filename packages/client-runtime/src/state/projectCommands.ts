@@ -6,7 +6,7 @@ import {
   type ProjectReadFileResult,
   type ScopedProjectRef,
   WS_METHODS,
-} from "@a4code/contracts";
+} from "@t3tools/contracts";
 import * as SecureRandom from "effect/crypto/SecureRandom";
 import * as Effect from "effect/Effect";
 import * as Option from "effect/Option";
@@ -31,7 +31,7 @@ import {
 import { createProject, deleteProject, updateProject } from "../operations/commands.ts";
 import type { EnvironmentRegistry } from "../connection/registry.ts";
 import { createFileMetadataAtoms } from "./fileMetadata.ts";
-import { resolveWorkspaceFilePath } from "@a4code/shared/path";
+import { resolveWorkspaceFilePath } from "@t3tools/shared/path";
 
 export type {
   CreateProjectInput,
@@ -71,7 +71,7 @@ function writtenFilePaths(
   );
 }
 
-class ScratchProjectNotLoadedError extends Schema.TaggedError<ScratchProjectNotLoadedError>()(
+export class ScratchProjectNotLoadedError extends Schema.TaggedError<ScratchProjectNotLoadedError>()(
   "ScratchProjectNotLoadedError",
   { projectId: ProjectId },
 ) {

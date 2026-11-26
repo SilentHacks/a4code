@@ -3,19 +3,19 @@ import {
   linkBackBlockLabel,
   linkBatchFailureLabel,
   linkWithMintedCode,
-} from "@a4code/client-runtime/link-batch";
-import { ANOTHER_ADDRESS, linkRequestFailureMessage } from "@a4code/client-runtime/link-request";
+} from "@t3tools/client-runtime/link-batch";
+import { ANOTHER_ADDRESS, linkRequestFailureMessage } from "@t3tools/client-runtime/link-request";
 import {
   AuthAccessWriteScope,
   type AuthMcpClientAccess,
   type EnvironmentId,
   type PeerLinkSummary,
-} from "@a4code/contracts";
+} from "@t3tools/contracts";
 import {
   isAtomCommandInterrupted,
   squashAtomCommandFailure,
-} from "@a4code/client-runtime/state/runtime";
-import { peerLinkHealth, type PeerLinkHealth } from "@a4code/client-runtime/state/peerLinks";
+} from "@t3tools/client-runtime/state/runtime";
+import { peerLinkHealth, type PeerLinkHealth } from "@t3tools/client-runtime/state/peerLinks";
 import * as DateTime from "effect/DateTime";
 import * as Option from "effect/Option";
 import * as Result from "effect/Result";
@@ -582,7 +582,7 @@ export function LinkEnvironmentDialog({
                   onChange={(event) => setPairingCode(event.target.value)}
                   placeholder={
                     machine === null
-                      ? gt("From Sharing & access there, or a4code pair")
+                      ? gt("From Sharing & access there, or t3 pair")
                       : gt("Paste the code")
                   }
                   disabled={busy}

@@ -5,7 +5,7 @@ import type {
   ProjectId,
   ScopedProjectRef,
   ServerConfig,
-} from "@a4code/contracts";
+} from "@t3tools/contracts";
 import { Atom } from "effect/reactivity";
 
 import type { EnvironmentProject } from "./models.ts";

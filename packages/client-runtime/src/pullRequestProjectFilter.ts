@@ -1,4 +1,4 @@
-import type { EnvironmentId, ProjectId } from "@a4code/contracts";
+import type { EnvironmentId, ProjectId } from "@t3tools/contracts";
 
 interface FilterProject {
   readonly id: ProjectId;

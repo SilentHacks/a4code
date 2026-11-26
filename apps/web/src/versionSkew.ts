@@ -3,9 +3,9 @@ import type {
   ServerConfig,
   ServerInstallation,
   ServerSelfUpdateCapability,
-} from "@a4code/contracts";
-import type { ServerUpdateState } from "@a4code/client-runtime/state/server";
-import { compareSemverVersions, parseSemver } from "@a4code/shared/semver";
+} from "@t3tools/contracts";
+import type { ServerUpdateState } from "@t3tools/client-runtime/state/server";
+import { compareSemverVersions, parseSemver } from "@t3tools/shared/semver";
 import * as Schema from "effect/Schema";
 import { msg } from "gt-react";
 
@@ -19,7 +19,7 @@ export interface VersionMismatch {
   readonly hint: string;
 }
 
-const VERSION_MISMATCH_DISMISSALS_STORAGE_KEY = "a4code:version-mismatch-dismissals:v1";
+const VERSION_MISMATCH_DISMISSALS_STORAGE_KEY = "t3code:version-mismatch-dismissals:v1";
 
 const dismissedServerUpdateFailures = new WeakSet<ServerUpdateState>();
 
@@ -107,15 +107,15 @@ export function manualServerUpdateCommand(
 ): string {
   const quote = (value: string) => `'${value.replaceAll("'", "'\\''")}'`;
   if (installation?.kind === "npm-global") {
-    return `npm install --global --prefix ${quote(installation.prefix)} a4code@${targetVersion}`;
+    return `npm install --global --prefix ${quote(installation.prefix)} t3@${targetVersion}`;
   }
   if (installation?.kind === "t3-launcher") {
-    // An inherited A4CODE_HOME would otherwise send the update to a home the launcher is not in.
+    // An inherited T3CODE_HOME would otherwise send the update to a home the launcher is not in.
     return `${quote(installation.launcher)} update --base-dir ${quote(installation.baseDir)} ${targetVersion}`;
   }
   const runner =
     installation?.kind === "pnpm-dlx" ? "pnpm dlx" : installation?.kind === "bunx" ? "bunx" : "npx";
-  return `${runner} a4code@${targetVersion}`;
+  return `${runner} t3@${targetVersion}`;
 }
 
 export function buildVersionMismatchDismissalKey(

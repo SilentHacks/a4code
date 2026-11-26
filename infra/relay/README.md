@@ -1,22 +1,22 @@
-# A4 Connect Relay
+# T3 Connect Relay
 
 > [!NOTE]
-> Sign in to A4 Connect from the app under Settings > Sharing & access.
+> Sign in to T3 Connect from the app under Settings > Sharing & access.
 
-The relay is the hosted control plane for A4 Connect. It helps clients discover and connect to
+The relay is the hosted control plane for T3 Connect. It helps clients discover and connect to
 remote environments, manages the cloud-side records needed for those connections, and delivers
 optional mobile notifications and Live Activities.
 
-The relay is intentionally not in the hot path for normal A4 Code traffic. After a client connects,
+The relay is intentionally not in the hot path for normal T3 Code traffic. After a client connects,
 regular API and WebSocket traffic goes directly between that client and the selected environment.
-See the [A4 Connect architecture note](../../docs/internals/06_a4-connect.md) for the larger system
+See the [T3 Connect architecture note](../../docs/internals/06_t3-connect.md) for the larger system
 design.
 
 ## Responsibilities
 
 The relay currently owns:
 
-- Linking A4 Code environments to a cloud account.
+- Linking T3 Code environments to a cloud account.
 - Provisioning and tracking managed environment endpoints.
 - Issuing short-lived credentials used to connect clients to linked environments.
 - Listing linked environments and registered mobile devices for an account.
@@ -76,19 +76,20 @@ dependencies represented at their boundary rather than mocking internal behavior
 
 ## Deployment
 
-The relay deploys with the Alchemy CLI (`vp run --filter a4code-relay deploy` is `alchemy deploy`
+The relay deploys with the Alchemy CLI (`vp run --filter t3code-relay deploy` is `alchemy deploy`
 in this directory):
 
 ```sh
-vp run --filter a4code-relay deploy
+vp run --filter t3code-relay deploy
 ```
 
 The stack provisions the Cloudflare Worker and queues, managed endpoint resources, database
 connectivity, and relay tracing resources. Copy [`infra/relay/.env.example`](./.env.example) to
 `infra/relay/.env` and fill in the deployment-specific values before deploying. Alchemy loads that
-file from the relay directory. Set `APNS_ENABLED=true` with your own credentials to enable Apple push.
-Production adopts the configured API and tunnel DNS zones as retained Cloudflare resources.
-Personal stages reference the production-owned zones.
+file from the relay directory. Runtime secrets include Clerk, APNs, and optional FCM credentials. Set
+`APNS_ENABLED=false` for an Android-only development deployment without Apple credentials. Production adopts
+the configured API and tunnel DNS zones as retained Cloudflare resources. Personal stages reference
+the production-owned zones.
 
 The `prod` Alchemy stage owns the retained PlanetScale database and is the shared hosted relay for
 stable and nightly clients. Every other stage references that database and provisions an isolated
@@ -96,8 +97,8 @@ PlanetScale branch and runtime role for local development, so deploy `prod` befo
 developer stages:
 
 ```sh
-vp run --filter a4code-relay deploy -- --stage prod
-vp run --filter a4code-relay deploy -- --env-file .env.local
+vp run --filter t3code-relay deploy -- --stage prod
+vp run --filter t3code-relay deploy -- --env-file .env.local
 ```
 
 Alchemy defaults personal deployments to the `dev_$USER` stage. Relay custom domains apply the same
@@ -112,7 +113,7 @@ domain override.
 The stack's `PublishClientConfig` action ([`src/clientConfig.ts`](./src/clientConfig.ts)) writes the
 deployed relay URL and tracing configuration into the repository-root `.env`, so subsequent source
 builds point at the relay that was just deployed without copying values manually. It runs only when
-one of those outputs changed, and `A4CODE_RELAY_CLIENT_CONFIG_ENV` redirects it to another file.
+one of those outputs changed, and `T3CODE_RELAY_CLIENT_CONFIG_ENV` redirects it to another file.
 
 ### Deployment CI
 
@@ -159,8 +160,9 @@ The `production` GitHub environment must define these Actions secrets:
 - `CLERK_SECRET_KEY`
 - `APNS_PRIVATE_KEY`
 - `FCM_SERVICE_ACCOUNT` when Android push is enabled
-- `A4CODE_T3CHAT_LINK_SECRET`, optional, shared with the T3 Chat deployment. Also set
-  `A4CODE_T3CHAT_URL` to that deployment's HTTPS origin. The integration is off without both.
+- `T3CHAT_LINK_SECRET`, optional, shared with T3 Chat's `T3CODE_LINK_SECRET`. Without it the
+  T3 Chat account link is off. Local and preview stages can set `T3CHAT_URL` to point
+  at another T3 Chat deployment; production uses `https://t3.chat`.
 
 The account-scoped repository credentials are consumed by Alchemy while provisioning relay stages; they
 are not bound into the relay Worker. The production deployment uses an Axiom personal access token,
@@ -170,6 +172,6 @@ and hosted web builds.
 
 See:
 
-- [A4 Connect setup](../../docs/operations/02_connect-setup.md) for Clerk keys, JWT templates, and sign-up restrictions.
+- [T3 Connect setup](../../docs/operations/02_connect-setup.md) for Clerk keys, JWT templates, and sign-up restrictions.
 - [Relay Observability](../../docs/operations/05_relay-observability.md) for deployment tracing and diagnostics.
-- [A4 Connect architecture](../../docs/internals/06_a4-connect.md) for environment linking and trust boundaries.
+- [T3 Connect architecture](../../docs/internals/06_t3-connect.md) for environment linking and trust boundaries.

@@ -1,5 +1,5 @@
 import { pipe } from "effect/Function";
-import { THEME_CSS_MAX_LENGTH, type EnvironmentTheme } from "@a4code/contracts";
+import { THEME_CSS_MAX_LENGTH, type EnvironmentTheme } from "@t3tools/contracts";
 import * as Equal from "effect/Equal";
 import * as Option from "effect/Option";
 import * as Schema from "effect/Schema";
@@ -14,8 +14,8 @@ import {
   IRIS_THEME,
   OCEAN_THEME,
   T3_CHAT_THEME,
-  A4_CODE_LIGHT_THEME_COLORS,
-  A4_CODE_DARK_THEME_COLORS,
+  T3_CODE_LIGHT_THEME_COLORS,
+  T3_CODE_DARK_THEME_COLORS,
   RESERVED_THEME_IDS,
   THEME_COLOR_ROLES,
   type ThemeAppearance,
@@ -23,7 +23,7 @@ import {
   type ThemeColors,
   type ThemeDefinition,
   type ThemeVariants,
-} from "@a4code/shared/themePalettes";
+} from "@t3tools/shared/themePalettes";
 import {
   CONTEXT_CHIP_ACCENTS,
   contextChipColorVariable,
@@ -45,11 +45,11 @@ const OCEAN_THEME_ID = "ocean" as const;
 const EMBER_THEME_ID = "ember" as const;
 const IRIS_THEME_ID = "iris" as const;
 export const THEME_FILE_VERSION = 1 as const;
-export const CUSTOM_THEMES_STORAGE_KEY = "a4code:themes:v1";
-export const THEME_FOLLOW_SYSTEM_STORAGE_KEY = "a4code:theme-follow-system";
-export const THEME_APPEARANCE_MODE_STORAGE_KEY = "a4code:theme-appearance-mode";
-export const THEME_HALVES_STORAGE_KEY = "a4code:theme-halves:v1";
-export const ENVIRONMENT_THEMES_STORAGE_KEY = "a4code:environment-themes:v1";
+export const CUSTOM_THEMES_STORAGE_KEY = "t3code:themes:v1";
+export const THEME_FOLLOW_SYSTEM_STORAGE_KEY = "t3code:theme-follow-system";
+export const THEME_APPEARANCE_MODE_STORAGE_KEY = "t3code:theme-appearance-mode";
+export const THEME_HALVES_STORAGE_KEY = "t3code:theme-halves:v1";
+export const ENVIRONMENT_THEMES_STORAGE_KEY = "t3code:environment-themes:v1";
 
 const LEGACY_T3_CHAT_DARK_THEME_ID = "t3-chat-dark";
 
@@ -435,11 +435,11 @@ function legacyThemeMode(theme: ThemePreference): ThemeAppearance | null {
 export function getStandardThemeColors(appearance: ThemeAppearance): ThemeColors {
   if (appearance === "dark") {
     return (standardDarkThemeColors ??= decodeThemeColors({
-      ...A4_CODE_DARK_THEME_COLORS,
+      ...T3_CODE_DARK_THEME_COLORS,
       canvas: "#000000",
     }));
   }
-  return (standardLightThemeColors ??= decodeThemeColors(A4_CODE_LIGHT_THEME_COLORS));
+  return (standardLightThemeColors ??= decodeThemeColors(T3_CODE_LIGHT_THEME_COLORS));
 }
 
 // index.css paints the light bubble a step darker than the shared palette mobile uses.

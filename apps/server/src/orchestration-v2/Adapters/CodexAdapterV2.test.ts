@@ -1,5 +1,5 @@
-import { historyResponseItems } from "@a4code/provider-core/server/handoffBudget";
-import { makeProviderFailure } from "@a4code/provider-core/server/failure";
+import { historyResponseItems } from "@t3tools/provider-core/server/handoffBudget";
+import { makeProviderFailure } from "@t3tools/provider-core/server/failure";
 import {
   makeProviderTextDeltaCoalescer,
   type ProviderTextDeltaUpdate,
@@ -33,7 +33,7 @@ import {
   ThreadId,
   TurnItemId,
   type ServerProviderModel,
-} from "@a4code/contracts";
+} from "@t3tools/contracts";
 import { assert, describe, it } from "@effect/vitest";
 import * as CodexClient from "effect-codex-app-server/client";
 import * as CodexReplay from "effect-codex-app-server/replay";
@@ -45,8 +45,8 @@ import * as Digest from "effect/crypto/Digest";
 import * as Effect from "effect/Effect";
 import * as Predicate from "effect/Predicate";
 import * as FileSystem from "effect/FileSystem";
-import { MCP_APP_OUTPUT_KEY, readMcpAppReference } from "@a4code/shared/mcpApp";
-import { toolOutputImages } from "@a4code/shared/toolOutput";
+import { MCP_APP_OUTPUT_KEY, readMcpAppReference } from "@t3tools/shared/mcpApp";
+import { toolOutputImages } from "@t3tools/shared/toolOutput";
 import { resolveAttachmentPathById } from "../../attachmentStore.ts";
 import * as Fiber from "effect/Fiber";
 import * as Layer from "effect/Layer";
@@ -64,17 +64,17 @@ import * as PlatformError from "effect/PlatformError";
 import { TestClock } from "effect/testing";
 import { ChildProcess, ChildProcessSpawner } from "effect/process";
 import * as Scope from "effect/Scope";
-import * as HostProcess from "@a4code/shared/HostProcess";
+import * as HostProcess from "@t3tools/shared/HostProcess";
 
 import packageJson from "../../../package.json" with { type: "json" };
-import * as McpProviderSessions from "@a4code/provider-core/server/McpProviderSessions";
-import * as ProviderEventLoggers from "@a4code/provider-core/server/ProviderEventLoggers";
-import * as IdAllocator from "@a4code/provider-core/server/IdAllocator";
+import * as McpProviderSessions from "@t3tools/provider-core/server/McpProviderSessions";
+import * as ProviderEventLoggers from "@t3tools/provider-core/server/ProviderEventLoggers";
+import * as IdAllocator from "@t3tools/provider-core/server/IdAllocator";
 import * as EffectWorker from "../EffectWorker.ts";
 import * as Orchestrator from "../Orchestrator.ts";
 import * as ProviderReplayHarness from "../testkit/ProviderReplayHarness.ts";
-import * as ProviderAdapter from "@a4code/provider-core/server/ProviderAdapter";
-import type * as ProviderContinuationRequests from "@a4code/provider-core/server/ProviderContinuationRequests";
+import * as ProviderAdapter from "@t3tools/provider-core/server/ProviderAdapter";
+import type * as ProviderContinuationRequests from "@t3tools/provider-core/server/ProviderContinuationRequests";
 import * as ModelManifest from "../../provider/ModelManifest.ts";
 import * as PortScanner from "../../preview/PortScanner.ts";
 import { resolveProviderCompatibility } from "../../provider/providerCompatibility.ts";
@@ -366,7 +366,7 @@ describe("CodexAdapterV2 native protocol logging", () => {
             payload: {
               id: requestId,
               method: "thread/start",
-              params: { config: { "shell_environment_policy.set.A4CODE_THREAD_ID": appThreadId } },
+              params: { config: { "shell_environment_policy.set.T3CODE_THREAD_ID": appThreadId } },
             },
           });
           yield* protocolLogger({
@@ -605,7 +605,7 @@ const CODEX_TEST_RUNTIME_POLICY = ProviderAdapter.ProviderAdapterV2RuntimePolicy
   interactionMode: "default",
   cwd: "/workspace",
 });
-const T3_THREAD_ENV_KEY = "shell_environment_policy.set.A4CODE_THREAD_ID";
+const T3_THREAD_ENV_KEY = "shell_environment_policy.set.T3CODE_THREAD_ID";
 const threadEnvOf = (params: unknown) =>
   Predicate.hasProperty(params, "config") && Predicate.hasProperty(params.config, T3_THREAD_ENV_KEY)
     ? params.config[T3_THREAD_ENV_KEY]
@@ -3018,8 +3018,8 @@ describe("CodexAdapterV2 post-settle continuation", () => {
             "tools.update_plan.enabled": true,
             mcp_optional_startup_grace_ms: 10_000,
             "features.concurrent_reasoning_summaries": true,
-            "shell_environment_policy.set.A4CODE_THREAD_ID": `thread-${scenario}`,
-            "mcp_servers.envprobe.env.A4CODE_THREAD_ID": `thread-${scenario}`,
+            "shell_environment_policy.set.T3CODE_THREAD_ID": `thread-${scenario}`,
+            "mcp_servers.envprobe.env.T3CODE_THREAD_ID": `thread-${scenario}`,
             "mcp_servers.t3-code": {
               url: "http://127.0.0.1:43123/mcp",
               tool_timeout_sec: 3_900,
@@ -14105,7 +14105,7 @@ describe("CodexAdapterV2 app-server process", () => {
         // Scope.close cannot be interrupted, so a regression is ended by this rescue instead of
         // hanging the test; the deadline under test must make it unnecessary.
         let rescued = false;
-        // oxlint-disable-next-line a4code/no-real-time-wait-in-tests -- a watchdog for a hung child, not a wait for a milestone; it must never fire.
+        // oxlint-disable-next-line t3code/no-real-time-wait-in-tests -- a watchdog for a hung child, not a wait for a milestone; it must never fire.
         const rescue = yield* Effect.sleep("10 seconds").pipe(
           Effect.andThen(
             Effect.sync(() => {

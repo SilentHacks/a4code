@@ -1,4 +1,4 @@
-import { thrownErrorMessage } from "@a4code/client-runtime/errors";
+import { thrownErrorMessage } from "@t3tools/client-runtime/errors";
 import { DownloadIcon, CopyIcon, CheckIcon, Code2Icon, EyeIcon, Table2Icon } from "lucide-react";
 import { msg, T, useGT, useMessages, Var } from "gt-react";
 import { m, type MessageResolver } from "~/i18n/messages";
@@ -12,9 +12,9 @@ import {
   type ProjectId,
   type ResolvedKeybindingsConfig,
   type ScopedThreadRef,
-} from "@a4code/contracts";
-import { filePreviewDelimiter } from "@a4code/shared/delimitedPreview";
-import { AuthFilesystemWriteScope } from "@a4code/contracts";
+} from "@t3tools/contracts";
+import { filePreviewDelimiter } from "@t3tools/shared/delimitedPreview";
+import { AuthFilesystemWriteScope } from "@t3tools/contracts";
 import {
   isWorkspaceAudioPreviewPath,
   isWorkspaceImagePreviewPath,
@@ -22,7 +22,7 @@ import {
   isWorkspaceVideoPreviewPath,
   officePreviewKind,
   binaryPreviewKind,
-} from "@a4code/shared/filePreview";
+} from "@t3tools/shared/filePreview";
 import { useAtomMount, useAtomValue } from "@effect/atom-react";
 import { Atom } from "effect/reactivity";
 import {
@@ -45,8 +45,8 @@ import { useFilesystemReadAccess } from "~/state/filesystem";
 import {
   isAtomCommandInterrupted,
   squashAtomCommandFailure,
-} from "@a4code/client-runtime/state/runtime";
-import { mediaFileReference } from "@a4code/client-runtime/media-reference";
+} from "@t3tools/client-runtime/state/runtime";
+import { mediaFileReference } from "@t3tools/client-runtime/media-reference";
 import { FolderTree, Globe2, WrapTextIcon } from "lucide-react";
 import * as Schema from "effect/Schema";
 import {
@@ -77,8 +77,8 @@ import { PREFERRED_HIGHLIGHTER } from "~/lib/syntaxHighlighting";
 import { cn, isMacPlatform } from "~/lib/utils";
 import { requestWorkspaceFocus } from "~/lib/workspaceFocus";
 import type { ChatFileAttachment } from "~/types";
-import { isAbsolutePath, isHostPath } from "@a4code/shared/path";
-import { resolvePathLinkTarget } from "@a4code/shared/fileLinks";
+import { isAbsolutePath, isHostPath } from "@t3tools/shared/path";
+import { resolvePathLinkTarget } from "@t3tools/shared/fileLinks";
 import { ScrollArea } from "~/components/ui/scroll-area";
 import { stackedThreadToast, toastManager } from "~/components/ui/toast";
 import { type DraftId, useComposerDraftStore } from "~/composerDraftStore";
@@ -108,7 +108,7 @@ import { breadcrumbPathOf, retainedBreadcrumbTrail, trailChildOf } from "./fileP
 import { FileMarkdownPreview } from "./FileMarkdownPreview";
 import { RenderedFileFind } from "./RenderedFileFind";
 import { ChunkedMarkdown } from "./ChunkedMarkdown";
-import { LARGE_MARKDOWN_CHUNK_MAX_CHARS, splitMarkdown } from "@a4code/shared/markdownChunks";
+import { LARGE_MARKDOWN_CHUNK_MAX_CHARS, splitMarkdown } from "@t3tools/shared/markdownChunks";
 import {
   type FileCommentAnnotationEntry,
   type FileCommentAnnotationGroup,
@@ -141,7 +141,7 @@ import {
   shouldShowFileExplorer,
   workspaceAssetResource,
 } from "./filePreviewMode";
-import { setMarkdownTaskChecked } from "@a4code/shared/markdownTaskEdits";
+import { setMarkdownTaskChecked } from "@t3tools/shared/markdownTaskEdits";
 import { changeFileSaveSession, useFileSaveSession } from "./fileSaveSessions";
 import { revisionedQuery } from "~/state/revisionedQuery";
 import {
@@ -181,15 +181,15 @@ const MermaidFilePreview = lazy(() =>
   import("./MermaidFilePreview").then((module) => ({ default: module.MermaidFilePreview })),
 );
 
-const FILE_EXPLORER_STORAGE_KEY = "a4code.fileExplorerOpen";
-const RENDER_MARKDOWN_STORAGE_KEY = "a4code.renderMarkdown";
+const FILE_EXPLORER_STORAGE_KEY = "t3code.fileExplorerOpen";
+const RENDER_MARKDOWN_STORAGE_KEY = "t3code.renderMarkdown";
 
 function hostParentPath(path: string): string {
   const index = path.lastIndexOf("/");
   return index <= 0 ? "/" : path.slice(0, index);
 }
-const RENDER_BROWSER_FILE_STORAGE_KEY = "a4code.renderBrowserFile";
-const RENDER_TABLE_STORAGE_KEY = "a4code.renderTable";
+const RENDER_BROWSER_FILE_STORAGE_KEY = "t3code.renderBrowserFile";
+const RENDER_TABLE_STORAGE_KEY = "t3code.renderTable";
 type FilePostRender = <LAnnotation>(
   fileContainer: HTMLElement,
   instance: FileInstance<LAnnotation, undefined>,
@@ -325,7 +325,7 @@ export function WorkspaceBrowserPreview(props: {
       void refreshAssetUrl().catch(() => undefined);
     }
   });
-  // oxlint-disable-next-line a4code/no-unreasoned-state-sync -- mints a fresh URL shortly before the loaded page's grant expires
+  // oxlint-disable-next-line t3code/no-unreasoned-state-sync -- mints a fresh URL shortly before the loaded page's grant expires
   useEffect(() => {
     if (frame === null) return;
     const timer = setTimeout(() => renewGrant(frame.url), frame.renewAt - Date.now());
@@ -1074,7 +1074,7 @@ function EditableFileSurface({
   const hasOpenCommentForm = lineAnnotations.some((annotation) =>
     annotation.metadata.entries.some((entry) => entry.kind === "draft"),
   );
-  // oxlint-disable-next-line a4code/no-unreasoned-state-sync -- installs selection dismissal listeners on the editor surface DOM node
+  // oxlint-disable-next-line t3code/no-unreasoned-state-sync -- installs selection dismissal listeners on the editor surface DOM node
   useEffect(() => {
     const root = surfaceRef.current;
     if (!root) return;
@@ -1404,7 +1404,7 @@ export default function FilePreviewPanel({
   const isMarkdown = previewPath ? isMarkdownPreviewFile(previewPath) : false;
   const isMermaid = previewPath !== null && /\.(mmd|mermaid)$/i.test(previewPath);
   const [renderMermaidPreferred, setRenderMermaidPreferred] = useLocalStorage(
-    "a4code.renderMermaid",
+    "t3code.renderMermaid",
     true,
     Schema.Boolean,
   );
@@ -1568,7 +1568,7 @@ export default function FilePreviewPanel({
       : NO_FILE_REVISION_ATOM,
   );
 
-  // oxlint-disable-next-line a4code/no-unreasoned-state-sync -- scrolls the breadcrumb DOM so the deepest and current crumbs are in view after commit
+  // oxlint-disable-next-line t3code/no-unreasoned-state-sync -- scrolls the breadcrumb DOM so the deepest and current crumbs are in view after commit
   useEffect(() => {
     const crumbs = breadcrumbRef.current?.querySelectorAll<HTMLElement>("[data-file-crumb]");
     // Show the deepest crumb when it fits, but never at the cost of the current one.

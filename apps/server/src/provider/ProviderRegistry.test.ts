@@ -40,14 +40,14 @@ import {
   type ServerProviderUpdateState,
   type ServerProviderVersionAdvisoryStatus,
   type ServerSettings as ContractServerSettings,
-} from "@a4code/contracts";
+} from "@t3tools/contracts";
 import { HttpClient, HttpClientResponse } from "effect/http";
 import { ChildProcessSpawner } from "effect/process";
-import * as HostProcess from "@a4code/shared/HostProcess";
-import { WindowsShellEnvironment } from "@a4code/shared/shell";
-import { deepMerge } from "@a4code/shared/Struct";
-import { createModelCapabilities } from "@a4code/shared/model";
-import { applyServerSettingsPatch } from "@a4code/shared/serverSettings";
+import * as HostProcess from "@t3tools/shared/HostProcess";
+import { WindowsShellEnvironment } from "@t3tools/shared/shell";
+import { deepMerge } from "@t3tools/shared/Struct";
+import { createModelCapabilities } from "@t3tools/shared/model";
+import { applyServerSettingsPatch } from "@t3tools/shared/serverSettings";
 
 import {
   checkCodexProviderStatus,
@@ -61,11 +61,11 @@ import * as AntigravityInstallation from "./AntigravityInstallation.ts";
 import * as ModelManifest from "./ModelManifest.ts";
 import { applyProviderCompatibility } from "./providerCompatibility.ts";
 import * as ResetCreditCoordinator from "./resetCreditCoordinator.ts";
-import * as ProviderLatestVersions from "@a4code/provider-core/server/ProviderLatestVersions";
-import * as McpProviderSessions from "@a4code/provider-core/server/McpProviderSessions";
-import * as OpenCodeRuntime from "@a4code/provider-opencode/server/OpenCodeRuntime";
-import * as OpenCodeServerLedger from "@a4code/provider-opencode/server/OpenCodeServerLedger";
-import * as ProviderEventLoggers from "@a4code/provider-core/server/ProviderEventLoggers";
+import * as ProviderLatestVersions from "@t3tools/provider-core/server/ProviderLatestVersions";
+import * as McpProviderSessions from "@t3tools/provider-core/server/McpProviderSessions";
+import * as OpenCodeRuntime from "@t3tools/provider-opencode/server/OpenCodeRuntime";
+import * as OpenCodeServerLedger from "@t3tools/provider-opencode/server/OpenCodeServerLedger";
+import * as ProviderEventLoggers from "@t3tools/provider-core/server/ProviderEventLoggers";
 import * as ProviderInstallationGate from "./ProviderInstallationGate.ts";
 import * as ProviderInstanceRegistryHydration from "./ProviderInstanceRegistryHydration.ts";
 import * as PortScanner from "../preview/PortScanner.ts";
@@ -77,19 +77,19 @@ import {
   resolveProviderStatusCachePath,
   writeProviderStatusCache,
 } from "./providerStatusCache.ts";
-import { COMPACT_SLASH_COMMAND } from "@a4code/provider-core/server/snapshotProbe";
+import { COMPACT_SLASH_COMMAND } from "@t3tools/provider-core/server/snapshotProbe";
 import type {
   AnyProviderDriver,
   ProviderInstance,
   ProviderWorkspaceSnapshot,
-} from "@a4code/provider-core/server/driver";
+} from "@t3tools/provider-core/server/driver";
 import * as ProviderInstanceRegistry from "./ProviderInstanceRegistry.ts";
 import * as ProviderInstanceRegistryMutator from "./ProviderInstanceRegistryMutator.ts";
 import * as ProviderRegistry from "./ProviderRegistry.ts";
-import { ProviderDriverError } from "@a4code/provider-core/server/errors";
-import { mergeProviderInstanceEnvironment } from "@a4code/provider-core/server/instanceEnvironment";
-import { makeManualOnlyProviderMaintenanceCapabilities } from "@a4code/provider-core/server/maintenanceResolver";
-import * as SecretResolver from "@a4code/secret-provider-core/server/SecretResolver";
+import { ProviderDriverError } from "@t3tools/provider-core/server/errors";
+import { mergeProviderInstanceEnvironment } from "@t3tools/provider-core/server/instanceEnvironment";
+import { makeManualOnlyProviderMaintenanceCapabilities } from "@t3tools/provider-core/server/maintenanceResolver";
+import * as SecretResolver from "@t3tools/secret-provider-core/server/SecretResolver";
 import * as ProviderHostPathWatcher from "./ProviderHostPathWatcher.ts";
 import * as DesktopTelemetryReceiver from "../resourceTelemetry/DesktopTelemetryReceiver.ts";
 import { providerHostEnvironment } from "../policy/managedProviders.ts";
@@ -115,7 +115,7 @@ const defaultClaudeSettings: ClaudeSettings = Schema.decodeSync(ClaudeSettings)(
 const decodeCodexSettings = Schema.decodeSync(CodexSettings);
 const defaultCodexSettings: CodexSettings = Schema.decodeSync(CodexSettings)({});
 
-process.env.A4CODE_CURSOR_ENABLED = "1";
+process.env.T3CODE_CURSOR_ENABLED = "1";
 
 const encoder = new TextEncoder();
 const TEST_EPOCH = DateTime.makeUnsafe("1970-01-01T00:00:00.000Z");
@@ -655,7 +655,7 @@ it.layer(
         const fiber = yield* checkCodexProviderStatus(
           defaultCodexSettings,
           () => Effect.sleep("22 seconds").pipe(Effect.as(makeCodexProbeSnapshot())),
-          { A4CODE_CODEX_PROBE_TIMEOUT_MS: "60000" },
+          { T3CODE_CODEX_PROBE_TIMEOUT_MS: "60000" },
         ).pipe(Effect.forkChild);
         yield* TestClock.adjust("22 seconds");
         const status = yield* Fiber.join(fiber);
@@ -1843,7 +1843,7 @@ it.layer(
         // PATH. Installed instances may hold live sessions, so it must not be rebuilt.
         const failsEarly = mode === "installed error";
         const replay = mode === "replay" || failsEarly;
-        const host = { PATH: "/early/bin", A4CODE_CODEX_LAUNCH_ARGS: "hidden" };
+        const host = { PATH: "/early/bin", T3CODE_CODEX_LAUNCH_ARGS: "hidden" };
         const environment = providerHostEnvironment(
           { organization: "PATH test", lockedSettings: [] },
           host,
@@ -4399,8 +4399,8 @@ it.layer(
 
     it.effect("re-probes when settings change the codex binaryPath", () =>
       Effect.gen(function* () {
-        const firstMissing = `a4code_codex_first_`;
-        const secondMissing = `a4code_codex_second_`;
+        const firstMissing = `t3code_codex_first_`;
+        const secondMissing = `t3code_codex_second_`;
         const spawnedCommands: Array<string> = [];
         const secondProbeStarted = yield* Deferred.make<void>();
         const releaseSecondProbe = yield* Deferred.make<void>();

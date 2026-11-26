@@ -1,24 +1,24 @@
-import type { ProjectThreadAwarenessV2Input } from "@a4code/shared/agentAwareness";
-import { applyOrchestrationV2ThreadVisit, pendingGuestMessageCount } from "@a4code/contracts";
+import type { ProjectThreadAwarenessV2Input } from "@t3tools/shared/agentAwareness";
+import { applyOrchestrationV2ThreadVisit, pendingGuestMessageCount } from "@t3tools/contracts";
 import { applyThreadPullRequestLinkUpdate } from "../sourceControl/threadPullRequests.ts";
 import { projectTurnItemForWire } from "./WireProjection.ts";
 import * as Stream from "effect/Stream";
-import * as NodeSqliteClient from "@a4code/shared/nodeSqliteClient";
+import * as NodeSqliteClient from "@t3tools/shared/nodeSqliteClient";
 import { makeThreadFind } from "./ThreadFind.ts";
-import { unsentManualContinuationSource } from "@a4code/shared/orchestrationV2ManualContinuation";
+import { unsentManualContinuationSource } from "@t3tools/shared/orchestrationV2ManualContinuation";
 import type {
   OrchestrationV2ThreadLinkMetadata,
   OrchestrationV2SearchThreadInput,
   OrchestrationV2SearchThreadResult,
   OrchestrationV2ThreadHistoryPage,
-} from "@a4code/contracts";
+} from "@t3tools/contracts";
 import {
   latestRootProviderFailure,
   latestUnheldRun,
   runRanAfter,
   threadErrorSummary,
   usageLimitRunPresentedAsLatest,
-} from "@a4code/shared/orchestrationV2ThreadError";
+} from "@t3tools/shared/orchestrationV2ThreadError";
 import { threadPullRequestsOf } from "../sourceControl/threadPullRequests.ts";
 import {
   anchorsModelSwitch,
@@ -53,7 +53,7 @@ import type {
   ProviderThreadId,
   ProviderTurnId,
   RunAttemptId,
-} from "@a4code/contracts";
+} from "@t3tools/contracts";
 import {
   IDLE_COMPACTION_TEXT,
   idleCompactionOf,
@@ -86,12 +86,12 @@ import {
   NodeId,
   ProjectId,
   ProviderInstanceId,
-} from "@a4code/contracts";
-import { createOrchestrationV2TurnItemVisibility } from "@a4code/shared/orchestrationV2Timeline";
+} from "@t3tools/contracts";
+import { createOrchestrationV2TurnItemVisibility } from "@t3tools/shared/orchestrationV2Timeline";
 import {
   deriveBlockedOnThreadWait,
   derivePendingBackgroundWork,
-} from "@a4code/shared/orchestrationV2PendingBackgroundWork";
+} from "@t3tools/shared/orchestrationV2PendingBackgroundWork";
 import * as Context from "effect/Context";
 import * as DateTime from "effect/DateTime";
 import * as Effect from "effect/Effect";
@@ -102,8 +102,8 @@ import * as Schema from "effect/Schema";
 import * as SqlClient from "effect/sql/SqlClient";
 import type * as Statement from "effect/sql/Statement";
 
-import { MCP_APP_OUTPUT_KEY } from "@a4code/shared/mcpApp";
-import { normalizeProjectPathForComparison } from "@a4code/shared/path";
+import { MCP_APP_OUTPUT_KEY } from "@t3tools/shared/mcpApp";
+import { normalizeProjectPathForComparison } from "@t3tools/shared/path";
 import { threadHtmlRenderAttachmentIds } from "../attachmentStore.ts";
 import { DELEGATED_TASK_MESSAGE_CONDITION } from "./delegatedTaskMessage.ts";
 import {
@@ -132,7 +132,7 @@ import {
   type SelectTimelinePageResult,
   type ThreadHistoryPrefix,
 } from "./threadHistoryPaging.ts";
-import { routineSpan } from "@a4code/shared/observability";
+import { routineSpan } from "@t3tools/shared/observability";
 
 export class ProjectionStoreApplyEventError extends Schema.TaggedError<ProjectionStoreApplyEventError>()(
   "ProjectionStoreApplyEventError",
@@ -916,7 +916,7 @@ type ProjectionWindow = Omit<
 };
 
 export class ProjectionStoreV2 extends Context.Service<ProjectionStoreV2, ProjectionStoreV2Shape>()(
-  "a4code/orchestration-v2/ProjectionStore/ProjectionStoreV2",
+  "t3/orchestration-v2/ProjectionStore/ProjectionStoreV2",
 ) {}
 
 // The provider batch owns the writer, so no other write can change these rows before it commits.
@@ -927,7 +927,7 @@ export interface ProviderBatchProjection {
 }
 export class ProviderBatchProjectionState extends Context.Reference<
   ProviderBatchProjection | undefined
->("a4code/orchestration-v2/ProjectionStore/ProviderBatchProjectionState", {
+>("t3/orchestration-v2/ProjectionStore/ProviderBatchProjectionState", {
   defaultValue: () => undefined,
 }) {}
 

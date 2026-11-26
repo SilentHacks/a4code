@@ -1,12 +1,12 @@
 import {
   DEFAULT_SPEECH_POST_PROCESSING_PROMPT,
   type EnvironmentSpeechPostProcessingRequest,
-} from "@a4code/contracts";
+} from "@t3tools/contracts";
 import * as Context from "effect/Context";
 import * as Effect from "effect/Effect";
 import * as FileSystem from "effect/FileSystem";
 import * as Layer from "effect/Layer";
-import { resolveSpeechPostProcessingModelSelection } from "@a4code/shared/serverSettings";
+import { resolveSpeechPostProcessingModelSelection } from "@t3tools/shared/serverSettings";
 
 import * as ProviderRegistry from "../provider/ProviderRegistry.ts";
 import * as ServerSettings from "../serverSettings.ts";
@@ -22,7 +22,7 @@ export class SpeechPostProcessing extends Context.Service<
       input: EnvironmentSpeechPostProcessingRequest,
     ) => Effect.Effect<{ readonly text: string }, SpeechOperationError>;
   }
->()("a4code/speech/postProcessing/SpeechPostProcessing") {}
+>()("t3/speech/postProcessing/SpeechPostProcessing") {}
 
 const make = Effect.gen(function* () {
   const settingsService = yield* ServerSettings.ServerSettingsService;

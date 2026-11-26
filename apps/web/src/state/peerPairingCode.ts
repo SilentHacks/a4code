@@ -1,13 +1,13 @@
 import {
   createMcpApprovalCodeCommand,
   createPeerPairingCodeCommand,
-} from "@a4code/client-runtime/state/peerPairingCode";
-import { runAtomCommand, squashAtomCommandFailure } from "@a4code/client-runtime/state/runtime";
+} from "@t3tools/client-runtime/state/peerPairingCode";
+import { runAtomCommand, squashAtomCommandFailure } from "@t3tools/client-runtime/state/runtime";
 import type {
   AuthMcpClientAccess,
   AuthPairingCredentialResult,
   EnvironmentId,
-} from "@a4code/contracts";
+} from "@t3tools/contracts";
 import * as Result from "effect/Result";
 
 import { connectionAtomRuntime } from "../connection/runtime";

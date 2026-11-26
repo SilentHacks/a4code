@@ -1,8 +1,8 @@
-import { findErrorTraceId, thrownErrorMessage } from "@a4code/client-runtime/errors";
+import { findErrorTraceId, thrownErrorMessage } from "@t3tools/client-runtime/errors";
 import {
   isAtomCommandInterrupted,
   squashAtomCommandFailure,
-} from "@a4code/client-runtime/state/runtime";
+} from "@t3tools/client-runtime/state/runtime";
 import { msg } from "gt-react";
 import { useState } from "react";
 

@@ -4,7 +4,7 @@ import {
   authScopeResponse,
   AuthAdministrativeClientScopes,
   connectDeviceVerificationCode,
-} from "@a4code/contracts";
+} from "@t3tools/contracts";
 import { expect, it } from "@effect/vitest";
 import * as DateTime from "effect/DateTime";
 import * as Effect from "effect/Effect";
@@ -984,7 +984,7 @@ it.layer(Layer.mergeAll(NodeServices.layer, NodePlatformCrypto.layer))(
           origin: "https://box.tail1234.ts.net",
           "x-forwarded-host": "box.tail1234.ts.net",
         });
-        yield* upgrade({ origin: "a4code://app" });
+        yield* upgrade({ origin: "t3code://app" });
         yield* upgrade({ origin: "http://localhost:5733" });
         yield* upgrade({});
 

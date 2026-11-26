@@ -6,7 +6,7 @@ import {
   IssueInvolvement,
   IssueListState,
   ProjectId,
-} from "@a4code/contracts";
+} from "@t3tools/contracts";
 
 /**
  * What the issues page remembers between visits; the selection in the URL is not part of it.

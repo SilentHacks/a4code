@@ -8,7 +8,7 @@ import {
   type ModelSelection,
   type ServerConfig,
   type ServerSettings,
-} from "@a4code/contracts";
+} from "@t3tools/contracts";
 
 import {
   buildModelOptions,
@@ -21,7 +21,7 @@ import {
   withStoredThreadModelOptions,
   type ModelOption,
 } from "./modelOptions";
-import { groupModelsBySubProvider } from "@a4code/client-runtime/providerSubProviders";
+import { groupModelsBySubProvider } from "@t3tools/client-runtime/providerSubProviders";
 
 describe("mobile model options", () => {
   it("keeps unavailable OMP models and options instead of silently selecting another provider", () => {

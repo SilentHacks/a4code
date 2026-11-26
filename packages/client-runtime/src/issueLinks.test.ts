@@ -4,7 +4,7 @@ import {
   IssueTrackerKind,
   ProjectId,
   SourceControlProviderKind,
-} from "@a4code/contracts";
+} from "@t3tools/contracts";
 import { describe, expect, it } from "vite-plus/test";
 
 import { mayContainStandaloneIssueLink, resolveIssueLinkTarget } from "./issueLinks.ts";

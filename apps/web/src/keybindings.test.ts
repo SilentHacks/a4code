@@ -3,14 +3,14 @@ import {
   compileResolvedKeybindingsConfig,
   DEFAULT_RESOLVED_KEYBINDINGS,
   mergeWithDefaultKeybindings,
-} from "@a4code/shared/keybindings";
+} from "@t3tools/shared/keybindings";
 
 import {
   type KeybindingCommand,
   type KeybindingShortcut,
   type KeybindingWhenNode,
   type ResolvedKeybindingsConfig,
-} from "@a4code/contracts";
+} from "@t3tools/contracts";
 import {
   effectiveShortcutsForCommand,
   formatShortcutLabel,

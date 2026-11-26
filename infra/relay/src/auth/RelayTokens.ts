@@ -7,9 +7,9 @@ import {
   RelayWebClientId,
   type RelayPublicClientId,
   type RelayEnvironmentLinkChallengeRequest,
-} from "@a4code/contracts/relay";
-import { encodeOAuthScope, parseAllowedOAuthScope } from "@a4code/shared/oauthScope";
-import { normalizeRelayIssuer, RelayJwtError } from "@a4code/shared/relayJwt";
+} from "@t3tools/contracts/relay";
+import { encodeOAuthScope, parseAllowedOAuthScope } from "@t3tools/shared/oauthScope";
+import { normalizeRelayIssuer, RelayJwtError } from "@t3tools/shared/relayJwt";
 import * as Context from "effect/Context";
 import * as Effect from "effect/Effect";
 import * as Layer from "effect/Layer";
@@ -103,7 +103,7 @@ export class RelayTokens extends Context.Service<
       readonly token: string;
     }) => Effect.Effect<RelayDpopAccessTokenClaims | null>;
   }
->()("a4code-relay/auth/RelayTokens") {}
+>()("t3code-relay/auth/RelayTokens") {}
 
 const make = Effect.gen(function* () {
   const config = yield* RelayConfiguration.RelayConfiguration;

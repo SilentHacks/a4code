@@ -1,5 +1,5 @@
-import { EnvironmentId, type ExecutionEnvironmentDescriptor } from "@a4code/contracts";
-import { RelayEnvironmentEndpointFailure } from "@a4code/contracts/relay";
+import { EnvironmentId, type ExecutionEnvironmentDescriptor } from "@t3tools/contracts";
+import { RelayEnvironmentEndpointFailure } from "@t3tools/contracts/relay";
 import * as Schema from "effect/Schema";
 
 import { MarkedText } from "../errors/translatable.ts";
@@ -58,7 +58,7 @@ export type PersistedConnectionTarget = typeof PersistedConnectionTarget.Type;
 
 export type NetworkStatus = "unknown" | "offline" | "online";
 
-const ConnectionTransientReason = Schema.Literals([
+export const ConnectionTransientReason = Schema.Literals([
   "network",
   "timeout",
   "transport",
@@ -68,13 +68,15 @@ const ConnectionTransientReason = Schema.Literals([
   "session-pending",
   "approval-pending",
 ]);
+export type ConnectionTransientReason = typeof ConnectionTransientReason.Type;
 
-const ConnectionBlockedReason = Schema.Literals([
+export const ConnectionBlockedReason = Schema.Literals([
   "authentication",
   "configuration",
   "permission",
   "unsupported",
 ]);
+export type ConnectionBlockedReason = typeof ConnectionBlockedReason.Type;
 
 /** A part of the path to an environment: this device, T3 Connect, the host's tunnel, or A4 Code on the host. */
 export const ConnectionHop = Schema.Literals(["device", "relay", "tunnel", "server"]);

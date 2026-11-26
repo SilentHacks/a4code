@@ -3,7 +3,7 @@ import {
   type PullRequestRef,
   type RepositoryIdentity,
   type ThreadPullRequestKey,
-} from "@a4code/contracts";
+} from "@t3tools/contracts";
 import { sourceControlDefinitions } from "../sourceControl/sourceControlDefinitions.ts";
 import { normalizeThreadPullRequestKey } from "../sourceControl/threadPullRequests.ts";
 

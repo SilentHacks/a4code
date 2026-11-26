@@ -8,7 +8,7 @@ import {
   ProviderThreadId,
   RunId,
   ThreadId,
-} from "@a4code/contracts";
+} from "@t3tools/contracts";
 import * as Context from "effect/Context";
 import * as DateTime from "effect/DateTime";
 import * as Effect from "effect/Effect";
@@ -22,9 +22,9 @@ import {
   historicalMessage,
   renderHistory,
   selectHistory,
-} from "@a4code/provider-core/server/handoffBudget";
-import * as IdAllocator from "@a4code/provider-core/server/IdAllocator";
-import { createOrchestrationV2TurnItemVisibility } from "@a4code/shared/orchestrationV2Timeline";
+} from "@t3tools/provider-core/server/handoffBudget";
+import * as IdAllocator from "@t3tools/provider-core/server/IdAllocator";
+import { createOrchestrationV2TurnItemVisibility } from "@t3tools/shared/orchestrationV2Timeline";
 import { turnItemsSinceContextBoundary } from "./contextBoundary.ts";
 import type { ProjectionStoreV2Shape } from "./ProjectionStore.ts";
 
@@ -105,7 +105,7 @@ export interface ContextHandoffServiceV2Shape {
 export class ContextHandoffServiceV2 extends Context.Service<
   ContextHandoffServiceV2,
   ContextHandoffServiceV2Shape
->()("a4code/orchestration-v2/ContextHandoffService/ContextHandoffServiceV2") {}
+>()("t3/orchestration-v2/ContextHandoffService/ContextHandoffServiceV2") {}
 
 function compactText(text: string, maxLength = 240): string {
   const compacted = text.replace(/\s+/g, " ").trim();

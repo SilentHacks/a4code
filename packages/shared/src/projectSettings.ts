@@ -13,7 +13,7 @@ import {
   type T3ProjectFile,
   type ThreadEnvMode,
   type WorktreeCleanupRules,
-} from "@a4code/contracts";
+} from "@t3tools/contracts";
 import { readCustomModelEntries } from "./model.ts";
 import { normalizeProjectPathForComparison } from "./path.ts";
 import { fallbackTextGenerationModelSelection } from "./serverSettings.ts";

@@ -3,7 +3,7 @@ import {
   MAX_WEBHOOK_FILTERS,
   ScheduledTaskWebhookFilter,
   type ScheduledTaskWebhookFilterOp,
-} from "@a4code/contracts";
+} from "@t3tools/contracts";
 import * as Option from "effect/Option";
 import * as Schema from "effect/Schema";
 import { mFallback, msg } from "gt-i18n";

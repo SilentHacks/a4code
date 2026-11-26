@@ -7,7 +7,7 @@ import {
   type ServerProvider,
   type ServerProviderSkill,
   type ServerProviderSlashCommand,
-} from "@a4code/contracts";
+} from "@t3tools/contracts";
 import { Atom } from "effect/reactivity";
 
 import { deadlineStore } from "./clock.ts";

@@ -1,7 +1,7 @@
 import type { Element, Root } from "hast";
 import { toHtml } from "hast-util-to-html";
 import { describe, expect, it } from "vite-plus/test";
-import { extractMarkdownLinkHrefs } from "@a4code/shared/markdownLinks";
+import { extractMarkdownLinkHrefs } from "@t3tools/shared/markdownLinks";
 
 import {
   decodeMarkdownLinkEscapes,

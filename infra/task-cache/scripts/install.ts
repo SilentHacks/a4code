@@ -1,4 +1,4 @@
-/* oxlint-disable a4code/no-global-process-runtime -- Standalone setup must run before workspace dependencies are installed. */
+/* oxlint-disable t3code/no-global-process-runtime -- Standalone setup must run before workspace dependencies are installed. */
 // @effect-diagnostics nodeBuiltinImport:off - standalone bootstrap also runs before dependencies are installed.
 // @effect-diagnostics globalConsole:off globalFetch:off globalDate:off - interactive setup and endpoint verification.
 import * as NodeCrypto from "node:crypto";
@@ -8,17 +8,16 @@ import * as NodePath from "node:path";
 import * as NodeURL from "node:url";
 import * as NodeReadlinePromises from "node:readline/promises";
 import { patchNativeCli } from "../src/nativeHook.js";
-import { taskCacheEndpoint } from "../src/remoteCache.ts";
 
 const home = NodeOS.homedir();
 const root = NodePath.resolve(import.meta.dirname, "../../..");
-const state = NodePath.join(home, ".config/a4-task-cache");
+const state = NodePath.join(home, ".config/t3-task-cache");
 const nonInteractive = process.argv.includes("--non-interactive");
-const installed = NodePath.join(home, ".local/share/a4-task-cache");
+const installed = NodePath.join(home, ".local/share/t3-task-cache");
 const hookConfig = NodePath.join(home, ".config/vite-plus/run-hook.json");
-const legacySourceLine = '. "$HOME/.config/a4-task-cache/env"';
+const legacySourceLine = '. "$HOME/.config/t3-task-cache/env"';
 const sourceLine =
-  '[ ! -r "$HOME/.config/a4-task-cache/env" ] || . "$HOME/.config/a4-task-cache/env"';
+  '[ ! -r "$HOME/.config/t3-task-cache/env" ] || . "$HOME/.config/t3-task-cache/env"';
 const profiles = [".profile", ".bashrc", ".bash_profile", ".bash_login", ".zshenv", ".zshrc"];
 if (process.argv.includes("--uninstall")) {
   for (const file of profiles) {
@@ -46,7 +45,7 @@ if (process.argv.includes("--uninstall")) {
   }
   await NodeFSP.rm(NodePath.join(state, "credentials.json"), { force: true });
   await NodeFSP.rm(NodePath.join(state, "env"), { force: true });
-  await NodeFSP.rm(NodePath.join(home, ".cache/a4-task-cache/telemetry"), {
+  await NodeFSP.rm(NodePath.join(home, ".cache/t3-task-cache/telemetry"), {
     recursive: true,
     force: true,
   });
@@ -66,6 +65,9 @@ if (process.argv.includes("--uninstall")) {
   process.exit(0);
 }
 
+const { endpoint: defaultEndpoint } = JSON.parse(
+  await NodeFSP.readFile(NodePath.join(root, ".task-cache.json"), "utf8"),
+);
 let credentials: Record<string, { name: string; token: string }> = {};
 try {
   credentials = JSON.parse(
@@ -82,21 +84,20 @@ const prompt = NodeReadlinePromises.createInterface({
   input: process.stdin,
   output: process.stdout,
 });
-let endpoint = taskCacheEndpoint(root) ?? "";
-let name = process.env.A4CODE_TASK_CACHE_SETUP_NAME || credentials[endpoint]?.name;
-let token = process.env.A4CODE_TASK_CACHE_SETUP_TOKEN || credentials[endpoint]?.token;
+let endpoint = process.env.T3_CACHE_SETUP_URL || defaultEndpoint;
+let name = process.env.T3_CACHE_SETUP_NAME || credentials[endpoint]?.name;
+let token = process.env.T3_CACHE_SETUP_TOKEN || credentials[endpoint]?.token;
 const initialEndpoint = endpoint;
 const initialName = name;
 try {
   if (!nonInteractive) {
-    const entered = await prompt.question(`Cache URL${endpoint ? ` [${endpoint}]` : ""}: `);
-    endpoint = entered.trim() || endpoint;
+    endpoint = (await prompt.question(`Cache URL [${endpoint}]: `)).trim() || endpoint;
     name = (await prompt.question(`Developer name${name ? ` [${name}]` : ""}: `)).trim() || name;
     prompt.close();
     if (process.stdin.isTTY || !token || endpoint !== initialEndpoint || name !== initialName) {
       const savedToken = endpoint === initialEndpoint && name === initialName ? token : undefined;
       if (!process.stdin.isTTY)
-        throw new Error("Use A4CODE_TASK_CACHE_SETUP_TOKEN for non-interactive setup.");
+        throw new Error("Use T3_CACHE_SETUP_TOKEN for non-interactive setup.");
       process.stdout.write(
         `Credential token (hidden)${savedToken ? " [Enter keeps saved token]" : ""}: `,
       );
@@ -136,7 +137,6 @@ try {
 }
 if (!name || !token || !/^[a-z0-9-]{1,64}$/.test(name) || token.length < 32)
   throw new Error("A valid developer name and credential token are required.");
-if (!endpoint) throw new Error("A cache URL is required.");
 const url = new URL(endpoint);
 if (
   (url.protocol !== "https:" &&

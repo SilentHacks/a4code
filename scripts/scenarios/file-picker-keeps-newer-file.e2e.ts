@@ -1,5 +1,5 @@
 /// <reference lib="dom" />
-import type { EnvironmentId, ProjectSearchEntriesInput } from "@a4code/contracts";
+import type { EnvironmentId, ProjectSearchEntriesInput } from "@t3tools/contracts";
 import { expect } from "e2e";
 import type { AsyncResult, Atom, AtomRegistry } from "effect/reactivity";
 

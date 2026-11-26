@@ -20,7 +20,7 @@ import {
   NonNegativeInt,
   ProjectId,
   clampedPositiveInt,
-} from "@a4code/contracts";
+} from "@t3tools/contracts";
 import * as SecureRandom from "effect/crypto/SecureRandom";
 import * as Schema from "effect/Schema";
 import { McpSchema, Tool, Toolkit } from "effect/ai";

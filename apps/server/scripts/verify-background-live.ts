@@ -23,7 +23,7 @@ import {
   ThreadId,
   WsRpcGroup,
   type OrchestrationV2ThreadProjection,
-} from "@a4code/contracts";
+} from "@t3tools/contracts";
 
 const { values } = NodeUtil.parseArgs({
   options: {

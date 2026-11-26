@@ -4,9 +4,9 @@ import {
   normalizeProviderAccentColor,
   providerAccentForegroundColor,
   providerInstanceInitials,
-} from "@a4code/client-runtime/state/provider-instance-display";
+} from "@t3tools/client-runtime/state/provider-instance-display";
 
-import { ProviderDriverKind } from "@a4code/contracts";
+import { ProviderDriverKind } from "@t3tools/contracts";
 import {
   AnthropicIcon,
   AntigravityIcon,

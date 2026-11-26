@@ -49,7 +49,7 @@ test(
       );
     await t3.open(thread);
     await browser.evaluate(() => {
-      localStorage.setItem("a4code:theme", "dark");
+      localStorage.setItem("t3code:theme", "dark");
       return null;
     });
     await t3.open(thread);

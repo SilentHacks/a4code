@@ -9,8 +9,8 @@ import type {
   ScopedThreadRef,
   ThreadLinkedPullRequest,
   ThreadPullRequestLink,
-} from "@a4code/contracts";
-import { scopedThreadKey } from "@a4code/client-runtime/environment";
+} from "@t3tools/contracts";
+import { scopedThreadKey } from "@t3tools/client-runtime/environment";
 import { lazy, Suspense } from "react";
 import { LinkedThreadPane } from "./LinkedThreadPane";
 import SideThreadPane from "./SideThreadPane";

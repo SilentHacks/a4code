@@ -1,4 +1,4 @@
-import { AuthStandardClientScopes } from "@a4code/contracts";
+import { AuthStandardClientScopes } from "@t3tools/contracts";
 import * as NodeCrypto from "@effect/platform-node/NodeCrypto";
 import * as NodeServices from "@effect/platform-node/NodeServices";
 import { expect, it } from "@effect/vitest";
@@ -12,7 +12,7 @@ import * as TestClock from "effect/testing/TestClock";
 import {
   DESKTOP_BOOTSTRAP_TOKEN_WINDOW_MS,
   currentDesktopBootstrapToken,
-} from "@a4code/shared/desktopBootstrapToken";
+} from "@t3tools/shared/desktopBootstrapToken";
 
 import * as ServerConfig from "../config.ts";
 import { MCP_APPROVAL_SUBJECT_PREFIX } from "../persistence/AuthPairingLinks.ts";

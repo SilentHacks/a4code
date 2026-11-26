@@ -2,8 +2,8 @@ import { useGT } from "gt-react-native";
 import { FilePreviewGallery, useFilePreviewGallery } from "./ui/FilePreviewGallery";
 import { composerImageGallery } from "../lib/composerImageGallery";
 import { SymbolView } from "./ui/AppSymbol";
-import { imageMimeType } from "@a4code/shared/image";
-import { videoMimeType } from "@a4code/shared/video";
+import { imageMimeType } from "@t3tools/shared/image";
+import { videoMimeType } from "@t3tools/shared/video";
 import { useAtomValue } from "@effect/atom-react";
 import { AsyncResult, Atom } from "effect/reactivity";
 import { Paths } from "expo-file-system";
@@ -26,7 +26,7 @@ import { type MediaActionsSource } from "../lib/mediaActionsSource";
 import { PresentationSource } from "./ui/NativePresentation";
 import type { FilePreviewSource } from "./ui/FilePreviewModal";
 import { isPdfFile } from "../lib/filePreview";
-import type { EnvironmentId } from "@a4code/contracts";
+import type { EnvironmentId } from "@t3tools/contracts";
 import {
   retryComposerAttachmentUpload,
   useComposerAttachmentUploadState,

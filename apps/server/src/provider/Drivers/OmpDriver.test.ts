@@ -1,8 +1,8 @@
 import * as NodeCrypto from "@effect/platform-node/NodeCrypto";
 import * as NodeServices from "@effect/platform-node/NodeServices";
 import { expect, it } from "@effect/vitest";
-import { ProviderInstanceId } from "@a4code/contracts";
-import * as HostProcess from "@a4code/shared/HostProcess";
+import { ProviderInstanceId } from "@t3tools/contracts";
+import * as HostProcess from "@t3tools/shared/HostProcess";
 import * as Effect from "effect/Effect";
 import * as FileSystem from "effect/FileSystem";
 import * as Layer from "effect/Layer";
@@ -12,15 +12,15 @@ import * as ChildProcessSpawner from "effect/process/ChildProcessSpawner";
 import * as BackgroundPolicy from "../../background/BackgroundPolicy.ts";
 import * as ServerConfig from "../../config.ts";
 import * as ServerSettings from "../../serverSettings.ts";
-import * as IdAllocator from "@a4code/provider-core/server/IdAllocator";
-import * as ProviderEventLoggers from "@a4code/provider-core/server/ProviderEventLoggers";
+import * as IdAllocator from "@t3tools/provider-core/server/IdAllocator";
+import * as ProviderEventLoggers from "@t3tools/provider-core/server/ProviderEventLoggers";
 import * as ProviderHostLive from "../ProviderHostLive.ts";
 import * as ServerSecretStore from "../../auth/ServerSecretStore.ts";
-import * as McpProviderSessions from "@a4code/provider-core/server/McpProviderSessions";
-import * as ProviderLatestVersions from "@a4code/provider-core/server/ProviderLatestVersions";
+import * as McpProviderSessions from "@t3tools/provider-core/server/McpProviderSessions";
+import * as ProviderLatestVersions from "@t3tools/provider-core/server/ProviderLatestVersions";
 import { OmpDriver } from "./OmpDriver.ts";
 
-const layerDeps = ServerConfig.layerTest(process.cwd(), { prefix: "a4code-driver-" }).pipe(
+const layerDeps = ServerConfig.layerTest(process.cwd(), { prefix: "t3-omp-driver-" }).pipe(
   Layer.provideMerge(Layer.mergeAll(NodeServices.layer, NodeCrypto.layer)),
   Layer.provideMerge(IdAllocator.layer),
   Layer.provideMerge(McpProviderSessions.layer),
@@ -81,7 +81,7 @@ it.layer(testLayer)("OmpDriver", (it) => {
     () =>
       Effect.gen(function* () {
         const fs = yield* FileSystem.FileSystem;
-        const directory = yield* fs.makeTempDirectoryScoped({ prefix: "a4code-instances-" });
+        const directory = yield* fs.makeTempDirectoryScoped({ prefix: "t3-omp-instances-" });
         const binaryPath = `${directory}/omp`;
         yield* fs.makeDirectory(`${directory}/one`);
         yield* fs.makeDirectory(`${directory}/two`);

@@ -26,7 +26,7 @@ export class DesktopRendererHistory extends Context.Service<
     readonly recordMetrics: (metrics: ReadonlyArray<Electron.ProcessMetric>) => Effect.Effect<void>;
     readonly shutdown: Effect.Effect<void>;
   }
->()("@a4code/desktop/telemetry/DesktopRendererHistory") {}
+>()("@t3tools/desktop/telemetry/DesktopRendererHistory") {}
 
 interface RendererMemory {
   readonly sampledAtUnixMs: number;

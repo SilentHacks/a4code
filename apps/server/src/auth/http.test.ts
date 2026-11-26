@@ -5,7 +5,7 @@ import {
   AuthEnvironmentBootstrapTokenType,
   AuthAccessTokenType,
   EnvironmentHttpApi,
-} from "@a4code/contracts";
+} from "@t3tools/contracts";
 import { expect, it } from "@effect/vitest";
 import * as Context from "effect/Context";
 import * as DateTime from "effect/DateTime";

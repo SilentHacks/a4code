@@ -7,11 +7,11 @@ import {
   serializeTableElementToHtml,
   serializeTableElementToMarkdown,
 } from "./markdown-clipboard";
-import { EnvironmentId, MessageId, ThreadId } from "@a4code/contracts";
+import { EnvironmentId, MessageId, ThreadId } from "@t3tools/contracts";
 import {
   collectAssistantCitations,
   serializeAssistantCitation,
-} from "@a4code/shared/assistantCitations";
+} from "@t3tools/shared/assistantCitations";
 import type { Element as HastElement, ElementContent, Root } from "hast";
 
 import { markdownTree } from "./markdown/wordsHast";

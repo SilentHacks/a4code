@@ -1,4 +1,4 @@
-import type { ExecutionEnvironmentPlatformOs } from "@a4code/contracts";
+import type { ExecutionEnvironmentPlatformOs } from "@t3tools/contracts";
 
 export type PendingModifier = "ctrl" | "meta";
 export type HostPlatform = "mac" | "linux" | "windows" | "unknown";

@@ -1,4 +1,4 @@
-import { errorDisplayMessage, type MarkedText } from "@a4code/client-runtime/errors";
+import { errorDisplayMessage, type MarkedText } from "@t3tools/client-runtime/errors";
 import type { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { useSelectWorkspaceDetail } from "../layout/workspace/useSelectWorkspaceDetail";
 import * as Dialog from "../../components/ui/Dialog";
@@ -33,24 +33,24 @@ import {
   sortAddProjectProviderSources,
   type OfferedSourceControlProviders,
   type AddProjectRemoteSource,
-} from "@a4code/client-runtime/operations/projects";
+} from "@t3tools/client-runtime/operations/projects";
 import {
   connectionStatusText,
   type EnvironmentConnectionPhase,
-} from "@a4code/client-runtime/connection";
+} from "@t3tools/client-runtime/connection";
 import {
   canPreloadBrowsePath,
   createBrowseNavigationCoordinator,
   filterFilesystemBrowseEntries,
   getFilesystemBrowsePath,
   resolveFilesystemReadAccess,
-} from "@a4code/client-runtime/state/filesystem";
+} from "@t3tools/client-runtime/state/filesystem";
 import {
   appendBrowsePathSegment,
   inferProjectTitleFromPath,
   isWindowsPlatform,
-} from "@a4code/client-runtime/state/projects";
-import { resolvePastedPath } from "@a4code/shared/path";
+} from "@t3tools/client-runtime/state/projects";
+import { resolvePastedPath } from "@t3tools/shared/path";
 import {
   AuthOrchestrationOperateScope,
   AuthSourceControlWriteScope,
@@ -61,7 +61,7 @@ import {
   ProjectId,
   resolveEnvironmentMachineKind,
   SourceControlProviderKind,
-} from "@a4code/contracts";
+} from "@t3tools/contracts";
 import {
   StackActions,
   useNavigation,
@@ -91,7 +91,7 @@ import { AppText as Text, AppTextInput as TextInput } from "../../components/ui/
 import { EnvironmentMachineSymbol } from "../../components/EnvironmentMachineSymbol";
 import { ErrorBanner } from "../../components/ui/ErrorBanner";
 import { SourceControlIcon } from "./SourceControlIcon";
-import { sourceControlClients } from "@a4code/client-runtime/source-control-clients";
+import { sourceControlClients } from "@t3tools/client-runtime/source-control-clients";
 import { ThemedSwitch } from "../../components/ui/ThemedSwitch";
 import { uuidv4 } from "../../lib/uuid";
 import { useAtomCommand } from "../../state/use-atom-command";
@@ -416,7 +416,7 @@ function useBrowsePathInput(
     return committed;
   };
 
-  // oxlint-disable-next-line a4code/no-unreasoned-state-sync -- invalidates the browse navigation coordinator on unmount so in-flight browses do not commit
+  // oxlint-disable-next-line t3code/no-unreasoned-state-sync -- invalidates the browse navigation coordinator on unmount so in-flight browses do not commit
   useEffect(
     () => () => {
       browseNavigation.invalidate();
@@ -977,7 +977,7 @@ export function AddProjectRepositoryScreen(props: {
   const gt = useGT();
   const messages = useMessages();
 
-  // oxlint-disable-next-line a4code/no-unreasoned-state-sync -- cancels the repository lookup when its screen unmounts
+  // oxlint-disable-next-line t3code/no-unreasoned-state-sync -- cancels the repository lookup when its screen unmounts
   useEffect(() => () => pendingLookup.current?.abort(), []);
 
   const lookupRepository = async () => {

@@ -1,19 +1,19 @@
-import { PRIMARY_LOCAL_ENVIRONMENT_ID } from "@a4code/contracts";
+import { PRIMARY_LOCAL_ENVIRONMENT_ID } from "@t3tools/contracts";
 import {
   makeLocalFileTracer,
   makeTraceSink,
   nodeProcessRuntimeAttributes,
   processServiceInstanceId,
   type SignalExport,
-} from "@a4code/shared/observability";
-import * as HostProcess from "@a4code/shared/HostProcess";
-import * as SharedObservability from "@a4code/shared/observability";
-import * as OtelEnvironment from "@a4code/shared/otelEnvironment";
-import { releaseChannelOf, releaseResourceAttributes } from "@a4code/shared/releaseResource";
+} from "@t3tools/shared/observability";
+import * as HostProcess from "@t3tools/shared/HostProcess";
+import * as SharedObservability from "@t3tools/shared/observability";
+import * as OtelEnvironment from "@t3tools/shared/otelEnvironment";
+import { releaseChannelOf, releaseResourceAttributes } from "@t3tools/shared/releaseResource";
 import {
   parsePersistedServerObservabilitySettings,
   type PersistedServerObservabilitySettings,
-} from "@a4code/shared/serverSettings";
+} from "@t3tools/shared/serverSettings";
 import * as Context from "effect/Context";
 import * as DateTime from "effect/DateTime";
 import * as Effect from "effect/Effect";
@@ -64,7 +64,7 @@ export class DesktopBackendOutputLogFactory extends Context.Service<
   {
     readonly forInstance: (id: string) => Effect.Effect<DesktopBackendOutputLogShape>;
   }
->()("@a4code/desktop/app/DesktopObservability/DesktopBackendOutputLogFactory") {}
+>()("@t3tools/desktop/app/DesktopObservability/DesktopBackendOutputLogFactory") {}
 
 const textEncoder = new TextEncoder();
 const textDecoder = new TextDecoder();
@@ -608,12 +608,12 @@ const layerTelemetry = Layer.unwrap(
       ? environment.appVersion
       : desktopPackageJson.version;
     const resource = {
-      serviceName: "a4code-desktop",
+      serviceName: "t3code-desktop",
       serviceVersion,
       attributes: {
-        "service.namespace": "a4code",
+        "service.namespace": "t3code",
         "service.runtime": "desktop",
-        "a4code.desktop.mode": environment.isDevelopment ? "development" : "packaged",
+        "t3code.desktop.mode": environment.isDevelopment ? "development" : "packaged",
         "service.instance.id": processServiceInstanceId(endpoints.resourceAttributes),
         ...releaseResourceAttributes(
           environment.isDevelopment ? "dev" : releaseChannelOf(serviceVersion),

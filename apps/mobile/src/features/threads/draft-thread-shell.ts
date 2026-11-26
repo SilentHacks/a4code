@@ -1,4 +1,4 @@
-import { presentThreadShell } from "@a4code/client-runtime/state/shell";
+import { presentThreadShell } from "@t3tools/client-runtime/state/shell";
 import type {
   EnvironmentId,
   ThreadId,
@@ -6,7 +6,7 @@ import type {
   ModelSelection,
   RuntimeMode,
   ProviderInteractionMode,
-} from "@a4code/contracts";
+} from "@t3tools/contracts";
 import * as DateTime from "effect/DateTime";
 import { msg } from "gt-react-native";
 

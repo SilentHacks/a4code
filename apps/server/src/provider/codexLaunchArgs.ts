@@ -1,12 +1,12 @@
-import { tokenizeCliArgs } from "@a4code/shared/cliArgs";
+import { tokenizeCliArgs } from "@t3tools/shared/cliArgs";
 
-const A4CODE_CODEX_LAUNCH_ARGS_ENV = "A4CODE_CODEX_LAUNCH_ARGS";
+const T3CODE_CODEX_LAUNCH_ARGS_ENV = "T3CODE_CODEX_LAUNCH_ARGS";
 
 export const resolveCodexLaunchArgs = (
   launchArgs?: string,
   environment: NodeJS.ProcessEnv = process.env,
 ) => {
-  const override = environment[A4CODE_CODEX_LAUNCH_ARGS_ENV];
+  const override = environment[T3CODE_CODEX_LAUNCH_ARGS_ENV];
   return override?.trim() ? override : launchArgs?.trim() || "";
 };
 

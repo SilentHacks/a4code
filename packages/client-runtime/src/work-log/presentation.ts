@@ -8,28 +8,28 @@ import {
   type ToolActivityIcon,
   type OrchestrationV2TurnItem,
   type ThreadId,
-} from "@a4code/contracts";
-import type { ToolCallVisibility } from "@a4code/contracts/settings";
+} from "@t3tools/contracts";
+import type { ToolCallVisibility } from "@t3tools/contracts/settings";
 import {
   resolveT3McpSummaryAction,
   resolveT3McpToolDefinition,
   type T3McpToolDefinition,
   type T3McpToolSummaryAction,
-} from "@a4code/shared/t3McpToolPresentation";
-import { classifyMarkdownImageSource } from "@a4code/client-runtime/markdown-images";
-import { resolveMediaSource } from "@a4code/client-runtime/media-source";
-import { sourceControlClients } from "@a4code/client-runtime/source-control-clients";
-import { isWorkspaceImagePreviewPath } from "@a4code/shared/mediaPreview";
-import { formatTokens } from "@a4code/shared/usageFormat";
-import { classifyToolActivity } from "@a4code/shared/toolActivity";
-import { toolOutputIndicatesFailure } from "@a4code/shared/toolOutput";
+} from "@t3tools/shared/t3McpToolPresentation";
+import { classifyMarkdownImageSource } from "@t3tools/client-runtime/markdown-images";
+import { resolveMediaSource } from "@t3tools/client-runtime/media-source";
+import { sourceControlClients } from "@t3tools/client-runtime/source-control-clients";
+import { isWorkspaceImagePreviewPath } from "@t3tools/shared/mediaPreview";
+import { formatTokens } from "@t3tools/shared/usageFormat";
+import { classifyToolActivity } from "@t3tools/shared/toolActivity";
+import { toolOutputIndicatesFailure } from "@t3tools/shared/toolOutput";
 
 import {
   summarizeT3ToolCalls,
   t3ToolOutcomeLabel,
   t3ToolResultIndicatesFailure,
   type T3ToolSummaryCall,
-} from "@a4code/client-runtime/t3ToolSummary";
+} from "@t3tools/client-runtime/t3ToolSummary";
 import { mFallback, msg } from "gt-i18n";
 import { t3ToolSentence } from "./t3ToolSentences.ts";
 import type { MFunctionType } from "gt-i18n/types";
@@ -88,7 +88,7 @@ export function contextCompactionLabel(
 }
 
 export interface WorkLogPresentationEntry {
-  readonly questionAnswer?: import("@a4code/contracts").UserInputAttachmentAnswerPayload;
+  readonly questionAnswer?: import("@t3tools/contracts").UserInputAttachmentAnswerPayload;
   readonly id: string;
   readonly createdAt: string;
   readonly label: string;

@@ -1,12 +1,12 @@
 import { useAtomValue } from "@effect/atom-react";
-import { AVAILABLE_CONNECTION_STATE } from "@a4code/client-runtime/connection";
-import { thrownErrorMessage } from "@a4code/client-runtime/errors";
+import { AVAILABLE_CONNECTION_STATE } from "@t3tools/client-runtime/connection";
+import { thrownErrorMessage } from "@t3tools/client-runtime/errors";
 import {
   ServerUpdateTerminalError,
   nudgeReconnectDuringUpdateRestart,
   serverUpdateStateAtom,
-} from "@a4code/client-runtime/state/server";
-import { EnvironmentId, type ServerConfig } from "@a4code/contracts";
+} from "@t3tools/client-runtime/state/server";
+import { EnvironmentId, type ServerConfig } from "@t3tools/contracts";
 import * as Effect from "effect/Effect";
 import * as Option from "effect/Option";
 import * as Schema from "effect/Schema";
@@ -204,7 +204,7 @@ export function postponeUpdateRestart(): void {
   decideRestart?.(false);
 }
 
-const SAVED_RESULT_KEY = "a4code:update-everything-result:v1";
+const SAVED_RESULT_KEY = "t3code:update-everything-result:v1";
 const SAVED_RESULT_MAX_AGE_MS = 10 * 60 * 1000;
 // Covers a background service's 30-minute trial start, like the server update itself.
 const HANDOFF_TIMEOUT_MS = 32 * 60 * 1000;

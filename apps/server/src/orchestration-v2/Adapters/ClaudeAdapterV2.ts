@@ -3,14 +3,14 @@ import {
   compactDynamicToolOutput,
   mcpToolResultOutput,
   toolOutputImages,
-} from "@a4code/shared/toolOutput";
+} from "@t3tools/shared/toolOutput";
 import { makeProviderTextDeltaCoalescer } from "./ProviderTextDeltaCoalescer.ts";
 import { claudeTaskOutputRoot, tailClaudeTaskOutput } from "./ClaudeTaskOutputTail.ts";
 import {
   dynamicToolTitle,
   formatReadToolLabel,
   formatSearchToolLabel,
-} from "@a4code/shared/toolActivity";
+} from "@t3tools/shared/toolActivity";
 import { field, text } from "../unknownField.ts";
 import { mergeWorkflowAgentMetadata, type WorkflowAgentMetadata } from "../workflowAgentAnswers.ts";
 import {
@@ -25,8 +25,8 @@ import {
   parseClaudeWorkflowRunHandles,
 } from "./claudeWorkflowProgress.ts";
 
-import { isWorkspaceImagePreviewPath } from "@a4code/shared/filePreview";
-import { pastedUrl } from "@a4code/shared/oauthCallback";
+import { isWorkspaceImagePreviewPath } from "@t3tools/shared/filePreview";
+import { pastedUrl } from "@t3tools/shared/oauthCallback";
 import {
   addClaudeLedgerUsage,
   claudeLedgerDelta,
@@ -73,26 +73,26 @@ import type {
 // @effect-diagnostics-next-line nodeBuiltinImport:off -- the SDK takes a Node ChildProcess for the CLI.
 import * as NodeChildProcess from "node:child_process";
 import * as NodeUtil from "node:util";
-import { parseCliArgs } from "@a4code/shared/cliArgs";
-import { fromLenientJson } from "@a4code/shared/schemaJson";
+import { parseCliArgs } from "@t3tools/shared/cliArgs";
+import { fromLenientJson } from "@t3tools/shared/schemaJson";
 import {
   claudeMcpToolName,
   claudeMcpToolNamePart,
   claudeMcpToolPrefix,
   MCP_APP_OUTPUT_KEY,
   mcpAppToolResourceUri,
-} from "@a4code/shared/mcpApp";
-import { AgentScope } from "@a4code/shared/AgentScope";
+} from "@t3tools/shared/mcpApp";
+import { AgentScope } from "@t3tools/shared/AgentScope";
 import * as ProviderProcesses from "../../process/providerProcesses.ts";
 import * as SpawnWorker from "../../process/SpawnWorker.ts";
-import * as HostProcess from "@a4code/shared/HostProcess";
-import { applyClaudePromptEffortPrefix } from "@a4code/shared/model";
-import { compareSemverVersions } from "@a4code/shared/semver";
+import * as HostProcess from "@t3tools/shared/HostProcess";
+import { applyClaudePromptEffortPrefix } from "@t3tools/shared/model";
+import { compareSemverVersions } from "@t3tools/shared/semver";
 import {
   CLAUDE_RESUME_COMPACTION_COMPACT_ANSWER,
   CLAUDE_RESUME_COMPACTION_NEVER_ANSWER,
   formatClaudeResumeCompactionQuestion,
-} from "@a4code/shared/claudeCompaction";
+} from "@t3tools/shared/claudeCompaction";
 import {
   type AgentFeedbackMode,
   type ChatAttachment,
@@ -139,7 +139,7 @@ import {
   type ThreadId,
   resolveIdleCompaction,
   isDelegatedAppThread,
-} from "@a4code/contracts";
+} from "@t3tools/contracts";
 
 import { FILE_HEADERS_ONLY, formatPatch, structuredPatch } from "diff";
 // @effect-diagnostics-next-line nodeBuiltinImport:off -- A synchronous digest inside the pure note filter.
@@ -198,9 +198,9 @@ import { NativeTelemetryClient } from "../../resourceTelemetry/NativeTelemetryCl
 import * as PortScanner from "../../preview/PortScanner.ts";
 import * as ProcessRunner from "../../processRunner.ts";
 import * as ServerSettings from "../../serverSettings.ts";
-import { expandHomePath } from "@a4code/provider-core/server/pathExpansion";
-import { spawnAndCollect } from "@a4code/provider-core/server/snapshotProbe";
-import { signalProcessGroup } from "@a4code/provider-core/server/processGroup";
+import { expandHomePath } from "@t3tools/provider-core/server/pathExpansion";
+import { spawnAndCollect } from "@t3tools/provider-core/server/snapshotProbe";
+import { signalProcessGroup } from "@t3tools/provider-core/server/processGroup";
 import {
   claudeLocalSettingsDirectory,
   claudeSignedOutMessage,
@@ -221,47 +221,47 @@ import {
   boundProviderEventForLogging,
   shouldPersistProviderEvent,
 } from "../../provider/EventNdjsonLogger.ts";
-import * as ProviderEventLoggers from "@a4code/provider-core/server/ProviderEventLoggers";
+import * as ProviderEventLoggers from "@t3tools/provider-core/server/ProviderEventLoggers";
 import {
   claudeRateLimitEventToUpdate,
   type ClaudeScopedLimitNames,
 } from "../../provider/claudeUsageLimits.ts";
-import type { ManagedServerProvider } from "@a4code/provider-core/server/snapshot";
+import type { ManagedServerProvider } from "@t3tools/provider-core/server/snapshot";
 import {
-  A4_CODE_DEVICE_TOOL_INSTRUCTIONS_WITH_TOOL_SEARCH,
-  A4_CODE_ORCHESTRATION_INSTRUCTIONS,
-} from "@a4code/provider-core/server/orchestrationInstructions";
-import { buildRuntimeInstructions } from "@a4code/provider-core/server/runtimeInstructions";
+  T3_CODE_DEVICE_TOOL_INSTRUCTIONS_WITH_TOOL_SEARCH,
+  T3_CODE_ORCHESTRATION_INSTRUCTIONS,
+} from "@t3tools/provider-core/server/orchestrationInstructions";
+import { buildRuntimeInstructions } from "@t3tools/provider-core/server/runtimeInstructions";
 import {
   mcpToolPresentation,
   normalizeMcpText,
-} from "@a4code/provider-core/server/mcpToolPresentation";
-import * as McpProviderSession from "@a4code/provider-core/server/mcpSession";
-import * as McpProviderSessions from "@a4code/provider-core/server/McpProviderSessions";
-import * as IdAllocator from "@a4code/provider-core/server/IdAllocator";
+} from "@t3tools/provider-core/server/mcpToolPresentation";
+import * as McpProviderSession from "@t3tools/provider-core/server/mcpSession";
+import * as McpProviderSessions from "@t3tools/provider-core/server/McpProviderSessions";
+import * as IdAllocator from "@t3tools/provider-core/server/IdAllocator";
 import {
   makeProviderFailure,
   makeProviderRetryTurnItem,
   PROVIDER_RETRY_BUDGET_MS,
   providerProcessExitGuidance,
-} from "@a4code/provider-core/server/failure";
-import { turnScopedSelectionTransition } from "@a4code/provider-core/server/selectionTransition";
-import { providerMessageTextWithAttachmentPaths } from "@a4code/provider-core/server/attachmentPrompt";
-import * as ProviderAdapter from "@a4code/provider-core/server/ProviderAdapter";
+} from "@t3tools/provider-core/server/failure";
+import { turnScopedSelectionTransition } from "@t3tools/provider-core/server/selectionTransition";
+import { providerMessageTextWithAttachmentPaths } from "@t3tools/provider-core/server/attachmentPrompt";
+import * as ProviderAdapter from "@t3tools/provider-core/server/ProviderAdapter";
 import {
   ProviderAdapterDriverCreateError,
   type ProviderAdapterDriverCreateInput,
-} from "@a4code/provider-core/server/adapterDriver";
+} from "@t3tools/provider-core/server/adapterDriver";
 import {
   type BackgroundWorkReport,
   backgroundWorkNotification,
-} from "@a4code/provider-core/server/notification";
-import * as ProviderContinuationRequests from "@a4code/provider-core/server/ProviderContinuationRequests";
+} from "@t3tools/provider-core/server/notification";
+import * as ProviderContinuationRequests from "@t3tools/provider-core/server/ProviderContinuationRequests";
 import {
   makeSubagentChildThread,
   makeSubagentConversationArtifacts,
   subagentThreadTitle,
-} from "@a4code/provider-core/server/subagentProjection";
+} from "@t3tools/provider-core/server/subagentProjection";
 
 export const CLAUDE_PROVIDER = ProviderDriverKind.make("claudeAgent");
 /** The query exited before the turn attached, so the prompt was never offered. */
@@ -987,7 +987,7 @@ export interface ClaudeAgentSdkQueryRunnerShape {
 export class ClaudeAgentSdkQueryRunner extends Context.Service<
   ClaudeAgentSdkQueryRunner,
   ClaudeAgentSdkQueryRunnerShape
->()("a4code/orchestration-v2/Adapters/ClaudeAdapterV2/ClaudeAgentSdkQueryRunner") {}
+>()("t3/orchestration-v2/Adapters/ClaudeAdapterV2/ClaudeAgentSdkQueryRunner") {}
 
 export interface ClaudeAgentSdkSessionForkInput {
   readonly sessionId: string;
@@ -2573,7 +2573,7 @@ const subagentDeviceInstructions: HookCallback = () =>
   Promise.resolve({
     hookSpecificOutput: {
       hookEventName: "SubagentStart",
-      additionalContext: A4_CODE_DEVICE_TOOL_INSTRUCTIONS_WITH_TOOL_SEARCH,
+      additionalContext: T3_CODE_DEVICE_TOOL_INSTRUCTIONS_WITH_TOOL_SEARCH,
     },
   });
 
@@ -2760,11 +2760,11 @@ export function makeClaudeQueryOptions(input: {
         }) +
           (input.mcpServers === undefined
             ? ""
-            : A4_CODE_ORCHESTRATION_INSTRUCTIONS +
+            : T3_CODE_ORCHESTRATION_INSTRUCTIONS +
               CLAUDE_BACKGROUND_WAIT_INSTRUCTIONS +
               CLAUDE_SEND_TO_USER_INSTRUCTIONS +
               (deviceInstructions
-                ? `\n${A4_CODE_DEVICE_TOOL_INSTRUCTIONS_WITH_TOOL_SEARCH}\n`
+                ? `\n${T3_CODE_DEVICE_TOOL_INSTRUCTIONS_WITH_TOOL_SEARCH}\n`
                 : "")),
         ...launchAppendSystemPrompt,
       ].join("\n\n"),

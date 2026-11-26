@@ -16,7 +16,7 @@ const layerTest = Layer.empty.pipe(
 const makeTempDir = Effect.gen(function* () {
   const fileSystem = yield* FileSystem.FileSystem;
   return yield* fileSystem.makeTempDirectoryScoped({
-    prefix: "a4code-project-file-",
+    prefix: "t3code-project-file-",
   });
 });
 

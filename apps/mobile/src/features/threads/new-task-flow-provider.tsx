@@ -1,7 +1,7 @@
 import { ActiveNewTaskContext } from "../../state/active-new-task";
-import { errorDisplayMessage } from "@a4code/client-runtime/errors";
+import { errorDisplayMessage } from "@t3tools/client-runtime/errors";
 import { msg, useMessages } from "gt-react-native";
-import { resolveNewThreadModelSelection } from "@a4code/shared/usageLimits";
+import { resolveNewThreadModelSelection } from "@t3tools/shared/usageLimits";
 import { useNowMinuteMs } from "../../lib/clock";
 import { m, type MessageResolver } from "../../i18n/messages";
 import * as Dialog from "../../components/ui/Dialog";
@@ -13,16 +13,16 @@ import type {
   ProviderOptionSelection,
   RuntimeMode,
   ServerProvider,
-} from "@a4code/contracts";
+} from "@t3tools/contracts";
 import {
   CommandId,
   DEFAULT_PROVIDER_INTERACTION_MODE,
   MessageId,
   repositoryGroupingKeyOf,
   ThreadId,
-} from "@a4code/contracts";
-import { threadContextsOutsideEnvironment } from "@a4code/shared/composerContextReferences";
-import { isTriagePrompt, replaceTriagePlaybookLink } from "@a4code/shared/triagePrompt";
+} from "@t3tools/contracts";
+import { threadContextsOutsideEnvironment } from "@t3tools/shared/composerContextReferences";
+import { isTriagePrompt, replaceTriagePlaybookLink } from "@t3tools/shared/triagePrompt";
 import * as Arr from "effect/Array";
 import { pipe } from "effect/Function";
 
@@ -74,13 +74,13 @@ import {
   useRemoteConnectionStatus,
   useSavedRemoteConnections,
 } from "../../state/use-remote-environment-registry";
-import { availableScratchWorkspaceRoot } from "@a4code/client-runtime/operations/projects";
+import { availableScratchWorkspaceRoot } from "@t3tools/client-runtime/operations/projects";
 import {
   isAtomCommandInterrupted,
   squashAtomCommandFailure,
-} from "@a4code/client-runtime/state/runtime";
-import { EnvironmentProject } from "@a4code/client-runtime/state/shell";
-import { type VcsRef } from "@a4code/client-runtime/state/vcs";
+} from "@t3tools/client-runtime/state/runtime";
+import { EnvironmentProject } from "@t3tools/client-runtime/state/shell";
+import { type VcsRef } from "@t3tools/client-runtime/state/vcs";
 import {
   buildHomeProjectScopes,
   sortHomeProjectScopes,
@@ -113,7 +113,7 @@ import {
   resolveWorktreeRepositorySelection,
   type WorktreeRepositoryChoice,
   type WorktreeRepositorySelection,
-} from "@a4code/client-runtime/state/thread-repositories";
+} from "@t3tools/client-runtime/state/thread-repositories";
 import { useConnectionsReady, useWorkspaceEnvironments } from "../../state/workspace";
 
 type WorkspaceMode = "local" | "worktree";

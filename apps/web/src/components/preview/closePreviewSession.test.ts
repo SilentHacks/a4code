@@ -3,7 +3,7 @@ import type {
   PreviewCloseInput,
   PreviewSessionSnapshot,
   ScopedThreadRef,
-} from "@a4code/contracts";
+} from "@t3tools/contracts";
 import { Atom, AsyncResult } from "effect/reactivity";
 import { beforeEach, describe, expect, it, vi } from "vite-plus/test";
 

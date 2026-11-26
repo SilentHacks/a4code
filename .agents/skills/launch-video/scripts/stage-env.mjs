@@ -1,4 +1,4 @@
-// Starts real A4 Code dev environments for staging a launch video: fresh homes, fictional
+// Starts real T3 Code dev environments for staging a launch video: fresh homes, fictional
 // machine labels, the free replay agent, no paid provider. Import from a staging script.
 import * as NodeChildProcess from "node:child_process";
 import * as NodeCrypto from "node:crypto";
@@ -43,7 +43,7 @@ const identityEnv = (home) => {
   const { label, machine } = JSON.parse(
     NodeFS.readFileSync(NodePath.join(home, "identity.json"), "utf8"),
   );
-  return { A4CODE_ENVIRONMENT_LABEL: label, A4CODE_ENVIRONMENT_MACHINE_KIND: machine };
+  return { T3CODE_ENVIRONMENT_LABEL: label, T3CODE_ENVIRONMENT_MACHINE_KIND: machine };
 };
 
 /**
@@ -141,8 +141,8 @@ export async function startEnvironment(
           FAKE_CLAUDE_LOG: NodePath.join(home, "fake-claude.log"),
         }
       : {}),
-    A4CODE_AUTO_BOOTSTRAP_PROJECT_FROM_CWD: "0",
-    A4CODE_PORT_OFFSET: String(webPort - BASE_WEB_PORT),
+    T3CODE_AUTO_BOOTSTRAP_PROJECT_FROM_CWD: "0",
+    T3CODE_PORT_OFFSET: String(webPort - BASE_WEB_PORT),
     ...env,
   };
   const runner = (mode, extra) => [
@@ -162,8 +162,8 @@ export async function startEnvironment(
     runner("dev:server", ["--host", host]),
     {
       ...baseEnv,
-      A4CODE_DEV_ALLOWED_ORIGINS: [webOrigin, ...allowedOrigins].join(","),
-      A4CODE_DEV_AUTH_TOKEN: token,
+      T3CODE_DEV_ALLOWED_ORIGINS: [webOrigin, ...allowedOrigins].join(","),
+      T3CODE_DEV_AUTH_TOKEN: token,
     },
     log,
   );
@@ -290,9 +290,9 @@ export async function openBrowser({ width = 1440, height = 720, args = [] } = {}
   const context = await browser.newContext({ viewport: { width, height }, colorScheme: "dark" });
   await context.addInitScript(() => {
     // "none" is what a release build shows: no dev or nightly artwork.
-    if (!localStorage.getItem("a4code:client-settings:v1")) {
+    if (!localStorage.getItem("t3code:client-settings:v1")) {
       localStorage.setItem(
-        "a4code:client-settings:v1",
+        "t3code:client-settings:v1",
         JSON.stringify({ environmentIdentificationMode: "none" }),
       );
     }
@@ -302,7 +302,7 @@ export async function openBrowser({ width = 1440, height = 720, args = [] } = {}
 }
 
 /**
- * Writes link rows straight into a stopped server's database, as if `a4code environment link` had
+ * Writes link rows straight into a stopped server's database, as if `t3 environment link` had
  * made them. The server must have started once (migrations). The map probes each row's URLs
  * live: a row is "reachable" only while something there answers as that environment.
  * Rows: { environmentId, label, urls, access = "full-access", lastError = null }.

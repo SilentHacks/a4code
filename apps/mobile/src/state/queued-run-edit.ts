@@ -5,16 +5,16 @@ import type {
   OrchestrationMessageContext,
   RunId,
   UploadChatAttachment,
-} from "@a4code/contracts";
+} from "@t3tools/contracts";
 import * as Equal from "effect/Equal";
 import { useAtomValue } from "@effect/atom-react";
 import { msg } from "gt-react-native";
-import { stripAttachmentOnlyBootstrapPrompt } from "@a4code/shared/composerContextReferences";
+import { stripAttachmentOnlyBootstrapPrompt } from "@t3tools/shared/composerContextReferences";
 import {
   makeQueuedRunEditStore,
   resolveQueuedEditExit,
   type QueuedRunsAtom,
-} from "@a4code/client-runtime/queued-run-edit";
+} from "@t3tools/client-runtime/queued-run-edit";
 
 import { m } from "../i18n/messages";
 import { uploadedComposerContext } from "../lib/composerContext";

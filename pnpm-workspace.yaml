@@ -2,7 +2,7 @@ packages:
   - apps/*
   - evals
   - infra/*
-  - oxlint-plugin-a4code
+  - oxlint-plugin-t3code
   - packages/*
   - scripts
 

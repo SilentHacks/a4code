@@ -6,11 +6,11 @@ import {
   ProviderInstanceId,
   type ServerSettings,
   type ServerSettingsPatch,
-} from "@a4code/contracts";
+} from "@t3tools/contracts";
 import { describe, expect, it, vi } from "vite-plus/test";
-import { applyServerSettingsPatch } from "@a4code/shared/serverSettings";
+import { applyServerSettingsPatch } from "@t3tools/shared/serverSettings";
 import * as Cause from "effect/Cause";
-import { resolveWorktreeCleanup } from "@a4code/shared/projectSettings";
+import { resolveWorktreeCleanup } from "@t3tools/shared/projectSettings";
 
 import type { SidebarProjectSnapshot } from "../../sidebarProjectGrouping";
 import {

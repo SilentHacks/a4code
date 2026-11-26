@@ -1,9 +1,9 @@
-import type { TurnItemId } from "@a4code/contracts";
+import type { TurnItemId } from "@t3tools/contracts";
 import {
   appendTerminalOutput,
   EMPTY_TERMINAL_OUTPUT,
   type TerminalOutputState,
-} from "@a4code/shared/terminalOutput";
+} from "@t3tools/shared/terminalOutput";
 import * as Context from "effect/Context";
 import * as Effect from "effect/Effect";
 import * as Layer from "effect/Layer";
@@ -20,7 +20,7 @@ export interface RecordedCommandOutput {
 export class CommandOutputRecorder extends Context.Service<
   CommandOutputRecorder,
   { readonly snapshot: Effect.Effect<ReadonlyMap<TurnItemId, RecordedCommandOutput>> }
->()("a4code/orchestration-v2/testkit/CommandOutputRecorder") {}
+>()("t3/orchestration-v2/testkit/CommandOutputRecorder") {}
 
 export const layer: Layer.Layer<
   CommandOutputHub.CommandOutputHub | CommandOutputRecorder,

@@ -1,6 +1,6 @@
 export const CLIENT_NAMES = [
-  "io.github.silenthacks.a4code.SnapShot",
-  "io.github.silenthacks.a4code.dev.SnapShot",
+  "com.t3tools.T3Code.SnapShot",
+  "com.t3tools.T3Code.Development.SnapShot",
 ];
 
 export function isWaylandSession(meta) {

@@ -3,8 +3,8 @@ import {
   isPrivateNetworkHost,
   isSharedAddressSpaceHost,
   isTailnetHost,
-} from "@a4code/shared/hostClassification";
-import type { DesktopSshEnvironmentTarget } from "@a4code/contracts";
+} from "@t3tools/shared/hostClassification";
+import type { DesktopSshEnvironmentTarget } from "@t3tools/contracts";
 import * as Option from "effect/Option";
 
 import {
@@ -270,8 +270,8 @@ export function mergeLearnedRoutes(input: {
   const authorization =
     active._tag === "RelayConnectionTarget" ||
     (activeProfile?._tag === "BearerConnectionProfile" &&
-      activeProfile.authorization === "a4-connect")
-      ? ("a4-connect" as const)
+      activeProfile.authorization === "t3-connect")
+      ? ("t3-connect" as const)
       : undefined;
   const sharedCredential =
     authorization === undefined && active._tag === "BearerConnectionTarget"
@@ -388,7 +388,7 @@ export function sendsTokenInClear(
   tailscale?: boolean,
 ): boolean {
   const profile = Option.getOrNull(route.profile);
-  if (profile?._tag !== "BearerConnectionProfile" || profile.authorization === "a4-connect") {
+  if (profile?._tag !== "BearerConnectionProfile" || profile.authorization === "t3-connect") {
     return false;
   }
   if ((tailscale ?? profile.network === "tailscale") || !profile.httpBaseUrl.startsWith("http:")) {
@@ -470,7 +470,7 @@ export function routesAfterRemoving(
     if (route === removed) return false;
     if (!isLearned(route)) return true;
     const profile = Option.getOrNull(route.profile);
-    if (profile?._tag === "BearerConnectionProfile" && profile.authorization === "a4-connect") {
+    if (profile?._tag === "BearerConnectionProfile" && profile.authorization === "t3-connect") {
       return removed.target._tag !== "RelayConnectionTarget";
     }
     return credentialConnectionId(connectionRouteId(route.target)) !== removedId;

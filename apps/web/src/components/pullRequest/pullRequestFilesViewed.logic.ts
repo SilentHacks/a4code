@@ -1,4 +1,4 @@
-import type { PullRequestFileViewedState, PullRequestFilesViewedResult } from "@a4code/contracts";
+import type { PullRequestFileViewedState, PullRequestFilesViewedResult } from "@t3tools/contracts";
 
 export type FileViewedStates = ReadonlyMap<string, PullRequestFileViewedState>;
 

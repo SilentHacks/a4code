@@ -1,4 +1,4 @@
-import { resolveProviderProbeTimeoutMs } from "@a4code/provider-core/server/snapshotProbe";
+import { resolveProviderProbeTimeoutMs } from "@t3tools/provider-core/server/snapshotProbe";
 import type { SDKModel, SDKUser } from "@cursor/sdk";
 import type {
   ModelCapabilities,
@@ -6,9 +6,9 @@ import type {
   ServerProviderAuth,
   ServerProviderModel,
   ServerProviderState,
-} from "@a4code/contracts";
+} from "@t3tools/contracts";
 import type { CursorSettings } from "../settings.ts";
-import { createModelCapabilities } from "@a4code/shared/model";
+import { createModelCapabilities } from "@t3tools/shared/model";
 import * as DateTime from "effect/DateTime";
 import * as Effect from "effect/Effect";
 import * as Option from "effect/Option";
@@ -22,7 +22,7 @@ import {
   COMPACT_SLASH_COMMAND,
   providerModelsFromSettings,
   type ServerProviderDraft,
-} from "@a4code/provider-core/server/snapshotProbe";
+} from "@t3tools/provider-core/server/snapshotProbe";
 import * as CursorSdkCatalog from "./CursorSdkCatalog.ts";
 
 const CURSOR_PRESENTATION = {

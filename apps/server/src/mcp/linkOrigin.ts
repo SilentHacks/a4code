@@ -3,7 +3,7 @@ import {
   OrchestratorMcpFailure,
   type OrchestrationV2LinkOrigin,
   type OrchestrationV2ThreadShell,
-} from "@a4code/contracts";
+} from "@t3tools/contracts";
 import * as Effect from "effect/Effect";
 
 import { assertFullAccess, type Caller } from "./threadAccess.ts";

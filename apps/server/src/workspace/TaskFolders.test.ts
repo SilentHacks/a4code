@@ -7,7 +7,7 @@ import {
   type ProjectTrackedFolder,
   TaskFolderError,
   ThreadId,
-} from "@a4code/contracts";
+} from "@t3tools/contracts";
 import * as Deferred from "effect/Deferred";
 import * as Effect from "effect/Effect";
 import * as Exit from "effect/Exit";

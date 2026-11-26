@@ -1,12 +1,12 @@
-import { thrownErrorMessage } from "@a4code/client-runtime/errors";
+import { thrownErrorMessage } from "@t3tools/client-runtime/errors";
 import { useNavigate } from "@tanstack/react-router";
 import {
   type AtomCommandResult,
   isAtomCommandInterrupted,
   squashAtomCommandFailure,
-} from "@a4code/client-runtime/state/runtime";
-import { AuthAccessWriteScope, type EnvironmentId } from "@a4code/contracts";
-import { unseenConnectDevices } from "@a4code/client-runtime/connect-device-notices";
+} from "@t3tools/client-runtime/state/runtime";
+import { AuthAccessWriteScope, type EnvironmentId } from "@t3tools/contracts";
+import { unseenConnectDevices } from "@t3tools/client-runtime/connect-device-notices";
 import * as DateTime from "effect/DateTime";
 import * as Schema from "effect/Schema";
 import { useEffect, useRef, useState } from "react";
@@ -59,7 +59,7 @@ function EnvironmentConnectDevices({
   );
 }
 
-const CONNECT_DEVICES_SEEN_KEY = "a4code:connect-devices-seen-through";
+const CONNECT_DEVICES_SEEN_KEY = "t3code:connect-devices-seen-through";
 const ConnectDevicesSeenThrough = Schema.Record(Schema.String, Schema.Number);
 
 /** Devices approved by hand are already known, so only `announce` hosts that skip approval. */
@@ -79,7 +79,7 @@ function NewConnectDeviceToast({
     access.data?.type === "snapshot" ? (access.data.payload.connectDevices ?? null) : null;
   const shown = useRef<{ toastId: string; renderedKey: string } | null>(null);
 
-  // oxlint-disable-next-line a4code/no-unreasoned-state-sync -- opens, updates and closes an imperative toastManager toast to match devices this client has not announced
+  // oxlint-disable-next-line t3code/no-unreasoned-state-sync -- opens, updates and closes an imperative toastManager toast to match devices this client has not announced
   useEffect(() => {
     if (devices === null) return;
     const seenThrough = readLocalStorageValue(
@@ -153,7 +153,7 @@ function NewConnectDeviceToast({
     }
   });
 
-  // oxlint-disable-next-line a4code/no-unreasoned-state-sync -- closes this environment's imperative toast when it goes away
+  // oxlint-disable-next-line t3code/no-unreasoned-state-sync -- closes this environment's imperative toast when it goes away
   useEffect(
     () => () => {
       if (shown.current) toastManager.close(shown.current.toastId);
@@ -213,7 +213,7 @@ function ConnectDeviceRequestToasts({
         )
       : null;
 
-  // oxlint-disable-next-line a4code/no-unreasoned-state-sync -- opens, updates and closes imperative toastManager toasts to match the pending requests
+  // oxlint-disable-next-line t3code/no-unreasoned-state-sync -- opens, updates and closes imperative toastManager toasts to match the pending requests
   useEffect(() => {
     if (requests === null) return;
     // The server publishes no event when a request expires, so the toast ends itself then.
@@ -294,7 +294,7 @@ function ConnectDeviceRequestToasts({
     }
   });
 
-  // oxlint-disable-next-line a4code/no-unreasoned-state-sync -- closes this environment's imperative toasts when it stops needing approval
+  // oxlint-disable-next-line t3code/no-unreasoned-state-sync -- closes this environment's imperative toasts when it stops needing approval
   useEffect(() => {
     const tracked = toasts.current;
     return () => {

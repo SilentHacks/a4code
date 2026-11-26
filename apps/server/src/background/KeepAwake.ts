@@ -11,10 +11,10 @@ import * as Schema from "effect/Schema";
 import * as Stream from "effect/Stream";
 import * as SqlClient from "effect/sql/SqlClient";
 
-import * as HostProcess from "@a4code/shared/HostProcess";
+import * as HostProcess from "@t3tools/shared/HostProcess";
 
 import * as OrchestrationEventStore from "../persistence/OrchestrationEventStore.ts";
-import { windowsPowerShellPath } from "@a4code/shared/windowsSystem";
+import { windowsPowerShellPath } from "@t3tools/shared/windowsSystem";
 import { forkParked } from "../serverActivation.ts";
 import * as Settings from "../serverSettings.ts";
 

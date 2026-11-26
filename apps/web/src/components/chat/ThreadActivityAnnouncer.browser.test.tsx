@@ -1,4 +1,4 @@
-import { MessageId, RunId } from "@a4code/contracts";
+import { MessageId, RunId } from "@t3tools/contracts";
 import { type ComponentProps } from "react";
 import { describe, expect, it, vi } from "vite-plus/test";
 

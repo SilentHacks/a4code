@@ -43,7 +43,7 @@ export interface NetServiceShape {
 }
 
 export class NetService extends Context.Service<NetService, NetServiceShape>()(
-  "@a4code/shared/Net/NetService",
+  "@t3tools/shared/Net/NetService",
 ) {}
 
 /** @public */

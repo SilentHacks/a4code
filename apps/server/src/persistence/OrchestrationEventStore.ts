@@ -13,9 +13,9 @@ import {
   StoredProjectIcon,
   ThreadId,
   type OrchestrationV2DomainEvent,
-} from "@a4code/contracts";
+} from "@t3tools/contracts";
 import * as Context from "effect/Context";
-import * as NodeSqliteClient from "@a4code/shared/nodeSqliteClient";
+import * as NodeSqliteClient from "@t3tools/shared/nodeSqliteClient";
 import * as SqlClient from "effect/sql/SqlClient";
 import * as SqlSchema from "effect/sql/SqlSchema";
 import * as Effect from "effect/Effect";
@@ -122,7 +122,7 @@ export class OrchestrationEventStore extends Context.Service<
       readonly filter?: (event: ApplicationStoredEvent) => boolean;
     }) => Stream.Stream<A, OrchestrationEventStoreError>;
   }
->()("a4code/persistence/OrchestrationEventStore") {}
+>()("t3/persistence/OrchestrationEventStore") {}
 
 const encodeProjectIcon = Schema.encodeSync(StoredProjectIcon);
 const decodeProjectEvent = Schema.decodeUnknownEffect(ApplicationProjectEvent);

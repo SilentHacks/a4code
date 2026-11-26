@@ -6,11 +6,11 @@ import type {
   ProviderInstanceId,
   ServerProvider,
   ServerProviderModel,
-} from "@a4code/contracts";
+} from "@t3tools/contracts";
 import {
   getModelSelectionStringOptionValue,
   getProviderOptionCurrentValue,
-} from "@a4code/shared/model";
+} from "@t3tools/shared/model";
 
 import { isReasoningSelect } from "./modelTraits.ts";
 import type { ThreadStructure } from "./state/models.ts";

@@ -7,19 +7,19 @@ import {
   managedRelaySessionAtom,
   readManagedRelaySnapshotState,
   unlinkManagedRelayT3Chat,
-} from "@a4code/client-runtime/relay";
+} from "@t3tools/client-runtime/relay";
 import {
   createAtomCommandScheduler,
   createRuntimeCommand,
-} from "@a4code/client-runtime/state/runtime";
+} from "@t3tools/client-runtime/state/runtime";
 import {
   DEFAULT_MANAGED_TUNNEL_LIMIT,
   T3CHAT_PLAN_TUNNEL_LIMITS,
   type RelayClientDeviceRecord,
   type RelayClientEnvironmentRecord,
   type RelayT3ChatLinkResponse,
-} from "@a4code/contracts/relay";
-import type { EnvironmentId } from "@a4code/contracts";
+} from "@t3tools/contracts/relay";
+import type { EnvironmentId } from "@t3tools/contracts";
 import * as Context from "effect/Context";
 import * as Effect from "effect/Effect";
 import * as Layer from "effect/Layer";

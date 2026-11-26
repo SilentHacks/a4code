@@ -4,7 +4,7 @@ import {
   OrchestrationV2TurnItem,
   type OrchestrationV2ThreadProjection,
   type ScopedThreadRef,
-} from "@a4code/contracts";
+} from "@t3tools/contracts";
 import * as Option from "effect/Option";
 import * as Schema from "effect/Schema";
 import { AsyncResult, Atom } from "effect/reactivity";

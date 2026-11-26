@@ -4,10 +4,10 @@ import {
   type SecretProviderConfig,
   type SecretProviderId,
   type SecretProviderKind,
-} from "@a4code/contracts";
-import { builtInSecretProviderDefinitions } from "@a4code/secret-provider-definitions/registry";
-import { invalidSecretReferenceText } from "@a4code/client-runtime/secret-request";
-import { hasFeatureFlag } from "@a4code/client-runtime/state/server";
+} from "@t3tools/contracts";
+import { builtInSecretProviderDefinitions } from "@t3tools/secret-provider-definitions/registry";
+import { invalidSecretReferenceText } from "@t3tools/client-runtime/secret-request";
+import { hasFeatureFlag } from "@t3tools/client-runtime/state/server";
 import { useAtomValue } from "@effect/atom-react";
 import * as Option from "effect/Option";
 import * as Schema from "effect/Schema";

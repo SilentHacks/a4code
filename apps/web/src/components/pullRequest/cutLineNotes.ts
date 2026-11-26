@@ -1,4 +1,4 @@
-import { cutLineNoteStart } from "@a4code/shared/diffCutLines";
+import { cutLineNoteStart } from "@t3tools/shared/diffCutLines";
 
 const HIGHLIGHT_NAME = "t3-cut-line-note";
 

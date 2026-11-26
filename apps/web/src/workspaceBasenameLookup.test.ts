@@ -7,7 +7,7 @@ import {
   pickWorkspaceBasenameMatch,
   pickWorkspaceLinkMatch,
   workspaceLinkLookupQuery,
-} from "@a4code/client-runtime/workspace-basename-lookup";
+} from "@t3tools/client-runtime/workspace-basename-lookup";
 
 describe("pickWorkspaceBasenameMatch", () => {
   const entries = [

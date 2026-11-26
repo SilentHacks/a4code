@@ -10,7 +10,7 @@ import {
   type AuthSessionState,
   type ScopedProjectRef,
   WS_METHODS,
-} from "@a4code/contracts";
+} from "@t3tools/contracts";
 import { vi } from "vite-plus/test";
 import * as SecureRandom from "effect/crypto/SecureRandom";
 import * as Effect from "effect/Effect";

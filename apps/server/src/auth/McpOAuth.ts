@@ -17,8 +17,9 @@ import {
   mcpClientScopes,
   parseMcpApprovalCode,
   type RuntimeMode,
-} from "@a4code/contracts";
-import { encodeOAuthScope } from "@a4code/shared/oauthScope";
+} from "@t3tools/contracts";
+import { DEFAULT_HOSTED_APP_URL } from "@t3tools/shared/connectAuth";
+import { encodeOAuthScope } from "@t3tools/shared/oauthScope";
 import * as Clock from "effect/Clock";
 import * as Context from "effect/Context";
 import * as Digest from "effect/crypto/Digest";
@@ -148,7 +149,7 @@ const ClientIdPayload = Schema.Struct({
   v: Schema.Literal(1),
   n: Schema.String,
   r: Schema.Array(Schema.String),
-  /** Registered as another A4 Code environment's peer link. */
+  /** Registered as another T3 Code environment's peer link. */
   p: Schema.optionalKey(Schema.Literal(1)),
 });
 const decodeClientIdPayload = Schema.decodeUnknownOption(Schema.fromJsonString(ClientIdPayload));
@@ -237,7 +238,7 @@ export class McpOAuth extends Context.Service<
       readonly token: AuthMcpTokenRequest;
     }) => Effect.Effect<AuthMcpTokenResult, AuthMcpTokenError>;
   }
->()("a4code/auth/McpOAuth") {}
+>()("t3/auth/McpOAuth") {}
 
 const redirectWith = (
   redirectUri: string,
@@ -352,7 +353,7 @@ const make = Effect.gen(function* () {
         return yield* new AuthMcpRegistrationError({
           error: "invalid_client_metadata",
           error_description:
-            'Linked environments is off on that machine. Turn it on in its Settings → Labs, or without a desktop, set "linkedEnvironmentsEnabled": true in userdata/settings.json in its T3 home (~/.a4code by default).',
+            'Linked environments is off on that machine. Turn it on in its Settings → Labs, or without a desktop, set "linkedEnvironmentsEnabled": true in userdata/settings.json in its T3 home (~/.t3 by default).',
         });
       }
       const clientId = yield* signClientId(name, redirectUris, peerLink);
@@ -618,7 +619,13 @@ export const layerMcpClientAuthenticator = Layer.effect(
     const environmentAuth = yield* EnvironmentAuth.EnvironmentAuth;
     const environment = yield* ServerEnvironment.ServerEnvironment;
     const environmentId = yield* environment.getEnvironmentId;
-    const hostedAppUrl = yield* Effect.option(hostedAppUrlConfig);
+    const hostedAppUrl = yield* hostedAppUrlConfig.pipe(
+      Effect.catch((cause) =>
+        Effect.logWarning("Outside MCP clients get app.t3.codes thread links", { cause }).pipe(
+          Effect.as(DEFAULT_HOSTED_APP_URL),
+        ),
+      ),
+    );
     return McpHttpServer.McpClientAuthenticator.of({
       authenticate: Effect.fn("McpHttpServer.McpClientAuthenticator.authenticate")(
         function (request) {
@@ -635,9 +642,7 @@ export const layerMcpClientAuthenticator = Layer.effect(
                     access: client.access,
                     linked: client.peerLink,
                     linkExpiresAt: client.linkExpiresAt,
-                    ...(!client.peerLink && Option.isSome(hostedAppUrl)
-                      ? { hostedAppUrl: hostedAppUrl.value }
-                      : {}),
+                    ...(client.peerLink ? {} : { hostedAppUrl }),
                   },
                   capabilities: new Set<McpInvocationContext.McpCapability>([
                     "orchestration",

@@ -1,4 +1,4 @@
-import { EnvironmentId } from "@a4code/contracts";
+import { EnvironmentId } from "@t3tools/contracts";
 import { expect, it, vi } from "vite-plus/test";
 
 import { act, fakeTimers, render } from "../../test/render";

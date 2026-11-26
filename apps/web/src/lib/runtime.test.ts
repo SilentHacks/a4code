@@ -1,5 +1,5 @@
 import { afterEach, describe, expect, it, vi } from "@effect/vitest";
-import { withRelayClientTracing } from "@a4code/shared/relayTracing";
+import { withRelayClientTracing } from "@t3tools/shared/relayTracing";
 import * as Effect from "effect/Effect";
 import * as Tracer from "effect/Tracer";
 // Load the runtime's module graph once at collection, outside the per-test timeout;
@@ -57,7 +57,7 @@ describe("web runtime relay telemetry policy", () => {
       exports: true,
     },
     {
-      // The hosted app is served by no A4 Code server, so nothing can answer for it.
+      // The hosted app is served by no T3 server, so nothing can answer for it.
       surface: "hosted app",
       desktopBridge: undefined,
       location: new URL("https://app.example.test/"),
@@ -66,8 +66,8 @@ describe("web runtime relay telemetry policy", () => {
   ])("applies $surface before the first relay span", async (surface) => {
     const { desktopBridge, exports } = surface;
     vi.resetModules();
-    vi.stubEnv("A4CODE_TELEMETRY_ENABLED", "false");
-    vi.stubEnv("A4CODE_OTEL_SDK_DISABLED", "true");
+    vi.stubEnv("T3CODE_TELEMETRY_ENABLED", "false");
+    vi.stubEnv("T3CODE_OTEL_SDK_DISABLED", "true");
     vi.stubEnv("OTEL_SDK_DISABLED", "true");
     vi.stubEnv("VITE_RELAY_OTLP_TRACES_URL", "https://telemetry.example.test/v1/traces");
     vi.stubEnv("VITE_RELAY_OTLP_TRACES_DATASET", "relay-test");

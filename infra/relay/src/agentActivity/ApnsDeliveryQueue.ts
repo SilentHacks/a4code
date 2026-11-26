@@ -11,7 +11,7 @@ import * as Schema from "effect/Schema";
 import {
   RelayDeliveryKind as RelayDeliveryKindSchema,
   type RelayDeliveryResult,
-} from "@a4code/contracts/relay";
+} from "@t3tools/contracts/relay";
 
 import {
   sanitizeAgentActivityAggregateState,
@@ -51,7 +51,7 @@ export class ApnsDeliveryQueueSender extends Context.Service<
       body: SignedApnsDeliveryJob,
     ) => Effect.Effect<void, Cloudflare.Queues.SendError>;
   }
->()("a4code-relay/agentActivity/ApnsDeliveryQueue/ApnsDeliveryQueueSender") {}
+>()("t3code-relay/agentActivity/ApnsDeliveryQueue/ApnsDeliveryQueueSender") {}
 
 export class ApnsDeliveryQueue extends Context.Service<
   ApnsDeliveryQueue,
@@ -75,7 +75,7 @@ export class ApnsDeliveryQueue extends Context.Service<
       readonly notification: NonNullable<ApnsDeliveryJobPayload["notification"]>;
     }) => Effect.Effect<RelayDeliveryResult, ApnsDeliveryQueueError>;
   }
->()("a4code-relay/agentActivity/ApnsDeliveryQueue") {}
+>()("t3code-relay/agentActivity/ApnsDeliveryQueue") {}
 
 const make = Effect.gen(function* () {
   const sender = yield* ApnsDeliveryQueueSender;

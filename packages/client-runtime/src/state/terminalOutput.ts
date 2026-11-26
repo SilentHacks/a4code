@@ -5,7 +5,7 @@ import {
   type TerminalSessionSnapshot,
   terminalSequenceEnd,
   terminalSequenceStateAfter,
-} from "@a4code/contracts";
+} from "@t3tools/contracts";
 
 export interface TerminalOutputChunk {
   readonly startOffset: number;

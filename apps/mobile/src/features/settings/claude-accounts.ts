@@ -2,7 +2,7 @@ import { msg } from "gt-react-native";
 import {
   deriveAvailableInstanceId,
   deriveInstanceId,
-} from "@a4code/client-runtime/provider-instance-ids";
+} from "@t3tools/client-runtime/provider-instance-ids";
 import {
   defaultInstanceIdForDriver,
   isManagedSettingPath,
@@ -12,7 +12,7 @@ import {
   type ProviderInstanceConfig,
   type ProviderInstanceMutation,
   type ServerSettings,
-} from "@a4code/contracts";
+} from "@t3tools/contracts";
 
 import { m } from "../../i18n/messages";
 

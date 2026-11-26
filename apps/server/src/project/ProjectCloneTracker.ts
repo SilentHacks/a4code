@@ -1,4 +1,4 @@
-import { SourceControlProviderKind } from "@a4code/contracts";
+import { SourceControlProviderKind } from "@t3tools/contracts";
 import type {
   ProjectCloneSnapshot,
   ProjectCloneStage,
@@ -7,14 +7,14 @@ import type {
   ProjectId,
   SourceControlCloneProtocol,
   SourceControlRepositoryInfo,
-} from "@a4code/contracts";
+} from "@t3tools/contracts";
 import {
   OrchestrationDispatchCommandError,
   PROJECT_CLONE_DETAIL_MAX_LENGTH,
   PROJECT_CLONE_ERROR_MAX_LENGTH,
   SourceControlRepositoryError,
-} from "@a4code/contracts";
-import { splitsSurrogatePair } from "@a4code/shared/assistantCitations";
+} from "@t3tools/contracts";
+import { splitsSurrogatePair } from "@t3tools/shared/assistantCitations";
 import * as Cause from "effect/Cause";
 import * as Context from "effect/Context";
 import * as DateTime from "effect/DateTime";
@@ -52,7 +52,7 @@ export class ProjectCloneTracker extends Context.Service<
     readonly get: (projectId: ProjectId) => Effect.Effect<ProjectCloneSnapshot | null>;
     readonly stream: Stream.Stream<ReadonlyArray<ProjectCloneSnapshot>>;
   }
->()("a4code/project/ProjectCloneTracker") {}
+>()("t3/project/ProjectCloneTracker") {}
 
 export interface ProjectCloneHooks {
   /** Fails with `ProjectConflictError` when another project already owns the destination. */

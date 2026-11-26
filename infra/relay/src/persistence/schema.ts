@@ -4,7 +4,7 @@ import type {
   RelayAgentActivityState,
   RelayAgentAwarenessPreferences,
   RelayManagedEndpointOrigin,
-} from "@a4code/contracts/relay";
+} from "@t3tools/contracts/relay";
 import {
   bigint,
   boolean,

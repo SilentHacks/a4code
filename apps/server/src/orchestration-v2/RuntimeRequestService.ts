@@ -4,7 +4,7 @@ import {
   ProviderUserInputAnswers,
   RuntimeRequestId,
   ThreadId,
-} from "@a4code/contracts";
+} from "@t3tools/contracts";
 import * as Context from "effect/Context";
 import * as Effect from "effect/Effect";
 import * as Layer from "effect/Layer";
@@ -62,7 +62,7 @@ export interface RuntimeRequestServiceV2Shape {
 export class RuntimeRequestServiceV2 extends Context.Service<
   RuntimeRequestServiceV2,
   RuntimeRequestServiceV2Shape
->()("a4code/orchestration-v2/RuntimeRequestService/RuntimeRequestServiceV2") {}
+>()("t3/orchestration-v2/RuntimeRequestService/RuntimeRequestServiceV2") {}
 
 export const layer: Layer.Layer<
   RuntimeRequestServiceV2,

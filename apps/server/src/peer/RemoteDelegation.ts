@@ -18,7 +18,7 @@ import {
   ProviderDriverKind,
   type RunId,
   type ThreadId,
-} from "@a4code/contracts";
+} from "@t3tools/contracts";
 import * as Cause from "effect/Cause";
 import * as Context from "effect/Context";
 import * as SecureRandom from "effect/crypto/SecureRandom";
@@ -31,7 +31,7 @@ import * as Schedule from "effect/Schedule";
 import * as Scope from "effect/Scope";
 import * as Stream from "effect/Stream";
 import * as Tool from "effect/ai/Tool";
-import { withExecutedModelNote } from "@a4code/provider-core/server/subagentProjection";
+import { withExecutedModelNote } from "@t3tools/provider-core/server/subagentProjection";
 
 import type * as McpInvocationContext from "../mcp/McpInvocationContext.ts";
 import { ProjectToolkit } from "../mcp/toolkits/project/tools.ts";
@@ -61,7 +61,7 @@ const FOLLOW_MAX_BACKOFF = Duration.minutes(5);
 const FOLLOW_MAX_DEFECTS = 3;
 /** How a follower retries; tests step it by hand. */
 export const FollowRetrySchedule = Context.Reference<Schedule.Schedule<unknown>>(
-  "a4code/peer/RemoteDelegation/FollowRetrySchedule",
+  "t3/peer/RemoteDelegation/FollowRetrySchedule",
   {
     defaultValue: () =>
       Schedule.exponential(Duration.seconds(2)).pipe(
@@ -138,7 +138,7 @@ export class RemoteDelegation extends Context.Service<
      */
     readonly start: () => Effect.Effect<void, never, Scope.Scope>;
   }
->()("a4code/peer/RemoteDelegation") {}
+>()("t3/peer/RemoteDelegation") {}
 
 /** The other side refused because the thread there runs above this caller's modes. */
 const isModeRefusal = (error: OrchestratorMcpFailure) =>

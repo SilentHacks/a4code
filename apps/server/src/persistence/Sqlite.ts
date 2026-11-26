@@ -6,7 +6,7 @@ import * as Predicate from "effect/Predicate";
 import * as Schema from "effect/Schema";
 import * as SqlClient from "effect/sql/SqlClient";
 import * as SqlError from "effect/sql/SqlError";
-import * as NodeSqliteClient from "@a4code/shared/nodeSqliteClient";
+import * as NodeSqliteClient from "@t3tools/shared/nodeSqliteClient";
 
 import { hasPendingMigrations, runMigrations } from "./Migrations.ts";
 import { initializeV2Database } from "./initializeV2Database.ts";
@@ -115,7 +115,7 @@ const makeLayerFromPath = <E, R>(makeSetup: (dbPath: string) => Layer.Layer<neve
         writerWorker: true,
         spanAttributes: {
           "db.name": path.basename(dbPath),
-          "service.name": "a4code-server",
+          "service.name": "t3code-server",
         },
       }),
     ).pipe(

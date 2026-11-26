@@ -1,4 +1,4 @@
-import { RelayApi } from "@a4code/contracts/relay";
+import { RelayApi } from "@t3tools/contracts/relay";
 import { and, asc, eq, isNull, sql } from "drizzle-orm";
 import * as Clock from "effect/Clock";
 import * as Context from "effect/Context";
@@ -91,7 +91,7 @@ export class AccountDeletion extends Context.Service<
       AccountDeletionQueueFailed
     >;
   }
->()("a4code-relay/accounts/AccountDeletion") {}
+>()("t3code-relay/accounts/AccountDeletion") {}
 
 const make = Effect.gen(function* () {
   const db = yield* RelayDb.RelayDb;

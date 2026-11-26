@@ -3,8 +3,8 @@ Pod::Spec.new do |s|
   s.version = '1.0.0'
   s.summary = 'Webview whose localhost is another A4 Code environment.'
   s.description = "Loads an environment's loopback pages on the device through the server's preview tunnel, keeping their localhost origin."
-  s.author = 'A4 Code contributors'
-  s.homepage = 'https://github.com/SilentHacks/a4code'
+  s.author = 'T3 Tools'
+  s.homepage = 'https://t3tools.com'
   s.platform = :ios, '18.0'
   s.source = { :path => '.' }
   s.static_framework = true

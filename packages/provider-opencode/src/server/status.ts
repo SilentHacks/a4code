@@ -1,4 +1,4 @@
-import { resolveProviderProbeTimeoutMs } from "@a4code/provider-core/server/snapshotProbe";
+import { resolveProviderProbeTimeoutMs } from "@t3tools/provider-core/server/snapshotProbe";
 import {
   ProviderDriverKind,
   type ModelCapabilities,
@@ -8,7 +8,7 @@ import {
   type ServerProviderSkill,
   type ServerProviderSlashCommand,
   settingsSecretLiteral,
-} from "@a4code/contracts";
+} from "@t3tools/contracts";
 import type { OpenCodeSettings } from "../settings.ts";
 import * as Cause from "effect/Cause";
 import * as Schema from "effect/Schema";
@@ -21,19 +21,19 @@ import type * as Scope from "effect/Scope";
 import * as Stream from "effect/Stream";
 import * as SubscriptionRef from "effect/SubscriptionRef";
 
-import { createModelCapabilities, DEFAULT_VARIANT_CHOICE_ID } from "@a4code/shared/model";
+import { createModelCapabilities, DEFAULT_VARIANT_CHOICE_ID } from "@t3tools/shared/model";
 import {
   brokenVersionDetail,
   noCompatibilityPolicy,
   type ProviderCompatibilityLookup,
-} from "@a4code/provider-core/server/compatibility";
+} from "@t3tools/provider-core/server/compatibility";
 import {
   buildServerProvider,
   COMPACT_SLASH_COMMAND,
   nonEmptyTrimmed,
   providerModelsFromSettings,
   type ServerProviderDraft,
-} from "@a4code/provider-core/server/snapshotProbe";
+} from "@t3tools/provider-core/server/snapshotProbe";
 import * as OpenCodeRuntime from "./OpenCodeRuntime.ts";
 import type { ProbedOpenCode } from "./versionProbe.ts";
 import type { Agent, ProviderListResponse } from "@opencode-ai/sdk/v2";

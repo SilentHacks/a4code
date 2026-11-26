@@ -1,10 +1,13 @@
-import { BearerConnectionTarget, PrimaryConnectionTarget } from "@a4code/client-runtime/connection";
-import type { EnvironmentCatalogState } from "@a4code/client-runtime/state/connections";
-import { EnvironmentId, type ServerConfig } from "@a4code/contracts";
+import {
+  BearerConnectionTarget,
+  PrimaryConnectionTarget,
+} from "@t3tools/client-runtime/connection";
+import type { EnvironmentCatalogState } from "@t3tools/client-runtime/state/connections";
+import { EnvironmentId, type ServerConfig } from "@t3tools/contracts";
 import {
   compileResolvedKeybindingsConfig,
   mergeWithDefaultKeybindings,
-} from "@a4code/shared/keybindings";
+} from "@t3tools/shared/keybindings";
 import * as Option from "effect/Option";
 import { Atom, AtomRegistry } from "effect/reactivity";
 import { describe, expect, it } from "vite-plus/test";

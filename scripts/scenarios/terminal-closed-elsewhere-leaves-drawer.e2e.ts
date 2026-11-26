@@ -1,4 +1,4 @@
-import { ThreadId } from "@a4code/contracts";
+import { ThreadId } from "@t3tools/contracts";
 import { expect } from "e2e";
 import * as Effect from "effect/Effect";
 

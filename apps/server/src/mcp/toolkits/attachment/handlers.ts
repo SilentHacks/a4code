@@ -3,7 +3,7 @@ import {
   type ChatAttachment,
   MessageId,
   OrchestratorMcpFailure,
-} from "@a4code/contracts";
+} from "@t3tools/contracts";
 import * as Clock from "effect/Clock";
 import * as Effect from "effect/Effect";
 import * as AssetSigner from "../../../assets/AssetSigner.ts";

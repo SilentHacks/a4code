@@ -4,20 +4,20 @@ import {
   ExecutionEnvironmentDescriptor,
   ORCHESTRATION_PROTOCOL_VERSION,
   PortSchema,
-} from "@a4code/contracts";
-import { resolveWorktreeT3Home } from "@a4code/shared/devHome";
-import * as HostProcess from "@a4code/shared/HostProcess";
-import { formatHostForUrl, isWildcardHost } from "@a4code/shared/hostClassification";
-import { DEFAULT_SIGNAL_EXPORT } from "@a4code/shared/observability";
-import { buildPairingAppLink } from "@a4code/shared/remote";
-import * as OtelEnvironment from "@a4code/shared/otelEnvironment";
+} from "@t3tools/contracts";
+import { resolveWorktreeT3Home } from "@t3tools/shared/devHome";
+import * as HostProcess from "@t3tools/shared/HostProcess";
+import { formatHostForUrl, isWildcardHost } from "@t3tools/shared/hostClassification";
+import { DEFAULT_SIGNAL_EXPORT } from "@t3tools/shared/observability";
+import { buildPairingAppLink } from "@t3tools/shared/remote";
+import * as OtelEnvironment from "@t3tools/shared/otelEnvironment";
 import {
   buildTailscaleHttpsBaseUrl,
   DEFAULT_TAILSCALE_SERVE_PORT,
   ensureTailscaleServe,
   readTailscaleServeRootHolder,
   readTailscaleStatus,
-} from "@a4code/tailscale";
+} from "@t3tools/tailscale";
 import * as Config from "effect/Config";
 import * as Console from "effect/Console";
 import * as DateTime from "effect/DateTime";
@@ -279,7 +279,7 @@ const discoverPairTarget = Effect.fn("pair.discoverPairTarget")(function* (
     bases.push(yield* resolveBaseDir(explicitBaseDir));
   } else {
     // Same precedence as dev-runner: inside a linked worktree only its own
-    // `.a4code` counts. Minting opens the target database with this checkout's
+    // `.t3` counts. Minting opens the target database with this checkout's
     // migrations, so falling back to the shared home could migrate the live
     // install with unreleased schema.
     const worktreeHome = yield* resolveWorktreeT3Home(yield* HostProcess.WorkingDirectory);
@@ -287,7 +287,7 @@ const discoverPairTarget = Effect.fn("pair.discoverPairTarget")(function* (
       bases.push(worktreeHome);
       inLinkedWorktree = true;
     } else {
-      const envHome = yield* Config.String("A4CODE_HOME").pipe(Config.option);
+      const envHome = yield* Config.String("T3CODE_HOME").pipe(Config.option);
       bases.push(yield* resolveBaseDir(Option.getOrUndefined(envHome)));
     }
   }
@@ -489,7 +489,7 @@ const mintPairingLink = Effect.fn("pair.mintPairingLink")(function* (input: {
     return yield* environmentAuth.createPairingLink({
       scopes: input.scopes,
       subject: "one-time-token",
-      label: Option.getOrElse(input.label, () => "a4code pair"),
+      label: Option.getOrElse(input.label, () => "t3 pair"),
       ...(Option.isSome(input.ttl) ? { ttl: input.ttl.value } : {}),
     });
   }).pipe(
@@ -559,7 +559,7 @@ export const pairCommand = Command.make("pair", {
         return yield* new IncompatibleServerProtocolError({
           serverVersion: target.descriptor.serverVersion,
           serverProtocolVersion,
-          pairCommand: `npx a4code@${target.descriptor.serverVersion} pair${baseDirArgs}`,
+          pairCommand: `npx t3@${target.descriptor.serverVersion} pair${baseDirArgs}`,
         });
       }
 
@@ -584,7 +584,7 @@ export const pairCommand = Command.make("pair", {
         pairingBaseUrl = resolveDirectPairingBaseUrl(target.state, yield* HostProcess.Platform);
         if (isLoopbackHost(new URL(pairingBaseUrl).hostname)) {
           notes.push(
-            "This URL is only reachable from this machine. To reach it from your other devices, run `a4code up`, or re-run with --tailscale.",
+            "This URL is only reachable from this machine. To reach it from your other devices, run `t3 up`, or re-run with --tailscale.",
           );
         } else if (target.state.privateNetworkOnly) {
           notes.push(

@@ -9,7 +9,7 @@ Bring your own: Claude Code, Codex, Cursor, Grok Build, OpenCode, Google Antigra
 ## Why use A4 Code instead of Claude Code or the Codex app?
 
 - **Bring your own subscription**: Use Claude, Codex, and every other agent you already have installed in one place.
-- **Remote-first**: Run `a4code up` on any box and drive it from anywhere.
+- **Remote-first**: Run `t3 up` on any box and drive it from anywhere.
 - **Native mobile app**: Approve steps, review PRs, and steer threads from iOS and Android.
 - **Open source (MIT)**: Fork the source code under your own branding if you ever want something different.
 
@@ -35,15 +35,15 @@ Since v0.1.7, Claude in A4 Code drains your 5-hour limit at the same rate as Cla
 
 ## How do I use A4 Code remotely?
 
-Your agents run wherever the A4 Code server runs (desktop, server, or VPS). Run `a4code up` on that machine and connect via T3 Connect, LAN, Tailscale, or a configured hosted web app. See [Remote access](./remote-access.md).
+Your agents run wherever the A4 Code server runs (desktop, server, or VPS). Run `t3 up` on that machine and connect via T3 Connect, LAN, Tailscale, or [app.t3.codes](https://app.t3.codes). See [Remote access](./remote-access.md).
 
 ## How do I use A4 Code on my phone?
 
-Build the [iOS or Android app](./install.md#mobile-app) from source and connect it to your A4 Code server with a pairing link or a configured T3 Connect service. The host must stay on while the agents run.
+Install the [iOS](https://apps.apple.com/us/app/t3-code-remote-claude-more/id6787819824) or [Android](https://play.google.com/store/apps/details?id=com.t3tools.t3code) app and connect it to your computer with T3 Connect or a pairing link. The phone is a remote control—your host computer runs the agents and must stay on. See [Mobile app](./install.md#mobile-app) and [Remote access](./remote-access.md).
 
 ## Why does T3 Connect keep disconnecting?
 
-Open **Settings → Environments**, select the machine, and choose **Details**—the first failed check identifies the cause. See [T3 Connect troubleshooting](./a4-connect-troubleshooting.md). Tailscale also works great as a direct fallback.
+Open **Settings → Environments**, select the machine, and choose **Details**—the first failed check identifies the cause. See [T3 Connect troubleshooting](./t3-connect-troubleshooting.md). Tailscale also works great as a direct fallback.
 
 ## Will I get banned for using my subscription?
 
@@ -65,7 +65,7 @@ No. A4 Code focuses on frontier coding agents.
 
 No. Code and prompts go directly from your machine to your chosen provider. With T3 Connect, traffic travels over a Cloudflare tunnel (`cloudflared` on your machine); T3's relay coordinates the link without proxying your HTTP/WebSocket sessions.
 
-A4 Code sends basic product usage events (provider, model, token totals—no prompts or file contents). Disable with `A4CODE_TELEMETRY_ENABLED=false` or `DO_NOT_TRACK=1`. See [Product usage data](./telemetry.md).
+A4 Code sends basic product usage events (provider, model, token totals—no prompts or file contents). Disable with `T3CODE_TELEMETRY_ENABLED=false` or `DO_NOT_TRACK=1`. See [Product usage data](./telemetry.md).
 
 ## Worktrees are eating my disk. How do I clean them up?
 
@@ -77,7 +77,7 @@ Yes—on-device speech on iOS, Android, and macOS 26+ desktop, or via a paired e
 
 ## Does it work on Windows, Mac, and Linux?
 
-Yes, all three (desktop app and CLI). Note: there is no standalone `a4code` binary for Intel Macs (use the desktop app there), and Windows users can also run agents inside WSL. See [Install](./install.md).
+Yes, all three (desktop app and CLI). Note: there is no standalone `t3` binary for Intel Macs (use the desktop app there), and Windows users can also run agents inside WSL. See [Install](./install.md).
 
 ## Why is my provider not showing up?
 

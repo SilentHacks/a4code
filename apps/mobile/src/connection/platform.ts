@@ -1,11 +1,11 @@
-import { ClientCapabilities, PlatformConnectionSource } from "@a4code/client-runtime/platform";
+import { ClientCapabilities, PlatformConnectionSource } from "@t3tools/client-runtime/platform";
 import {
   ConnectionBlockedError,
   ConnectionTransientError,
   Connectivity,
   Wakeups,
-} from "@a4code/client-runtime/connection";
-import { managedRelayAccountChanges, managedRelaySessionAtom } from "@a4code/client-runtime/relay";
+} from "@t3tools/client-runtime/connection";
+import { managedRelayAccountChanges, managedRelaySessionAtom } from "@t3tools/client-runtime/relay";
 import * as Clock from "effect/Clock";
 import { msg } from "gt-react-native";
 import { m } from "../i18n/messages";

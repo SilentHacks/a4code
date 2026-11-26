@@ -5,12 +5,12 @@ import {
   MAX_SNOOZE_PRESETS,
   SnoozePresetDay,
   type SnoozePresetSetting,
-} from "@a4code/contracts/settings";
+} from "@t3tools/contracts/settings";
 import {
   resolveSnoozePreset,
   resolveSnoozePresets,
   snoozePresetId,
-} from "@a4code/client-runtime/state/thread-settled";
+} from "@t3tools/client-runtime/state/thread-settled";
 import * as Equal from "effect/Equal";
 import * as Schema from "effect/Schema";
 import { msg, T, useGT, useLocale, useMessages, Var } from "gt-react";

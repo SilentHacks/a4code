@@ -8,13 +8,13 @@ import type {
   ScopedProjectRef,
   ServerConfig,
   ServerProvider,
-} from "@a4code/contracts";
-import { scopeProjectRef, scopeThreadRef } from "@a4code/client-runtime/environment";
-import { resolveProviderInstanceDisplayName as agentName } from "@a4code/client-runtime/state/provider-instance-display";
+} from "@t3tools/contracts";
+import { scopeProjectRef, scopeThreadRef } from "@t3tools/client-runtime/environment";
+import { resolveProviderInstanceDisplayName as agentName } from "@t3tools/client-runtime/state/provider-instance-display";
 import {
   isAtomCommandInterrupted,
   squashAtomCommandFailure,
-} from "@a4code/client-runtime/state/runtime";
+} from "@t3tools/client-runtime/state/runtime";
 import {
   AgentSessionSource,
   AuthProvidersManageScope,
@@ -26,7 +26,7 @@ import {
   isManagedDriverAllowed,
   ProviderDriverKind,
   ThreadId,
-} from "@a4code/contracts";
+} from "@t3tools/contracts";
 import { Link, useBlocker } from "@tanstack/react-router";
 import * as Schema from "effect/Schema";
 import {
@@ -139,7 +139,7 @@ export function WelcomePage({
     environments.find((environment) => environment.environmentId === environmentId)?.label ??
     gt("this computer");
   const agentReady = useWelcomeAgents(environmentId).readyCount > 0;
-  // The phone and `a4code` on PATH belong to the primary computer, so only it offers them.
+  // The phone and `t3` on PATH belong to the primary computer, so only it offers them.
   const isPrimary = usePrimaryEnvironmentId() === environmentId;
   // The same access Settings → Sharing & access checks.
   const canReadRelay = useEnvironmentScope(environmentId, AuthRelayReadScope);
@@ -468,7 +468,7 @@ function AgentsSection({
   const [codexSetupId, setCodexSetupId] = useState<ProviderInstanceId | null>(null);
   const [cliTerminalFor, setCliTerminalFor] = useState<ProviderInstanceId | null>(null);
 
-  // oxlint-disable-next-line a4code/no-unreasoned-state-sync -- asks the environment to refresh its provider list when the environment changes
+  // oxlint-disable-next-line t3code/no-unreasoned-state-sync -- asks the environment to refresh its provider list when the environment changes
   useEffect(() => {
     void refreshProviders({ environmentId, input: {} });
   }, [environmentId, refreshProviders]);
@@ -1042,7 +1042,7 @@ function PhoneConnectLink({ environmentId }: { readonly environmentId: Environme
   const linkState = useCloudLinkState(environmentId);
   const refreshLinkState = useEffectEvent(linkState.refresh);
   // The server rechecks the tunnel every 30 s; read its latest result while this panel is open.
-  // oxlint-disable-next-line a4code/no-unreasoned-state-sync -- 30 s interval that refreshes the cloud link reachability while mounted
+  // oxlint-disable-next-line t3code/no-unreasoned-state-sync -- 30 s interval that refreshes the cloud link reachability while mounted
   useEffect(() => {
     const interval = window.setInterval(() => refreshLinkState(), 30_000);
     return () => window.clearInterval(interval);
@@ -1323,7 +1323,7 @@ function AgentInstallTerminal({
   const commandStartedRef = useRef(false);
   const handleCommandFinished = useEffectEvent(onCommandFinished);
 
-  // oxlint-disable-next-line a4code/no-unreasoned-state-sync -- the shell stays open after an install or sign-in, so its command exiting is the only signal to check the agent again
+  // oxlint-disable-next-line t3code/no-unreasoned-state-sync -- the shell stays open after an install or sign-in, so its command exiting is the only signal to check the agent again
   useEffect(() => {
     if (commandRunning) {
       commandStartedRef.current = true;
@@ -1335,7 +1335,7 @@ function AgentInstallTerminal({
 
   // StrictMode can finish a cancelled open after replacement setup; it must not close or pre-type into that
   // session.
-  // oxlint-disable-next-line a4code/no-unreasoned-state-sync -- opens the setup PTY, types the command into it, and closes it on cleanup
+  // oxlint-disable-next-line t3code/no-unreasoned-state-sync -- opens the setup PTY, types the command into it, and closes it on cleanup
   useEffect(() => {
     const generation = setupGenerationRef.current + 1;
     setupGenerationRef.current = generation;
@@ -1510,7 +1510,7 @@ function useProjectImport({
   );
   const importGenerationRef = useRef(0);
 
-  // oxlint-disable-next-line a4code/no-unreasoned-state-sync -- bumps the import generation on mount and unmount so in-flight imports drop stale results
+  // oxlint-disable-next-line t3code/no-unreasoned-state-sync -- bumps the import generation on mount and unmount so in-flight imports drop stale results
   useEffect(() => {
     importGenerationRef.current += 1;
     return () => {
@@ -1996,7 +1996,7 @@ function ImportRowMeta({
   );
 }
 
-/** The desktop app links `a4code` on a fresh install; this puts its folder on PATH when it is not. */
+/** The desktop app links `t3` on a fresh install; this puts its folder on PATH when it is not. */
 function CliPathSetup() {
   const { state, busy, run } = useDesktopCliCommand();
   const setup = state?.pathSetup;

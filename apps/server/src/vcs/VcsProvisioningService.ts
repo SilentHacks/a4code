@@ -7,7 +7,7 @@ import {
   type VcsError,
   type VcsInitInput,
   VcsUnsupportedOperationError,
-} from "@a4code/contracts";
+} from "@t3tools/contracts";
 import * as VcsDriverRegistry from "./VcsDriverRegistry.ts";
 
 export class VcsProvisioningService extends Context.Service<
@@ -15,7 +15,7 @@ export class VcsProvisioningService extends Context.Service<
   {
     readonly initRepository: (input: VcsInitInput) => Effect.Effect<void, VcsError>;
   }
->()("a4code/vcs/VcsProvisioningService") {}
+>()("t3/vcs/VcsProvisioningService") {}
 
 function resolveRequestedKind(
   kind: VcsDriverKind | undefined,

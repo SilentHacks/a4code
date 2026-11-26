@@ -11,9 +11,9 @@ import * as Schema from "effect/Schema";
 import * as Stream from "effect/Stream";
 import { ChildProcess, ChildProcessSpawner } from "effect/process";
 
-import * as HostProcess from "@a4code/shared/HostProcess";
-import { buildRemoteNodeEnvScript } from "@a4code/ssh/tunnel";
-import { satisfiesSemverRange } from "@a4code/shared/semver";
+import * as HostProcess from "@t3tools/shared/HostProcess";
+import { buildRemoteNodeEnvScript } from "@t3tools/ssh/tunnel";
+import { satisfiesSemverRange } from "@t3tools/shared/semver";
 
 import * as DesktopEnvironment from "../app/DesktopEnvironment.ts";
 import * as DesktopManagedPolicy from "../app/DesktopManagedPolicy.ts";
@@ -106,7 +106,7 @@ export class DesktopWslEnvironment extends Context.Service<
     readonly getUserHome: (distro: string | null) => Effect.Effect<Option.Option<string>>;
     // Use the distro IP to avoid unreliable wslhost localhost forwarding.
     readonly getDistroIp: (distro: string | null) => Effect.Effect<Option.Option<string>>;
-    // A null t3Home means the distro's login shell has no absolute A4CODE_HOME, so ~/.a4code applies.
+    // A null t3Home means the distro's login shell has no absolute T3CODE_HOME, so ~/.t3 applies.
     readonly prepareRuntime: (
       distro: string | null,
       archive: WslRuntimeArchive,
@@ -124,7 +124,7 @@ export class DesktopWslEnvironment extends Context.Service<
       options?: EnsureWslNodePtyOptions,
     ) => Effect.Effect<EnsureWslNodePtyResult>;
   }
->()("@a4code/desktop/wsl/DesktopWslEnvironment") {}
+>()("@t3tools/desktop/wsl/DesktopWslEnvironment") {}
 
 const buildDistroArgs = (distro: string | null): ReadonlyArray<string> =>
   distro ? ["-d", distro] : [];
@@ -265,15 +265,15 @@ const runWslShell = (
 
 const shellQuote = (value: string): string => `'${value.replaceAll("'", "'\\''")}'`;
 
-const WSL_RUNTIME_READY_MARKER = ".a4code-wsl-runtime-ready";
-const WSL_RUNTIME_SELECTED_MARKER = ".a4code-wsl-runtime-selected";
+const WSL_RUNTIME_READY_MARKER = ".t3code-wsl-runtime-ready";
+const WSL_RUNTIME_SELECTED_MARKER = ".t3code-wsl-runtime-selected";
 const WSL_RUNTIME_SELECTION_GRACE_MINUTES = 5;
 
 const sanitizeWslRuntimeId = (value: string): string => value.replace(/[^A-Za-z0-9._-]/g, "_");
 
 const runtimeParentAssignment = (t3Home: string | null): string =>
   t3Home === null
-    ? 'runtime_parent="$HOME/.a4code/wsl-runtime"'
+    ? 'runtime_parent="$HOME/.t3/wsl-runtime"'
     : `runtime_parent=${shellQuote(`${t3Home}/wsl-runtime`)}`;
 
 // A null archive path asks for a staging directory to copy the archive into, unless the cache is ready.
@@ -452,8 +452,8 @@ const formatNodePtyProbeFailureReason = (exitCode: number): string | null =>
 
 // Capture login-shell PATH because the server launches provider CLIs by name.
 const RESOLVED_PATH_LINE = `printf 'resolvedPath:%s\\n' "$PATH"`;
-// wsl.exe --exec skips the profile, so the server only sees a profile-exported A4CODE_HOME if passed on.
-const T3_HOME_LINE = `printf 't3Home:%s\\n' "\${A4CODE_HOME:-}"`;
+// wsl.exe --exec skips the profile, so the server only sees a profile-exported T3CODE_HOME if passed on.
+const T3_HOME_LINE = `printf 't3Home:%s\\n' "\${T3CODE_HOME:-}"`;
 
 const NODE_PTY_PROBE_SCRIPT = (
   linuxServerDir: string,

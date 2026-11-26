@@ -48,7 +48,7 @@ const config = {
 } satisfies RelayConfiguration.RelayConfiguration["Service"];
 const input = {
   token: "device-token",
-  packageName: "io.github.silenthacks.a4code.dev",
+  packageName: "com.t3tools.t3code.dev",
   data: { t3_kind: "agent_activity", active: "true" },
   alert: false,
 };

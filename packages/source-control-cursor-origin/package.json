@@ -1,5 +1,5 @@
 {
-  "name": "@a4code/source-control-cursor-origin",
+  "name": "@t3tools/source-control-cursor-origin",
   "private": true,
   "type": "module",
   "exports": {
@@ -17,11 +17,11 @@
     "test": "vp test run --config ../../vite.config.ts --dir ."
   },
   "dependencies": {
-    "@a4code/contracts": "workspace:*",
-    "@a4code/provider-core": "workspace:*",
-    "@a4code/shared": "workspace:*",
-    "@a4code/source-control-core": "workspace:*",
     "@effect/platform-node": "catalog:",
+    "@t3tools/contracts": "workspace:*",
+    "@t3tools/provider-core": "workspace:*",
+    "@t3tools/shared": "workspace:*",
+    "@t3tools/source-control-core": "workspace:*",
     "effect": "catalog:"
   },
   "devDependencies": {

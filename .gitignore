@@ -15,7 +15,6 @@ build/
 .logs/
 release/
 release-mock/
-.a4code
 .t3
 .idea/
 apps/web/.playwright

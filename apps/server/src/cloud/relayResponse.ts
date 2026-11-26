@@ -1,4 +1,4 @@
-import { RelayProtectedError } from "@a4code/contracts/relay";
+import { RelayProtectedError } from "@t3tools/contracts/relay";
 import * as Clock from "effect/Clock";
 import * as Effect from "effect/Effect";
 import * as Option from "effect/Option";
@@ -64,7 +64,7 @@ function recoveryHint(error: RelayProtectedError): string {
     case "RelayEnvironmentLinkLimitExceededError":
       return "Unlink an unused environment in T3 Connect, then restart A4 Code on this machine.";
     case "RelayAuthInvalidError":
-      return "Run `a4code connect login` to check this machine's authorization. If the stored credential was revoked, sign out with `a4code connect logout`, then run `a4code connect` again. Restart A4 Code after signing in.";
+      return "Run `t3 connect login` to check this machine's authorization. If the stored credential was revoked, sign out with `t3 connect logout`, then run `t3 connect` again. Restart A4 Code after signing in.";
     case "RelayEnvironmentLinkProofInvalidError":
       if (error.reason === "environment_key_mismatch") {
         return "T3 Connect already has this environment linked with a different key. Unlink it in T3 Connect, then restart A4 Code on this machine.";

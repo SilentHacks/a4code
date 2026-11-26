@@ -1,9 +1,9 @@
-import { AuthSettingsWriteScope } from "@a4code/contracts";
+import { AuthSettingsWriteScope } from "@t3tools/contracts";
 import { useEnvironmentsWithScope } from "../../state/session";
 import {
   requiredScopesForServerSettingsPatch,
   EnvironmentAuthorizationError,
-} from "@a4code/contracts";
+} from "@t3tools/contracts";
 import { readEnvironmentScope } from "../../state/session";
 import * as Cause from "effect/Cause";
 import { AsyncResult } from "effect/reactivity";
@@ -14,7 +14,7 @@ import {
   type ProjectScopedServerSettingKey,
   type ServerSettings,
   type UnifiedSettings,
-} from "@a4code/contracts";
+} from "@t3tools/contracts";
 
 import { persistClientSettingsPatch, useMergedSettings } from "../../hooks/useSettings";
 import { m } from "../../i18n/messages";

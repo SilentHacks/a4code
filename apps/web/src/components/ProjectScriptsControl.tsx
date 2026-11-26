@@ -1,19 +1,19 @@
 import { m } from "../i18n/messages";
-import { thrownErrorMessage } from "@a4code/client-runtime/errors";
+import { thrownErrorMessage } from "@t3tools/client-runtime/errors";
 import { ThreadDetailsControl } from "./chat/ThreadDetailsControl";
 import {
   AuthSettingsWriteScope,
   type EnvironmentId,
   type ProjectScript,
   type T3ProjectFileScript,
-} from "@a4code/contracts";
+} from "@t3tools/contracts";
 import { useAtomValue } from "@effect/atom-react";
-import { DEFAULT_RESOLVED_KEYBINDINGS } from "@a4code/shared/keybindings";
+import { DEFAULT_RESOLVED_KEYBINDINGS } from "@t3tools/shared/keybindings";
 import {
   isAtomCommandInterrupted,
   squashAtomCommandFailure,
-} from "@a4code/client-runtime/state/runtime";
-import { projectScriptMenuLabel } from "@a4code/shared/projectScriptsCopy";
+} from "@t3tools/client-runtime/state/runtime";
+import { projectScriptMenuLabel } from "@t3tools/shared/projectScriptsCopy";
 import { ChevronDownIcon, DownloadIcon, PlusIcon, SettingsIcon, WrenchIcon } from "lucide-react";
 import React, { useState } from "react";
 import { T, useGT, useMessages, Var } from "gt-react";

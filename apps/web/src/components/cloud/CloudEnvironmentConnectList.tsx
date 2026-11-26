@@ -2,7 +2,7 @@ import {
   errorDisplayMessage,
   findErrorTraceId,
   thrownErrorMessage,
-} from "@a4code/client-runtime/errors";
+} from "@t3tools/client-runtime/errors";
 import {
   connectionErrorText,
   type ConnectionTarget,
@@ -10,22 +10,22 @@ import {
   RelayConnectionRegistration,
   RelayConnectionTarget,
   orchestrationProtocolCompatibilityError,
-} from "@a4code/client-runtime/connection";
-import { relayOfflineReasonMessage } from "@a4code/client-runtime/relay";
+} from "@t3tools/client-runtime/connection";
+import { relayOfflineReasonMessage } from "@t3tools/client-runtime/relay";
 import {
   isAtomCommandInterrupted,
   settlePromise,
   squashAtomCommandFailure,
-} from "@a4code/client-runtime/state/runtime";
+} from "@t3tools/client-runtime/state/runtime";
 import {
   type EnvironmentId,
   resolveEnvironmentMachineKind,
   type ServerConfig,
-} from "@a4code/contracts";
+} from "@t3tools/contracts";
 import type {
   RelayClientEnvironmentRecord,
   RelayEnvironmentStatusResponse,
-} from "@a4code/contracts/relay";
+} from "@t3tools/contracts/relay";
 import * as Option from "effect/Option";
 import { T, useGT, useMessages } from "gt-react";
 import { type ReactNode, useEffect, useEffectEvent, useState } from "react";
@@ -146,7 +146,7 @@ export function CloudEnvironmentConnectRows({
       .map((environment) => environment.environmentId),
   );
 
-  // oxlint-disable-next-line a4code/no-unreasoned-state-sync -- fetches relay discovery when its inputs change, unless hidden polling covers it, and reports readiness
+  // oxlint-disable-next-line t3code/no-unreasoned-state-sync -- fetches relay discovery when its inputs change, unless hidden polling covers it, and reports readiness
   useEffect(() => {
     let active = true;
     // A single row belongs to a view that already listed the machines; listing again empties it.
@@ -252,7 +252,7 @@ export function CloudEnvironmentConnectRows({
       }
     },
   );
-  // oxlint-disable-next-line a4code/no-unreasoned-state-sync -- auto-selects newly discovered machines from the discovery store and starts their relay connections
+  // oxlint-disable-next-line t3code/no-unreasoned-state-sync -- auto-selects newly discovered machines from the discovery store and starts their relay connections
   useEffect(() => {
     // oxlint-disable-next-line react/set-state-in-effect -- Discovery results arrive from an external store and auto-selection starts relay connections, which mark themselves connecting.
     selectNewComputers(environmentsState.environments);
@@ -262,7 +262,7 @@ export function CloudEnvironmentConnectRows({
   const shouldRefreshWhileEmpty =
     refreshWhileEmpty && visibleEnvironments.length === 0 && !environmentsState.offline;
 
-  // oxlint-disable-next-line a4code/no-unreasoned-state-sync -- polls relay discovery on a timer, focus and visibility change while no machine is found
+  // oxlint-disable-next-line t3code/no-unreasoned-state-sync -- polls relay discovery on a timer, focus and visibility change while no machine is found
   useEffect(() => {
     if (!shouldRefreshWhileEmpty) return;
     let timer: ReturnType<typeof setTimeout> | undefined;

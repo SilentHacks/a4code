@@ -1,5 +1,5 @@
 import type { ModelOption, ProviderGroup } from "../../lib/modelOptions";
-import type { ModelSelection, ProviderInstanceId } from "@a4code/contracts";
+import type { ModelSelection, ProviderInstanceId } from "@t3tools/contracts";
 
 export function modelFavoriteKey(provider: ProviderInstanceId, model: string): string {
   return `${provider}:${model}`;

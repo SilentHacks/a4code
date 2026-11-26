@@ -5,10 +5,10 @@ import {
   formatConnectReachable,
   type RelayClientInstallProgressEvent,
   type RelayClientInstallProgressStage,
-} from "@a4code/contracts";
-import { RelayOkResponse } from "@a4code/contracts/relay";
-import * as RelayClient from "@a4code/shared/relayClient";
-import { withRelayClientTracing } from "@a4code/shared/relayTracing";
+} from "@t3tools/contracts";
+import { RelayOkResponse } from "@t3tools/contracts/relay";
+import * as RelayClient from "@t3tools/shared/relayClient";
+import { withRelayClientTracing } from "@t3tools/shared/relayTracing";
 import * as Cause from "effect/Cause";
 import * as Clock from "effect/Clock";
 import * as Config from "effect/Config";
@@ -212,8 +212,8 @@ function formatCloudStatus(
           : !status.desired
             ? `Run \`${commands.link}\` to enable T3 Connect.`
             : publishOnly
-              ? "Start A4 Code to provision the environment link."
-              : "Start A4 Code to provision the environment link and launch its managed tunnel.";
+              ? "Start T3 to provision the environment link."
+              : "Start T3 to provision the environment link and launch its managed tunnel.";
 
   return [
     "T3 Connect",
@@ -250,7 +250,7 @@ const CLOUD_CLI_LIVE_SERVER_TIMEOUT = Duration.seconds(5);
 const confirmRelayClientInstall = (version: string) =>
   Prompt.run(
     Prompt.Confirm({
-      message: `The A4 Code relay client is required for T3 Connect. Download and install version ${version}?`,
+      message: `The T3 relay client is required for T3 Connect. Download and install version ${version}?`,
       initial: false,
     }),
   );
@@ -361,7 +361,7 @@ function formatAlertBox(text: string): string {
 }
 
 /**
- * Waits for the server that `a4code connect` just started to prove other devices
+ * Waits for the server that `t3 connect` just started to prove other devices
  * can reach it, so a broken tunnel fails setup instead of looking green.
  */
 export const waitForReachability = Effect.fn("cloud.cli.wait_for_reachability")(function* () {
@@ -381,7 +381,7 @@ export const waitForReachability = Effect.fn("cloud.cli.wait_for_reachability")(
   yield* Console.error(
     formatAlertBox(
       last === null
-        ? "✕ Could not check T3 Connect\n  The A4 Code server on this machine did not answer.\n  Fix: run `a4code service status`, then `a4code connect status`."
+        ? "✕ Could not check T3 Connect\n  The T3 server on this machine did not answer.\n  Fix: run `t3 service status`, then `t3 connect status`."
         : formatReachabilityFailure(last),
     ),
   );
@@ -474,11 +474,11 @@ const reportCloudDisconnectResults = Effect.fn("cloud.cli.report_disconnect_resu
       yield* Console.warn(
         input.clearAuthorization
           ? "Could not revoke the relay-side environment record before signing out.\nThe stored CLI authorization was still removed locally."
-          : "Could not revoke the relay-side environment record yet.\nRun `a4code connect unlink` again when the relay is reachable, or deregister it from the T3 Connect page of your T3 account.",
+          : "Could not revoke the relay-side environment record yet.\nRun `t3 connect unlink` again when the relay is reachable, or deregister it from the T3 Connect page of your T3 account.",
       );
     } else if (input.relayResult.value.status === "not-authenticated") {
       yield* Console.warn(
-        "The relay-side environment record was not revoked.\nDeregister it from the T3 Connect page of your T3 account, or run `a4code connect login` and retry.",
+        "The relay-side environment record was not revoked.\nDeregister it from the T3 Connect page of your T3 account, or run `t3 connect login` and retry.",
       );
     } else if (input.relayResult.value.status === "revoked") {
       yield* Console.log("Revoked the relay-side environment record.");
@@ -507,7 +507,7 @@ export const disconnectCloud = Effect.fn("cloud.cli.disconnect")(function* (opti
 
   if (options.clearAuthorization) {
     yield* Console.log(
-      "Signed out of T3 Connect locally.\nThe background service is managed separately with `a4code service`.",
+      "Signed out of T3 Connect locally.\nThe background service is managed separately with `t3 service`.",
     );
   }
   return liveResult;
@@ -574,7 +574,7 @@ function formatRelayClientReady(version: string): string {
 const linkEnvironmentForConnect = Effect.fn("cloud.cli.link_environment")(function* (options: {
   readonly headless: boolean;
   readonly publishOnly?: boolean;
-  /** For `a4code up`, where the user already chose T3 Connect: install it quietly, without asking. */
+  /** For `t3 up`, where the user already chose T3 Connect: install it quietly, without asking. */
   readonly installRelayClient?: boolean;
 }) {
   const publishOnly = options.publishOnly ?? false;
@@ -657,7 +657,7 @@ const connectLinkCommand = Command.make("link", {
           const next = Option.isSome(running)
             ? `A A4 Code server is already running. Restart it to ${purpose}: run \`${yield* resolveHostCliHint("service restart", flags.baseDir)}\` for the background service, or stop the server and start it again.`
             : flags.publishOnly
-              ? `Start A4 Code to ${purpose}.`
+              ? `Start T3 to ${purpose}.`
               : `Start the server with \`${yield* resolveHostCliHint("serve", flags.baseDir)}\` to ${purpose}.`;
           yield* Console.log(`✓ Authorized${connectedAs(linked.identity)}\n\nNext\n  ${next}`);
         }
@@ -790,13 +790,13 @@ const connectPublishCommand = Command.make("publish", {
         // A desired managed link already covers publishing and must not be downgraded.
         if (yield* CliState.readCliDesiredCloudLink) {
           yield* Console.log(
-            "An T3 Connect link is already pending. Start A4 Code to finish provisioning it; publishing starts once it links.",
+            "A T3 Connect link is already pending. Start T3 to finish provisioning it; publishing starts once it links.",
           );
           return;
         }
         yield* CliState.setCliDesiredCloudLink(true, "publish_only");
         yield* Console.log(
-          "Restart A4 Code to finish authorizing this environment to publish (no managed tunnel is created).",
+          "Restart T3 to finish authorizing this environment to publish (no managed tunnel is created).",
         );
       }),
     ),
@@ -821,7 +821,7 @@ const connectLogoutCommand = Command.make("logout", {
   ),
 );
 
-// `a4code connect` itself is `a4code up --connect`, in up.ts.
+// `t3 connect` itself is `t3 up --connect`, in up.ts.
 export const connectSubcommands = [
   connectLoginCommand,
   connectLinkCommand,

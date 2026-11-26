@@ -3,7 +3,7 @@ import {
   type OmpSettings,
   type ServerProvider,
   type ServerProviderModel,
-} from "@a4code/contracts";
+} from "@t3tools/contracts";
 import * as DateTime from "effect/DateTime";
 import * as Effect from "effect/Effect";
 import * as Result from "effect/Result";
@@ -22,11 +22,11 @@ import {
   parseGenericCliVersion,
   providerModelsFromSettings,
   type ProviderProbeResult,
-} from "@a4code/provider-core/server/snapshotProbe";
+} from "@t3tools/provider-core/server/snapshotProbe";
 import {
   enrichProviderSnapshotWithVersionAdvisory,
   type ProviderMaintenanceCapabilities,
-} from "@a4code/provider-core/server/maintenanceResolver";
+} from "@t3tools/provider-core/server/maintenanceResolver";
 
 const DRIVER = ProviderDriverKind.make("omp");
 const NO_MODELS_MESSAGE =

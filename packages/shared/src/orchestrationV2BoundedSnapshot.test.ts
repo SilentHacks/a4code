@@ -5,7 +5,7 @@ import {
   type OrchestrationV2ProjectedTurnItem,
   type OrchestrationV2ThreadProjection,
   type OrchestrationV2TurnItem,
-} from "@a4code/contracts";
+} from "@t3tools/contracts";
 import { describe, expect, it } from "vite-plus/test";
 
 import {

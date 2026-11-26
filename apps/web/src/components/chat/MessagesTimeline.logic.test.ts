@@ -1,4 +1,4 @@
-import { ThreadId, type WorktreeSetupSnapshot } from "@a4code/contracts";
+import { ThreadId, type WorktreeSetupSnapshot } from "@t3tools/contracts";
 import {
   CheckpointRef,
   NodeId,
@@ -10,7 +10,7 @@ import {
   RuntimeRequestId,
   type OrchestrationV2ProjectedTurnItem,
   type OrchestrationV2TurnItem,
-} from "@a4code/contracts";
+} from "@t3tools/contracts";
 import * as DateTime from "effect/DateTime";
 import {
   deriveTimelineEntriesFromVisibleTurnItems,
@@ -25,7 +25,7 @@ import {
 } from "../../test-fixtures";
 import type { TurnDiffSummary } from "../../types";
 import { describe, expect, it } from "vite-plus/test";
-import { MessageId, RunId } from "@a4code/contracts";
+import { MessageId, RunId } from "@t3tools/contracts";
 import {
   computeStableMessagesTimelineRows,
   deriveMessagesTimelineRows,
@@ -5256,8 +5256,8 @@ describe("workEntryReadOutput", () => {
     expect(
       workEntryReadOutput(
         { changedFiles: ["src/app.ts", "~/.claude/CLAUDE.md", "~\\.gitconfig"] },
-        "/workspace/a4code",
+        "/workspace/t3code",
       ),
-    ).toBe("/workspace/a4code/src/app.ts\n~/.claude/CLAUDE.md\n~/.gitconfig");
+    ).toBe("/workspace/t3code/src/app.ts\n~/.claude/CLAUDE.md\n~/.gitconfig");
   });
 });

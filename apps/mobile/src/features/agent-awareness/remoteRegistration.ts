@@ -11,19 +11,19 @@ import * as Schema from "effect/Schema";
 import * as Semaphore from "effect/Semaphore";
 import { AppState, Platform } from "react-native";
 import { msg } from "gt-react-native";
-import type { EnvironmentId } from "@a4code/contracts";
+import type { EnvironmentId } from "@t3tools/contracts";
 import {
   type RelayDeviceRegistrationRequest,
   type RelayAgentActivitySnapshotResponse,
   type RelayLiveActivityRegistrationRequest,
-} from "@a4code/contracts/relay";
-import { findErrorTraceId } from "@a4code/client-runtime/errors";
-import { ManagedRelay } from "@a4code/client-runtime/relay";
+} from "@t3tools/contracts/relay";
+import { findErrorTraceId } from "@t3tools/client-runtime/errors";
+import { ManagedRelay } from "@t3tools/client-runtime/relay";
 import {
   isAtomCommandInterrupted,
   settleAsyncResult,
   squashAtomCommandFailure,
-} from "@a4code/client-runtime/state/runtime";
+} from "@t3tools/client-runtime/state/runtime";
 
 import { m } from "../../i18n/messages";
 import { runtime } from "../../lib/runtime";
@@ -745,7 +745,7 @@ const registerDevice = Effect.fn("remoteRegistration.registerDevice")(function* 
       deviceId,
       label:
         Constants.deviceName?.trim() ||
-        // oxlint-disable-next-line a4code/no-untranslated-copy -- device label stored on the relay and shown to every client
+        // oxlint-disable-next-line t3code/no-untranslated-copy -- device label stored on the relay and shown to every client
         (Platform.OS === "android" ? "Android device" : "iOS device"),
       ...(Platform.OS === "android"
         ? {

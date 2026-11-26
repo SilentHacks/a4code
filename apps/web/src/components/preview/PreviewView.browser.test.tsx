@@ -6,7 +6,7 @@ import {
   EnvironmentId,
   FILL_PREVIEW_VIEWPORT,
   ThreadId,
-} from "@a4code/contracts";
+} from "@t3tools/contracts";
 import { type ComponentProps } from "react";
 import { describe, expect, it, vi } from "vite-plus/test";
 import { page, userEvent } from "vite-plus/test/browser";

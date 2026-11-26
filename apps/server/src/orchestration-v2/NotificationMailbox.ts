@@ -3,7 +3,7 @@ import {
   type MessageId,
   type OrchestrationV2ConversationMessage,
   type OrchestrationV2ThreadProjection,
-} from "@a4code/contracts";
+} from "@t3tools/contracts";
 
 export function isBufferedProviderNotification(
   message: Pick<

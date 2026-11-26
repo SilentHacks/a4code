@@ -4,6 +4,19 @@ import * as NodePath from "node:path";
 import * as NodeURL from "node:url";
 import * as NodeUtil from "node:util";
 
+export interface T3CodePublicConfig {
+  readonly clerkPublishableKey: string | undefined;
+  readonly clerkJwtTemplate: string | undefined;
+  readonly clerkCliOAuthClientId: string | undefined;
+  readonly relayUrl: string | undefined;
+  readonly mobileOtlpTracesUrl: string | undefined;
+  readonly mobileOtlpTracesDataset: string | undefined;
+  readonly mobileOtlpTracesToken: string | undefined;
+  readonly relayClientOtlpTracesUrl: string | undefined;
+  readonly relayClientOtlpTracesDataset: string | undefined;
+  readonly relayClientOtlpTracesToken: string | undefined;
+}
+
 type Environment = Readonly<Record<string, string | undefined>>;
 
 const REPO_ROOT = NodePath.resolve(NodeURL.fileURLToPath(import.meta.url), "../../..");
@@ -17,114 +30,137 @@ export function loadRepoEnv({
 } = {}): Record<string, string | undefined> {
   const rootEnv = readEnvFile(NodePath.join(repoRoot, ".env"));
   const localEnv = readEnvFile(NodePath.join(repoRoot, ".env.local"));
-  const sources = [baseEnv, localEnv, rootEnv];
-  const clerkPublishableKey = firstNonEmpty(
-    sources,
-    "A4CODE_CLERK_PUBLISHABLE_KEY",
-    "T3CODE_CLERK_PUBLISHABLE_KEY",
-    "VITE_CLERK_PUBLISHABLE_KEY",
-    "EXPO_PUBLIC_CLERK_PUBLISHABLE_KEY",
-  );
-  const clerkJwtTemplate = firstNonEmpty(
-    sources,
-    "A4CODE_CLERK_JWT_TEMPLATE",
-    "T3CODE_CLERK_JWT_TEMPLATE",
-    "VITE_CLERK_JWT_TEMPLATE",
-    "EXPO_PUBLIC_CLERK_JWT_TEMPLATE",
-  );
-  const clerkCliOAuthClientId = firstNonEmpty(
-    sources,
-    "A4CODE_CLERK_CLI_OAUTH_CLIENT_ID",
-    "T3CODE_CLERK_CLI_OAUTH_CLIENT_ID",
-    "VITE_CLERK_CLI_OAUTH_CLIENT_ID",
-  );
-  const relayUrl = firstNonEmpty(
-    sources,
-    "A4CODE_RELAY_URL",
-    "T3CODE_RELAY_URL",
-    "VITE_A4CODE_RELAY_URL",
-    "VITE_T3CODE_RELAY_URL",
-  );
-  const hostedAppUrl =
-    firstNonEmpty(
-      sources,
-      "A4CODE_HOSTED_APP_URL",
-      "T3CODE_HOSTED_APP_URL",
-      "VITE_HOSTED_APP_URL",
-    ) ?? (relayUrl === "https://relay.t3.codes" ? "https://app.t3.codes" : undefined);
-  const mobileTracesUrl = firstNonEmpty(
-    sources,
-    "A4CODE_MOBILE_OTLP_TRACES_URL",
-    "T3CODE_MOBILE_OTLP_TRACES_URL",
-    "EXPO_PUBLIC_OTLP_TRACES_URL",
-  );
-  const mobileTracesDataset = firstNonEmpty(
-    sources,
-    "A4CODE_MOBILE_OTLP_TRACES_DATASET",
-    "T3CODE_MOBILE_OTLP_TRACES_DATASET",
-    "EXPO_PUBLIC_OTLP_TRACES_DATASET",
-  );
-  const mobileTracesToken = firstNonEmpty(
-    sources,
-    "A4CODE_MOBILE_OTLP_TRACES_TOKEN",
-    "T3CODE_MOBILE_OTLP_TRACES_TOKEN",
-    "EXPO_PUBLIC_OTLP_TRACES_TOKEN",
-  );
-  const relayTracesUrl = firstNonEmpty(
-    sources,
-    "A4CODE_RELAY_CLIENT_OTLP_TRACES_URL",
-    "T3CODE_RELAY_CLIENT_OTLP_TRACES_URL",
-    "VITE_RELAY_OTLP_TRACES_URL",
-  );
-  const relayTracesDataset = firstNonEmpty(
-    sources,
-    "A4CODE_RELAY_CLIENT_OTLP_TRACES_DATASET",
-    "T3CODE_RELAY_CLIENT_OTLP_TRACES_DATASET",
-    "VITE_RELAY_OTLP_TRACES_DATASET",
-  );
-  const relayTracesToken = firstNonEmpty(
-    sources,
-    "A4CODE_RELAY_CLIENT_OTLP_TRACES_TOKEN",
-    "T3CODE_RELAY_CLIENT_OTLP_TRACES_TOKEN",
-    "VITE_RELAY_OTLP_TRACES_TOKEN",
-  );
-  const env = {
+  const config = resolvePublicConfig(baseEnv, localEnv, rootEnv);
+
+  return {
     ...rootEnv,
     ...localEnv,
     ...baseEnv,
-    A4CODE_CLERK_PUBLISHABLE_KEY: clerkPublishableKey,
-    VITE_CLERK_PUBLISHABLE_KEY: clerkPublishableKey,
-    EXPO_PUBLIC_CLERK_PUBLISHABLE_KEY: clerkPublishableKey,
-    A4CODE_CLERK_JWT_TEMPLATE: clerkJwtTemplate,
-    VITE_CLERK_JWT_TEMPLATE: clerkJwtTemplate,
-    EXPO_PUBLIC_CLERK_JWT_TEMPLATE: clerkJwtTemplate,
-    A4CODE_CLERK_CLI_OAUTH_CLIENT_ID: clerkCliOAuthClientId,
-    VITE_CLERK_CLI_OAUTH_CLIENT_ID: clerkCliOAuthClientId,
-    A4CODE_RELAY_URL: relayUrl,
-    VITE_A4CODE_RELAY_URL: relayUrl,
-    A4CODE_HOSTED_APP_URL: hostedAppUrl,
-    VITE_HOSTED_APP_URL: hostedAppUrl,
-    A4CODE_MOBILE_OTLP_TRACES_URL: mobileTracesUrl,
-    EXPO_PUBLIC_OTLP_TRACES_URL: mobileTracesUrl,
-    A4CODE_MOBILE_OTLP_TRACES_DATASET: mobileTracesDataset,
-    EXPO_PUBLIC_OTLP_TRACES_DATASET: mobileTracesDataset,
-    A4CODE_MOBILE_OTLP_TRACES_TOKEN: mobileTracesToken,
-    EXPO_PUBLIC_OTLP_TRACES_TOKEN: mobileTracesToken,
-    A4CODE_RELAY_CLIENT_OTLP_TRACES_URL: relayTracesUrl,
-    VITE_RELAY_OTLP_TRACES_URL: relayTracesUrl,
-    A4CODE_RELAY_CLIENT_OTLP_TRACES_DATASET: relayTracesDataset,
-    VITE_RELAY_OTLP_TRACES_DATASET: relayTracesDataset,
-    A4CODE_RELAY_CLIENT_OTLP_TRACES_TOKEN: relayTracesToken,
-    VITE_RELAY_OTLP_TRACES_TOKEN: relayTracesToken,
+    ...(config.clerkPublishableKey
+      ? {
+          T3CODE_CLERK_PUBLISHABLE_KEY: config.clerkPublishableKey,
+          VITE_CLERK_PUBLISHABLE_KEY: config.clerkPublishableKey,
+          EXPO_PUBLIC_CLERK_PUBLISHABLE_KEY: config.clerkPublishableKey,
+        }
+      : {}),
+    ...(config.clerkJwtTemplate
+      ? {
+          T3CODE_CLERK_JWT_TEMPLATE: config.clerkJwtTemplate,
+          VITE_CLERK_JWT_TEMPLATE: config.clerkJwtTemplate,
+          EXPO_PUBLIC_CLERK_JWT_TEMPLATE: config.clerkJwtTemplate,
+        }
+      : {}),
+    ...(config.clerkCliOAuthClientId
+      ? {
+          T3CODE_CLERK_CLI_OAUTH_CLIENT_ID: config.clerkCliOAuthClientId,
+          VITE_CLERK_CLI_OAUTH_CLIENT_ID: config.clerkCliOAuthClientId,
+        }
+      : {}),
+    ...(config.relayUrl
+      ? {
+          T3CODE_RELAY_URL: config.relayUrl,
+          VITE_T3CODE_RELAY_URL: config.relayUrl,
+        }
+      : {}),
+    ...(config.mobileOtlpTracesUrl
+      ? {
+          T3CODE_MOBILE_OTLP_TRACES_URL: config.mobileOtlpTracesUrl,
+          EXPO_PUBLIC_OTLP_TRACES_URL: config.mobileOtlpTracesUrl,
+        }
+      : {}),
+    ...(config.mobileOtlpTracesDataset
+      ? {
+          T3CODE_MOBILE_OTLP_TRACES_DATASET: config.mobileOtlpTracesDataset,
+          EXPO_PUBLIC_OTLP_TRACES_DATASET: config.mobileOtlpTracesDataset,
+        }
+      : {}),
+    ...(config.mobileOtlpTracesToken
+      ? {
+          T3CODE_MOBILE_OTLP_TRACES_TOKEN: config.mobileOtlpTracesToken,
+          EXPO_PUBLIC_OTLP_TRACES_TOKEN: config.mobileOtlpTracesToken,
+        }
+      : {}),
+    ...(config.relayClientOtlpTracesUrl
+      ? {
+          T3CODE_RELAY_CLIENT_OTLP_TRACES_URL: config.relayClientOtlpTracesUrl,
+          VITE_RELAY_OTLP_TRACES_URL: config.relayClientOtlpTracesUrl,
+        }
+      : {}),
+    ...(config.relayClientOtlpTracesDataset
+      ? {
+          T3CODE_RELAY_CLIENT_OTLP_TRACES_DATASET: config.relayClientOtlpTracesDataset,
+          VITE_RELAY_OTLP_TRACES_DATASET: config.relayClientOtlpTracesDataset,
+        }
+      : {}),
+    ...(config.relayClientOtlpTracesToken
+      ? {
+          T3CODE_RELAY_CLIENT_OTLP_TRACES_TOKEN: config.relayClientOtlpTracesToken,
+          VITE_RELAY_OTLP_TRACES_TOKEN: config.relayClientOtlpTracesToken,
+        }
+      : {}),
   };
-  return Object.fromEntries(Object.entries(env).filter(([, value]) => value !== undefined));
+}
+
+function resolvePublicConfig(...sources: readonly Environment[]): T3CodePublicConfig {
+  return {
+    clerkPublishableKey: firstNonEmpty(
+      sources,
+      "T3CODE_CLERK_PUBLISHABLE_KEY",
+      "VITE_CLERK_PUBLISHABLE_KEY",
+      "EXPO_PUBLIC_CLERK_PUBLISHABLE_KEY",
+    ),
+    clerkJwtTemplate: firstNonEmpty(
+      sources,
+      "T3CODE_CLERK_JWT_TEMPLATE",
+      "VITE_CLERK_JWT_TEMPLATE",
+      "EXPO_PUBLIC_CLERK_JWT_TEMPLATE",
+    ),
+    clerkCliOAuthClientId: firstNonEmpty(
+      sources,
+      "T3CODE_CLERK_CLI_OAUTH_CLIENT_ID",
+      "VITE_CLERK_CLI_OAUTH_CLIENT_ID",
+    ),
+    relayUrl: firstNonEmpty(sources, "T3CODE_RELAY_URL", "VITE_T3CODE_RELAY_URL"),
+    mobileOtlpTracesUrl: firstNonEmpty(
+      sources,
+      "T3CODE_MOBILE_OTLP_TRACES_URL",
+      "EXPO_PUBLIC_OTLP_TRACES_URL",
+    ),
+    mobileOtlpTracesDataset: firstNonEmpty(
+      sources,
+      "T3CODE_MOBILE_OTLP_TRACES_DATASET",
+      "EXPO_PUBLIC_OTLP_TRACES_DATASET",
+    ),
+    mobileOtlpTracesToken: firstNonEmpty(
+      sources,
+      "T3CODE_MOBILE_OTLP_TRACES_TOKEN",
+      "EXPO_PUBLIC_OTLP_TRACES_TOKEN",
+    ),
+    relayClientOtlpTracesUrl: firstNonEmpty(
+      sources,
+      "T3CODE_RELAY_CLIENT_OTLP_TRACES_URL",
+      "VITE_RELAY_OTLP_TRACES_URL",
+    ),
+    relayClientOtlpTracesDataset: firstNonEmpty(
+      sources,
+      "T3CODE_RELAY_CLIENT_OTLP_TRACES_DATASET",
+      "VITE_RELAY_OTLP_TRACES_DATASET",
+    ),
+    relayClientOtlpTracesToken: firstNonEmpty(
+      sources,
+      "T3CODE_RELAY_CLIENT_OTLP_TRACES_TOKEN",
+      "VITE_RELAY_OTLP_TRACES_TOKEN",
+    ),
+  };
 }
 
 function firstNonEmpty(sources: readonly Environment[], ...names: readonly string[]) {
   for (const source of sources) {
     for (const name of names) {
       const value = source[name]?.trim();
-      if (value) return value;
+      if (value) {
+        return value;
+      }
     }
   }
   return undefined;

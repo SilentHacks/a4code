@@ -18,7 +18,7 @@ const MANIFEST = `<manifest xmlns:android="http://schemas.android.com/apk/res/an
 </manifest>`;
 
 // Trimmed from the MainActivity.kt that `expo prebuild` generates for this app.
-const MAIN_ACTIVITY = `package io.github.silenthacks.a4code
+const MAIN_ACTIVITY = `package com.t3tools.t3code
 
 import android.os.Build
 import android.os.Bundle
@@ -45,7 +45,7 @@ async function prebuildAndroid(input = { manifest: MANIFEST, mainActivity: MAIN_
   const projectRoot = NodeFS.mkdtempSync(NodePath.join(NodeOS.tmpdir(), "tablet-orientation-"));
   projectRoots.push(projectRoot);
   const sourceRoot = NodePath.join(projectRoot, "android/app/src/main");
-  const activityPath = NodePath.join(sourceRoot, "java/com/SilentHacks/a4code/MainActivity.kt");
+  const activityPath = NodePath.join(sourceRoot, "java/com/t3tools/t3code/MainActivity.kt");
   const manifestPath = NodePath.join(sourceRoot, "AndroidManifest.xml");
   NodeFS.mkdirSync(NodePath.dirname(activityPath), { recursive: true });
   NodeFS.writeFileSync(manifestPath, input.manifest);
@@ -53,7 +53,7 @@ async function prebuildAndroid(input = { manifest: MANIFEST, mainActivity: MAIN_
 
   const config = withAndroidTabletOrientation({
     name: "A4 Code",
-    slug: "a4code",
+    slug: "t3code",
     orientation: "portrait",
   });
   // Prebuild registers Expo's orientation mod after app plugins. Mods run in

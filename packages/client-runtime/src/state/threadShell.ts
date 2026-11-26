@@ -7,12 +7,12 @@ import type {
   ScopedProjectRef,
   ScopedThreadRef,
   ThreadId,
-} from "@a4code/contracts";
+} from "@t3tools/contracts";
 import {
   isListedThreadLineage,
   isProviderNativeSubagentThread,
   OrchestrationV2ThreadShell,
-} from "@a4code/contracts";
+} from "@t3tools/contracts";
 import * as Schema from "effect/Schema";
 import { Atom } from "effect/reactivity";
 

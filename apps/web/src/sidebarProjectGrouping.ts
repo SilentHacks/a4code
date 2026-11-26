@@ -2,7 +2,7 @@ import type {
   EnvironmentId,
   ScopedProjectRef,
   SidebarProjectGroupingMode,
-} from "@a4code/contracts";
+} from "@t3tools/contracts";
 import {
   buildProjectGroups,
   derivePhysicalProjectKey,
@@ -10,7 +10,7 @@ import {
   resolveScratchProjectScopeKey,
   selectGroupDefaultProject,
   type ProjectGroupingSettings,
-} from "@a4code/client-runtime/state/project-grouping";
+} from "@t3tools/client-runtime/state/project-grouping";
 import { msg } from "gt-react";
 
 import { m, type MessageResolver } from "./i18n/messages";

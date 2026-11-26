@@ -1,4 +1,4 @@
-import type { PullRequestChangeBreakdown } from "@a4code/contracts";
+import type { PullRequestChangeBreakdown } from "@t3tools/contracts";
 
 export type ChangedFileKind = keyof NonNullable<PullRequestChangeBreakdown>;
 

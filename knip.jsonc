@@ -47,7 +47,7 @@
         "verify-windows-desktop-artifact.ts",
       ],
       "ignoreDependencies": ["esbuild"],
-      // The `a4code` npm package's files: copied into the package, never imported.
+      // The `t3` npm package's files: copied into the package, never imported.
       // knip-schemas.test.ts writes a throwaway project to .knip-test-*, which a
       // knip run beside it in check:changed must not report.
       "ignore": ["npm-launcher/**", ".knip-test-*/**"],
@@ -75,7 +75,7 @@
       // CLI archive and desktop sidecar stage them from this manifest.
       "ignoreDependencies": [
         "@effect/platform-node-shared",
-        "@a4code/web",
+        "@t3tools/web",
         "ffi-rs",
         "transcribe-cpp",
       ],
@@ -129,8 +129,8 @@
       // Fonts are configured as asset paths; Expo autolinks the native packages.
       "ignoreDependencies": [
         "@expo-google-fonts/dm-sans",
-        "@a4code/mobile-review-diff-native",
-        "@a4code/mobile-terminal-native",
+        "@t3tools/mobile-review-diff-native",
+        "@t3tools/mobile-terminal-native",
       ],
     },
     "apps/mobile/modules/t3-highlights": {

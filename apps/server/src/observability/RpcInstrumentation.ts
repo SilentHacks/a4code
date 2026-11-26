@@ -1,4 +1,4 @@
-import { ORCHESTRATION_V2_WS_METHODS, WS_METHODS, type WsRpcGroup } from "@a4code/contracts";
+import { ORCHESTRATION_V2_WS_METHODS, WS_METHODS, type WsRpcGroup } from "@t3tools/contracts";
 import * as Effect from "effect/Effect";
 import * as Layer from "effect/Layer";
 import * as Option from "effect/Option";
@@ -299,7 +299,7 @@ const RPC_METHODS_WITH_TRACING_DISABLED: ReadonlySet<string> = new Set([
 
 /** Add after RpcScopeAuthorization to wrap authorization and record rejected calls. */
 export class RpcInstrumentation extends RpcMiddleware.Service<RpcInstrumentation>()(
-  "a4code/server/RpcInstrumentation",
+  "t3/server/RpcInstrumentation",
 ) {}
 
 export const rpcInstrumentationLayer = Layer.succeed(RpcInstrumentation)((effect, { rpc }) => {

@@ -1,6 +1,6 @@
-import type { DesktopSshPasswordPromptRequest } from "@a4code/contracts";
-import { DesktopSshPasswordPromptResolutionInputSchema } from "@a4code/contracts";
-import type { SshPasswordRequest } from "@a4code/ssh/auth";
+import type { DesktopSshPasswordPromptRequest } from "@t3tools/contracts";
+import { DesktopSshPasswordPromptResolutionInputSchema } from "@t3tools/contracts";
+import type { SshPasswordRequest } from "@t3tools/ssh/auth";
 import * as Context from "effect/Context";
 import * as SecureRandom from "effect/crypto/SecureRandom";
 import * as DateTime from "effect/DateTime";
@@ -190,7 +190,7 @@ export class DesktopSshPasswordPrompts extends Context.Service<
       input: DesktopSshPasswordPromptResolutionInput,
     ) => Effect.Effect<void, DesktopSshPasswordPromptResolveError>;
   }
->()("@a4code/desktop/ssh/DesktopSshPasswordPrompts") {}
+>()("@t3tools/desktop/ssh/DesktopSshPasswordPrompts") {}
 
 interface PendingSshPasswordPrompt {
   readonly requestId: string;

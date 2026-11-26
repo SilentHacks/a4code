@@ -1,4 +1,4 @@
-import { ProviderInstanceId, ThreadId, type ServerProvider } from "@a4code/contracts";
+import { ProviderInstanceId, ThreadId, type ServerProvider } from "@t3tools/contracts";
 import { expect, it } from "@effect/vitest";
 
 import {

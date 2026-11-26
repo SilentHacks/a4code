@@ -4,7 +4,7 @@ import type {
   DeviceServiceState,
   DeviceSummary,
   ScopedThreadRef,
-} from "@a4code/contracts";
+} from "@t3tools/contracts";
 import { ArrowUpRight, CircleAlert, Play, Smartphone, Square, X } from "lucide-react";
 import { useAtomMount } from "@effect/atom-react";
 import { T, useGT, Var } from "gt-react";

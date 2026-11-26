@@ -1,14 +1,14 @@
-import { formatProviderSkillDisplayName } from "@a4code/shared/inlineSkills";
-import type { ServerProviderSkill } from "@a4code/contracts";
+import { formatProviderSkillDisplayName } from "@t3tools/shared/inlineSkills";
+import type { ServerProviderSkill } from "@t3tools/contracts";
 import {
   dedupeProviderSkillsByName,
   isProviderSkillUserInvocable,
-} from "@a4code/client-runtime/providerSkills";
+} from "@t3tools/client-runtime/providerSkills";
 import {
   insertRankedSearchResult,
   normalizeSearchQuery,
   scoreQueryMatch,
-} from "@a4code/shared/searchRanking";
+} from "@t3tools/shared/searchRanking";
 
 export function scoreProviderSkill(skill: ServerProviderSkill, query: string): number | null {
   const normalizedName = skill.name.toLowerCase();

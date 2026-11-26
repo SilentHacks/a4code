@@ -3,7 +3,7 @@ import {
   type PullRequestCapabilities,
   type PullRequestListState,
   type PullRequestViewerPermissions,
-} from "@a4code/contracts";
+} from "@t3tools/contracts";
 import {
   PullRequestProviderError,
   tailLogLines,
@@ -12,7 +12,7 @@ import {
   type ProviderCheckRerun,
   type ProviderRepositoryRef,
   type PullRequestProviderApi,
-} from "@a4code/source-control-core/server/PullRequestProvider";
+} from "@t3tools/source-control-core/server/PullRequestProvider";
 import * as Cache from "effect/Cache";
 import * as Duration from "effect/Duration";
 import * as Effect from "effect/Effect";

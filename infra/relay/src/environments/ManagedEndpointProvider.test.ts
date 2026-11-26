@@ -25,15 +25,15 @@ const config = RelayConfiguration.RelayConfiguration.of({
     teamId: "team-id",
     keyId: "key-id",
     privateKey: Redacted.make("private-key"),
-    bundleId: "io.github.silenthacks.a4code.dev",
+    bundleId: "com.t3tools.t3code.dev",
   },
   apnsDeliveryJobSigningSecret: Redacted.make("job-secret"),
   clerkSecretKey: Redacted.make("clerk-secret"),
   clerkPublishableKey: "pk_test_test",
-  clerkJwtAudience: "a4-code-relay",
+  clerkJwtAudience: "t3-code-relay",
   cloudMintPrivateKey: Redacted.make("cloud-private-key"),
   cloudMintPublicKey: "cloud-public-key",
-  managedEndpointBaseDomain: "a4code.test",
+  managedEndpointBaseDomain: "t3code.test",
   managedEndpointNamespace: "dev_julius",
 });
 
@@ -430,11 +430,11 @@ function expectedManagedEndpointHash(environmentId: string, userId: string): str
 }
 
 function expectedManagedHostname(environmentId: string, userId = "user_ABC"): string {
-  return `dev-julius-${expectedManagedEndpointHash(environmentId, userId)}.a4code.test`;
+  return `dev-julius-${expectedManagedEndpointHash(environmentId, userId)}.t3code.test`;
 }
 
 function expectedManagedTunnelName(environmentId: string, userId = "user_ABC"): string {
-  return `a4coderelay-managedendpoint-dev-julius-${expectedManagedEndpointHash(environmentId, userId)}`;
+  return `t3coderelay-managedendpoint-dev-julius-${expectedManagedEndpointHash(environmentId, userId)}`;
 }
 
 describe("ManagedEndpointProvider", () => {
@@ -570,7 +570,7 @@ describe("ManagedEndpointProvider", () => {
           | { readonly name?: string }
           | undefined
       )?.name;
-      expect(requestedName).toMatch(/^a4coderelay-managedendpoint-dev-julius-[a-f0-9]{16}$/);
+      expect(requestedName).toMatch(/^t3coderelay-managedendpoint-dev-julius-[a-f0-9]{16}$/);
       const configBody = (
         tunnelCalls.find((call) => call.operation === "putConfiguration")?.input as
           | { readonly tunnelConfig?: unknown }
@@ -579,7 +579,7 @@ describe("ManagedEndpointProvider", () => {
       expect(configBody).toMatchObject({
         ingress: [
           {
-            hostname: expect.stringMatching(/^dev-julius-[a-f0-9]{16}\.a4code\.test$/),
+            hostname: expect.stringMatching(/^dev-julius-[a-f0-9]{16}\.t3code\.test$/),
           },
           { service: "http_status:404" },
         ],
@@ -1254,7 +1254,7 @@ describe("ManagedEndpointProvider", () => {
 
       configuration.current = {
         ingress: [
-          { hostname: "*.a4code.test", service: "http://127.0.0.1:4711" },
+          { hostname: "*.t3code.test", service: "http://127.0.0.1:4711" },
           { hostname: expectedManagedHostname("env_ABC"), service: "http://127.0.0.1:3773" },
           { service: "http_status:404" },
         ],
@@ -1301,7 +1301,7 @@ describe("ManagedEndpointProvider", () => {
           origin: { localHttpHost: "127.0.0.1", localHttpPort: 3773 },
           endpoint: {
             ...provisioned.endpoint,
-            httpBaseUrl: "https://different-host.a4code.test/",
+            httpBaseUrl: "https://different-host.t3code.test/",
           },
         }),
       );

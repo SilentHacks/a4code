@@ -1,8 +1,8 @@
 // @effect-diagnostics-next-line nodeBuiltinImport:off -- FileSystem.access has no execute check.
 import * as NodeFSP from "node:fs/promises";
 
-import type { DesktopCliCommandState } from "@a4code/contracts";
-import * as HostProcess from "@a4code/shared/HostProcess";
+import type { DesktopCliCommandState } from "@t3tools/contracts";
+import * as HostProcess from "@t3tools/shared/HostProcess";
 import * as Context from "effect/Context";
 import * as Effect from "effect/Effect";
 import * as FileSystem from "effect/FileSystem";
@@ -15,7 +15,7 @@ import * as Stream from "effect/Stream";
 import * as ChildProcess from "effect/process/ChildProcess";
 import * as ChildProcessSpawner from "effect/process/ChildProcessSpawner";
 
-import { pathSetup, readUserLoginShell } from "@a4code/shared/shell";
+import { pathSetup, readUserLoginShell } from "@t3tools/shared/shell";
 
 import * as DesktopCliShim from "./DesktopCliShim.ts";
 import * as DesktopEnvironment from "./DesktopEnvironment.ts";
@@ -75,7 +75,7 @@ export class DesktopCliCommand extends Context.Service<
     /** Installs the command on a fresh install's first launch; removing it in Settings sticks. */
     readonly installOnFirstLaunch: Effect.Effect<void>;
   }
->()("@a4code/desktop/app/DesktopCliCommand") {}
+>()("@t3tools/desktop/app/DesktopCliCommand") {}
 
 export const make = Effect.gen(function* () {
   const environment = yield* DesktopEnvironment.DesktopEnvironment;
@@ -106,7 +106,7 @@ export const make = Effect.gen(function* () {
   const isOurLink = Effect.fn("DesktopCliCommand.isOurLink")(
     function* (link: string) {
       yield* fs.readLink(link);
-      // The launcher is a few KB; never read a large binary another `a4code` links to.
+      // The launcher is a few KB; never read a large binary another `t3` links to.
       const info = yield* fs.stat(link);
       if (info.type !== "File" || Number(info.size) > 16_384) return false;
       const content = yield* fs.readFileString(link);
@@ -172,7 +172,7 @@ export const make = Effect.gen(function* () {
 
   const firstOnPath = Effect.gen(function* () {
     for (const directory of pathEntries(env.PATH, ":")) {
-      const candidate = path.join(directory, "a4code");
+      const candidate = path.join(directory, "t3");
       if (yield* isExecutableFile(candidate)) return Option.some(candidate);
     }
     return Option.none<string>();
@@ -201,7 +201,7 @@ export const make = Effect.gen(function* () {
         : Option.none<string>();
     }
     for (const directory of knownLocations(environment.homeDirectory, environment.platform)) {
-      const link = path.join(directory, "a4code");
+      const link = path.join(directory, "t3");
       if (yield* isOurLink(link)) return Option.some(link);
     }
     return Option.none<string>();
@@ -293,7 +293,7 @@ export const make = Effect.gen(function* () {
   );
 
   const install: DesktopCliCommand["Service"]["install"] = Effect.gen(function* () {
-    if (!environment.isPackaged) return yield* fail("The a4code command needs an installed app.");
+    if (!environment.isPackaged) return yield* fail("The t3 command needs an installed app.");
     yield* ensureLauncher;
     if (windows) {
       // PATH would split the folder at the `;`, leaving two wrong entries behind.
@@ -332,7 +332,7 @@ export const make = Effect.gen(function* () {
       ...candidates.filter((candidate) => onPath.includes(candidate)),
       ...candidates.filter((candidate) => !onPath.includes(candidate)),
     ])) {
-      const link = path.join(directory, "a4code");
+      const link = path.join(directory, "t3");
       const created = (yield* exists(directory))
         ? yield* writableDirectory(directory)
         : yield* fs.makeDirectory(directory, { recursive: true }).pipe(
@@ -365,7 +365,7 @@ export const make = Effect.gen(function* () {
       return yield* state;
     }
     return yield* fail(
-      `Another a4code command is already in ~/.local/bin and ~/bin, or neither is writable. Run the launcher directly at ${launcher}.`,
+      `Another t3 command is already in ~/.local/bin and ~/bin, or neither is writable. Run the launcher directly at ${launcher}.`,
     );
   }).pipe(Effect.withSpan("desktop.cliCommand.install"));
 
@@ -382,7 +382,7 @@ export const make = Effect.gen(function* () {
       return yield* state;
     }
     for (const directory of knownLocations(environment.homeDirectory, environment.platform)) {
-      const link = path.join(directory, "a4code");
+      const link = path.join(directory, "t3");
       if (yield* isOurLink(link)) {
         yield* fs.remove(link).pipe(Effect.mapError(() => fail(`Could not remove ${link}.`)));
       }
@@ -395,7 +395,7 @@ export const make = Effect.gen(function* () {
   const addToPath: DesktopCliCommand["Service"]["addToPath"] = Effect.gen(function* () {
     const installed = yield* installedAt;
     if (Option.isNone(installed) || !(yield* leadsHere(installed.value))) {
-      return yield* fail("Install the a4code command first.");
+      return yield* fail("Install the t3 command first.");
     }
     const setup = startupLine(installed.value);
     if (setup === undefined) return yield* fail("A4 Code cannot add t3 to this shell's PATH.");
@@ -422,14 +422,14 @@ export const make = Effect.gen(function* () {
       // Mark first so a failed or removed install is never retried behind the user's back.
       yield* fs.writeFileString(firstLaunchMarker, "");
       if (!freshInstall) {
-        return yield* logInfo("left the a4code command to Settings on an existing install");
+        return yield* logInfo("left the t3 command to Settings on an existing install");
       }
       // Another T3 home's app owns the existing link; only Install in Settings may take it over.
       const existing = Option.getOrUndefined(yield* installedAt);
       if (existing !== undefined) {
         const target = yield* fs.readLink(existing).pipe(Effect.option);
         if (Option.getOrUndefined(target) !== launcher) {
-          return yield* logInfo("left another A4 Code app's a4code command in place", {
+          return yield* logInfo("left another A4 Code app's t3 command in place", {
             existing,
           });
         }
@@ -437,19 +437,17 @@ export const make = Effect.gen(function* () {
       // A t3 that is not ours in these folders, even off PATH, means the user has one already. On
       // Windows the app never writes there, so any t3 there is someone else's.
       for (const directory of userCandidates(environment.homeDirectory)) {
-        for (const name of windows ? ["a4code.cmd", "a4code.exe"] : ["a4code"]) {
+        for (const name of windows ? ["t3.cmd", "t3.exe"] : ["t3"]) {
           const other = path.join(directory, name);
           const present =
             (yield* exists(other)) || Option.isSome(yield* fs.readLink(other).pipe(Effect.option));
           if (present && (windows || !(yield* isOurLink(other)))) {
-            return yield* logInfo("left the a4code command to Settings beside another t3", {
-              other,
-            });
+            return yield* logInfo("left the t3 command to Settings beside another t3", { other });
           }
         }
       }
       const installed = yield* install;
-      yield* logInfo("installed the a4code command on first launch", {
+      yield* logInfo("installed the t3 command on first launch", {
         installedPath: installed.installedPath,
         onPath: installed.onPath,
       });
@@ -457,7 +455,7 @@ export const make = Effect.gen(function* () {
   ).pipe(
     // Our own messages are short and name only paths; anything else is logged as a category.
     Effect.catch((error) =>
-      logWarning("did not install the a4code command on first launch", {
+      logWarning("did not install the t3 command on first launch", {
         reason: error._tag === "DesktopCliCommandError" ? error.message : "state-write-failed",
       }),
     ),

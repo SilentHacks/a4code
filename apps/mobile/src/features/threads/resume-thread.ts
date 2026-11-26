@@ -3,8 +3,8 @@ import type {
   SetThreadInteractionModeInput,
   SetThreadRuntimeModeInput,
   StartThreadTurnInput,
-} from "@a4code/client-runtime/operations";
-import type { AtomCommandResult } from "@a4code/client-runtime/state/runtime";
+} from "@t3tools/client-runtime/operations";
+import type { AtomCommandResult } from "@t3tools/client-runtime/state/runtime";
 import type {
   EnvironmentId,
   MessageId,
@@ -13,7 +13,7 @@ import type {
   RunId,
   RuntimeMode,
   ThreadId,
-} from "@a4code/contracts";
+} from "@t3tools/contracts";
 
 type Command<Input, E> = (request: {
   readonly environmentId: EnvironmentId;
