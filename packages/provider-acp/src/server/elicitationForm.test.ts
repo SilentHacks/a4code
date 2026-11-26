@@ -1,7 +1,7 @@
 import { assert, describe, it } from "@effect/vitest";
 
 import * as Effect from "effect/Effect";
-import { projectAcpElicitationForm } from "./elicitation.ts";
+import { projectAcpElicitationForm, withOptionalChoices } from "./elicitation.ts";
 
 describe("projectAcpElicitationForm", () => {
   for (const type of ["string", "array"] as const) {
@@ -168,4 +168,54 @@ describe("projectAcpElicitationForm", () => {
       );
     }),
   );
+});
+
+describe("withOptionalChoices", () => {
+  const choice = (id: string) => ({
+    id,
+    header: id,
+    question: id,
+    options: [{ label: "Fast", description: "Fast", value: "fast" }],
+  });
+  const form = withOptionalChoices(
+    {
+      questions: [
+        choice("mode"),
+        choice("tier"),
+        { ...choice("tags"), multiSelect: true },
+        { ...choice("notes"), options: [] },
+      ],
+      respond: (answers) => ({ action: "accept", content: { answered: Object.keys(answers) } }),
+    },
+    {
+      type: "object",
+      properties: {
+        mode: { type: "string" },
+        tier: { type: "string" },
+        tags: { type: "array" },
+        notes: { type: "string" },
+      },
+      required: ["tier"],
+    },
+  );
+
+  it("marks only the single choices the schema leaves optional", () => {
+    assert.deepStrictEqual(
+      form.questions.map((question) => [question.id, question.required]),
+      [
+        ["mode", false],
+        ["tier", undefined],
+        ["tags", undefined],
+        ["notes", undefined],
+      ],
+    );
+  });
+
+  it("answers without a skipped choice and cancels without a required one", () => {
+    assert.deepStrictEqual(form.respond({ tier: "fast" }), {
+      action: "accept",
+      content: { answered: ["tier"] },
+    });
+    assert.deepStrictEqual(form.respond({ mode: "fast" }), { action: "cancel" });
+  });
 });

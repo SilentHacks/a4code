@@ -9,6 +9,29 @@ import { migrationManifest, runMigrations } from "./Migrations.ts";
 import PullRequestFilesViewed from "./Migrations/053_PullRequestFilesViewed.ts";
 import RemoveRedundantProjectionIndexes from "./Migrations/056_RemoveRedundantProjectionIndexes.ts";
 import OrchestrationV2 from "./Migrations/055_OrchestrationV2.ts";
+import PromptStash from "./Migrations/120_PromptStash.ts";
+
+it.effect("upgrades the fork's migration 117 without losing stashed prompts", () =>
+  Effect.gen(function* () {
+    const sql = yield* SqlClient.SqlClient;
+    yield* runMigrations({ toMigrationInclusive: 116 });
+    yield* Migrator.make({})({
+      loader: Migrator.fromRecord({ "117_PromptStash": PromptStash }),
+    });
+    yield* sql`INSERT INTO prompt_stash (id, entry_json) VALUES ('draft', '{"prompt":"saved"}')`;
+
+    assert.deepStrictEqual(yield* runMigrations(), [
+      [117, "WorkflowMailSender"],
+      [118, "WorkflowPools"],
+      [119, "WorkflowRunSubject"],
+      [120, "PromptStash"],
+    ]);
+    assert.deepStrictEqual(yield* sql`SELECT id, entry_json FROM prompt_stash`, [
+      { id: "draft", entry_json: '{"prompt":"saved"}' },
+    ]);
+    assert.deepStrictEqual(yield* runMigrations(), []);
+  }).pipe(Effect.provide(NodeSqliteClient.layer({ filename: ":memory:" }))),
+);
 
 const seedPreview = Effect.gen(function* () {
   const sql = yield* SqlClient.SqlClient;
@@ -96,7 +119,10 @@ describe("V2 preview upgrade", () => {
         [114, "WorkflowRunIndexes"],
         [115, "WorkflowRunTags"],
         [116, "ForkHistoryMembership"],
-        [117, "PromptStash"],
+        [117, "WorkflowMailSender"],
+        [118, "WorkflowPools"],
+        [119, "WorkflowRunSubject"],
+        [120, "PromptStash"],
       ]);
       assert.deepStrictEqual(yield* runMigrations(), []);
       assert.deepStrictEqual(yield* sql`SELECT * FROM orchestration_v2_legacy_imports`, imports);
@@ -236,7 +262,10 @@ describe("V2 preview upgrade", () => {
         [114, "WorkflowRunIndexes"],
         [115, "WorkflowRunTags"],
         [116, "ForkHistoryMembership"],
-        [117, "PromptStash"],
+        [117, "WorkflowMailSender"],
+        [118, "WorkflowPools"],
+        [119, "WorkflowRunSubject"],
+        [120, "PromptStash"],
       ]);
     }).pipe(Effect.provide(NodeSqliteClient.layer({ filename: ":memory:" }))),
   );

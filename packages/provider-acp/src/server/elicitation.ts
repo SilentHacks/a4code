@@ -6,7 +6,7 @@ import * as Effect from "effect/Effect";
 import * as JsonSchema from "effect/JsonSchema";
 import * as Schema from "effect/Schema";
 import * as SchemaRepresentation from "effect/SchemaRepresentation";
-import type { ElicitationContentValue } from "effect-acp/compat";
+import type { CreateElicitationResponse, ElicitationContentValue } from "effect-acp/compat";
 
 import { unknownRecord } from "./clientPolicy.ts";
 
@@ -19,6 +19,12 @@ export class AcpElicitationAnswerError extends Schema.TaggedError<AcpElicitation
       ? `ACP answer for ${this.field} is required.`
       : `ACP answer for ${this.field || "form"} does not satisfy the requested schema.`;
   }
+}
+
+/** A form as the user answers it, and the elicitation response their answers make. */
+export interface ElicitationQuestionForm {
+  readonly questions: ReadonlyArray<OrchestrationV2UserInputQuestion>;
+  readonly respond: (answers: ProviderUserInputAnswers) => CreateElicitationResponse;
 }
 
 type Scalar = string | number | boolean;
@@ -123,6 +129,44 @@ function validator(schema: Record<string, unknown>): (value: unknown) => boolean
   );
 }
 
+function requiredIds(schema: Readonly<Record<string, unknown>> | undefined): ReadonlySet<string> {
+  return new Set(
+    Array.isArray(schema?.required)
+      ? schema.required.filter((key): key is string => typeof key === "string")
+      : [],
+  );
+}
+
+/**
+ * Applies the schema's `required` list to a form mapped outside the generic parser: a single
+ * choice the schema leaves optional can be skipped, and one it requires must be answered.
+ */
+export function withOptionalChoices(
+  form: ElicitationQuestionForm,
+  requestedSchema: unknown,
+): ElicitationQuestionForm {
+  const schema = unknownRecord(requestedSchema);
+  const properties = unknownRecord(schema?.properties) ?? {};
+  const required = requiredIds(schema);
+  return {
+    questions: form.questions.map((question) =>
+      question.required === undefined &&
+      question.multiSelect !== true &&
+      question.options.length > 0 &&
+      Object.hasOwn(properties, question.id) &&
+      !required.has(question.id)
+        ? { ...question, required: false }
+        : question,
+    ),
+    respond: (answers) =>
+      form.questions.some(
+        (question) => required.has(question.id) && !Object.hasOwn(answers, question.id),
+      )
+        ? { action: "cancel" }
+        : form.respond(answers),
+  };
+}
+
 /** Returns undefined when the existing question UX cannot faithfully represent a form. */
 export function projectAcpElicitationForm(
   requestedSchema: unknown,
@@ -145,7 +189,7 @@ export function projectAcpElicitationForm(
   const companions = new Map<string, string>();
   for (const [id, value] of Object.entries(properties)) {
     const property = unknownRecord(value);
-    const companionId = `${id}__other`;
+    const companionId = Object.hasOwn(properties, `${id}__other`) ? `${id}__other` : `${id}_other`;
     if (
       property?.type === "string" &&
       choicesFromSchema(property) &&
@@ -250,7 +294,11 @@ export function projectAcpElicitationForm(
         }
       }
       for (const field of fields) {
-        let value = Object.hasOwn(answers, field.id) ? answers[field.id] : undefined;
+        let value = Object.hasOwn(answers, field.id)
+          ? answers[field.id]
+          : field.required && field.type === "array" && field.accepts([])
+            ? []
+            : undefined;
         // Older callers wrap scalar selections in an array (or { answers: [...] }).
         const nested = unknownRecord(value);
         if (nested && Object.hasOwn(nested, "answers")) value = nested.answers;

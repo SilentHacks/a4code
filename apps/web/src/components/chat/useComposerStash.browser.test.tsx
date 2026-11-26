@@ -1,10 +1,12 @@
 import { RegistryContext } from "@effect/atom-react";
 import {
   EnvironmentId,
+  PromptStashError,
   RuntimeRequestId,
   ThreadId,
   type PromptStashEntry,
 } from "@t3tools/contracts";
+import * as Cause from "effect/Cause";
 import { Atom, AtomRegistry } from "effect/reactivity";
 import { expect, it, vi } from "vite-plus/test";
 
@@ -161,7 +163,7 @@ function stashInput(target: DraftId, prompt: string) {
   return input;
 }
 
-it.each(["cleared", "edited", "failure"] as const)(
+it.each(["cleared", "edited", "failure", "full"] as const)(
   "only clears an unchanged draft after the environment confirms the stash (%s)",
   async (outcome) => {
     const target = DraftId.make("stash-environment-save");
@@ -171,7 +173,8 @@ it.each(["cleared", "edited", "failure"] as const)(
     using connection = remoteRegistry();
     using _draft = { [Symbol.dispose]: () => store.clearComposerContent(target) };
     const { promise, resolve } = Promise.withResolvers<
-      { _tag: "Success"; value: { evicted: null } } | { _tag: "Failure" }
+      | { _tag: "Success"; value: { evicted: null } }
+      | { _tag: "Failure"; cause: Cause.Cause<PromptStashError> }
     >();
     remote.save.mockReturnValue(promise);
     await using _screen = await render(
@@ -205,11 +208,18 @@ it.each(["cleared", "edited", "failure"] as const)(
         store.setPrompt(target, "Edited");
       }
       resolve(
-        outcome === "failure" ? { _tag: "Failure" } : { _tag: "Success", value: { evicted: null } },
+        outcome === "failure" || outcome === "full"
+          ? {
+              _tag: "Failure",
+              cause: Cause.fail(
+                new PromptStashError({ reason: outcome === "full" ? "full" : "storage" }),
+              ),
+            }
+          : { _tag: "Success", value: { evicted: null } },
       );
       await promise;
     });
-    const expected = outcome === "edited" ? "Edited" : outcome === "failure" ? "Before" : "";
+    const expected = outcome === "edited" ? "Edited" : outcome === "cleared" ? "" : "Before";
     expect(input.promptRef.current).toBe(expected);
     expect(store.getComposerDraft(target)?.prompt ?? "").toBe(expected);
     expect(usePromptStashStore.getState().entries).toEqual([]);

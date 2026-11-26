@@ -1,5 +1,7 @@
 import { RegistryContext, useAtomValue } from "@effect/atom-react";
 import { msg } from "gt-react";
+import * as Cause from "effect/Cause";
+import * as Option from "effect/Option";
 import { m } from "~/i18n/messages";
 import type { ChatComposerProps } from "./ChatComposer";
 import {
@@ -100,6 +102,20 @@ function reportEvicted(entry: PromptStashEntry | null) {
       msg("The stash holds {max} prompts; the oldest was removed to make room.", {
         max: MAX_STASH_ENTRIES,
       }),
+    ),
+    data: { hideCopyButton: true },
+  });
+}
+
+function reportFullStash() {
+  toastManager.add({
+    type: "warning",
+    title: m(msg("Stash is full")),
+    description: m(
+      msg(
+        "The stash holds {max} prompts. Restore or delete one to make room; the composer was left as-is.",
+        { max: MAX_STASH_ENTRIES },
+      ),
     ),
     data: { hideCopyButton: true },
   });
@@ -825,8 +841,10 @@ export function useComposerStash(input: {
             environmentId,
             input: { entry: { ...entry, ...remoteImages } },
           });
-          if (saved._tag !== "Success") {
-            saveFailed();
+          if (saved._tag === "Failure") {
+            const error = Option.getOrUndefined(Cause.findErrorOption(saved.cause));
+            if (error?._tag === "PromptStashError" && error.reason === "full") reportFullStash();
+            else saveFailed();
             return;
           }
           if (capturedDraftIsUnchanged()) {
@@ -846,7 +864,7 @@ export function useComposerStash(input: {
       // crash or closed tab mid-encode still leaves the prompt recoverable,
       // while clearing before the async image work means edits typed during
       // encoding are not wiped.
-      const { evicted, written, durable } = stashEntryToQueue({
+      const { full, written, durable } = stashEntryToQueue({
         ...entry,
         attachments: [],
         droppedImageNames: [],
@@ -854,9 +872,11 @@ export function useComposerStash(input: {
         pendingImageCount: images.length,
       });
 
-      // If it was rejected (quota) the store has already rolled itself back,
-      // so leave the composer untouched rather than making it the second
-      // casualty of a reload.
+      // A full or rejected write kept nothing, so leave the composer untouched.
+      if (full) {
+        reportFullStash();
+        return;
+      }
       if (!written) {
         toastManager.add({
           type: "error",
@@ -885,7 +905,6 @@ export function useComposerStash(input: {
 
       clearDraft();
       pulseStashBadge();
-      reportEvicted(evicted);
 
       const encoded = remoteImages ?? (await encodeStashImages(images));
       const { attached, durable: imagesDurable } = finalizeStashEntryImages(entryId, encoded);

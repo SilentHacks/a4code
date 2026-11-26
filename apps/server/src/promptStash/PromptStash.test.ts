@@ -115,7 +115,13 @@ it.effect(
       assert.deepEqual(yield* pull, [{ _tag: "reset" }]);
       // Save during initial replay: the reset snapshot must finish before the live delta.
       assert.deepEqual(yield* stash.save({ ...rich, prompt: "stale retry" }), { evicted: null });
-      assert.deepEqual(yield* stash.save(draft("replacement")), { evicted: stored });
+      assert.propertyVal(
+        yield* stash.save(draft("replacement")).pipe(Effect.flip),
+        "reason",
+        "full",
+      );
+      assert.deepEqual(yield* stash.take({ _tag: "delete", id: stored.id }), { entry: stored });
+      assert.deepEqual(yield* stash.save(draft("replacement")), { evicted: null });
       for (let i = MAX_STASH_ENTRIES - 1; i > 0; i--) {
         assert.deepEqual(yield* pull, [
           { _tag: "upsert", entry: { ...draft(`entry-${i}`), createdAt: now } },
@@ -124,7 +130,8 @@ it.effect(
       assert.deepEqual(yield* pull, [{ _tag: "upsert", entry: stored }]);
       assert.deepEqual(yield* pull, [{ _tag: "ready" }]);
       const replacement = { ...draft("replacement"), createdAt: now };
-      assert.deepEqual(yield* pull, [{ _tag: "upsert", entry: replacement, evictedId: stored.id }]);
+      assert.deepEqual(yield* pull, [{ _tag: "remove", id: stored.id }]);
+      assert.deepEqual(yield* pull, [{ _tag: "upsert", entry: replacement }]);
       assert.deepEqual(yield* stash.take({ _tag: "delete", id: stored.id }), { entry: null });
 
       const claimA = { id: replacement.id, claimId: "claim-a" };
@@ -167,33 +174,6 @@ it.effect(
         { _tag: "upsert", entry: { ...afterRemoval, createdAt: "2026-01-01T00:01:00.000Z" } },
       ]);
     }).pipe(Effect.scoped, Effect.provide(layer)),
-);
-
-it.effect(
-  "evicts the oldest available entry and rejects a save while all entries are claimed",
-  () =>
-    Effect.gen(function* () {
-      const stash = yield* PromptStash.PromptStash;
-      const ids = Array.from({ length: MAX_STASH_ENTRIES }, (_, index) => `entry-${index}`);
-      const oldest = "entry-0";
-      const nextOldest = "entry-1";
-      for (const id of ids) {
-        yield* stash.save(draft(id));
-      }
-      const claim = { _tag: "claim", claimId: "restore" } as const;
-      assert.equal((yield* stash.take({ ...claim, id: oldest })).entry?.id, oldest);
-      assert.equal((yield* stash.save(draft("replacement"))).evicted?.id, nextOldest);
-      for (const id of [...ids.slice(2), "replacement"]) {
-        assert.equal((yield* stash.take({ ...claim, id })).entry?.id, id);
-      }
-      assert.propertyVal(
-        yield* stash.save(draft("overflow")).pipe(Effect.flip),
-        "reason",
-        "storage",
-      );
-      yield* TestClock.adjust("60 seconds");
-      assert.equal((yield* stash.save(draft("overflow"))).evicted?.id, oldest);
-    }).pipe(Effect.provide(layer)),
 );
 
 it.effect("rebases a subscriber that falls behind the bounded live backlog", () =>

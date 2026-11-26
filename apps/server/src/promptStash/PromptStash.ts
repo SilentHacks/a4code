@@ -74,33 +74,18 @@ const make = Effect.gen(function* () {
           }
           const full =
             yield* sql`SELECT 1 FROM prompt_stash LIMIT 1 OFFSET ${MAX_STASH_ENTRIES - 1}`;
-          let evicted = null;
-          if (full.length > 0) {
-            const now = yield* Clock.currentTimeMillis;
-            const [row] = yield* sql<EntryRow>`
-              DELETE FROM prompt_stash WHERE position = (
-                SELECT position FROM prompt_stash
-                WHERE claim_expires_at IS NULL OR claim_expires_at <= ${now}
-                ORDER BY position LIMIT 1
-              ) RETURNING entry_json
-            `;
-            if (!row) return yield* new PromptStashError({ reason: "storage" });
-            evicted = yield* decodeEntry(row.entry_json);
-          }
+          if (full.length > 0) return yield* new PromptStashError({ reason: "full" });
           yield* sql`INSERT INTO prompt_stash (id, entry_json) VALUES (${entry.id}, ${json})`;
-          return { entry, evicted };
+          return entry;
         }),
       );
-      if (!saved) return { evicted: null };
-      yield* PubSub.publish(changes, {
-        sequence: ++sequence,
-        event: {
-          _tag: "upsert",
-          entry: saved.entry,
-          ...(saved.evicted ? { evictedId: saved.evicted.id } : {}),
-        },
-      });
-      return { evicted: saved.evicted };
+      if (saved) {
+        yield* PubSub.publish(changes, {
+          sequence: ++sequence,
+          event: { _tag: "upsert", entry: saved },
+        });
+      }
+      return { evicted: null };
     },
     // A disconnected caller must not interrupt between commit and publication.
     Effect.uninterruptible,

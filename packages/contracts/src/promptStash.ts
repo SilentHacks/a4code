@@ -61,7 +61,7 @@ export const PromptStashEvent = Schema.Union([
 export type PromptStashEvent = typeof PromptStashEvent.Type;
 
 export class PromptStashError extends Schema.TaggedError<PromptStashError>()("PromptStashError", {
-  reason: Schema.Literals(["too-large", "wrong-environment", "storage"]),
+  reason: Schema.Literals(["too-large", "wrong-environment", "storage", "full"]),
 }) {
   override get message(): string {
     switch (this.reason) {
@@ -69,6 +69,8 @@ export class PromptStashError extends Schema.TaggedError<PromptStashError>()("Pr
         return "This draft is too large to stash.";
       case "wrong-environment":
         return "This draft has a file from another environment.";
+      case "full":
+        return "The prompt stash is full.";
       case "storage":
         return "Could not access the prompt stash.";
     }
