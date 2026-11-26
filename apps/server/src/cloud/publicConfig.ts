@@ -148,9 +148,10 @@ function validateHostedAppUrl(value: string) {
 }
 
 function makePublicValueConfig(name: string, fallback: string) {
-  return Config.NonEmptyString(name).pipe(
+  const runtimeConfig = Config.NonEmptyString(name).pipe(
     Config.orElse(() => Config.NonEmptyString(name.replace(/^A4CODE_/u, "T3CODE_"))),
-    ...(fallback ? [Config.withDefault(fallback)] : []),
+  );
+  return (fallback ? runtimeConfig.pipe(Config.withDefault(fallback)) : runtimeConfig).pipe(
     Config.map((value) => value.trim()),
   );
 }
