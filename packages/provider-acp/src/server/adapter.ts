@@ -33,20 +33,20 @@ import {
   type ThreadId,
   isRuntimeModeAbove,
   type TurnTokenUsage,
-} from "@t3tools/contracts";
-import { AgentScope, AgentScopeThreadId } from "@t3tools/shared/AgentScope";
-import { parseGrepOutput } from "@t3tools/shared/grepOutput";
-import * as HostProcess from "@t3tools/shared/HostProcess";
-import { HTML_RENDER_TOOL_NAME } from "@t3tools/shared/htmlRender";
-import { modelSelectionsEqual } from "@t3tools/shared/model";
-import { type SelfInvocation, selfInvocationArgs } from "@t3tools/shared/nodeRuntime";
-import { resolveT3McpToolId } from "@t3tools/shared/t3McpToolPresentation";
+} from "@a4code/contracts";
+import { AgentScope, AgentScopeThreadId } from "@a4code/shared/AgentScope";
+import { parseGrepOutput } from "@a4code/shared/grepOutput";
+import * as HostProcess from "@a4code/shared/HostProcess";
+import { HTML_RENDER_TOOL_NAME } from "@a4code/shared/htmlRender";
+import { modelSelectionsEqual } from "@a4code/shared/model";
+import { type SelfInvocation, selfInvocationArgs } from "@a4code/shared/nodeRuntime";
+import { resolveT3McpToolId } from "@a4code/shared/t3McpToolPresentation";
 import {
   compactDynamicToolOutput,
   compactT3McpToolOutput,
   htmlRenderFromToolItem,
   mcpToolResultOutput,
-} from "@t3tools/shared/toolOutput";
+} from "@a4code/shared/toolOutput";
 import { FILE_HEADERS_ONLY, formatPatch, structuredPatch } from "diff";
 import * as Cause from "effect/Cause";
 import * as Clock from "effect/Clock";
@@ -77,13 +77,13 @@ import {
   formatReadToolLabel,
   formatSearchToolLabel,
   searchToolLabelParts,
-} from "@t3tools/shared/toolActivity";
-import { isWorkspaceImagePreviewPath } from "@t3tools/shared/mediaPreview";
-import * as ProviderHost from "@t3tools/provider-core/server/ProviderHost";
+} from "@a4code/shared/toolActivity";
+import { isWorkspaceImagePreviewPath } from "@a4code/shared/mediaPreview";
+import * as ProviderHost from "@a4code/provider-core/server/ProviderHost";
 import { makeAcpMcpOverAcpBridge, type AcpMcpOverAcpBridge } from "./mcpOverAcpBridge.ts";
-import { mcpToolPresentation } from "@t3tools/provider-core/server/mcpToolPresentation";
-import * as McpProviderSessions from "@t3tools/provider-core/server/McpProviderSessions";
-import * as McpProviderSession from "@t3tools/provider-core/server/mcpSession";
+import { mcpToolPresentation } from "@a4code/provider-core/server/mcpToolPresentation";
+import * as McpProviderSessions from "@a4code/provider-core/server/McpProviderSessions";
+import * as McpProviderSession from "@a4code/provider-core/server/mcpSession";
 import {
   applyAcpAgentTerminalUpdate,
   MAX_AGENT_TERMINAL_OUTPUT_CHARS,
@@ -136,30 +136,30 @@ import * as AcpSessionRuntime from "./AcpSessionRuntime.ts";
 import {
   t3AcpPromptWithInstructions,
   type T3AcpInstructionState,
-} from "@t3tools/provider-core/server/orchestrationInstructions";
-import { buildRuntimeInstructions } from "@t3tools/provider-core/server/runtimeInstructions";
-import * as IdAllocator from "@t3tools/provider-core/server/IdAllocator";
-import type * as ProviderContinuationRequests from "@t3tools/provider-core/server/ProviderContinuationRequests";
+} from "@a4code/provider-core/server/orchestrationInstructions";
+import { buildRuntimeInstructions } from "@a4code/provider-core/server/runtimeInstructions";
+import * as IdAllocator from "@a4code/provider-core/server/IdAllocator";
+import type * as ProviderContinuationRequests from "@a4code/provider-core/server/ProviderContinuationRequests";
 import {
   type BackgroundWork,
   type BackgroundWorkReport,
   backgroundWorkNotification,
-} from "@t3tools/provider-core/server/notification";
+} from "@a4code/provider-core/server/notification";
 import {
   makeProviderFailure,
   makeProviderRetryTurnItem,
-} from "@t3tools/provider-core/server/failure";
-import { acpSelectionTransition } from "@t3tools/provider-core/server/selectionTransition";
+} from "@a4code/provider-core/server/failure";
+import { acpSelectionTransition } from "@a4code/provider-core/server/selectionTransition";
 import {
   isProviderNativeImageAttachment,
   providerMessageTextWithAttachmentPaths,
-} from "@t3tools/provider-core/server/attachmentPrompt";
+} from "@a4code/provider-core/server/attachmentPrompt";
 import {
   makeSubagentChildThread,
   makeSubagentConversationArtifacts,
   subagentThreadTitle,
-} from "@t3tools/provider-core/server/subagentProjection";
-import * as ProviderAdapter from "@t3tools/provider-core/server/ProviderAdapter";
+} from "@a4code/provider-core/server/subagentProjection";
+import * as ProviderAdapter from "@a4code/provider-core/server/ProviderAdapter";
 
 export const ACP_PROTOCOL = "acp.ndjson-jsonrpc" as const;
 
@@ -1174,7 +1174,7 @@ function acpMcpContext(
       // from its shell can find its T3 thread. Claude and Codex sessions set
       // the same variable (PortScanner.AGENT_THREAD_ENV; a string literal here
       // because this package cannot reach apps/server).
-      T3CODE_THREAD_ID: session.threadId,
+      A4CODE_THREAD_ID: session.threadId,
       T3_ACP_MCP_ENDPOINT: session.endpoint,
       T3_ACP_MCP_AUTHORIZATION: session.authorizationHeader,
       T3_ACP_MCP_NODE: self.command,
@@ -9327,7 +9327,7 @@ export const makeAcpAdapterV2 = Effect.fn("makeAcpAdapterV2")(function* (
                 recorded?.failure ??
                   makeProviderFailure({
                     class: "provider_error",
-                    message: `${flavor.runtimeHarness ?? driver} sent nothing for ${minutes} ${minutes === 1 ? "minute" : "minutes"}, so T3 Code stopped the turn and restarted the agent. Send a message to continue.`,
+                    message: `${flavor.runtimeHarness ?? driver} sent nothing for ${minutes} ${minutes === 1 ? "minute" : "minutes"}, so A4 Code stopped the turn and restarted the agent. Send a message to continue.`,
                   }),
                 recorded === undefined
                   ? undefined

@@ -9,14 +9,14 @@ import * as Path from "effect/Path";
 import * as Schema from "effect/Schema";
 import * as Scope from "effect/Scope";
 
-import { codexAuthDeliveryUrl, readCodexAuthHandoff } from "@t3tools/shared/codexAuthHandoff";
+import { codexAuthDeliveryUrl, readCodexAuthHandoff } from "@a4code/shared/codexAuthHandoff";
 import { receiveCodexAuthCallback, CodexAuthCallbackError } from "./CodexAuthCallback.ts";
 import * as ElectronShell from "../electron/ElectronShell.ts";
-import { providerAuthReturnUrl } from "@t3tools/shared/providerAuthReturnUrl";
-import { promptLinkAppPath } from "@t3tools/shared/promptLinks";
-import { readPairingAppLink } from "@t3tools/shared/remote";
-import * as HostProcess from "@t3tools/shared/HostProcess";
-import { clerkFrontendApiHostnameFromPublishableKey } from "@t3tools/shared/relayAuth";
+import { providerAuthReturnUrl } from "@a4code/shared/providerAuthReturnUrl";
+import { promptLinkAppPath } from "@a4code/shared/promptLinks";
+import { readPairingAppLink } from "@a4code/shared/remote";
+import * as HostProcess from "@a4code/shared/HostProcess";
+import { clerkFrontendApiHostnameFromPublishableKey } from "@a4code/shared/relayAuth";
 import * as ElectronApp from "../electron/ElectronApp.ts";
 import * as ElectronProtocol from "../electron/ElectronProtocol.ts";
 import * as ElectronWindow from "../electron/ElectronWindow.ts";
@@ -24,7 +24,7 @@ import * as DesktopUserData from "./DesktopUserData.ts";
 import * as DesktopEnvironment from "./DesktopEnvironment.ts";
 import * as DesktopWebLinks from "./DesktopWebLinks.ts";
 
-declare const __T3CODE_BUILD_CLERK_PUBLISHABLE_KEY__: string | undefined;
+declare const __A4CODE_BUILD_CLERK_PUBLISHABLE_KEY__: string | undefined;
 
 export class DesktopClerkBridgeInitializationError extends Schema.TaggedError<DesktopClerkBridgeInitializationError>()(
   "DesktopClerkBridgeInitializationError",
@@ -64,7 +64,7 @@ export class DesktopClerk extends Context.Service<
       | Scope.Scope
     >;
   }
->()("@t3tools/desktop/app/DesktopClerk") {}
+>()("@a4code/desktop/app/DesktopClerk") {}
 
 function resolveDesktopClerkFrontendApiHostname(
   publishableKey: string | undefined,
@@ -80,9 +80,9 @@ function resolveDesktopClerkFrontendApiHostname(
 }
 
 export const desktopClerkFrontendApiHostname = resolveDesktopClerkFrontendApiHostname(
-  typeof __T3CODE_BUILD_CLERK_PUBLISHABLE_KEY__ === "undefined"
+  typeof __A4CODE_BUILD_CLERK_PUBLISHABLE_KEY__ === "undefined"
     ? undefined
-    : __T3CODE_BUILD_CLERK_PUBLISHABLE_KEY__,
+    : __A4CODE_BUILD_CLERK_PUBLISHABLE_KEY__,
 );
 
 function createDesktopClerkBridge(tokenDirectory: string, isDevelopment: boolean) {
@@ -96,6 +96,8 @@ function createDesktopClerkBridge(tokenDirectory: string, isDevelopment: boolean
     },
   });
 }
+
+declare const __A4CODE_BUILD_HOSTED_APP_URL__: string | undefined;
 
 /** @public */
 export const make = Effect.gen(function* () {
@@ -170,9 +172,13 @@ export const make = Effect.gen(function* () {
       const context = yield* Effect.context<ElectronWindow.ElectronWindow>();
       const runPromise = Effect.runPromiseWith(context);
 
+      const hostedOrigin =
+        typeof __A4CODE_BUILD_HOSTED_APP_URL__ === "undefined"
+          ? undefined
+          : __A4CODE_BUILD_HOSTED_APP_URL__;
       const startProviderAuthHandoff = (value: string | undefined) => {
         if (!value) return false;
-        const request = readCodexAuthHandoff(value, environment.isDevelopment);
+        const request = readCodexAuthHandoff(value, environment.isDevelopment, hostedOrigin);
         if (!request) return false;
         void runPromise(
           Effect.gen(function* () {
@@ -182,7 +188,7 @@ export const make = Effect.gen(function* () {
                 receiveCodexAuthCallback(
                   request.authorizationUrl,
                   (url) => runPromise(shell.openExternal(url)),
-                  (callbackUrl) => codexAuthDeliveryUrl(request, callbackUrl),
+                  (callbackUrl) => codexAuthDeliveryUrl(request, callbackUrl, hostedOrigin),
                   signal,
                 ),
               catch: () =>
@@ -216,7 +222,10 @@ export const make = Effect.gen(function* () {
         return true;
       };
       const openAppLink = (value: string | undefined) => {
-        if (!value || (promptLinkAppPath(value) === null && readPairingAppLink(value) === null))
+        if (
+          !value ||
+          (promptLinkAppPath(value, hostedOrigin) === null && readPairingAppLink(value) === null)
+        )
           return false;
         void runPromise(webLinks.receive(value));
         return true;

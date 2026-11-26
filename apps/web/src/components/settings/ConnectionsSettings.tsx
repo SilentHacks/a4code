@@ -1,6 +1,6 @@
-import { errorDisplayMessage, thrownErrorMessage } from "@t3tools/client-runtime/errors";
+import { errorDisplayMessage, thrownErrorMessage } from "@a4code/client-runtime/errors";
 import { m as resolveMessage } from "~/i18n/messages";
-import { managedCapabilityDenial } from "@t3tools/client-runtime/contract-labels";
+import { managedCapabilityDenial } from "@a4code/client-runtime/contract-labels";
 import { SessionPermissions } from "./SessionPermissions";
 import { useSearch } from "@tanstack/react-router";
 import { ChevronRightIcon, EllipsisIcon } from "lucide-react";
@@ -23,12 +23,12 @@ import {
   type DesktopWslState,
   EnvironmentId,
   resolveEnvironmentMachineKind,
-} from "@t3tools/contracts";
+} from "@a4code/contracts";
 import {
   isAtomCommandInterrupted,
   settlePromise,
   squashAtomCommandFailure,
-} from "@t3tools/client-runtime/state/runtime";
+} from "@a4code/client-runtime/state/runtime";
 import * as Cause from "effect/Cause";
 
 import { isLocalEnvironmentDisabled } from "../../localEnvironment";
@@ -157,7 +157,7 @@ import {
   RevokeConnectDeviceDialog,
 } from "./RevokeConnectDeviceDialog";
 
-// Sessions T3 Connect minted for a device signed in to the linked account.
+// Sessions A4 Connect minted for a device signed in to the linked account.
 const CLOUD_CONNECT_SESSION_SUBJECT = "cloud-connect";
 const DEFAULT_TAILSCALE_SERVE_PORT = 443;
 const EMPTY_ADVERTISED_ENDPOINTS: ReadonlyArray<AdvertisedEndpoint> = [];
@@ -769,7 +769,7 @@ function ConnectionsSettingsContent({
     }
   };
 
-  // Removing a T3 Connect route preserves account registration; use a separate dialog pointing to
+  // Removing a A4 Connect route preserves account registration; use a separate dialog pointing to
   // deregistration.
   const [pendingT3ConnectRemoval, setPendingT3ConnectRemoval] =
     useState<EnvironmentPresentation | null>(null);
@@ -788,7 +788,7 @@ function ConnectionsSettingsContent({
     if (confirmed === true) await removeSavedBackend(environment);
   };
 
-  // T3 Connect devices waiting for approval have their own list.
+  // A4 Connect devices waiting for approval have their own list.
   const visibleDesktopPairingLinks = desktopPairingLinks.filter(
     (pairingLink) => pairingLink.connectDeviceRequest === undefined,
   );
@@ -803,7 +803,7 @@ function ConnectionsSettingsContent({
   const updateAccessSettings = useUpdateEnvironmentSettings(accessEnvironmentId);
   const [pendingConnectRevoke, setPendingConnectRevoke] =
     useState<ConnectDeviceRevokeRequest | null>(null);
-  // With approval off a revoked T3 Connect device signs straight back in, so offer to turn it
+  // With approval off a revoked A4 Connect device signs straight back in, so offer to turn it
   // on. Older servers have no such setting, and revoking there goes ahead as before.
   const connectApprovalOff =
     accessEnvironment?.serverConfig?.settings.requireConnectDeviceApproval === false;
@@ -1126,7 +1126,7 @@ function ConnectionsSettingsContent({
         {desktopWslState.enabled ? (
           <SettingsRow
             title={gt("WSL only")}
-            description={gt("Run only the WSL backend. T3 Code restarts when this changes.")}
+            description={gt("Run only the WSL backend. A4 Code restarts when this changes.")}
             className="bg-muted/20 pl-7 sm:pl-8"
             control={
               <Switch
@@ -1532,10 +1532,10 @@ function ConnectionsSettingsContent({
                 <AlertDialogDescription>
                   {pendingDesktopServerExposureMode === "network-accessible"
                     ? gt(
-                        "Let your other devices connect to T3 Code over the network. Pair devices to give them access. T3 Code will restart.",
+                        "Let your other devices connect to A4 Code over the network. Pair devices to give them access. A4 Code will restart.",
                       )
                     : gt(
-                        "Devices connected over your local network will disconnect. Existing tunnels, such as T3 Connect or Tailscale HTTPS, keep working. T3 Code will restart.",
+                        "Devices connected over your local network will disconnect. Existing tunnels, such as A4 Connect or Tailscale HTTPS, keep working. A4 Code will restart.",
                       )}
                 </AlertDialogDescription>
               </AlertDialogHeader>
@@ -1595,14 +1595,14 @@ function ConnectionsSettingsContent({
                   {pendingWslChange?.kind === "disable"
                     ? pendingWslChange.wasWslOnly
                       ? gt(
-                          "T3 Code will restart on the Windows backend. Threads and projects opened against WSL stay safe inside the distro and become available again when you re-enable WSL.",
+                          "A4 Code will restart on the Windows backend. Threads and projects opened against WSL stay safe inside the distro and become available again when you re-enable WSL.",
                         )
                       : gt(
-                          "The WSL backend will stop. Threads and projects opened against WSL stay safe inside the distro, but they'll be unavailable in T3 Code until you re-enable WSL.",
+                          "The WSL backend will stop. Threads and projects opened against WSL stay safe inside the distro, but they'll be unavailable in A4 Code until you re-enable WSL.",
                         )
                     : pendingWslChange?.kind === "distro"
                       ? gt(
-                          "T3 Code will restart the WSL backend on the new distro. Sessions still running on the current distro will be interrupted.",
+                          "A4 Code will restart the WSL backend on the new distro. Sessions still running on the current distro will be interrupted.",
                         )
                       : pendingWslChange?.kind === "enable"
                         ? gt(
@@ -1610,10 +1610,10 @@ function ConnectionsSettingsContent({
                           )
                         : pendingWslChange?.nextValue
                           ? gt(
-                              "T3 Code will restart and start only the WSL backend. Your Windows-side projects won't be accessible until you turn this off again.",
+                              "A4 Code will restart and start only the WSL backend. Your Windows-side projects won't be accessible until you turn this off again.",
                             )
                           : gt(
-                              "T3 Code will restart and bring the Windows backend back up alongside WSL.",
+                              "A4 Code will restart and bring the Windows backend back up alongside WSL.",
                             )}
                 </AlertDialogDescription>
               </AlertDialogHeader>
@@ -1702,7 +1702,7 @@ function ConnectionsSettingsContent({
                   <T>Disable Tailscale HTTPS?</T>
                 </AlertDialogTitle>
                 <AlertDialogDescription>
-                  <T>T3 Code will restart the local backend without Tailscale Serve.</T>
+                  <T>A4 Code will restart the local backend without Tailscale Serve.</T>
                 </AlertDialogDescription>
               </AlertDialogHeader>
               <AlertDialogFooter>
@@ -1743,7 +1743,7 @@ function ConnectionsSettingsContent({
                 </DialogTitle>
                 <DialogDescription>
                   <T>
-                    T3 Code will restart the local backend with Tailscale Serve enabled and ask
+                    A4 Code will restart the local backend with Tailscale Serve enabled and ask
                     Tailscale to proxy HTTPS traffic to this backend.
                   </T>
                 </DialogDescription>

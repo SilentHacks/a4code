@@ -1,6 +1,6 @@
 // What a step's own code may use besides plain Effect: state shared between runs, and a way to
 // wake a run that waits. Both touch the world, so they are for inside `step` and `onEnd`.
-import type { WorkflowRunSubject } from "@t3tools/contracts";
+import type { WorkflowRunSubject } from "@a4code/contracts";
 import * as Context from "effect/Context";
 import * as DateTime from "effect/DateTime";
 import * as Deferred from "effect/Deferred";
@@ -71,7 +71,7 @@ export interface RunFilter {
   readonly keyPrefix?: string | undefined;
   readonly kind?: string | undefined;
   readonly tag?: string | undefined;
-  /** A subject's kind and key, or a web address matched as `t3 workflow list --subject` does. */
+  /** A subject's kind and key, or a web address matched as `a4code workflow list --subject` does. */
   readonly subject?: { readonly kind: string; readonly key: string } | string | undefined;
 }
 

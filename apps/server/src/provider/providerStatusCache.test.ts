@@ -7,8 +7,8 @@ import {
   ProviderDriverKind,
   ProviderInstanceId,
   type ServerProvider,
-} from "@t3tools/contracts";
-import { createModelCapabilities } from "@t3tools/shared/model";
+} from "@a4code/contracts";
+import { createModelCapabilities } from "@a4code/shared/model";
 import { assert, it } from "@effect/vitest";
 
 import {
@@ -253,7 +253,7 @@ it.layer(NodeServices.layer)("providerStatusCache", (it) => {
       version: null,
       status: "disabled",
       auth: { status: "unknown" },
-      message: "Codex is disabled in T3 Code settings.",
+      message: "Codex is disabled in A4 Code settings.",
     });
 
     assert.deepStrictEqual(

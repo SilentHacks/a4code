@@ -1,8 +1,4 @@
-import {
-  chunkTerminalWrite,
-  terminalWritePhase,
-  type TerminalWriteInput,
-} from "@t3tools/contracts";
+import { chunkTerminalWrite, terminalWritePhase, type TerminalWriteInput } from "@a4code/contracts";
 
 import { encodeTerminalPaste } from "./terminalInput";
 

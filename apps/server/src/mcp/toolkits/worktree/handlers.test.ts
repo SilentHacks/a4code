@@ -13,7 +13,7 @@ import {
   type RuntimeMode,
   ThreadId,
   type WorktreeMcpHandoffResult,
-} from "@t3tools/contracts";
+} from "@a4code/contracts";
 import * as Effect from "effect/Effect";
 import * as FileSystem from "effect/FileSystem";
 import * as Layer from "effect/Layer";
@@ -209,7 +209,7 @@ const handoffFrom = <A, E>(
         ),
       writeLayout: fileSystem
         .writeFileString(
-          path.join(project, "t3.json"),
+          path.join(project, "a4.json"),
           JSON.stringify({
             worktreeLayout: {
               create: `touch "${marker}" && git worktree add -q -b "$T3_WORKTREE_BRANCH" "$T3_WORKTREE_PROJECT_PATH"`,

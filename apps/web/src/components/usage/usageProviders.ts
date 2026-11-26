@@ -1,6 +1,6 @@
-import type { UsageProviderKind } from "@t3tools/contracts";
+import type { UsageProviderKind } from "@a4code/contracts";
 
-import { ProviderDriverKind } from "@t3tools/contracts";
+import { ProviderDriverKind } from "@a4code/contracts";
 
 import type { UsageMetric } from "./usageShortcuts";
 
@@ -38,7 +38,7 @@ export const PROVIDER_PRESENTATION = {
     driverKind: ProviderDriverKind.make("antigravity"),
   },
   omp: {
-    // oxlint-disable-next-line t3code/no-untranslated-copy -- Provider names stay in English.
+    // oxlint-disable-next-line a4code/no-untranslated-copy -- Provider names stay in English.
     label: "Oh My Pi",
     color: "#7c9a62",
     driverKind: ProviderDriverKind.make("omp"),

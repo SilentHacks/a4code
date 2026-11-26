@@ -3,7 +3,7 @@ import type {
   ProviderApprovalDecision,
   ProviderApprovalOption,
   RuntimeRequestId,
-} from "@t3tools/contracts";
+} from "@a4code/contracts";
 import {
   type ApprovalTextPart,
   approvalTextParts,
@@ -11,7 +11,7 @@ import {
   fullAccessOverrideExplanation,
   PUSH_HOOKS_APPROVAL_QUESTION,
   pushHooksApprovalRows,
-} from "@t3tools/client-runtime/state/thread-requests";
+} from "@a4code/client-runtime/state/thread-requests";
 import { T, useGT, useMessages } from "gt-react-native";
 import { type ComponentRef, useRef, useState } from "react";
 import { Pressable, ScrollView, View } from "react-native";
@@ -44,7 +44,7 @@ export function PendingApprovalCard(props: PendingApprovalCardProps) {
   const canRespond = props.approval.responseCapability === "live";
   const disabled = !canRespond || props.respondingApprovalId === props.approval.requestId;
   const [explanationOpen, setExplanationOpen] = useState(false);
-  // T3 Code's own question reads as the app asking: a plain sentence, then what it names.
+  // A4 Code's own question reads as the app asking: a plain sentence, then what it names.
   const { pushHooks } = props.approval;
   const detail =
     !pushHooks && props.approval.detail ? approvalTextParts(props.approval.detail) : null;

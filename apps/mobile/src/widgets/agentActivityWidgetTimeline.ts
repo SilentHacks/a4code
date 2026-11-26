@@ -1,4 +1,4 @@
-import type { RelayAgentActivityAggregateState } from "@t3tools/contracts/relay";
+import type { RelayAgentActivityAggregateState } from "@a4code/contracts/relay";
 import { msg } from "gt-react-native";
 
 import { m, type MessageResolver } from "../i18n/messages";
@@ -73,12 +73,12 @@ export function agentActivityWidgetTimeline(
   if (source.kind !== "snapshot" || !source.aggregate) {
     const props: AgentActivityProps = {
       text: agentActivityText(0, resolve),
-      title: "T3 Code",
+      title: "A4 Code",
       subtitle:
         source.kind === "signed-out"
-          ? resolve(msg("Sign in to {product} to see agents", { product: "T3 Connect" }))
+          ? resolve(msg("Sign in to {product} to see agents", { product: "A4 Connect" }))
           : source.kind === "unavailable"
-            ? resolve(msg("Couldn't reach {product}", { product: "T3 Connect" }))
+            ? resolve(msg("Couldn't reach {product}", { product: "A4 Connect" }))
             : source.kind === "loading"
               ? resolve(msg("Loading agents…"))
               : resolve(msg("No active agents")),

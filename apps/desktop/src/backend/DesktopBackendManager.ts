@@ -26,12 +26,12 @@ import {
   DesktopTelemetryControlMessage,
   type DesktopTelemetryControlMessage as DesktopTelemetryControlMessageValue,
   type DatabaseMigrationProgress,
-} from "@t3tools/contracts";
+} from "@a4code/contracts";
 import {
   databaseMigrationProgress,
   isRunningDatabaseMigrations,
-} from "@t3tools/shared/databaseMigrationLog";
-import { waitForHttpReady as waitForHttpReadyShared } from "@t3tools/shared/httpReadiness";
+} from "@a4code/shared/databaseMigrationLog";
+import { waitForHttpReady as waitForHttpReadyShared } from "@a4code/shared/httpReadiness";
 
 import * as DesktopObservability from "../app/DesktopObservability.ts";
 import * as DesktopTelemetryPublisher from "../telemetry/DesktopTelemetryPublisher.ts";
@@ -85,7 +85,7 @@ export interface BackendReadinessProbe {
 export interface DesktopBackendStartConfig extends BackendProcessContext {
   readonly args: ReadonlyArray<string>;
   readonly env: Record<string, string | undefined>;
-  /** False passes env verbatim, preventing the Windows T3CODE_HOME from leaking into WSL. */
+  /** False passes env verbatim, preventing the Windows A4CODE_HOME from leaking into WSL. */
   readonly extendEnv: boolean;
   readonly bootstrap: DesktopBackendBootstrapValue;
   readonly bootstrapDelivery: DesktopBackendBootstrapDelivery;

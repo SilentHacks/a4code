@@ -10,7 +10,7 @@ import {
   type PeerLinkThreadInput,
   type PeerLinkThreadItemInput,
   PeerLinkThreadReadError,
-} from "@t3tools/contracts";
+} from "@a4code/contracts";
 import * as Context from "effect/Context";
 import * as DateTime from "effect/DateTime";
 import * as Duration from "effect/Duration";
@@ -103,7 +103,7 @@ const fromStatus = (status: number, code: string | undefined, label: string) => 
     return new PeerLinkThreadReadError({
       reason: "incompatible",
       label,
-      message: `${label} runs a T3 Code version that does not share its threads over a link. Update it to read its threads from here.`,
+      message: `${label} runs a A4 Code version that does not share its threads over a link. Update it to read its threads from here.`,
     });
   }
   if (status === 401 || status === 403) {

@@ -116,7 +116,7 @@ vi.mock("../../components/ui/EmptyState", () => ({
 vi.mock("./nativeReviewDiffHighlighter", () => ({
   highlightNativeReviewDiffVisibleRows: mocks.highlight,
 }));
-vi.mock("@t3tools/client-runtime/state/runtime", () => ({
+vi.mock("@a4code/client-runtime/state/runtime", () => ({
   settlePromise: async (execute: () => Promise<unknown>) => {
     try {
       return AsyncResult.success(await execute());

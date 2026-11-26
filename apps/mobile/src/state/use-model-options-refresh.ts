@@ -1,5 +1,5 @@
 import { useAtomValue } from "@effect/atom-react";
-import type { EnvironmentId, ModelSelection } from "@t3tools/contracts";
+import type { EnvironmentId, ModelSelection } from "@a4code/contracts";
 import { useEffect } from "react";
 
 import { environmentServerConfigsAtom, serverEnvironment } from "./server";
@@ -23,7 +23,7 @@ export function useModelOptionsRefresh(
   const refreshProviders = useAtomCommand(serverEnvironment.refreshProviders, {
     reportFailure: false,
   });
-  // oxlint-disable-next-line t3code/no-unreasoned-state-sync -- discovers server-side options for the shown model, including defaults and previews before the first turn; provider snapshots publish the result
+  // oxlint-disable-next-line a4code/no-unreasoned-state-sync -- discovers server-side options for the shown model, including defaults and previews before the first turn; provider snapshots publish the result
   useEffect(() => {
     if (environmentId === null || !supported || !instanceId || !model) return;
     void refreshProviders({ environmentId, input: { instanceId, model } });

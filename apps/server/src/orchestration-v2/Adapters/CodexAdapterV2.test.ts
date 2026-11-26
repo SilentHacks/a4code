@@ -1,5 +1,5 @@
-import { historyResponseItems } from "@t3tools/provider-core/server/handoffBudget";
-import { makeProviderFailure } from "@t3tools/provider-core/server/failure";
+import { historyResponseItems } from "@a4code/provider-core/server/handoffBudget";
+import { makeProviderFailure } from "@a4code/provider-core/server/failure";
 import {
   makeProviderTextDeltaCoalescer,
   type ProviderTextDeltaUpdate,
@@ -33,7 +33,7 @@ import {
   ThreadId,
   TurnItemId,
   type ServerProviderModel,
-} from "@t3tools/contracts";
+} from "@a4code/contracts";
 import { assert, describe, it } from "@effect/vitest";
 import * as CodexClient from "effect-codex-app-server/client";
 import * as CodexReplay from "effect-codex-app-server/replay";
@@ -45,8 +45,8 @@ import * as Digest from "effect/crypto/Digest";
 import * as Effect from "effect/Effect";
 import * as Predicate from "effect/Predicate";
 import * as FileSystem from "effect/FileSystem";
-import { MCP_APP_OUTPUT_KEY, readMcpAppReference } from "@t3tools/shared/mcpApp";
-import { toolOutputImages } from "@t3tools/shared/toolOutput";
+import { MCP_APP_OUTPUT_KEY, readMcpAppReference } from "@a4code/shared/mcpApp";
+import { toolOutputImages } from "@a4code/shared/toolOutput";
 import { resolveAttachmentPathById } from "../../attachmentStore.ts";
 import * as Fiber from "effect/Fiber";
 import * as Layer from "effect/Layer";
@@ -64,17 +64,17 @@ import * as PlatformError from "effect/PlatformError";
 import { TestClock } from "effect/testing";
 import { ChildProcess, ChildProcessSpawner } from "effect/process";
 import * as Scope from "effect/Scope";
-import * as HostProcess from "@t3tools/shared/HostProcess";
+import * as HostProcess from "@a4code/shared/HostProcess";
 
 import packageJson from "../../../package.json" with { type: "json" };
-import * as McpProviderSessions from "@t3tools/provider-core/server/McpProviderSessions";
-import * as ProviderEventLoggers from "@t3tools/provider-core/server/ProviderEventLoggers";
-import * as IdAllocator from "@t3tools/provider-core/server/IdAllocator";
+import * as McpProviderSessions from "@a4code/provider-core/server/McpProviderSessions";
+import * as ProviderEventLoggers from "@a4code/provider-core/server/ProviderEventLoggers";
+import * as IdAllocator from "@a4code/provider-core/server/IdAllocator";
 import * as EffectWorker from "../EffectWorker.ts";
 import * as Orchestrator from "../Orchestrator.ts";
 import * as ProviderReplayHarness from "../testkit/ProviderReplayHarness.ts";
-import * as ProviderAdapter from "@t3tools/provider-core/server/ProviderAdapter";
-import type * as ProviderContinuationRequests from "@t3tools/provider-core/server/ProviderContinuationRequests";
+import * as ProviderAdapter from "@a4code/provider-core/server/ProviderAdapter";
+import type * as ProviderContinuationRequests from "@a4code/provider-core/server/ProviderContinuationRequests";
 import * as ModelManifest from "../../provider/ModelManifest.ts";
 import * as PortScanner from "../../preview/PortScanner.ts";
 import { resolveProviderCompatibility } from "../../provider/providerCompatibility.ts";
@@ -262,7 +262,7 @@ describe("CodexAdapterV2 runtime policy", () => {
       });
       assert.deepEqual((yield* build("approval-required")).sandboxPolicy, { type: "readOnly" });
       assert.deepEqual((yield* build("full-access")).sandboxPolicy, { type: "dangerFullAccess" });
-      // The folder list reaches the model without T3 Code's MCP tools.
+      // The folder list reaches the model without A4 Code's MCP tools.
       assert.deepEqual(Object.keys(autoAcceptEdits.additionalContext ?? {}), ["t3_code_workspace"]);
       assert.include(
         autoAcceptEdits.additionalContext?.["t3_code_workspace"]?.value,
@@ -366,7 +366,7 @@ describe("CodexAdapterV2 native protocol logging", () => {
             payload: {
               id: requestId,
               method: "thread/start",
-              params: { config: { "shell_environment_policy.set.T3CODE_THREAD_ID": appThreadId } },
+              params: { config: { "shell_environment_policy.set.A4CODE_THREAD_ID": appThreadId } },
             },
           });
           yield* protocolLogger({
@@ -605,7 +605,7 @@ const CODEX_TEST_RUNTIME_POLICY = ProviderAdapter.ProviderAdapterV2RuntimePolicy
   interactionMode: "default",
   cwd: "/workspace",
 });
-const T3_THREAD_ENV_KEY = "shell_environment_policy.set.T3CODE_THREAD_ID";
+const T3_THREAD_ENV_KEY = "shell_environment_policy.set.A4CODE_THREAD_ID";
 const threadEnvOf = (params: unknown) =>
   Predicate.hasProperty(params, "config") && Predicate.hasProperty(params.config, T3_THREAD_ENV_KEY)
     ? params.config[T3_THREAD_ENV_KEY]
@@ -713,7 +713,7 @@ function codexReplayPreamble(input: {
         id: 1,
         method: "initialize",
         params: {
-          clientInfo: { name: "T3 Code", title: "T3 Code", version: packageJson.version },
+          clientInfo: { name: "A4 Code", title: "A4 Code", version: packageJson.version },
           capabilities: {
             experimentalApi: true,
             optOutNotificationMethods: ["turn/diff/updated"],
@@ -730,7 +730,7 @@ function codexReplayPreamble(input: {
       frame: {
         id: 1,
         result: {
-          userAgent: "T3 Code/0.156.1",
+          userAgent: "A4 Code/0.156.1",
           codexHome: "/tmp/codex-home",
           platformFamily: "unix",
           platformOs: "macos",
@@ -1362,7 +1362,7 @@ describe("CodexAdapterV2 session initialize", () => {
               frame: {
                 id: 1,
                 result: {
-                  userAgent: "T3 Code/0.144.3 (Mac OS 15.5.0; x86_64) unknown (T3 Code; 0.1.5)",
+                  userAgent: "A4 Code/0.144.3 (Mac OS 15.5.0; x86_64) unknown (A4 Code; 0.1.5)",
                   codexHome: "/tmp/codex-home",
                   platformFamily: "unix",
                   platformOs: "macos",
@@ -1386,7 +1386,7 @@ describe("CodexAdapterV2 session initialize", () => {
       assert.instanceOf(failure.cause, ProviderSetupError);
       assert.equal(
         failure.cause.message,
-        "Codex 0.144.3 does not work with this T3 Code release. Update Codex to >=0.159.0, then retry.",
+        "Codex 0.144.3 does not work with this A4 Code release. Update Codex to >=0.159.0, then retry.",
       );
     }).pipe(
       Effect.scoped,
@@ -1886,11 +1886,11 @@ describe("CodexAdapterV2 post-settle continuation", () => {
   it.effect.each([
     { serverName: "t3-code", asked: true, expected: { own: true } },
     { serverName: "t3-code-direct", asked: true, expected: { own: true } },
-    // A server T3 Code did not register, or a request T3 Code did not make: named as ever.
+    // A server A4 Code did not register, or a request A4 Code did not make: named as ever.
     { serverName: "deploys", asked: true, expected: { own: false } },
     { serverName: "t3-code", asked: false, expected: { own: false } },
   ] as const)(
-    "shows an approval from $serverName (asked by T3 Code: $asked) as T3 Code's own: $expected.own",
+    "shows an approval from $serverName (asked by A4 Code: $asked) as A4 Code's own: $expected.own",
     ({ serverName, asked, expected }) =>
       Effect.gen(function* () {
         const nativeThreadId = "own-approval-thread";
@@ -1988,8 +1988,8 @@ describe("CodexAdapterV2 post-settle continuation", () => {
           decision: "accept",
         });
         yield* harness.firstTerminal;
-        // What the person answered in the app stays with the request T3 Code made, and with
-        // no other: a request under T3's server name that T3 Code did not make gets none.
+        // What the person answered in the app stays with the request A4 Code made, and with
+        // no other: a request under T3's server name that A4 Code did not make gets none.
         if (ownAsked !== undefined) {
           const kept = yield* sessions.takeApprovalRequest(harness.threadId, ownAsked);
           if (expected.own) assert.deepInclude(kept, { approved: true });
@@ -2009,7 +2009,7 @@ describe("CodexAdapterV2 post-settle continuation", () => {
   );
 
   it.effect.each(["plan", "default"] as const)(
-    "shows what T3 Code's own tool asks to the person in a Full access turn (%s mode)",
+    "shows what A4 Code's own tool asks to the person in a Full access turn (%s mode)",
     (interactionMode) =>
       Effect.gen(function* () {
         const nativeThreadId = "own-approval-full-access-thread";
@@ -2061,7 +2061,7 @@ describe("CodexAdapterV2 post-settle continuation", () => {
           message,
           pushHooks,
         });
-        // Another call's request, answered while this one waits, leaves this one T3 Code's own.
+        // Another call's request, answered while this one waits, leaves this one A4 Code's own.
         const answered = yield* sessions.recordApprovalRequest(harness.threadId, {
           message: "Push docs and run this repository's hook file .husky/pre-push?",
         });
@@ -2084,7 +2084,7 @@ describe("CodexAdapterV2 post-settle continuation", () => {
         const request = yield* Effect.raceFirst(
           Queue.take(pending),
           harness.firstTerminal.pipe(
-            Effect.andThen(Effect.die("T3 Code's own request was answered without the person")),
+            Effect.andThen(Effect.die("A4 Code's own request was answered without the person")),
           ),
         );
         const card = harness.events.findLast(
@@ -3018,8 +3018,8 @@ describe("CodexAdapterV2 post-settle continuation", () => {
             "tools.update_plan.enabled": true,
             mcp_optional_startup_grace_ms: 10_000,
             "features.concurrent_reasoning_summaries": true,
-            "shell_environment_policy.set.T3CODE_THREAD_ID": `thread-${scenario}`,
-            "mcp_servers.envprobe.env.T3CODE_THREAD_ID": `thread-${scenario}`,
+            "shell_environment_policy.set.A4CODE_THREAD_ID": `thread-${scenario}`,
+            "mcp_servers.envprobe.env.A4CODE_THREAD_ID": `thread-${scenario}`,
             "mcp_servers.t3-code": {
               url: "http://127.0.0.1:43123/mcp",
               tool_timeout_sec: 3_900,
@@ -4914,7 +4914,7 @@ describe("CodexAdapterV2 post-settle continuation", () => {
                   item: {
                     type: itemType,
                     id,
-                    ...(itemType === "webSearch" ? { query: "T3 Code", action: null } : {}),
+                    ...(itemType === "webSearch" ? { query: "A4 Code", action: null } : {}),
                   },
                   ...timestamps,
                 },
@@ -5001,7 +5001,7 @@ describe("CodexAdapterV2 post-settle continuation", () => {
         assert.equal(unfinished[0]?.id, unfinished[1]?.id);
         assert.deepEqual(unfinished[1]?.startedAt, DateTime.makeUnsafe(1782622443000));
         if (unfinished[1]?.type === "web_search") {
-          assert.deepEqual(unfinished[1].patterns, ["T3 Code"]);
+          assert.deepEqual(unfinished[1].patterns, ["A4 Code"]);
           assert.deepEqual(
             harness.events.flatMap((event) =>
               event.type === "node.updated" &&
@@ -14105,7 +14105,7 @@ describe("CodexAdapterV2 app-server process", () => {
         // Scope.close cannot be interrupted, so a regression is ended by this rescue instead of
         // hanging the test; the deadline under test must make it unnecessary.
         let rescued = false;
-        // oxlint-disable-next-line t3code/no-real-time-wait-in-tests -- a watchdog for a hung child, not a wait for a milestone; it must never fire.
+        // oxlint-disable-next-line a4code/no-real-time-wait-in-tests -- a watchdog for a hung child, not a wait for a milestone; it must never fire.
         const rescue = yield* Effect.sleep("10 seconds").pipe(
           Effect.andThen(
             Effect.sync(() => {

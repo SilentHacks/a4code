@@ -3,7 +3,7 @@ import * as Schema from "effect/Schema";
 import { dispatchLocalStorageChange, setLocalStorageItem } from "~/hooks/useLocalStorage";
 
 /** Which tree the Files surface shows: the project workspace or the whole server host. */
-export const FILES_LOCATION_STORAGE_KEY = "t3code.filesLocation";
+export const FILES_LOCATION_STORAGE_KEY = "a4code.filesLocation";
 export const FilesLocation = Schema.Literals(["project", "server"]);
 export type FilesLocation = typeof FilesLocation.Type;
 

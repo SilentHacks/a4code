@@ -13,14 +13,14 @@ import {
   ProviderSessionId,
   ProviderThreadId,
   ThreadId,
-} from "@t3tools/contracts";
-import type * as ProviderAdapter from "@t3tools/provider-core/server/ProviderAdapter";
+} from "@a4code/contracts";
+import type * as ProviderAdapter from "@a4code/provider-core/server/ProviderAdapter";
 import * as Context from "effect/Context";
 import * as DateTime from "effect/DateTime";
 import * as Effect from "effect/Effect";
 import * as Layer from "effect/Layer";
 import * as References from "effect/References";
-// oxlint-disable-next-line t3code/no-raw-mcp-registration -- the eval calls the tool McpHttpServer registered and registers none.
+// oxlint-disable-next-line a4code/no-raw-mcp-registration -- the eval calls the tool McpHttpServer registered and registers none.
 import { McpSchema, McpServer } from "effect/ai";
 
 import * as McpHttpServer from "../../apps/server/src/mcp/McpHttpServer.ts";

@@ -15,10 +15,10 @@ import {
   type ModelSelection,
   type OrchestrationV2ProviderThread,
   type OrchestrationV2TurnItem,
-} from "@t3tools/contracts";
-import { derivePendingBackgroundWork } from "@t3tools/shared/orchestrationV2PendingBackgroundWork";
-import * as HostProcess from "@t3tools/shared/HostProcess";
-import { resolveSelfInvocation } from "@t3tools/shared/nodeRuntime";
+} from "@a4code/contracts";
+import { derivePendingBackgroundWork } from "@a4code/shared/orchestrationV2PendingBackgroundWork";
+import * as HostProcess from "@a4code/shared/HostProcess";
+import { resolveSelfInvocation } from "@a4code/shared/nodeRuntime";
 import * as DateTime from "effect/DateTime";
 import * as Deferred from "effect/Deferred";
 import * as Effect from "effect/Effect";
@@ -29,15 +29,15 @@ import { ChildProcess, ChildProcessSpawner } from "effect/process";
 import type * as EffectAcpSchema from "effect-acp/compat";
 
 import * as ServerConfig from "../../config.ts";
-import * as TestProviderHost from "@t3tools/provider-testing/TestProviderHost";
-import * as McpProviderSessions from "@t3tools/provider-core/server/McpProviderSessions";
-import type * as AcpSessionRuntime from "@t3tools/provider-acp/server/AcpSessionRuntime";
+import * as TestProviderHost from "@a4code/provider-testing/TestProviderHost";
+import * as McpProviderSessions from "@a4code/provider-core/server/McpProviderSessions";
+import type * as AcpSessionRuntime from "@a4code/provider-acp/server/AcpSessionRuntime";
 import { makeOmpAcpRuntime } from "../../provider/acp/OmpAcpSupport.ts";
-import * as IdAllocator from "@t3tools/provider-core/server/IdAllocator";
+import * as IdAllocator from "@a4code/provider-core/server/IdAllocator";
 import {
   ProviderAdapterV2RuntimePolicy,
   type ProviderAdapterV2TurnInput,
-} from "@t3tools/provider-core/server/ProviderAdapter";
+} from "@a4code/provider-core/server/ProviderAdapter";
 import {
   extractOmpSubagentUpdates,
   makeOmpAcpAdapterFlavor,
@@ -185,7 +185,7 @@ readline.createInterface({input:process.stdin}).on('line', line => {
 });
 `;
 
-const serverConfigLayer = ServerConfig.layerTest(process.cwd(), { prefix: "t3-omp-v2-" }).pipe(
+const serverConfigLayer = ServerConfig.layerTest(process.cwd(), { prefix: "a4code-v2-" }).pipe(
   Layer.provide(NodeServices.layer),
 );
 const testLayer = Layer.mergeAll(

@@ -4,7 +4,7 @@ import {
   type EnvironmentId,
   type ProviderDriverKind,
   type ResolvedKeybindingsConfig,
-} from "@t3tools/contracts";
+} from "@a4code/contracts";
 import { RegistryContext, useAtomValue } from "@effect/atom-react";
 import { T, useGT } from "gt-react";
 import {
@@ -157,7 +157,7 @@ export const ProviderModelPicker = memo(function ProviderModelPicker(props: {
       void refreshProviders({ environmentId: props.environmentId, input: { instanceId, model } });
     }
   });
-  // oxlint-disable-next-line t3code/no-unreasoned-state-sync -- discovers server-side options for the shown selection, including defaults before the picker opens; provider snapshots publish the result
+  // oxlint-disable-next-line a4code/no-unreasoned-state-sync -- discovers server-side options for the shown selection, including defaults before the picker opens; provider snapshots publish the result
   useEffect(() => {
     if (props.environmentId === null || !supportsModelOptions || modelOptionSelectionKey === "[]")
       return;
@@ -171,7 +171,7 @@ export const ProviderModelPicker = memo(function ProviderModelPicker(props: {
     if (config?.environment.capabilities.modelCatalogRefresh !== true) return;
     void refreshProviders({ environmentId, input: { modelCatalogOnly: true } });
   });
-  // oxlint-disable-next-line t3code/no-unreasoned-state-sync -- asks the server for newly released models on every open; a parent, a keybinding or the palette can open the picker, so no one handler sees them all
+  // oxlint-disable-next-line a4code/no-unreasoned-state-sync -- asks the server for newly released models on every open; a parent, a keybinding or the palette can open the picker, so no one handler sees them all
   useEffect(() => {
     if (isMenuOpen) refreshModelCatalog();
   }, [isMenuOpen]);

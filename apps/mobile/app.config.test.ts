@@ -1,12 +1,13 @@
-import { DEFAULT_HOSTED_APP_URL } from "@t3tools/shared/connectAuth";
 import { afterEach, expect, it, vi } from "vite-plus/test";
-
-import appleAppSiteAssociation from "../web/public/.well-known/apple-app-site-association.json";
-import assetLinks from "../web/public/.well-known/assetlinks.json";
 
 // Keep config parsing independent of local env files and build credentials.
 vi.mock("../../scripts/lib/public-config.ts", () => ({
-  loadRepoEnv: () => ({ APP_VARIANT: process.env.APP_VARIANT }),
+  loadRepoEnv: () => ({
+    ...(process.env.APP_VARIANT === undefined ? {} : { APP_VARIANT: process.env.APP_VARIANT }),
+    ...(process.env.A4CODE_HOSTED_APP_URL === undefined
+      ? {}
+      : { A4CODE_HOSTED_APP_URL: process.env.A4CODE_HOSTED_APP_URL }),
+  }),
 }));
 
 afterEach(() => {
@@ -26,22 +27,26 @@ it.each(["prod", ""])("rejects APP_VARIANT=%j before selecting production IDs", 
 });
 
 it.each([
-  [undefined, "com.t3tools.t3code"],
-  ["development", "com.t3tools.t3code.dev"],
-  ["preview", "com.t3tools.t3code.preview"],
-  ["production", "com.t3tools.t3code"],
+  [undefined, "io.github.silenthacks.a4code"],
+  ["development", "io.github.silenthacks.a4code.dev"],
+  ["preview", "io.github.silenthacks.a4code.preview"],
+  ["production", "io.github.silenthacks.a4code"],
 ])("keeps the iOS and Android identifiers for APP_VARIANT=%j", async (value, identifier) => {
   const config = await loadConfig(value);
   expect(config.ios?.bundleIdentifier).toBe(identifier);
   expect(config.android?.package).toBe(identifier);
-  // Copied thread links open this app only while app.t3.codes lists it.
-  const host = new URL(DEFAULT_HOSTED_APP_URL).host;
-  expect(config.ios?.associatedDomains).toContain(`applinks:${host}`);
-  expect(appleAppSiteAssociation.applinks.details[0]?.appIDs).toContain(
-    `${config.ios?.appleTeamId}.${identifier}`,
-  );
+  expect(config.ios?.associatedDomains).toEqual([]);
+  expect(config.android?.intentFilters).toEqual([]);
+  expect(config.updates?.enabled).toBe(false);
+  expect(config.updates?.url).toBeUndefined();
+});
+
+it("associates thread links with the configured fork host", async () => {
+  const host = "app.example.org";
+  vi.stubEnv("A4CODE_HOSTED_APP_URL", `https://${host}`);
+  const config = await loadConfig("production");
+  expect(config.ios?.associatedDomains).toEqual([`applinks:${host}`]);
   expect(config.android?.intentFilters?.[0]?.data).toEqual([
     { scheme: "https", host, pathPrefix: "/threads/" },
   ]);
-  expect(assetLinks.map((link) => link.target.package_name)).toContain(identifier);
 });

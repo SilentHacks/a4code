@@ -1,14 +1,14 @@
-import { EnvironmentId, ThreadId } from "@t3tools/contracts";
+import { EnvironmentId, ThreadId } from "@a4code/contracts";
 import { describe, expect, it } from "vite-plus/test";
 import {
   buildPendingUserInputAnswers,
   resolvePendingUserInputAnswer,
   setPendingUserInputCustomAnswer,
   togglePendingUserInputOptionSelection,
-} from "@t3tools/client-runtime/state/pending-user-input";
+} from "@a4code/client-runtime/state/pending-user-input";
 import { formatInlineContextReference } from "./lib/composerContextReferences";
 import { threadContextReference } from "./lib/composerContextRecords";
-import { threadContextRecord } from "@t3tools/shared/composerContextReferences";
+import { threadContextRecord } from "@a4code/shared/composerContextReferences";
 
 import {
   answerContextRecords,
@@ -32,7 +32,7 @@ describe("projectPendingUserInputAnswer", () => {
   it("sends thread chips as readable links with the actual thread ID", () => {
     const answer = `Compare ${formatInlineContextReference(threadContextReference(record))}`;
     expect(projectPendingUserInputAnswer(answer, [record])).toBe(
-      "Compare [Reference work](t3-thread://v2/env-answer/reference-thread)",
+      "Compare [Reference work](a4-thread://v2/env-answer/reference-thread)",
     );
   });
 

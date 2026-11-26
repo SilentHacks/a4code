@@ -7,7 +7,7 @@ test(
   WEB,
   async ({ t3, app, browser, screen }) => {
     await t3.project("checkout-project", {
-      "t3.json": JSON.stringify({ defaultThreadEnvMode: "local" }),
+      "a4.json": JSON.stringify({ defaultThreadEnvMode: "local" }),
     });
     await t3.open();
     const picker = browser.locator("[data-draft-project-trigger]");
@@ -16,7 +16,7 @@ test(
     await screen.getByRole("textbox").fill("Plan the implementation");
 
     await t3.project("worktree-project", {
-      "t3.json": JSON.stringify({ defaultThreadEnvMode: "worktree" }),
+      "a4.json": JSON.stringify({ defaultThreadEnvMode: "worktree" }),
     });
     await picker.tap();
     await screen.getByRole("option", "worktree-project", { exact: true }).tap();

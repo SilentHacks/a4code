@@ -18,7 +18,7 @@ test(
       const { host, token } = await server.ready;
       const remoteProject = await second.state.project("demo", {
         ...repository,
-        "t3.json": JSON.stringify({ defaultThreadEnvMode: "worktree" }),
+        "a4.json": JSON.stringify({ defaultThreadEnvMode: "worktree" }),
       });
       await runPromise(run("git", ["branch", "-m", "remote-base"], { cwd: remoteProject }));
 

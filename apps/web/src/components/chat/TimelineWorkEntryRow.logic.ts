@@ -3,9 +3,9 @@ import type { MarkdownExtensions } from "~/markdown/wordsHast";
 import {
   resolveWorkEntryToolPresentation,
   toolGroupAction,
-} from "@t3tools/client-runtime/work-log/presentation";
-import { splitsSurrogatePair } from "@t3tools/shared/assistantCitations";
-import { isJavaScriptReplTool } from "@t3tools/shared/toolActivity";
+} from "@a4code/client-runtime/work-log/presentation";
+import { splitsSurrogatePair } from "@a4code/shared/assistantCitations";
+import { isJavaScriptReplTool } from "@a4code/shared/toolActivity";
 import { formatWorkspaceRelativePath } from "../../filePathDisplay";
 import { m, type MessageResolver } from "../../i18n/messages";
 import { type TimelineWorkEntry, type TimelineRow } from "./timelineRowContext";

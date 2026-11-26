@@ -1,11 +1,11 @@
-import { thrownErrorMessage } from "@t3tools/client-runtime/errors";
-import { scopeProjectRef } from "@t3tools/client-runtime/environment";
+import { thrownErrorMessage } from "@a4code/client-runtime/errors";
+import { scopeProjectRef } from "@a4code/client-runtime/environment";
 import {
   type AtomCommandResult,
   isAtomCommandInterrupted,
   squashAtomCommandFailure,
-} from "@t3tools/client-runtime/state/runtime";
-import type { EnvironmentId } from "@t3tools/contracts";
+} from "@a4code/client-runtime/state/runtime";
+import type { EnvironmentId } from "@a4code/contracts";
 import { useRouter } from "@tanstack/react-router";
 import { msg } from "gt-react";
 
@@ -89,7 +89,7 @@ export function useStartTriage() {
     // A null result means the user went elsewhere; only a throw is a failure.
     await handleNewThread(scopeProjectRef(project.value.environmentId, project.value.id), {
       prompt: prepared.value.prompt,
-    }).catch(() => fail(m(msg("T3 Code could not open a new thread."))));
+    }).catch(() => fail(m(msg("A4 Code could not open a new thread."))));
   };
 
   return async (environmentId: EnvironmentId) => {

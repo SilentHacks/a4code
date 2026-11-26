@@ -11,7 +11,7 @@ import {
   TurnItemId,
   type OrchestrationV2DomainEvent,
   type ThreadLinkedPullRequest,
-} from "@t3tools/contracts";
+} from "@a4code/contracts";
 import * as NodeServices from "@effect/platform-node/NodeServices";
 import * as DateTime from "effect/DateTime";
 import * as Deferred from "effect/Deferred";
@@ -22,9 +22,9 @@ import * as Fiber from "effect/Fiber";
 import * as Layer from "effect/Layer";
 import * as Path from "effect/Path";
 import * as SqlClient from "effect/sql/SqlClient";
-import { serializeAssistantCitation } from "@t3tools/shared/assistantCitations";
-import { ATTACHMENT_ONLY_BOOTSTRAP_PROMPT } from "@t3tools/shared/composerContextReferences";
-import { EXACT_PHRASE_GAP } from "@t3tools/shared/paletteSearch";
+import { serializeAssistantCitation } from "@a4code/shared/assistantCitations";
+import { ATTACHMENT_ONLY_BOOTSTRAP_PROMPT } from "@a4code/shared/composerContextReferences";
+import { EXACT_PHRASE_GAP } from "@a4code/shared/paletteSearch";
 
 import * as SqlitePersistence from "../persistence/Sqlite.ts";
 import { rebuildMessageSearch } from "./messageSearchIndex.ts";
@@ -460,7 +460,7 @@ it.layer(layerTest)("ThreadSearch", (it) => {
       ]) {
         assert.deepEqual(yield* threadIds(query), [threadId], query);
       }
-      // `t3 doctor` rebuilds the index after VACUUM; quotes must still read.
+      // `a4code doctor` rebuilds the index after VACUUM; quotes must still read.
       yield* rebuildMessageSearch(sql);
       assert.deepEqual(yield* threadIds("résumé"), [threadId]);
 

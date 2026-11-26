@@ -19,8 +19,8 @@ import {
   type IssueTrackerConnectInput,
   type IssueTrackerConnection,
   type IssueTrackerConnectionList,
-} from "@t3tools/contracts";
-import type { StandaloneIssueTrackerApi } from "@t3tools/source-control-core/server/IssueTracker";
+} from "@a4code/contracts";
+import type { StandaloneIssueTrackerApi } from "@a4code/source-control-core/server/IssueTracker";
 
 import * as ServerSecretStore from "../auth/ServerSecretStore.ts";
 import * as IssueTrackerBindings from "../persistence/IssueTrackerBindings.ts";

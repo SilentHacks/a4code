@@ -1,11 +1,11 @@
-import { errorDisplayMessage } from "@t3tools/client-runtime/errors";
+import { errorDisplayMessage } from "@a4code/client-runtime/errors";
 import { msg, T, useGT, useMessages } from "gt-react-native";
 import * as Dialog from "../../components/ui/Dialog";
 import { ConnectionTraceId } from "./ConnectionTraceId";
 import { SymbolView } from "../../components/ui/AppSymbol";
-import { hasSavedBearerRoute, hostFreezeNotice } from "@t3tools/client-runtime/connection";
-import type { AtomCommandResult } from "@t3tools/client-runtime/state/runtime";
-import { type EnvironmentId, resolveEnvironmentMachineKind } from "@t3tools/contracts";
+import { hasSavedBearerRoute, hostFreezeNotice } from "@a4code/client-runtime/connection";
+import type { AtomCommandResult } from "@a4code/client-runtime/state/runtime";
+import { type EnvironmentId, resolveEnvironmentMachineKind } from "@a4code/contracts";
 import { useAtomValue } from "@effect/atom-react";
 import * as Cause from "effect/Cause";
 import { AsyncResult } from "effect/reactivity";
@@ -233,7 +233,7 @@ export function ConnectionEnvironmentRow(props: {
           {props.environment.isRelayManaged ? (
             <Text className="text-sm text-foreground-muted">
               {gt("Managed by {product}. Tunnel details update automatically.", {
-                product: "T3 Connect",
+                product: "A4 Connect",
               })}
             </Text>
           ) : (

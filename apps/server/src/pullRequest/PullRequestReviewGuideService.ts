@@ -20,10 +20,10 @@ import {
   type PullRequestStack,
   type RepositoryIdentity,
   type ThreadPullRequestKey,
-} from "@t3tools/contracts";
-import type { ReviewGuideStackLayer } from "@t3tools/provider-core/server/textGeneration";
-import { withoutRemoteUrlCredentials } from "@t3tools/shared/cloneUrl";
-import { resolveProjectSettings } from "@t3tools/shared/projectSettings";
+} from "@a4code/contracts";
+import type { ReviewGuideStackLayer } from "@a4code/provider-core/server/textGeneration";
+import { withoutRemoteUrlCredentials } from "@a4code/shared/cloneUrl";
+import { resolveProjectSettings } from "@a4code/shared/projectSettings";
 import { sourceControlDefinitions } from "../sourceControl/sourceControlDefinitions.ts";
 
 import * as ServerConfig from "../config.ts";

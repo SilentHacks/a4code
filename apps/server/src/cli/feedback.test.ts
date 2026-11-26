@@ -3,8 +3,8 @@ import * as NodeSqlite from "node:sqlite";
 import * as NodeCrypto from "@effect/platform-node/NodeCrypto";
 import * as NodeServices from "@effect/platform-node/NodeServices";
 import { expect, it } from "@effect/vitest";
-import { AuthSessionId } from "@t3tools/contracts";
-import * as NetService from "@t3tools/shared/Net";
+import { AuthSessionId } from "@a4code/contracts";
+import * as NetService from "@a4code/shared/Net";
 import * as ConfigProvider from "effect/ConfigProvider";
 import * as DateTime from "effect/DateTime";
 import * as Effect from "effect/Effect";
@@ -51,15 +51,15 @@ const listedPaths = (command: Command.Command.Any, path: string): ReadonlyArray<
   ),
 ];
 
-it("feedback subjects name every listed t3 command", () => {
+it("feedback subjects name every listed a4code command", () => {
   expect([...T3_CLI_COMMANDS].sort()).toEqual(
-    [...listedPaths(makeCli({ cloudEnabled: true }), "t3")].sort(),
+    [...listedPaths(makeCli({ cloudEnabled: true }), "a4code")].sort(),
   );
 });
 
 const hidden = (tool: string) =>
   new McpBridge.AcpMcpBridgeError({
-    message: "T3 Code MCP tools/call failed.",
+    message: "A4 Code MCP tools/call failed.",
     rpcError: { code: -32602, message: `Tool '${tool}' not found` },
   });
 
@@ -113,9 +113,9 @@ it.effect("points to Labs only when the server hides the feedback tool", () =>
           Effect.fail(
             new McpBridge.AcpMcpBridgeError({ message: "fetch failed: connection refused" }),
           ),
-        stderr: `Could not reach the T3 Code server at ${runtimeState.origin}.`,
+        stderr: `Could not reach the A4 Code server at ${runtimeState.origin}.`,
       },
-      { args: submit, running: false, stderr: "No running T3 Code server uses" },
+      { args: submit, running: false, stderr: "No running A4 Code server uses" },
     ];
     for (const { args, running, call, stderr } of cases) {
       yield* running === false
@@ -215,7 +215,7 @@ it.effect("points to Labs only when the server hides the feedback tool", () =>
         NodeServices.layer,
         NodeCrypto.layer,
         NetService.layer,
-        ConfigProvider.layer(ConfigProvider.fromEnv({ env: { T3CODE_PORT: "3773" } })),
+        ConfigProvider.layer(ConfigProvider.fromEnv({ env: { A4CODE_PORT: "3773" } })),
       ),
     ),
   ),

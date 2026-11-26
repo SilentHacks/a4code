@@ -8,10 +8,10 @@ import * as Semaphore from "effect/Semaphore";
 
 import * as MobileSecureStorage from "./mobile-secure-storage";
 
-const AGENT_AWARENESS_DEVICE_ID_KEY = "t3code.agent-awareness.device-id";
-const ANALYTICS_DEVICE_ID_KEY = "t3code.analytics.device-id";
-const AGENT_AWARENESS_REGISTRATION_KEY = "t3code.agent-awareness.registration";
-const RECENT_THREAD_SHORTCUTS_KEY = "t3code.recent-thread-shortcuts";
+const AGENT_AWARENESS_DEVICE_ID_KEY = "a4code.agent-awareness.device-id";
+const ANALYTICS_DEVICE_ID_KEY = "a4code.analytics.device-id";
+const AGENT_AWARENESS_REGISTRATION_KEY = "a4code.agent-awareness.registration";
+const RECENT_THREAD_SHORTCUTS_KEY = "a4code.recent-thread-shortcuts";
 const encodeJson = Schema.encodeUnknownEffect(Schema.fromJsonString(Schema.Unknown));
 
 export class MobileStorageDecodeError extends Schema.TaggedError<MobileStorageDecodeError>()(
@@ -100,7 +100,7 @@ export class MobileStorage extends Context.Service<
       MobileSecureStorage.MobileSecureStorageError | MobileStorageEncodeError
     >;
   }
->()("@t3tools/mobile/persistence/mobile-storage/MobileStorage") {}
+>()("@a4code/mobile/persistence/mobile-storage/MobileStorage") {}
 
 export const make = Effect.fn("MobileStorage.make")(function* () {
   const secureStorage = yield* MobileSecureStorage.MobileSecureStorage;

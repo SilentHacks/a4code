@@ -15,7 +15,7 @@ const provideEnv = (env: Readonly<Record<string, string>>) =>
 
 it.effect("rejects an insecure runtime relay URL override", () =>
   makeRelayUrlConfig("https://embedded.example.test").pipe(
-    provideEnv({ T3CODE_RELAY_URL: "http://runtime.example.test" }),
+    provideEnv({ A4CODE_RELAY_URL: "http://runtime.example.test" }),
     Effect.flip,
   ),
 );
@@ -23,18 +23,23 @@ it.effect("rejects an insecure runtime relay URL override", () =>
 it.effect("rejects malformed or insecure hosted app URLs", () =>
   Effect.gen(function* () {
     for (const value of [
-      "app.t3.codes",
-      "http://app.t3.codes",
-      "https://app.t3.codes/nested",
-      "https://app.t3.codes?alias=true",
+      "app.example.test",
+      "http://app.example.test",
+      "https://app.example.test/nested",
+      "https://app.example.test?alias=true",
+      "https://user:password@app.example.test",
     ]) {
       const result = yield* hostedAppUrlConfig.pipe(
-        provideEnv({ T3CODE_HOSTED_APP_URL: value }),
+        provideEnv({ A4CODE_HOSTED_APP_URL: value }),
         Effect.result,
       );
       assert.isTrue(Result.isFailure(result), value);
     }
   }),
+);
+
+it.effect("has no hosted app without operator configuration", () =>
+  hostedAppUrlConfig.pipe(provideEnv({}), Effect.flip),
 );
 
 it.effect("derives direct Clerk OAuth endpoints from statically injected public config", () =>
@@ -62,8 +67,8 @@ it("product opt-out disables relay tracing with either built-in or runtime crede
     tracesToken: "embedded-token",
   };
   const env = {
-    T3CODE_TELEMETRY_ENABLED: "false",
-    T3CODE_OTEL_SDK_DISABLED: "false",
+    A4CODE_TELEMETRY_ENABLED: "false",
+    A4CODE_OTEL_SDK_DISABLED: "false",
   };
 
   assert.equal(resolveRelayClientTracingConfig(env, fallback), null);
@@ -71,9 +76,9 @@ it("product opt-out disables relay tracing with either built-in or runtime crede
     resolveRelayClientTracingConfig(
       {
         ...env,
-        T3CODE_RELAY_CLIENT_OTLP_TRACES_URL: "https://runtime.example.test/v1/traces",
-        T3CODE_RELAY_CLIENT_OTLP_TRACES_DATASET: "runtime-dataset",
-        T3CODE_RELAY_CLIENT_OTLP_TRACES_TOKEN: "runtime-token",
+        A4CODE_RELAY_CLIENT_OTLP_TRACES_URL: "https://runtime.example.test/v1/traces",
+        A4CODE_RELAY_CLIENT_OTLP_TRACES_DATASET: "runtime-dataset",
+        A4CODE_RELAY_CLIENT_OTLP_TRACES_TOKEN: "runtime-token",
       },
       fallback,
     ),

@@ -1,10 +1,10 @@
 Pod::Spec.new do |s|
   s.name           = 'T3NativeControls'
   s.version        = '1.0.0'
-  s.summary        = 'Native UIKit controls for T3 Code mobile.'
+  s.summary        = 'Native UIKit controls for A4 Code mobile.'
   s.description    = 'UIKit-backed controls that match native iOS navigation chrome.'
-  s.author         = 'T3 Tools'
-  s.homepage       = 'https://t3tools.com'
+  s.author         = 'A4 Code contributors'
+  s.homepage       = 'https://github.com/SilentHacks/a4code'
   s.platforms      = {
     :ios => '18.0',
   }

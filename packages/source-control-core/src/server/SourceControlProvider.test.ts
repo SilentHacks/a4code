@@ -15,13 +15,13 @@ it("removes URL credentials, query parameters, and fragments from error transpor
 });
 
 it.each([
-  ["git@github.com:T3Tools/t3code.git", "T3Tools/t3code"],
-  ["github.com:T3Tools/t3code.git", "T3Tools/t3code"],
-  ["gitlab.com:T3Tools/platform/t3code", "T3Tools/platform/t3code"],
-  ["https://github.com/T3Tools/t3code.git", "T3Tools/t3code"],
-  ["https://github.com/T3Tools/t3code.git?view=compact", "T3Tools/t3code"],
-  ["https://github.com/T3Tools/t3code.git#section", "T3Tools/t3code"],
-  ["C:/repos/t3code", null],
+  ["git@github.com:SilentHacks/a4code.git", "SilentHacks/a4code"],
+  ["github.com:SilentHacks/a4code.git", "SilentHacks/a4code"],
+  ["gitlab.com:T3Tools/platform/a4code", "T3Tools/platform/a4code"],
+  ["https://github.com/SilentHacks/a4code.git", "SilentHacks/a4code"],
+  ["https://github.com/SilentHacks/a4code.git?view=compact", "SilentHacks/a4code"],
+  ["https://github.com/SilentHacks/a4code.git#section", "SilentHacks/a4code"],
+  ["C:/repos/a4code", null],
 ])("reads the repository path of %s", (remoteUrl, expected) => {
   assert.strictEqual(repositoryPathFromRemoteUrl(remoteUrl), expected);
 });

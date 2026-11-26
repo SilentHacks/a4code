@@ -1,8 +1,8 @@
 import { describe, expect, it } from "vite-plus/test";
 
-import { ThreadId, TurnItemId, type OrchestrationV2TurnItem } from "@t3tools/contracts";
+import { ThreadId, TurnItemId, type OrchestrationV2TurnItem } from "@a4code/contracts";
 import * as DateTime from "effect/DateTime";
-import { compactT3McpToolOutput } from "@t3tools/shared/toolOutput";
+import { compactT3McpToolOutput } from "@a4code/shared/toolOutput";
 
 import {
   resolveViewedImageAsset,

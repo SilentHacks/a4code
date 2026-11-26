@@ -49,11 +49,11 @@ const LIST_RESULT: PullRequestListResult = {
       provider: SourceControlProviderKind.make("github"),
       host: "github.com",
       projectId: "project-1" as PullRequestListResult["entries"][number]["projectId"],
-      projectTitle: "t3code",
-      repository: "pingdotgg/t3code",
+      projectTitle: "a4code",
+      repository: "SilentHacks/a4code",
       number: 1,
       title: "Add a pull requests page",
-      url: "https://github.com/pingdotgg/t3code/pull/1",
+      url: "https://github.com/SilentHacks/a4code/pull/1",
       author: { login: "octocat", name: null, avatarUrl: null },
       headBranch: "feat/page",
       baseBranch: "main",
@@ -70,7 +70,7 @@ const LIST_RESULT: PullRequestListResult = {
   ],
   errors: [],
   truncated: false,
-  nextCursors: { "github.com pingdotgg/t3code": "2026-07-02T00:00:00Z|1|1" },
+  nextCursors: { "github.com SilentHacks/a4code": "2026-07-02T00:00:00Z|1|1" },
 };
 
 describe("PullRequestListResult", () => {
@@ -107,7 +107,7 @@ describe("PullRequestCapabilities", () => {
     };
     const detail = {
       ...LIST_RESULT.entries[0],
-      workspaceRoot: "/workspace/t3code",
+      workspaceRoot: "/workspace/a4code",
       body: "",
       changedFiles: 1,
       mergedAt: null,
@@ -164,7 +164,7 @@ describe("resolvePullRequestAuthorFilter", () => {
 
 describe("PullRequestOperationError", () => {
   // Cloudflare swaps an origin 502 for its own body without CORS headers, so a
-  // client behind a T3 Connect tunnel sees a transport error instead of this error.
+  // client behind a A4 Connect tunnel sees a transport error instead of this error.
   it.effect("answers with a status a Cloudflare tunnel passes through", () =>
     Effect.gen(function* () {
       const error = new PullRequestOperationError({

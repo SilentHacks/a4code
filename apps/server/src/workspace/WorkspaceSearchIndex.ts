@@ -30,10 +30,10 @@ import type {
   ProjectSearchContentsInput,
   ProjectSearchContentsResult,
   ProjectSearchEntriesResult,
-} from "@t3tools/contracts";
-import * as HostProcess from "@t3tools/shared/HostProcess";
-import { PROJECT_FAVICON_EXTENSIONS, isProjectFaviconPath } from "@t3tools/shared/projectFavicon";
-import { scoreSubsequenceMatch } from "@t3tools/shared/searchRanking";
+} from "@a4code/contracts";
+import * as HostProcess from "@a4code/shared/HostProcess";
+import { PROJECT_FAVICON_EXTENSIONS, isProjectFaviconPath } from "@a4code/shared/projectFavicon";
+import { scoreSubsequenceMatch } from "@a4code/shared/searchRanking";
 
 import * as VcsProcess from "../vcs/VcsProcess.ts";
 import { type IgnoreDecision, type IgnoreFile, parseIgnoreFile } from "./IgnorePatterns.ts";

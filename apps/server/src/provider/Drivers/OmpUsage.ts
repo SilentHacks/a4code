@@ -3,7 +3,7 @@ import type {
   ServerProviderAuth,
   ServerProviderUsageLimits,
   ServerProviderUsageWindow,
-} from "@t3tools/contracts";
+} from "@a4code/contracts";
 import { sha256 } from "@noble/hashes/sha2";
 import * as DateTime from "effect/DateTime";
 import * as Effect from "effect/Effect";
@@ -11,7 +11,7 @@ import * as Hex from "effect/encoding/Hex";
 import * as Option from "effect/Option";
 import * as Schema from "effect/Schema";
 
-import { makeUsageLimits } from "@t3tools/provider-core/server/usageLimits";
+import { makeUsageLimits } from "@a4code/provider-core/server/usageLimits";
 import { runOmpReadOnlyCommand } from "./OmpDiscovery.ts";
 
 const Timestamp = Schema.Union([Schema.Number, Schema.String]);

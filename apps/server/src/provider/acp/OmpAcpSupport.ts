@@ -1,12 +1,12 @@
-import type { OmpSettings, RuntimeMode } from "@t3tools/contracts";
-import * as HostProcess from "@t3tools/shared/HostProcess";
+import type { OmpSettings, RuntimeMode } from "@a4code/contracts";
+import * as HostProcess from "@a4code/shared/HostProcess";
 import * as Effect from "effect/Effect";
 import * as Layer from "effect/Layer";
 import * as Semaphore from "effect/Semaphore";
 import { ChildProcessSpawner } from "effect/process";
 import * as EffectAcpErrors from "effect-acp/errors";
 
-import * as AcpSessionRuntime from "@t3tools/provider-acp/server/AcpSessionRuntime";
+import * as AcpSessionRuntime from "@a4code/provider-acp/server/AcpSessionRuntime";
 import * as Exit from "effect/Exit";
 
 import { makeOmpLifecycleBridge } from "./OmpLifecycleBridge.ts";

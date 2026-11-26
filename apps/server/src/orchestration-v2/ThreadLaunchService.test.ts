@@ -32,7 +32,7 @@ import {
   TextGenerationError,
   ServerSettingsError,
   VcsProcessExitError,
-} from "@t3tools/contracts";
+} from "@a4code/contracts";
 import * as Cause from "effect/Cause";
 import * as Deferred from "effect/Deferred";
 import * as DateTime from "effect/DateTime";
@@ -67,7 +67,7 @@ import * as CommandReceiptStore from "./CommandReceiptStore.ts";
 import * as Orchestrator from "./Orchestrator.ts";
 import * as ProjectionStore from "./ProjectionStore.ts";
 import * as EffectOutbox from "./EffectOutbox.ts";
-import * as IdAllocator from "@t3tools/provider-core/server/IdAllocator";
+import * as IdAllocator from "@a4code/provider-core/server/IdAllocator";
 import * as ProviderAdapterRegistry from "./ProviderAdapterRegistry.ts";
 import * as TaskFolders from "../workspace/TaskFolders.ts";
 import {
@@ -81,7 +81,7 @@ import * as ThreadManagement from "./ThreadManagementService.ts";
 import * as ThreadTitleRegeneration from "./ThreadTitleRegenerationService.ts";
 import * as ProviderReplayHarness from "./testkit/ProviderReplayHarness.ts";
 import * as RemoteDelegation from "../peer/RemoteDelegation.ts";
-import type * as ProviderAdapter from "@t3tools/provider-core/server/ProviderAdapter";
+import type * as ProviderAdapter from "@a4code/provider-core/server/ProviderAdapter";
 
 const projectId = ProjectId.make("project:launch-test");
 const otherProjectId = ProjectId.make("project:launch-other");
@@ -3059,7 +3059,7 @@ const withLayoutProject = <A, E>(
       yield* git.execute({ operation: "launch-test", cwd: shop, args });
     }
     yield* fileSystem.writeFileString(
-      path.join(shop, "t3.json"),
+      path.join(shop, "a4.json"),
       JSON.stringify({
         worktreeLayout: {
           create: `echo create >> "${ran}" && git worktree add -q -b "$T3_WORKTREE_BRANCH" "$T3_WORKTREE_PROJECT_PATH"`,
@@ -4191,7 +4191,7 @@ it.effect("refuses a new worktree whose explicit branch already exists", () =>
     const git = yield* GitVcsDriver.GitVcsDriver;
     const directory = yield* fs.makeTempDirectoryScoped({ prefix: "launch-branch-exists-" });
     const cwd = `${directory}/repo`;
-    const temporaryBranch = "t3code/0b5e7a1c-3f2d-4e8a-9b6c-1d2e3f4a5b6c";
+    const temporaryBranch = "a4code/0b5e7a1c-3f2d-4e8a-9b6c-1d2e3f4a5b6c";
     yield* fs.makeDirectory(cwd);
     const command = (args: string[]) => git.execute({ operation: "launch-test", cwd, args });
     yield* command(["init", "-b", "main"]);

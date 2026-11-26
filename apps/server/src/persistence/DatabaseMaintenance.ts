@@ -1,5 +1,5 @@
-import * as HostProcess from "@t3tools/shared/HostProcess";
-import * as NodeSqliteClient from "@t3tools/shared/nodeSqliteClient";
+import * as HostProcess from "@a4code/shared/HostProcess";
+import * as NodeSqliteClient from "@a4code/shared/nodeSqliteClient";
 import * as Context from "effect/Context";
 import * as Effect from "effect/Effect";
 import * as FileSystem from "effect/FileSystem";
@@ -23,7 +23,7 @@ export class DatabaseMissingError extends Schema.TaggedError<DatabaseMissingErro
   { path: Schema.String },
 ) {
   override get message() {
-    return "No existing T3 Code database was found in this data directory.";
+    return "No existing A4 Code database was found in this data directory.";
   }
 }
 
@@ -38,9 +38,9 @@ export class DatabaseInUseError extends Schema.TaggedError<DatabaseInUseError>()
 ) {
   override get message() {
     if (this.pid !== undefined) {
-      return `Stop T3 Code server process ${this.pid}${this.serviceManaged ? "" : ", which the background service did not start,"} before repairing the database.`;
+      return `Stop A4 Code server process ${this.pid}${this.serviceManaged ? "" : ", which the background service did not start,"} before repairing the database.`;
     }
-    return "Stop the T3 Code server and desktop app, including any version before 0.1.0, before repairing the database.";
+    return "Stop the A4 Code server and desktop app, including any version before 0.1.0, before repairing the database.";
   }
 }
 
@@ -353,7 +353,7 @@ export const runRequestedReclaim = Effect.fn("DatabaseMaintenance.runRequestedRe
             .writeFileString(
               files.failure,
               error._tag === "DatabaseInUseError"
-                ? "Another program kept the database open. Close other T3 Code apps and t3 commands on this machine, then try again."
+                ? "Another program kept the database open. Close other A4 Code apps and t3 commands on this machine, then try again."
                 : error.message,
             )
             .pipe(

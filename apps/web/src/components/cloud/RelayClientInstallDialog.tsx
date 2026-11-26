@@ -1,7 +1,7 @@
 import { DownloadIcon } from "lucide-react";
 import { msg, T, useGT, useMessages, Var } from "gt-react";
 import { useSyncExternalStore } from "react";
-import type { RelayClientInstallProgressStage } from "@t3tools/contracts";
+import type { RelayClientInstallProgressStage } from "@a4code/contracts";
 
 import {
   completeRelayClientInstallDialogClose,
@@ -73,9 +73,9 @@ export function RelayClientInstallDialog() {
           </DialogTitle>
           <DialogDescription>
             {isInstalling
-              ? gt("T3 Code is preparing this environment for secure access through T3 Connect.")
+              ? gt("A4 Code is preparing this environment for secure access through A4 Connect.")
               : gt(
-                  "T3 Code needs the relay client to make this environment available through T3 Connect.",
+                  "A4 Code needs the relay client to make this environment available through A4 Connect.",
                 )}
           </DialogDescription>
         </DialogHeader>
@@ -100,7 +100,7 @@ export function RelayClientInstallDialog() {
                 value={activeStepIndex + 1}
               />
               <p className="text-xs leading-relaxed text-muted-foreground">
-                <T>Keep T3 Code open while the relay client is installed.</T>
+                <T>Keep A4 Code open while the relay client is installed.</T>
               </p>
             </div>
           ) : (
@@ -110,7 +110,7 @@ export function RelayClientInstallDialog() {
               </p>
               <p className="mt-1 text-sm leading-relaxed text-muted-foreground">
                 <T>
-                  T3 Code will download and install version{" "}
+                  A4 Code will download and install version{" "}
                   <Var>{view.status === "confirming" ? view.version : ""}</Var> locally.
                 </T>
               </p>

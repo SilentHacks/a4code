@@ -27,7 +27,7 @@ import type {
 } from "@anthropic-ai/claude-agent-sdk/sdk-tools";
 import * as NodeCrypto from "@effect/platform-node/NodeCrypto";
 import * as NodeServices from "@effect/platform-node/NodeServices";
-import { toolOutputImages } from "@t3tools/shared/toolOutput";
+import { toolOutputImages } from "@a4code/shared/toolOutput";
 import {
   ChatAttachmentId,
   type ChatAttachment,
@@ -54,8 +54,8 @@ import {
   RunAttemptId,
   RunId,
   ThreadId,
-} from "@t3tools/contracts";
-import { mcpAppFromToolItem } from "@t3tools/shared/toolOutput";
+} from "@a4code/contracts";
+import { mcpAppFromToolItem } from "@a4code/shared/toolOutput";
 import { assert, describe, it } from "@effect/vitest";
 import * as Cause from "effect/Cause";
 import * as Context from "effect/Context";
@@ -79,19 +79,19 @@ import * as Scope from "effect/Scope";
 import * as Stream from "effect/Stream";
 import * as TestClock from "effect/testing/TestClock";
 import { Tool } from "effect/ai";
-import { formatClaudeResumeCompactionQuestion } from "@t3tools/shared/claudeCompaction";
-import { backgroundWorkHoldsCompletion } from "@t3tools/shared/orchestrationV2PendingBackgroundWork";
-import * as HostProcess from "@t3tools/shared/HostProcess";
-import { getModelSelectionStringOptionValue } from "@t3tools/shared/model";
-import { SpawnExecutableResolution } from "@t3tools/shared/shell";
+import { formatClaudeResumeCompactionQuestion } from "@a4code/shared/claudeCompaction";
+import { backgroundWorkHoldsCompletion } from "@a4code/shared/orchestrationV2PendingBackgroundWork";
+import * as HostProcess from "@a4code/shared/HostProcess";
+import { getModelSelectionStringOptionValue } from "@a4code/shared/model";
+import { SpawnExecutableResolution } from "@a4code/shared/shell";
 
 import * as PortScanner from "../../preview/PortScanner.ts";
 import { attachmentRelativePath } from "../../attachmentStore.ts";
 import { WorkflowAgentTranscriptReadObserver } from "../workflowAgentTranscript.ts";
 import * as ServerConfig from "../../config.ts";
-import * as McpProviderSession from "@t3tools/provider-core/server/mcpSession";
-import { T3_CODE_DEVICE_TOOL_INSTRUCTIONS_WITH_TOOL_SEARCH } from "@t3tools/provider-core/server/orchestrationInstructions";
-import * as McpProviderSessions from "@t3tools/provider-core/server/McpProviderSessions";
+import * as McpProviderSession from "@a4code/provider-core/server/mcpSession";
+import { A4_CODE_DEVICE_TOOL_INSTRUCTIONS_WITH_TOOL_SEARCH } from "@a4code/provider-core/server/orchestrationInstructions";
+import * as McpProviderSessions from "@a4code/provider-core/server/McpProviderSessions";
 import { PreviewControlsToolkit } from "../../mcp/toolkits/previewControls/tools.ts";
 import { HtmlToolkit } from "../../mcp/toolkits/html/tools.ts";
 import { MessageToolkit } from "../../mcp/toolkits/message/tools.ts";
@@ -114,16 +114,16 @@ import {
   resolveClaudeModelSettingsKey,
 } from "../../provider/ClaudeCodeModelRoutes.ts";
 import { resolveProviderCatalog } from "../../provider/ModelManifest.ts";
-import * as ProviderEventLoggers from "@t3tools/provider-core/server/ProviderEventLoggers";
-import { AGENT_FEEDBACK_INSTRUCTIONS } from "@t3tools/provider-core/server/runtimeInstructions";
-import * as ProviderAdapter from "@t3tools/provider-core/server/ProviderAdapter";
-import type * as ProviderContinuationRequests from "@t3tools/provider-core/server/ProviderContinuationRequests";
+import * as ProviderEventLoggers from "@a4code/provider-core/server/ProviderEventLoggers";
+import { AGENT_FEEDBACK_INSTRUCTIONS } from "@a4code/provider-core/server/runtimeInstructions";
+import * as ProviderAdapter from "@a4code/provider-core/server/ProviderAdapter";
+import type * as ProviderContinuationRequests from "@a4code/provider-core/server/ProviderContinuationRequests";
 import {
   makeProviderFailure,
   PROVIDER_RETRY_BUDGET_MS,
-} from "@t3tools/provider-core/server/failure";
+} from "@a4code/provider-core/server/failure";
 import * as ClaudeAdapterV2 from "./ClaudeAdapterV2.ts";
-import * as IdAllocator from "@t3tools/provider-core/server/IdAllocator";
+import * as IdAllocator from "@a4code/provider-core/server/IdAllocator";
 import * as ProviderInstallationGate from "../../provider/ProviderInstallationGate.ts";
 import { ClaudeOrchestratorReplayHarness } from "./ClaudeAdapterV2.testkit.ts";
 import { withInlineContext } from "../ContextHandoffDelivery.ts";
@@ -932,7 +932,7 @@ describe("ClaudeAdapterV2 native protocol logging", () => {
     assert.equal(systemPrompt.preset, "claude_code");
     assert.include(systemPrompt.append ?? "", "Use `delegate_task`");
     assert.include(systemPrompt.append ?? "", "call `t3_background_wait`");
-    assert.notInclude(systemPrompt.append ?? "", "## T3 Code devices");
+    assert.notInclude(systemPrompt.append ?? "", "## A4 Code devices");
     const logged = ClaudeAdapterV2.loggedClaudeQueryOptions(options);
     assert.equal(logged.hasMcpServers, true);
     assert.notInclude(JSON.stringify(logged), "secret-claude-token");
@@ -978,13 +978,13 @@ describe("ClaudeAdapterV2 T3 tool instructions", () => {
 
   it("gives a session with device access the device block and the ToolSearch line to load it", () => {
     const text = append({ mcp: true, deviceToolsAvailable: true });
-    assert.include(text, T3_CODE_DEVICE_TOOL_INSTRUCTIONS_WITH_TOOL_SEARCH);
+    assert.include(text, A4_CODE_DEVICE_TOOL_INSTRUCTIONS_WITH_TOOL_SEARCH);
     assert.include(text, "Use `delegate_task`");
   });
 
   it("leaves the device block out without device access or without T3 tools", () => {
-    assert.notInclude(append({ mcp: true, deviceToolsAvailable: false }), "## T3 Code devices");
-    assert.notInclude(append({ mcp: false, deviceToolsAvailable: true }), "## T3 Code devices");
+    assert.notInclude(append({ mcp: true, deviceToolsAvailable: false }), "## A4 Code devices");
+    assert.notInclude(append({ mcp: false, deviceToolsAvailable: true }), "## A4 Code devices");
   });
 
   it("gives the agent feedback line only to a session with T3 tools", () => {
@@ -1023,7 +1023,7 @@ describe("ClaudeAdapterV2 T3 tool instructions", () => {
       {
         hookSpecificOutput: {
           hookEventName: "SubagentStart",
-          additionalContext: T3_CODE_DEVICE_TOOL_INSTRUCTIONS_WITH_TOOL_SEARCH,
+          additionalContext: A4_CODE_DEVICE_TOOL_INSTRUCTIONS_WITH_TOOL_SEARCH,
         },
       },
     ]);
@@ -8522,7 +8522,7 @@ describe("ClaudeAdapterV2 background wake turns", () => {
       }).pipe(Effect.scoped, Effect.provide(testLayer)),
     );
 
-    it.effect("shows what T3 Code's own tool asks without naming a server", () =>
+    it.effect("shows what A4 Code's own tool asks without naming a server", () =>
       Effect.gen(function* () {
         const { harness, elicit, awaitCard } = yield* startElicitationTurn();
         const sessions = yield* McpProviderSessions.McpProviderSessions;
@@ -8547,13 +8547,13 @@ describe("ClaudeAdapterV2 background wake turns", () => {
         assert.deepInclude(cards().at(-1), { prompt: message, pushHooks });
         assert.notProperty(cards().at(-1), "appName");
 
-        // Asked by a server T3 Code did not register: its name is shown, as for any server.
-        yield* elicit({ ...own, serverName: "deploys", displayName: "T3 Code" });
+        // Asked by a server A4 Code did not register: its name is shown, as for any server.
+        yield* elicit({ ...own, serverName: "deploys", displayName: "A4 Code" });
         yield* awaitCard(2);
-        assert.deepInclude(cards().at(-1), { prompt: message, appName: "T3 Code" });
+        assert.deepInclude(cards().at(-1), { prompt: message, appName: "A4 Code" });
         assert.notProperty(cards().at(-1), "pushHooks");
 
-        // Under T3 Code's name, but nothing T3 Code asked this thread.
+        // Under A4 Code's name, but nothing A4 Code asked this thread.
         yield* elicit({ ...own, message: "Push tools?" });
         yield* awaitCard(3);
         assert.deepInclude(cards().at(-1), { prompt: "Push tools?", appName: "t3-code" });
@@ -8561,7 +8561,7 @@ describe("ClaudeAdapterV2 background wake turns", () => {
       }).pipe(Effect.scoped, Effect.provide(testLayer)),
     );
 
-    it.effect("asks the person every time T3 Code's own tool asks", () =>
+    it.effect("asks the person every time A4 Code's own tool asks", () =>
       Effect.gen(function* () {
         const { harness, elicit, awaitCard } = yield* startElicitationTurn();
         const sessions = yield* McpProviderSessions.McpProviderSessions;
@@ -8605,7 +8605,7 @@ describe("ClaudeAdapterV2 background wake turns", () => {
           decision: "acceptForSession",
         });
         assert.deepEqual(yield* Fiber.join(first), { action: "accept", content: {} });
-        // What the person answered in the app stays with the request T3 Code made.
+        // What the person answered in the app stays with the request A4 Code made.
         assert.deepInclude(yield* sessions.takeApprovalRequest(harness.threadId, firstAsked), {
           approved: true,
         });

@@ -1,4 +1,4 @@
-import type { EnvironmentId } from "@t3tools/contracts";
+import type { EnvironmentId } from "@a4code/contracts";
 import { describe, expect, it, vi } from "vite-plus/test";
 
 import { act, render, type Screen } from "../../../test/render";

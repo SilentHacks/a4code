@@ -2,13 +2,13 @@ import type { Messages } from "./en";
 
 export const de: Messages = {
   layout: {
-    defaultTitle: "T3 Code",
-    defaultDescription: "T3 Code. Die Open-Source-Steuerzentrale für Coding-Agenten.",
+    defaultTitle: "A4 Code",
+    defaultDescription: "A4 Code. Die Open-Source-Steuerzentrale für Coding-Agenten.",
     socialImageAlt:
-      "T3 Code: die Open-Source-Steuerzentrale für Coding-Agenten, mit Claude Code, Codex, Cursor, OpenCode, Grok und Antigravity.",
-    homeLabel: "Startseite von T3 Code",
+      "A4 Code: die Open-Source-Steuerzentrale für Coding-Agenten, mit Claude Code, Codex, Cursor, OpenCode, Grok und Antigravity.",
+    homeLabel: "Startseite von A4 Code",
     download: "Download",
-    starsLabel: "T3 Code auf GitHub einen Stern geben, {stars} Sterne",
+    starsLabel: "A4 Code auf GitHub einen Stern geben, {stars} Sterne",
     githubStars: "{stars} GitHub-Sterne",
     language: "Sprache",
     mitLicensed: "MIT-lizenziert",
@@ -19,8 +19,8 @@ export const de: Messages = {
     security: "Sicherheit",
   },
   home: {
-    title: "T3 Code | Die Open-Source-Steuerzentrale für Coding-Agenten",
-    description: "T3 Code. Die Open-Source-Steuerzentrale für Coding-Agenten.",
+    title: "A4 Code | Die Open-Source-Steuerzentrale für Coding-Agenten",
+    description: "A4 Code. Die Open-Source-Steuerzentrale für Coding-Agenten.",
     heroTitle: ["Die Open-Source-", "Steuerzentrale", "für Coding-Agenten."],
     heroSub:
       "Steuere Claude Code, Codex, Antigravity, OpenCode, Cursor und Grok von einer Oberfläche aus. Nutze dein eigenes Abo. Forke das ganze Ding.",
@@ -32,14 +32,14 @@ export const de: Messages = {
     sourceLink: "Klau unseren Code (legal)",
     alsoOnPhone: "Auch auf deinem Handy:",
     screenshotAlt:
-      "T3 Code führt Subagenten von Claude, Codex, Muse und Gemini in einem Thread aus",
+      "A4 Code führt Subagenten von Claude, Codex, Muse und Gemini in einem Thread aus",
     endorsementsTitle: "Toleriert von über {users} Devs",
     endorsementsSub: "Ein paar haben sogar Nettes getwittert.",
     endorsementsLabel: "Stimmen von Entwicklern",
     readPost: "Beitrag von {handle} auf X lesen",
     harnessTitle: "Bring dein eigenes Abo mit",
     harnessBody:
-      "T3 Code verkauft keine Tokens weiter. Verbinde Claude Code, Codex, Antigravity, OpenCode, Cursor oder Grok mit den Zugangsdaten, die du schon hast. Wir orchestrieren sie, du behältst dein Abo.",
+      "A4 Code verkauft keine Tokens weiter. Verbinde Claude Code, Codex, Antigravity, OpenCode, Cursor oder Grok mit den Zugangsdaten, die du schon hast. Wir orchestrieren sie, du behältst dein Abo.",
     googleSignIn: "Google-Anmeldung",
     harnessPoints: [
       "Keine weiterverkauften Keys. Keine Kontingentgrenzen.",
@@ -47,7 +47,7 @@ export const de: Messages = {
       "Jede Woche neue Agenten.",
     ],
     gitVisualLabel:
-      "Illustration des Git-Workflows in T3 Code: Diff prüfen, Änderungen committen und pushen, Pull Request öffnen.",
+      "Illustration des Git-Workflows in A4 Code: Diff prüfen, Änderungen committen und pushen, Pull Request öffnen.",
     prReady: "Bereit",
     prCommits: "3 Commits",
     viewDiff: "Diff ansehen",
@@ -76,15 +76,15 @@ export const de: Messages = {
     browseSource: "Quellcode ansehen",
     ctaTitle: "Deine Agenten verdienen Besseres als ein Terminal.",
     ctaSub:
-      "T3 Code ist kostenlos, Open Source und schnell. Installier es, verbinde die Agenten, für die du schon zahlst, und lass sie direkt loslegen.",
+      "A4 Code ist kostenlos, Open Source und schnell. Installier es, verbinde die Agenten, für die du schon zahlst, und lass sie direkt loslegen.",
     otherPlatforms: "Andere Plattformen",
   },
   download: {
-    title: "T3 Code für macOS, Windows und Linux herunterladen | T3 Code",
+    title: "A4 Code für macOS, Windows und Linux herunterladen | A4 Code",
     description:
-      "Lade die offizielle Desktop-App von T3 Code für macOS, Windows oder Linux herunter, oder hol dir die Apps für iOS und Android. t3.codes ist die einzige offizielle Download-Seite.",
+      "Downloads für macOS, Windows und Linux. Die mobilen Apps werden aus dem Quellcode gebaut.",
     breadcrumb: "Download",
-    heading: "T3 Code herunterladen",
+    heading: "A4 Code herunterladen",
     channelLabel: "Release-Kanal",
     stable: "Stable",
     nightly: "Nightly",

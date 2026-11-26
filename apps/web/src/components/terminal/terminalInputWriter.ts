@@ -1,8 +1,4 @@
-import {
-  chunkTerminalWrite,
-  terminalWritePhase,
-  type TerminalWriteInput,
-} from "@t3tools/contracts";
+import { chunkTerminalWrite, terminalWritePhase, type TerminalWriteInput } from "@a4code/contracts";
 
 /** Sends one chunk of terminal input; resolves false when it failed and the rest should drop. */
 type SendTerminalChunk = (

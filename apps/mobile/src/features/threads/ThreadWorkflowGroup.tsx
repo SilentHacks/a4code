@@ -1,17 +1,17 @@
-import { scopeThreadRef } from "@t3tools/client-runtime/environment";
+import { scopeThreadRef } from "@a4code/client-runtime/environment";
 import {
   isActiveSubagentStatus,
   type RuntimeSubagent,
   type SubagentWorkflowGroup,
-} from "@t3tools/client-runtime/state/subagentRuntime";
+} from "@a4code/client-runtime/state/subagentRuntime";
 import {
   ThreadId,
   type EnvironmentId,
   type OrchestrationV2Subagent,
   type ServerProvider,
-} from "@t3tools/contracts";
-import { deriveSubagentElapsedMs } from "@t3tools/shared/orchestrationTiming";
-import { formatDuration } from "@t3tools/shared/orchestrationTimingCopy";
+} from "@a4code/contracts";
+import { deriveSubagentElapsedMs } from "@a4code/shared/orchestrationTiming";
+import { formatDuration } from "@a4code/shared/orchestrationTimingCopy";
 import { T, useGT, useMessages } from "gt-react-native";
 import { useState, type ReactNode } from "react";
 import { ScrollView, View } from "react-native";

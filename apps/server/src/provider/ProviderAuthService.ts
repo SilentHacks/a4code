@@ -7,7 +7,7 @@ import {
   type ProviderAuthState,
   type ProviderInstanceId,
   type ProviderSessionId,
-} from "@t3tools/contracts";
+} from "@a4code/contracts";
 import * as Context from "effect/Context";
 import * as Effect from "effect/Effect";
 import * as Function from "effect/Function";
@@ -18,9 +18,9 @@ import * as Semaphore from "effect/Semaphore";
 import * as ProviderSessionManager from "../orchestration-v2/ProviderSessionManager.ts";
 import * as ProjectionStore from "../orchestration-v2/ProjectionStore.ts";
 import * as ProviderInstanceRegistry from "./ProviderInstanceRegistry.ts";
-import type { ProviderAuthController } from "@t3tools/provider-core/server/auth";
+import type { ProviderAuthController } from "@a4code/provider-core/server/auth";
 
-export type { ProviderAuthController } from "@t3tools/provider-core/server/auth";
+export type { ProviderAuthController } from "@a4code/provider-core/server/auth";
 
 interface ProviderAuthTarget {
   readonly instanceId: ProviderInstanceId;
@@ -88,7 +88,7 @@ export const makeProviderAuthService = Effect.gen(function* () {
         instanceId,
         operation,
         detail: instance
-          ? "This provider does not support sign-in in T3 Code."
+          ? "This provider does not support sign-in in A4 Code."
           : "This provider instance is no longer available.",
       });
     }

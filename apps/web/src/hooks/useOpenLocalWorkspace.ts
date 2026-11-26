@@ -1,10 +1,10 @@
-import { squashAtomCommandFailure } from "@t3tools/client-runtime/state/runtime";
+import { squashAtomCommandFailure } from "@a4code/client-runtime/state/runtime";
 import {
   findProjectByPath,
   inferProjectTitleFromPath,
-} from "@t3tools/client-runtime/state/projects";
+} from "@a4code/client-runtime/state/projects";
 import { useAtomValue } from "@effect/atom-react";
-import type { DesktopAppActivationRequest } from "@t3tools/contracts";
+import type { DesktopAppActivationRequest } from "@a4code/contracts";
 import { msg } from "gt-react";
 
 import { handleDesktopAppActivationRequest } from "../desktopAppActivation";
@@ -74,7 +74,7 @@ export function useOpenLocalWorkspace() {
           const error = squashAtomCommandFailure(result);
           throw error instanceof Error
             ? error
-            : new Error(m(msg("T3 Code could not add the project.")));
+            : new Error(m(msg("A4 Code could not add the project.")));
         }
         return projectId;
       },

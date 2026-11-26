@@ -1,9 +1,9 @@
-import { createPromptStashEnvironmentAtoms } from "@t3tools/client-runtime/state/promptStash";
+import { createPromptStashEnvironmentAtoms } from "@a4code/client-runtime/state/promptStash";
 import {
   AuthOrchestrationReadScope,
   type EnvironmentId,
   type PromptStashEntry,
-} from "@t3tools/contracts";
+} from "@a4code/contracts";
 import { AsyncResult, Atom } from "effect/reactivity";
 
 import { connectionAtomRuntime } from "../connection/runtime";

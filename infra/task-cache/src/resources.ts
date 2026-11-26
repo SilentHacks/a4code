@@ -9,7 +9,7 @@ const protocol = new URL("../vendor/vite-plus-remote-cache-cloudflare/", import.
 
 export const cacheName = Effect.gen(function* () {
   const { stage } = yield* Alchemy.Stack;
-  return stage === "prod" ? "t3-task-cache" : `t3-task-cache-${stage}`;
+  return stage === "prod" ? "a4-task-cache" : `a4-task-cache-${stage}`;
 });
 
 export const Index = cacheName.pipe(

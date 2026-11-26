@@ -1,13 +1,13 @@
 import * as Context from "effect/Context";
 import * as Effect from "effect/Effect";
 import * as Layer from "effect/Layer";
-import type { IssueTrackerKind } from "@t3tools/contracts";
-import * as LinearDriver from "@t3tools/issue-tracker-linear/server/driver";
+import type { IssueTrackerKind } from "@a4code/contracts";
+import * as LinearDriver from "@a4code/issue-tracker-linear/server/driver";
 import {
   isStandaloneIssueTracker,
   type IssueTrackerApi,
   type StandaloneIssueTrackerApi,
-} from "@t3tools/source-control-core/server/IssueTracker";
+} from "@a4code/source-control-core/server/IssueTracker";
 
 import * as BuiltInDrivers from "../sourceControl/builtInDrivers.ts";
 import * as IssueTrackerHostLive from "./IssueTrackerHostLive.ts";

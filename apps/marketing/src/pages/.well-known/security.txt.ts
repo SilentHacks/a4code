@@ -8,7 +8,7 @@ const ONE_YEAR_MS = 365 * 24 * 60 * 60 * 1000;
 
 export const GET: APIRoute = () => {
   const body = [
-    "Contact: mailto:security@t3.codes",
+    "Contact: https://github.com/SilentHacks/a4code/security/advisories/new",
     `Policy: ${absoluteUrl("/security-policy")}`,
     `Canonical: ${absoluteUrl("/.well-known/security.txt")}`,
     "Preferred-Languages: en",

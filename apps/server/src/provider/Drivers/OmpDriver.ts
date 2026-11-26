@@ -1,4 +1,4 @@
-import { OmpSettings, ProviderDriverKind } from "@t3tools/contracts";
+import { OmpSettings, ProviderDriverKind } from "@a4code/contracts";
 import * as Effect from "effect/Effect";
 import * as FileSystem from "effect/FileSystem";
 import * as Path from "effect/Path";
@@ -7,8 +7,8 @@ import * as Stream from "effect/Stream";
 import { HttpClient } from "effect/http";
 import { ChildProcessSpawner } from "effect/process";
 
-import * as ProviderHost from "@t3tools/provider-core/server/ProviderHost";
-import * as ProviderLatestVersions from "@t3tools/provider-core/server/ProviderLatestVersions";
+import * as ProviderHost from "@a4code/provider-core/server/ProviderHost";
+import * as ProviderLatestVersions from "@a4code/provider-core/server/ProviderLatestVersions";
 import {
   OmpAdapterV2Driver,
   type OmpAdapterV2DriverEnv,
@@ -21,24 +21,24 @@ import {
   enrichOmpSnapshot,
   ompModelsFromSettings,
 } from "../OmpProvider.ts";
-import { makeManagedServerProvider } from "@t3tools/provider-core/server/managedProvider";
-import { mergeProviderInstanceEnvironment } from "@t3tools/provider-core/server/instanceEnvironment";
+import { makeManagedServerProvider } from "@a4code/provider-core/server/managedProvider";
+import { mergeProviderInstanceEnvironment } from "@a4code/provider-core/server/instanceEnvironment";
 import {
   defaultProviderContinuationIdentity,
   type ProviderDriver,
   type ProviderInstance,
-} from "@t3tools/provider-core/server/driver";
+} from "@a4code/provider-core/server/driver";
 import {
   makeCachedProviderMaintenanceResolution,
   makeManualOnlyProviderMaintenanceCapabilities,
   resolveProviderMaintenanceCapabilitiesEffect,
-} from "@t3tools/provider-core/server/maintenanceResolver";
+} from "@a4code/provider-core/server/maintenanceResolver";
 import {
   haveProviderSnapshotSettingsChanged,
   makeProviderSnapshotSettingsSource,
   type ProviderSnapshotSettings,
-} from "@t3tools/provider-core/server/snapshotSettings";
-import { withInstanceIdentity } from "@t3tools/provider-core/server/instanceIdentity";
+} from "@a4code/provider-core/server/snapshotSettings";
+import { withInstanceIdentity } from "@a4code/provider-core/server/instanceIdentity";
 import { makeOmpDiscoveryCache } from "./OmpDiscovery.ts";
 import { makeOmpMaintenanceResolver } from "./OmpMaintenance.ts";
 import { ompUsageReader } from "./OmpTranscriptUsage.ts";

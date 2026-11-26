@@ -11,7 +11,7 @@ Threshold monitors in [`infra/relay/src/monitoring.ts`](../../infra/relay/src/mo
 - **Links / tunnel recovery failing / Cloudflare 429s:** Check "Link failures by reason" and Cloudflare API status on `t3-code-relay-health`. Sustained 429s indicate Cloudflare API rate limiting or a recovery loop; slow Postgres points at DB/Hyperdrive.
 - **Environments unreachable:** Check Cloudflare Tunnel status and recent relay deploys before blaming hosts.
 - **Push delivery failing:** Inspect `relay.apns_deliveries.process_signed_job` or `relay.fcm.process` errors—an expired APNs key or FCM service account fails every job.
-- **Traffic dropped:** Check `https://relay.t3.codes/health` first.
+- **Traffic dropped:** Check `https://<your-relay-host>/health` first.
 - **Tunnel cleanup stopped / deletions failing:** Check `relay.managed_endpoint_reaper.sweep` spans and Cloudflare API errors. To pause cleanup during an incident, set `RELAY_TUNNEL_CLEANUP_MODE=off` and redeploy the relay (see [Managed tunnel cleanup rollout](./03_release.md#managed-tunnel-cleanup-rollout)).
 - **Account deletions failing:** A Clerk account deletion keeps failing. `select * from relay_account_deletions where completed_at is null order by attempts desc` shows which, and the failed `relay.account_deletion.delete_account` span under each `relay.account_deletion.process_pending` sweep names the stage (usually Cloudflare tunnel teardown). The row stays and retries every 5 minutes until it succeeds.
 
@@ -28,13 +28,13 @@ The mobile app sends `expo-observe` telemetry to the relay (`/v1/mobile/observe`
   | summarize count() by ['attributes.exception.type'], ['attributes.exception.message']
   ```
 
-- **Symbolicating iOS native crashes:** Download the build's dSYM archive from R2 at `ios/dsym/<easBuildId>.zip` and resolve offsets (`T3Code + <offset>`):
+- **Symbolicating iOS native crashes:** Download the build's dSYM archive from R2 at `ios/dsym/<easBuildId>.zip` and resolve offsets (`A4Code + <offset>`):
 
   ```sh
   unzip <easBuildId>.zip
-  atos -arch arm64 -o T3Code.app.dSYM/Contents/Resources/DWARF/T3Code -l 0x100000000 \
+  atos -arch arm64 -o A4Code.app.dSYM/Contents/Resources/DWARF/A4Code -l 0x100000000 \
     $(printf '0x%x' $((0x100000000 + <offset>)))
   ```
 
-- **Source map upload secret:** `MOBILE_SOURCEMAPS_R2` comes from Alchemy output `mobileSourceMapsUploadCredentials` (`cd infra/relay && vp exec alchemy state read T3CodeRelay/prod/output`). Store it as a GitHub Actions secret (for OTA updates) and as an EAS `production`-only secret (never `preview`, which runs PR code).
+- **Source map upload secret:** `MOBILE_SOURCEMAPS_R2` comes from Alchemy output `mobileSourceMapsUploadCredentials` (`cd infra/relay && vp exec alchemy state read A4CodeRelay/prod/output`). Store it as a GitHub Actions secret (for OTA updates) and as an EAS `production`-only secret (never `preview`, which runs PR code).
 - **Mobile alerts ([`infra/relay/src/mobileTelemetry/monitoring.ts`](../../infra/relay/src/mobileTelemetry/monitoring.ts)):** Crash spikes right after a release usually indicate a bad OTA—roll back in EAS. Android OS-kill spikes lag releases and point to memory leaks or main-thread freezes.

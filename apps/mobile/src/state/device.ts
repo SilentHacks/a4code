@@ -1,6 +1,6 @@
-import { createDeviceEnvironmentAtoms } from "@t3tools/client-runtime/state/device";
-import { resolveDeviceHubAccess } from "@t3tools/client-runtime/state/deviceHubAccess";
-import type { EnvironmentId, ThreadId } from "@t3tools/contracts";
+import { createDeviceEnvironmentAtoms } from "@a4code/client-runtime/state/device";
+import { resolveDeviceHubAccess } from "@a4code/client-runtime/state/deviceHubAccess";
+import type { EnvironmentId, ThreadId } from "@a4code/contracts";
 import * as Effect from "effect/Effect";
 import * as Option from "effect/Option";
 import { AsyncResult, Atom } from "effect/reactivity";

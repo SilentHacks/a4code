@@ -1,5 +1,5 @@
 import { expect, it } from "@effect/vitest";
-import type { PromptStashEntry, PromptStashEvent } from "@t3tools/contracts";
+import type { PromptStashEntry, PromptStashEvent } from "@a4code/contracts";
 import * as Effect from "effect/Effect";
 import * as Stream from "effect/Stream";
 

@@ -1,6 +1,6 @@
 # Maintenance, power, and diagnostics
 
-Control how aggressively T3 Code runs background checks, keep your computer awake while agents work, inspect server health, and analyze local trace files.
+Control how aggressively A4 Code runs background checks, keep your computer awake while agents work, inspect server health, and analyze local trace files.
 
 ## Background activity and power
 
@@ -33,4 +33,4 @@ t3 trace summary --since 30m        # Spans ended in the last 30 minutes
 t3 trace summary --since 2h --limit 50
 ```
 
-Pass `--base-dir <path>` (or set `T3CODE_HOME`) for a non-default data directory.
+Pass `--base-dir <path>` (or set `A4CODE_HOME`) for a non-default data directory.

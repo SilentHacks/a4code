@@ -13,13 +13,13 @@ import * as HttpRouter from "effect/http/HttpRouter";
 import * as HttpApi from "effect/http-api/HttpApi";
 import * as HttpApiBuilder from "effect/http-api/HttpApiBuilder";
 
-import { RELAY_HOOK_DELIVERY_TYP, signRelayJwt } from "@t3tools/shared/relayJwt";
+import { RELAY_HOOK_DELIVERY_TYP, signRelayJwt } from "@a4code/shared/relayJwt";
 import {
   EnvironmentHttpApi,
   EnvironmentId,
   ScheduledTaskWebhookDeliveryId,
   ScheduledTaskError,
-} from "@t3tools/contracts";
+} from "@a4code/contracts";
 import {
   ScheduledTaskService,
   type WebhookTriggerRequest,
@@ -209,7 +209,7 @@ describe("webhook route", () => {
     }),
   );
 
-  it.live("trusts no relay headers on an environment not linked to T3 Connect", () =>
+  it.live("trusts no relay headers on an environment not linked to A4 Connect", () =>
     Effect.gen(function* () {
       const received: Array<WebhookTriggerRequest> = [];
       const { handler, dispose } = handlerFor((request) => {

@@ -1,4 +1,4 @@
-import type { OmpSettings } from "@t3tools/contracts";
+import type { OmpSettings } from "@a4code/contracts";
 import * as Effect from "effect/Effect";
 import * as FileSystem from "effect/FileSystem";
 import * as Path from "effect/Path";

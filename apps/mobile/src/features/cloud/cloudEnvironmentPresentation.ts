@@ -1,10 +1,10 @@
-import type { RelayEnvironmentStatusResponse } from "@t3tools/contracts/relay";
+import type { RelayEnvironmentStatusResponse } from "@a4code/contracts/relay";
 import {
   orchestrationProtocolCompatibilityError,
   type EnvironmentConnectionPhase,
-} from "@t3tools/client-runtime/connection";
-import { errorDisplayMessage } from "@t3tools/client-runtime/errors";
-import { relayOfflineReasonMessage } from "@t3tools/client-runtime/relay";
+} from "@a4code/client-runtime/connection";
+import { errorDisplayMessage } from "@a4code/client-runtime/errors";
+import { relayOfflineReasonMessage } from "@a4code/client-runtime/relay";
 import { msg } from "gt-react-native";
 
 import { m, type MessageResolver } from "../../i18n/messages";

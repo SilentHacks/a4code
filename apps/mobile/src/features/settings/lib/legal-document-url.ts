@@ -1,10 +1,11 @@
-const DEFAULT_MARKETING_SITE_URL = "https://t3.codes";
+const FALLBACK_LEGAL_URL = "https://github.com/SilentHacks/a4code#license-and-attribution";
 
-function resolveMarketingSiteUrl(override: string | undefined): URL {
+function resolveMarketingSiteUrl(override: string | undefined): URL | undefined {
   try {
-    const url = new URL(override?.trim() || DEFAULT_MARKETING_SITE_URL);
+    if (!override?.trim()) return undefined;
+    const url = new URL(override.trim());
     if (url.protocol !== "https:" && url.protocol !== "http:") {
-      return new URL(DEFAULT_MARKETING_SITE_URL);
+      return undefined;
     }
 
     url.search = "";
@@ -12,14 +13,14 @@ function resolveMarketingSiteUrl(override: string | undefined): URL {
     url.pathname = `${url.pathname.replace(/\/+$/, "")}/`;
     return url;
   } catch {
-    return new URL(DEFAULT_MARKETING_SITE_URL);
+    return undefined;
   }
 }
 
 const MARKETING_SITE_URL = resolveMarketingSiteUrl(process.env.EXPO_PUBLIC_MARKETING_SITE_URL);
 
 function marketingSiteDocumentUrl(path: string): string {
-  return new URL(path, MARKETING_SITE_URL).toString();
+  return MARKETING_SITE_URL ? new URL(path, MARKETING_SITE_URL).toString() : FALLBACK_LEGAL_URL;
 }
 
 const PRIVACY_POLICY_URL = marketingSiteDocumentUrl("privacy-policy");

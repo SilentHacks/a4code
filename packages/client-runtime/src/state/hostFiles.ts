@@ -1,6 +1,6 @@
 import { mFallback, msg } from "gt-i18n";
 import type { MFunctionType } from "gt-i18n/types";
-import { WS_METHODS, type HostFileEntry } from "@t3tools/contracts";
+import { WS_METHODS, type HostFileEntry } from "@a4code/contracts";
 import type { Atom } from "effect/reactivity";
 
 import type { EnvironmentRegistry } from "../connection/registry.ts";

@@ -2,9 +2,9 @@ import type {
   ProviderApprovalOption,
   ProviderUserInputAnswers,
   UserInputQuestion,
-} from "@t3tools/contracts";
-import { isWorkspaceImagePreviewPath } from "@t3tools/shared/filePreview";
-import { resolveT3McpToolId } from "@t3tools/shared/t3McpToolPresentation";
+} from "@a4code/contracts";
+import { isWorkspaceImagePreviewPath } from "@a4code/shared/filePreview";
+import { resolveT3McpToolId } from "@a4code/shared/t3McpToolPresentation";
 import * as Effect from "effect/Effect";
 import * as Option from "effect/Option";
 import * as Predicate from "effect/Predicate";
@@ -15,13 +15,13 @@ import * as AcpWireSchema from "effect-acp/schema-v1";
 import {
   ACP_RAW_INPUT_PATH_KEYS,
   acpChangedPathsOfToolCall,
-} from "@t3tools/provider-acp/server/clientPolicy";
-import type { AcpAdapterV2Flavor } from "@t3tools/provider-acp/server/adapter";
-import { projectAcpElicitationForm } from "@t3tools/provider-acp/server/elicitation";
+} from "@a4code/provider-acp/server/clientPolicy";
+import type { AcpAdapterV2Flavor } from "@a4code/provider-acp/server/adapter";
+import { projectAcpElicitationForm } from "@a4code/provider-acp/server/elicitation";
 import {
   extractMcpToolCallIdentity,
   type AcpToolCallState,
-} from "@t3tools/provider-acp/server/runtimeModel";
+} from "@a4code/provider-acp/server/runtimeModel";
 
 import {
   ANTIGRAVITY_EDIT_DIFF_OMITTED,

@@ -13,8 +13,8 @@ import {
   type OrchestrationV2RunAttempt,
   type OrchestrationV2ProjectedTurnItem,
   type OrchestrationV2TurnItem,
-} from "@t3tools/contracts";
-import { summarizeToolGroup } from "@t3tools/client-runtime/work-log/presentation";
+} from "@a4code/contracts";
+import { summarizeToolGroup } from "@a4code/client-runtime/work-log/presentation";
 import * as DateTime from "effect/DateTime";
 import { describe, expect, it } from "vite-plus/test";
 import {
@@ -22,7 +22,7 @@ import {
   isPendingUserInputOptionSelected,
   setPendingUserInputCustomAnswer,
   togglePendingUserInputOptionSelection,
-} from "@t3tools/client-runtime/state/pending-user-input";
+} from "@a4code/client-runtime/state/pending-user-input";
 
 import {
   buildThreadFeed,

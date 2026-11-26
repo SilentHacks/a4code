@@ -28,7 +28,7 @@ import {
   RuntimeMode,
   OrchestrationV2LinkedSender,
   ThreadId,
-} from "@t3tools/contracts";
+} from "@a4code/contracts";
 
 import packageJson from "../../package.json" with { type: "json" };
 import { parseBearerToken } from "../auth/EnvironmentAuth.ts";
@@ -58,10 +58,10 @@ import * as McpInvocationContext from "./McpInvocationContext.ts";
 import * as McpToolAccess from "./McpToolAccess.ts";
 import * as McpToolExposure from "./McpToolExposure.ts";
 import * as McpWebhookTransport from "./McpWebhookTransport.ts";
-import { HTML_RENDER_TOOL_NAME } from "@t3tools/shared/htmlRender";
-import { compactT3McpToolOutput } from "@t3tools/shared/toolOutput";
-import * as McpProviderSessions from "@t3tools/provider-core/server/McpProviderSessions";
-import { MCP_TOOL_EXPOSURE_HEADER } from "@t3tools/provider-core/server/mcpSession";
+import { HTML_RENDER_TOOL_NAME } from "@a4code/shared/htmlRender";
+import { compactT3McpToolOutput } from "@a4code/shared/toolOutput";
+import * as McpProviderSessions from "@a4code/provider-core/server/McpProviderSessions";
+import { MCP_TOOL_EXPOSURE_HEADER } from "@a4code/provider-core/server/mcpSession";
 import * as OrchestratorMcpService from "./OrchestratorMcpService.ts";
 import { PreviewControlsToolkit } from "./toolkits/previewControls/tools.ts";
 import * as PreviewControlsHandlers from "./toolkits/previewControls/handlers.ts";
@@ -112,7 +112,7 @@ import * as MessageHandlers from "./toolkits/message/handlers.ts";
 import { HtmlPreviewTool, HtmlPreviewToolkit, HtmlRenderToolkit } from "./toolkits/html/tools.ts";
 import { MCP_HTTP_PATH } from "../httpCors.ts";
 import { requestUrl } from "../requestUrl.ts";
-import { routineSpan } from "@t3tools/shared/observability";
+import { routineSpan } from "@a4code/shared/observability";
 
 const mcpResourceMetadataUrl = (request: HttpServerRequest.HttpServerRequest) =>
   requestUrl(request).pipe(
@@ -140,7 +140,7 @@ const unauthorized = (input: {
   return HttpServerResponse.jsonUnsafe(
     {
       error: "invalid_mcp_credential",
-      message: "A valid T3 Code MCP credential is required.",
+      message: "A valid A4 Code MCP credential is required.",
     },
     {
       status: 401,
@@ -1535,7 +1535,7 @@ export const layerInProcessMcpServer = McpServer.middleware<{
 
 export const layerMcpTransport = <RA, RE, RR>(registrations: Layer.Layer<RA, RE, RR>) =>
   McpServer.layerHttp({
-    name: "T3 Code",
+    name: "A4 Code",
     version: packageJson.version,
     path: MCP_HTTP_PATH,
     protocols: mcpProtocols,

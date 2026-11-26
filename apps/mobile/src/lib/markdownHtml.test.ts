@@ -12,7 +12,7 @@ import { markdownImageSources } from "./markdownImageSources";
 import { markdownFileEmbedLabel, resolveMarkdownMediaPreview } from "./markdownMedia";
 import { resolveMarkdownLinkPresentation } from "./markdownLinks";
 import { ENRICHED_INLINE_FILE_LINK_REGEX } from "./enrichedLinkPresentation";
-import { EnvironmentId, ThreadId } from "@t3tools/contracts";
+import { EnvironmentId, ThreadId } from "@a4code/contracts";
 import { parseMarkdown } from "react-native-enriched-markdown/src/web/parseMarkdown";
 
 describe("HTML in native Markdown", () => {
@@ -402,7 +402,7 @@ describe("file embeds in native thread and file Markdown", () => {
 });
 
 describe("Windows paths in native Markdown", () => {
-  // regression: #23722 Markdown escapes ate the separator before `.t3` and `_build`
+  // regression: #23722 Markdown escapes ate the separator before `.a4code` and `_build`
   it("keeps backslashes in Windows image and link destinations", async () => {
     const image = String.raw`C:\work\.t3\_build\shot.png`;
     const link = String.raw`\\server\share\.t3\notes.md`;

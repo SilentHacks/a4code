@@ -1,4 +1,4 @@
-import { WS_METHODS, type PromptStashEntry, type PromptStashEvent } from "@t3tools/contracts";
+import { WS_METHODS, type PromptStashEntry, type PromptStashEvent } from "@a4code/contracts";
 import * as Stream from "effect/Stream";
 import { Atom } from "effect/reactivity";
 

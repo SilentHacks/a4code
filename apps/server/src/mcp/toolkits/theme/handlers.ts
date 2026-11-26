@@ -1,6 +1,6 @@
-import { OrchestratorMcpFailure } from "@t3tools/contracts";
-import { THEME_GUIDE } from "@t3tools/shared/themeCss";
-import { MOBILE_THEME_IDS } from "@t3tools/shared/themePalettes";
+import { OrchestratorMcpFailure } from "@a4code/contracts";
+import { THEME_GUIDE } from "@a4code/shared/themeCss";
+import { MOBILE_THEME_IDS } from "@a4code/shared/themePalettes";
 import * as Effect from "effect/Effect";
 import * as Struct from "effect/Struct";
 import * as EnvironmentTheme from "../../../environmentTheme.ts";

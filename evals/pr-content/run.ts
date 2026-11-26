@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 import * as NodeUtil from "node:util";
 import * as NodeServices from "@effect/platform-node/NodeServices";
-import { CodexSettings, ProviderInstanceId } from "@t3tools/contracts";
+import { CodexSettings, ProviderInstanceId } from "@a4code/contracts";
 import * as Effect from "effect/Effect";
 import * as FileSystem from "effect/FileSystem";
 import * as Layer from "effect/Layer";
@@ -91,7 +91,8 @@ const fixtures = [
   },
   {
     id: "conventional-commits-title",
-    source: "pingdotgg/t3code#40562: Conventional Commits style dropped the prefix from PR titles",
+    source:
+      "SilentHacks/a4code#40562: Conventional Commits style dropped the prefix from PR titles",
     launchArgs: undefined,
     titlePrefix: undefined,
     producedBy: undefined,

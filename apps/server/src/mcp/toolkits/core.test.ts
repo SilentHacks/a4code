@@ -1,5 +1,5 @@
-import type { OrchestrationV2TurnItem } from "@t3tools/contracts";
-import { ProviderSessionId, ProviderThreadId } from "@t3tools/contracts";
+import type { OrchestrationV2TurnItem } from "@a4code/contracts";
+import { ProviderSessionId, ProviderThreadId } from "@a4code/contracts";
 import * as Orchestrator from "../../orchestration-v2/Orchestrator.ts";
 import * as ProviderSessionManager from "../../orchestration-v2/ProviderSessionManager.ts";
 import * as CommandReceiptStore from "../../orchestration-v2/CommandReceiptStore.ts";
@@ -32,10 +32,10 @@ import {
   type OrchestrationV2ServerCommand,
   type OrchestrationV2ProjectedTurnItem,
   type OrchestrationV2ThreadShell,
-} from "@t3tools/contracts";
-import { pinOrderKeyBetween } from "@t3tools/shared/pinOrderKey";
+} from "@a4code/contracts";
+import { pinOrderKeyBetween } from "@a4code/shared/pinOrderKey";
 import * as DateTime from "effect/DateTime";
-import * as McpProviderSessions from "@t3tools/provider-core/server/McpProviderSessions";
+import * as McpProviderSessions from "@a4code/provider-core/server/McpProviderSessions";
 import * as Deferred from "effect/Deferred";
 import * as Effect from "effect/Effect";
 import * as Fiber from "effect/Fiber";
@@ -92,7 +92,7 @@ const declaredFailure = (result: McpSchema.CallToolResult) => {
   const text = result.content[0];
   return result.isError === true && text?.type === "text" ? JSON.parse(text.text) : undefined;
 };
-import { htmlRenderFromToolItem } from "@t3tools/shared/toolOutput";
+import { htmlRenderFromToolItem } from "@a4code/shared/toolOutput";
 
 const decodeMcpAttachmentInput = Schema.decodeUnknownEffect(McpAttachmentInput);
 const decodeThreadReadResult = Schema.decodeUnknownEffect(OrchestratorMcpThreadReadResult);

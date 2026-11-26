@@ -7,7 +7,7 @@ import * as Fiber from "effect/Fiber";
 import * as Schema from "effect/Schema";
 import * as Scope from "effect/Scope";
 import * as Stream from "effect/Stream";
-import { discardResponseBody, responsePayloads } from "@t3tools/shared/mcpResponsePayloads";
+import { discardResponseBody, responsePayloads } from "@a4code/shared/mcpResponsePayloads";
 
 /** ACP mandates stdio MCP support; HTTP/SSE support varies. */
 
@@ -89,8 +89,8 @@ export interface McpToolSession {
 }
 
 /**
- * One initialized MCP session over T3 Code's HTTP endpoint, terminated when
- * the scope closes. Used by the ACP terminal fallback and `t3 thread`.
+ * One initialized MCP session over A4 Code's HTTP endpoint, terminated when
+ * the scope closes. Used by the ACP terminal fallback and `a4code thread`.
  */
 export const mcpToolSession = (
   options: McpToolSessionOptions,
@@ -124,7 +124,7 @@ export const mcpToolSession = (
     if (!response.ok) {
       yield* discardResponseBody(response);
       return yield* new AcpMcpBridgeError({
-        message: `T3 Code MCP endpoint responded with HTTP ${response.status}.`,
+        message: `A4 Code MCP endpoint responded with HTTP ${response.status}.`,
       });
     }
     const payloads: Array<unknown> = [];
@@ -150,7 +150,7 @@ export const mcpToolSession = (
     if (envelope === null || envelope.error !== undefined) {
       const rpcError = Option.getOrUndefined(decodeRpcError(envelope?.error));
       return yield* new AcpMcpBridgeError({
-        message: `T3 Code MCP ${method} failed${envelope?.error === undefined ? "." : `: ${JSON.stringify(envelope.error)}`}`,
+        message: `A4 Code MCP ${method} failed${envelope?.error === undefined ? "." : `: ${JSON.stringify(envelope.error)}`}`,
         ...(rpcError === undefined ? {} : { rpcError }),
       });
     }
@@ -260,7 +260,7 @@ export function runAcpMcpStdioBridge(options: AcpMcpStdioBridgeOptions): Effect.
           if (envelope.id !== undefined) {
             yield* respondWithError(
               envelope.id,
-              `T3 Code MCP endpoint responded with HTTP ${response.status}.`,
+              `A4 Code MCP endpoint responded with HTTP ${response.status}.`,
             );
           }
           return yield* discardResponseBody(response);
@@ -274,7 +274,7 @@ export function runAcpMcpStdioBridge(options: AcpMcpStdioBridgeOptions): Effect.
             const error = Cause.squash(cause);
             return respondWithError(
               envelope.id,
-              `T3 Code MCP bridge request failed: ${error instanceof Error ? error.message : String(error)}`,
+              `A4 Code MCP bridge request failed: ${error instanceof Error ? error.message : String(error)}`,
             );
           }),
         ),

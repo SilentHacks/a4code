@@ -1,5 +1,5 @@
-import { sourceControlClients } from "@t3tools/client-runtime/source-control-clients";
-import { SOURCE_CONTROL_MEDIA_ASSET, type EnvironmentId } from "@t3tools/contracts";
+import { sourceControlClients } from "@a4code/client-runtime/source-control-clients";
+import { SOURCE_CONTROL_MEDIA_ASSET, type EnvironmentId } from "@a4code/contracts";
 import type { FilePreviewItem } from "../../components/ui/FilePreviewModal.types";
 
 export interface PullRequestMediaLocation {

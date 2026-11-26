@@ -12,8 +12,8 @@ import {
   type WorktreeMcpStatusResult,
   type VcsListRefsInput,
   type VcsListRefsResult,
-} from "@t3tools/contracts";
-import { resolveProjectSettings } from "@t3tools/shared/projectSettings";
+} from "@a4code/contracts";
+import { resolveProjectSettings } from "@a4code/shared/projectSettings";
 import * as Cause from "effect/Cause";
 import * as Context from "effect/Context";
 import * as SecureRandom from "effect/crypto/SecureRandom";
@@ -89,7 +89,7 @@ const make = Effect.gen(function* () {
       ? Effect.fail(
           failure(
             "thread_credential_required",
-            "Worktree handoff and status act as the calling T3 thread, so they need an agent running inside T3 Code.",
+            "Worktree handoff and status act as the calling T3 thread, so they need an agent running inside A4 Code.",
           ),
         )
       : Effect.succeed(scope as McpThreadInvocationScope);

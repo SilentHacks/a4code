@@ -20,6 +20,11 @@ on:
   pull_request_target:
     types: [labeled]
 
+env:
+  A4CODE_EAS_PROJECT_ID: ${{ vars.A4CODE_EAS_PROJECT_ID }}
+  A4CODE_EXPO_OWNER: ${{ vars.A4CODE_EXPO_OWNER }}
+  A4CODE_APPLE_TEAM_ID: ${{ vars.A4CODE_APPLE_TEAM_ID }}
+
 permissions:
   contents: read
 
@@ -205,7 +210,7 @@ jobs:
           cache: false
           run-install: |
             args:
-              - --filter=@t3tools/mobile...
+              - --filter=@a4code/mobile...
 
       - name: Expose pnpm
         if: steps.expo-token.outputs.present == 'true'
@@ -236,9 +241,9 @@ jobs:
           import { appendFileSync, readFileSync } from "node:fs";
           import { parseEnv } from "node:util";
           const env = parseEnv(readFileSync(".env.local", "utf8"));
-          const googleServicesFile = env.T3CODE_ANDROID_GOOGLE_SERVICES_FILE;
+          const googleServicesFile = env.A4CODE_ANDROID_GOOGLE_SERVICES_FILE;
           if (googleServicesFile) {
-            appendFileSync(process.env.GITHUB_ENV, `T3CODE_ANDROID_GOOGLE_SERVICES_FILE=${googleServicesFile}\n`);
+            appendFileSync(process.env.GITHUB_ENV, `A4CODE_ANDROID_GOOGLE_SERVICES_FILE=${googleServicesFile}\n`);
           }
           NODE
 
@@ -260,7 +265,7 @@ jobs:
           if [ -z "$link" ]; then
             link="$(eas build:list --platform ios --build-profile preview:dev --runtime-version "$hash" --status finished --limit 5 --json --non-interactive \
               | sed -n '/^\[/,$p' \
-              | jq -r --arg now "$(date -u +%Y-%m-%dT%H:%M:%SZ)" '[.[] | select((.expirationDate // "9999") > $now)][0] | select(. != null) | "https://expo.dev/accounts/pingdotgg/projects/t3-code/builds/\(.id)"')"
+              | jq -r --arg now "$(date -u +%Y-%m-%dT%H:%M:%SZ)" '[.[] | select((.expirationDate // "9999") > $now)][0] | select(. != null) | "https://expo.dev/builds/\(.id)"')"
           fi
           echo "link=$link" >> "$GITHUB_OUTPUT"
           if [ -z "$link" ]; then echo "build=true" >> "$GITHUB_OUTPUT"; fi
@@ -296,7 +301,7 @@ jobs:
           else
             link="$(eas build:list --platform android --build-profile preview:dev --runtime-version "$hash" --status finished --limit 5 --json --non-interactive \
               | sed -n '/^\[/,$p' \
-              | jq -r --arg now "$(date -u +%Y-%m-%dT%H:%M:%SZ)" '[.[] | select((.expirationDate // "9999") > $now)][0] | select(. != null) | "https://expo.dev/accounts/pingdotgg/projects/t3-code/builds/\(.id)"')"
+              | jq -r --arg now "$(date -u +%Y-%m-%dT%H:%M:%SZ)" '[.[] | select((.expirationDate // "9999") > $now)][0] | select(. != null) | "https://expo.dev/builds/\(.id)"')"
           fi
           echo "link=$link" >> "$GITHUB_OUTPUT"
           if [ -z "$link" ]; then echo "build=true" >> "$GITHUB_OUTPUT"; fi
@@ -376,7 +381,7 @@ jobs:
           profile: preview:dev
           environment: preview
           expo-token: ${{ secrets.EXPO_PREVIEW_TOKEN }}
-          output: ${{ runner.temp }}/t3code-preview.apk
+          output: ${{ runner.temp }}/a4code-preview.apk
           cache: "false"
 
       - id: build
@@ -386,7 +391,7 @@ jobs:
         env:
           EXPO_TOKEN: ${{ secrets.EXPO_PREVIEW_TOKEN }}
         run: |
-          eas upload --platform android --build-path "$RUNNER_TEMP/t3code-preview.apk" --fingerprint "$FINGERPRINT" --non-interactive --json | tee "$RUNNER_TEMP/upload.json"
+          eas upload --platform android --build-path "$RUNNER_TEMP/a4code-preview.apk" --fingerprint "$FINGERPRINT" --non-interactive --json | tee "$RUNNER_TEMP/upload.json"
           link="$(sed -n '/^{/,$p' "$RUNNER_TEMP/upload.json" | jq -r '.url // empty')"
           if [ -z "$link" ]; then
             echo "::error::eas upload returned no install link"
@@ -451,7 +456,7 @@ jobs:
           profile: preview:dev
           environment: preview
           expo-token: ${{ secrets.EXPO_PREVIEW_TOKEN }}
-          output: ${{ runner.temp }}/t3code-preview.ipa
+          output: ${{ runner.temp }}/a4code-preview.ipa
           cache: "false"
 
       - id: build
@@ -461,7 +466,7 @@ jobs:
         env:
           EXPO_TOKEN: ${{ secrets.EXPO_PREVIEW_TOKEN }}
         run: |
-          eas upload --platform ios --build-path "$RUNNER_TEMP/t3code-preview.ipa" --fingerprint "$FINGERPRINT" --non-interactive --json | tee "$RUNNER_TEMP/upload.json"
+          eas upload --platform ios --build-path "$RUNNER_TEMP/a4code-preview.ipa" --fingerprint "$FINGERPRINT" --non-interactive --json | tee "$RUNNER_TEMP/upload.json"
           link="$(sed -n '/^{/,$p' "$RUNNER_TEMP/upload.json" | jq -r '.url // empty')"
           if [ -z "$link" ]; then
             echo "::error::eas upload returned no install link"

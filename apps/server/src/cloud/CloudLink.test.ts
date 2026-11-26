@@ -1,7 +1,7 @@
 // @effect-diagnostics-next-line nodeBuiltinImport:off -- Effect's Crypto has no generateKeyPairSync.
 import * as NodeCrypto from "node:crypto";
-import { EnvironmentId } from "@t3tools/contracts";
-import { RELAY_MINT_REQUEST_TYP, signRelayJwt } from "@t3tools/shared/relayJwt";
+import { EnvironmentId } from "@a4code/contracts";
+import { RELAY_MINT_REQUEST_TYP, signRelayJwt } from "@a4code/shared/relayJwt";
 import { assert, it } from "@effect/vitest";
 import * as DateTime from "effect/DateTime";
 import * as Effect from "effect/Effect";
@@ -296,7 +296,7 @@ it.effect("an update the client walks away from still finishes", () => {
   );
 });
 
-it.effect("mints a T3 Connect credential under the host's device approval setting", () =>
+it.effect("mints a A4 Connect credential under the host's device approval setting", () =>
   withService({}, ({ mintCredential, connectCredentialRequests, stored }) =>
     Effect.gen(function* () {
       const before = new Set(stored.keys());
@@ -380,7 +380,7 @@ it.effect("unlinks on startup and refuses to link when the policy turns Connect 
 
       const applyError = yield* link.applyRelayConfig({} as never).pipe(Effect.flip);
       const mintError = yield* link.mintCredential({} as never).pipe(Effect.flip);
-      assert.equal(applyError.message, "Example Corp's policy does not allow T3 Connect.");
+      assert.equal(applyError.message, "Example Corp's policy does not allow A4 Connect.");
       assert.equal(mintError._tag, "ManagedPolicyRefusedError");
     }).pipe(
       Effect.provide(

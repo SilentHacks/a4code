@@ -5,7 +5,7 @@ import {
   AuthSettingsWriteScope,
   isManagedSettingPath,
   type ServerSettingsPatch,
-} from "@t3tools/contracts";
+} from "@a4code/contracts";
 import { useEnvironmentsWithScope } from "../../state/session";
 import { AutoSettleDaysField } from "./components/AutoSettleDaysField";
 import { ScreenScrollView as ScrollView } from "../../components/ui/ScreenScrollView";
@@ -15,8 +15,8 @@ import type { ComponentProps } from "react";
 import { View } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
-import { DEFAULT_SERVER_SETTINGS } from "@t3tools/contracts";
-import { supportsSharedSettingsSync } from "@t3tools/client-runtime/state/shared-settings";
+import { DEFAULT_SERVER_SETTINGS } from "@a4code/contracts";
+import { supportsSharedSettingsSync } from "@a4code/client-runtime/state/shared-settings";
 import { AppText as Text } from "../../components/ui/AppText";
 import { useEnvironments } from "../../state/environments";
 import { mobilePreferencesAtom, saveMobilePreferences } from "../../state/preferences";
@@ -280,7 +280,7 @@ const AGENT_FEEDBACK_CHOICES: ReadonlyArray<{
   {
     mode: "auto",
     label: msg("Automatic"),
-    description: msg("Agents also report T3 Code problems they hit on their own."),
+    description: msg("Agents also report A4 Code problems they hit on their own."),
   },
 ];
 

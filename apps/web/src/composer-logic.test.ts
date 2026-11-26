@@ -1,16 +1,16 @@
-import { threadPullRequestKeyOf } from "@t3tools/client-runtime/thread-pull-requests";
-import { filterComposerPullRequestMatches } from "@t3tools/shared/composerPullRequestMatches";
-import { EnvironmentId, MessageId, ThreadId, type AssistantCitation } from "@t3tools/contracts";
+import { threadPullRequestKeyOf } from "@a4code/client-runtime/thread-pull-requests";
+import { filterComposerPullRequestMatches } from "@a4code/shared/composerPullRequestMatches";
+import { EnvironmentId, MessageId, ThreadId, type AssistantCitation } from "@a4code/contracts";
 import {
   collectAssistantCitations,
   expandAssistantCitationsForProvider,
   serializeAssistantCitation,
-} from "@t3tools/shared/assistantCitations";
+} from "@a4code/shared/assistantCitations";
 import {
   DEFAULT_RESOLVED_KEYBINDINGS,
   compileResolvedKeybindingsConfig,
   mergeWithDefaultKeybindings,
-} from "@t3tools/shared/keybindings";
+} from "@a4code/shared/keybindings";
 import { describe, expect, it } from "vite-plus/test";
 
 import {
@@ -367,28 +367,28 @@ describe("filterComposerPullRequestMatches", () => {
       host: "github.com",
       number: 7,
       projectId: "project-1",
-      repository: "t3tools/t3code",
+      repository: "SilentHacks/a4code",
       updatedAt: "2026-09-01T12:00:00.000Z",
     },
     {
       host: "github.com",
       number: 8987,
       projectId: "project-1",
-      repository: "T3Tools/T3Code",
+      repository: "SilentHacks/a4code",
       updatedAt: "2026-09-03T12:00:00.000Z",
     },
     {
       host: "github.com",
       number: 27,
       projectId: "project-1",
-      repository: "t3tools/t3code",
+      repository: "SilentHacks/a4code",
       updatedAt: "2026-09-02T12:00:00.000Z",
     },
     {
       host: "github.com",
       number: 27,
       projectId: "project-1",
-      repository: "t3tools/t3code",
+      repository: "SilentHacks/a4code",
       updatedAt: "2026-09-01T13:00:00.000Z",
     },
     {
@@ -406,7 +406,7 @@ describe("filterComposerPullRequestMatches", () => {
         keyOf: threadPullRequestKeyOf,
         entries,
         projectId: "project-1",
-        repository: "t3tools/t3code",
+        repository: "SilentHacks/a4code",
         query: "7",
         limit: 10,
       }).map((entry) => entry.number),
@@ -418,21 +418,21 @@ describe("filterComposerPullRequestMatches", () => {
       host: "github.com",
       number: 7,
       projectId: "project-1",
-      repository: "t3tools/t3code",
+      repository: "SilentHacks/a4code",
       updatedAt: "2020-01-01T00:00:00.000Z",
     };
     const newerSubstringMatches = Array.from({ length: 12 }, (_unused, index) => ({
       host: "github.com",
       number: 700 + index,
       projectId: "project-1",
-      repository: "t3tools/t3code",
+      repository: "SilentHacks/a4code",
       updatedAt: `2026-09-${String(index + 1).padStart(2, "0")}T12:00:00.000Z`,
     }));
     const matches = filterComposerPullRequestMatches({
       keyOf: threadPullRequestKeyOf,
       entries: [...newerSubstringMatches, exact],
       projectId: "project-1",
-      repository: "t3tools/t3code",
+      repository: "SilentHacks/a4code",
       query: "7",
       limit: 10,
     });

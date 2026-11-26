@@ -1,7 +1,7 @@
-// `test` for iOS scenarios: e2e's mobile test plus `t3`, which seeds state like the web one and
+// `test` for iOS scenarios: e2e's mobile test plus `a4code`, which seeds state like the web one and
 // opens the dev client paired with the scenario's server.
 import { test as base } from "@e2e-dev/mobile";
-import * as HostProcess from "@t3tools/shared/HostProcess";
+import * as HostProcess from "@a4code/shared/HostProcess";
 import { expect } from "e2e";
 import * as Effect from "effect/Effect";
 import * as Path from "effect/Path";
@@ -11,8 +11,8 @@ import { APP_DIR, MOBILE, MOBILE_T3_HOME } from "../e2e.config.ts";
 import { run, ScenarioError } from "./shell.ts";
 import { makeState, runPromise, type T3State } from "./t3.ts";
 
-const APP_ID = "com.t3tools.t3code.dev";
-const SCHEME = "t3code-dev";
+const APP_ID = "io.github.silenthacks.a4code.dev";
+const SCHEME = "a4code-dev";
 
 export interface MobileT3 extends T3State {
   /** Installs the dev client if the device lacks it, loads it from Metro, and pairs it. */
@@ -34,9 +34,9 @@ const devClientPath = Effect.gen(function* () {
   const { fingerprint } = yield* decodePrepared(prepared.stdout.trim().split("\n").at(-1) ?? "");
   return path.join(
     yield* HostProcess.HomeDirectory,
-    ".cache/t3code/native-clients/artifacts/ios/development",
+    ".cache/a4code/native-clients/artifacts/ios/development",
     fingerprint,
-    "T3CodeDev.app",
+    "A4CodeDev.app",
   );
 });
 
@@ -47,7 +47,7 @@ let paired = false;
 export const test = base.extend<{ t3: MobileT3 }>({
   t3: async ({ device, screen }, use) => {
     const { state, cli, cleanup } = makeState(MOBILE_T3_HOME, {
-      T3CODE_PORT: String(MOBILE.serverPort),
+      A4CODE_PORT: String(MOBILE.serverPort),
     });
     const pairingUrl = Effect.gen(function* () {
       const origin = `http://${MOBILE.host}:${MOBILE.serverPort}`;

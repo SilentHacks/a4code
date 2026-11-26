@@ -5,7 +5,7 @@ import {
   RuntimeRequestId,
   ThreadId,
   type PromptStashEntry,
-} from "@t3tools/contracts";
+} from "@a4code/contracts";
 import * as Cause from "effect/Cause";
 import { Atom, AtomRegistry } from "effect/reactivity";
 import { expect, it, vi } from "vite-plus/test";

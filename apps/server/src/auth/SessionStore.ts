@@ -9,7 +9,7 @@ import {
   AuthWebSocketTicketUse,
   RuntimeMode,
   type ServerAuthSessionMethod,
-} from "@t3tools/contracts";
+} from "@a4code/contracts";
 import * as Context from "effect/Context";
 import * as SecureRandom from "effect/crypto/SecureRandom";
 import * as DateTime from "effect/DateTime";
@@ -63,7 +63,7 @@ export interface VerifiedSession {
   readonly scopes: ReadonlyArray<AuthEnvironmentScope>;
   readonly proofKeyThumbprint?: string;
   readonly runtimeModeCeiling?: RuntimeMode;
-  /** An MCP client that is another T3 Code environment's peer link. */
+  /** An MCP client that is another A4 Code environment's peer link. */
   readonly peerLink?: true;
 }
 

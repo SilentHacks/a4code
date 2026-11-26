@@ -1,6 +1,6 @@
 import * as NodeServices from "@effect/platform-node/NodeServices";
-import * as HostProcess from "@t3tools/shared/HostProcess";
-import * as NetService from "@t3tools/shared/Net";
+import * as HostProcess from "@a4code/shared/HostProcess";
+import * as NetService from "@a4code/shared/Net";
 import { expect } from "e2e";
 import * as Deferred from "effect/Deferred";
 import * as Effect from "effect/Effect";
@@ -132,7 +132,7 @@ function startFixtureServer(webOrigin: string) {
           HOME,
           GH_HOST: HOST,
           GH_ENTERPRISE_TOKEN: "scenario-only-token",
-          T3CODE_AUTO_BOOTSTRAP_PROJECT_FROM_CWD: "0",
+          A4CODE_AUTO_BOOTSTRAP_PROJECT_FROM_CWD: "0",
         },
         onLine: (line) => {
           const value = /^Token:\s*(\S+)/.exec(line)?.[1];

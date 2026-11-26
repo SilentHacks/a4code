@@ -1,4 +1,4 @@
-import { DatabaseReclaimError, type DatabaseStorageStatus } from "@t3tools/contracts";
+import { DatabaseReclaimError, type DatabaseStorageStatus } from "@a4code/contracts";
 import * as Clock from "effect/Clock";
 import * as Context from "effect/Context";
 import * as Duration from "effect/Duration";
@@ -199,7 +199,7 @@ const make = Effect.gen(function* () {
   const requestReclaim = Effect.gen(function* () {
     if (restart === null || !doctorTargetsThisDatabase) {
       return yield* new DatabaseReclaimError({
-        reason: `Stop T3 Code on this machine, then run: ${compactCommand}`,
+        reason: `Stop A4 Code on this machine, then run: ${compactCommand}`,
       });
     }
     // Only databases without automatic shrinking need it; a stale dialog can ask after another client's repair.

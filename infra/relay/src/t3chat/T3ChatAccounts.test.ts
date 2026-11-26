@@ -27,7 +27,7 @@ const relaySettings = (
   apns: null,
   clerkSecretKey: Redacted.make("clerk-secret-key"),
   clerkPublishableKey: "pk_test_test",
-  clerkJwtAudience: "t3-code-relay",
+  clerkJwtAudience: "a4-code-relay",
   apnsDeliveryJobSigningSecret: Redacted.make("apns-delivery-secret"),
   cloudMintPrivateKey: Redacted.make("cloud-mint-private-key"),
   cloudMintPublicKey: "cloud-mint-public-key",
@@ -110,11 +110,13 @@ describe("T3ChatAccounts", () => {
   );
 
   it.effect("asks T3 Chat for the link with the shared secret", () => {
-    const t3Chat = fakeT3Chat({ link: { email: "theo@t3.chat", plan: "premier", linkedAt: 1 } });
+    const t3Chat = fakeT3Chat({
+      link: { email: "user@example.test", plan: "premier", linkedAt: 1 },
+    });
     return Effect.gen(function* () {
       const accounts = yield* T3ChatAccounts.T3ChatAccounts;
       const link = yield* accounts.getLink({ userId: "user_1" });
-      expect(link).toEqual({ email: "theo@t3.chat", plan: "premier" });
+      expect(link).toEqual({ email: "user@example.test", plan: "premier" });
       expect(t3Chat.requests).toEqual([
         {
           url: "https://chat.example.test/api/t3code/link",

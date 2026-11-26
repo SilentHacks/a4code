@@ -9,9 +9,9 @@ import type {
   DesktopPortForward,
   DesktopPreviewTunnelAccessRequest,
   EnvironmentId,
-} from "@t3tools/contracts";
-import * as HostProcess from "@t3tools/shared/HostProcess";
-import * as NetService from "@t3tools/shared/Net";
+} from "@a4code/contracts";
+import * as HostProcess from "@a4code/shared/HostProcess";
+import * as NetService from "@a4code/shared/Net";
 import type { NonEmptyReadonlyArray } from "effect/Array";
 import * as Context from "effect/Context";
 import * as Deferred from "effect/Deferred";
@@ -330,7 +330,7 @@ export class LoopbackTunnel extends Context.Service<
       listener: (forwards: ReadonlyArray<DesktopPortForward>) => Effect.Effect<void>,
     ) => Effect.Effect<void, never, Scope.Scope>;
   }
->()("@t3tools/desktop/preview/LoopbackTunnel") {}
+>()("@a4code/desktop/preview/LoopbackTunnel") {}
 
 const make = Effect.gen(function* () {
   const electronWindow = yield* ElectronWindow.ElectronWindow;

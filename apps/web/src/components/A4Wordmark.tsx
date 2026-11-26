@@ -1,0 +1,12 @@
+import type { SVGProps } from "react";
+
+export function A4Wordmark(props: SVGProps<SVGSVGElement>) {
+  return (
+    <svg {...props} viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+      <path
+        d="M1 19 5.8 5h3.4L14 19h-3.4l-1-3H5.4l-1 3Zm5.3-6h2.4L7.5 9.2ZM17.8 5H21v8h2v3h-2v3h-3v-3h-6v-3Zm.2 4.4L15.4 13H18Z"
+        fill="currentColor"
+      />
+    </svg>
+  );
+}

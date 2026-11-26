@@ -1,5 +1,5 @@
-import { buildHostedPairingUrl } from "../../hostedPairing";
-import { setPairingTokenOnUrl } from "@t3tools/shared/remote";
+import { buildHostedPairingUrl, configuredHostedAppUrl } from "../../hostedPairing";
+import { setPairingTokenOnUrl } from "@a4code/shared/remote";
 
 export function resolveDesktopPairingUrl(endpointUrl: string, credential: string): string {
   const url = new URL(endpointUrl);
@@ -9,7 +9,7 @@ export function resolveDesktopPairingUrl(endpointUrl: string, credential: string
 
 export function resolveHostedPairingUrl(endpointUrl: string, credential: string): string | null {
   const url = new URL(endpointUrl);
-  if (url.protocol !== "https:") {
+  if (!configuredHostedAppUrl() || url.protocol !== "https:") {
     return null;
   }
 

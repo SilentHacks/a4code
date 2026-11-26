@@ -1,5 +1,5 @@
 import * as NodeURL from "node:url";
-import { toolOutputImages } from "@t3tools/shared/toolOutput";
+import { toolOutputImages } from "@a4code/shared/toolOutput";
 import * as NodeCrypto from "@effect/platform-node/NodeCrypto";
 import * as NodeServices from "@effect/platform-node/NodeServices";
 import { assert, it } from "@effect/vitest";
@@ -25,7 +25,7 @@ import {
   type OrchestrationV2ProviderThread,
   type OrchestrationV2ProviderTurn,
   type ProviderReplayEntry,
-} from "@t3tools/contracts";
+} from "@a4code/contracts";
 import * as Cause from "effect/Cause";
 import * as DateTime from "effect/DateTime";
 import * as Deferred from "effect/Deferred";
@@ -40,23 +40,23 @@ import * as Stream from "effect/Stream";
 import * as Exit from "effect/Exit";
 import { TestClock } from "effect/testing";
 
-import type * as ProviderAdapter from "@t3tools/provider-core/server/ProviderAdapter";
-import * as McpProviderSessions from "@t3tools/provider-core/server/McpProviderSessions";
-import { buildRuntimeInstructions } from "@t3tools/provider-core/server/runtimeInstructions";
-import { htmlRenderFromToolItem, sentMessageFromToolItem } from "@t3tools/shared/toolOutput";
-import * as IdAllocator from "@t3tools/provider-core/server/IdAllocator";
-import * as ProviderContinuationRequests from "@t3tools/provider-core/server/ProviderContinuationRequests";
+import type * as ProviderAdapter from "@a4code/provider-core/server/ProviderAdapter";
+import * as McpProviderSessions from "@a4code/provider-core/server/McpProviderSessions";
+import { buildRuntimeInstructions } from "@a4code/provider-core/server/runtimeInstructions";
+import { htmlRenderFromToolItem, sentMessageFromToolItem } from "@a4code/shared/toolOutput";
+import * as IdAllocator from "@a4code/provider-core/server/IdAllocator";
+import * as ProviderContinuationRequests from "@a4code/provider-core/server/ProviderContinuationRequests";
 import {
   OPENCODE_2_STILL_STOPPING,
   OPENCODE_PROVIDER,
   t3McpServerName,
-} from "@t3tools/provider-opencode/testing";
+} from "@a4code/provider-opencode/testing";
 import { resolveAttachmentPath } from "../../attachmentStore.ts";
 import { openCode2ReplayRuntime } from "./OpenCode2AdapterV2.testkit.ts";
 import {
   makeProviderReplayGate,
   type ProviderReplayGate,
-} from "@t3tools/provider-testing/replayGate";
+} from "@a4code/provider-testing/replayGate";
 
 const SESSION = "ses_f148ca2deffeJcwCnRQtb0YFNX";
 const WORK = "/work/opencode2";
@@ -1095,7 +1095,7 @@ it.layer(McpProviderSessions.layer)("OpenCode2 adapter", (it) => {
           ],
           { replayGate: gate },
         );
-        const items: Array<import("@t3tools/contracts").OrchestrationV2TurnItem> = [];
+        const items: Array<import("@a4code/contracts").OrchestrationV2TurnItem> = [];
         const shellStarted = yield* Deferred.make<void>();
         const terminal = yield* runtime.events.pipe(
           Stream.tap((e) =>
@@ -2448,8 +2448,7 @@ it.layer(McpProviderSessions.layer)("OpenCode2 adapter", (it) => {
         // One reader: the runtime's event queue hands each event to only one taker.
         const launchSeen = yield* Deferred.make<void>();
         const marked = yield* Deferred.make<boolean | undefined>();
-        const settled =
-          yield* Deferred.make<import("@t3tools/contracts").OrchestrationV2TurnItem>();
+        const settled = yield* Deferred.make<import("@a4code/contracts").OrchestrationV2TurnItem>();
         yield* runtime.events.pipe(
           Stream.tap((e) =>
             e.type === "turn_item.updated" &&
@@ -3187,7 +3186,7 @@ it.layer(McpProviderSessions.layer)("OpenCode2 adapter", (it) => {
       assert.equal(ended?.status, "failed");
       assert.equal(
         ended?.status === "failed" ? ended.failure.message : undefined,
-        "OpenCode is waiting on a request T3 Code couldn't answer.",
+        "OpenCode is waiting on a request A4 Code couldn't answer.",
       );
     }),
   );
@@ -5941,7 +5940,7 @@ it.layer(McpProviderSessions.layer)("OpenCode2 adapter", (it) => {
     }),
   );
 
-  // regression: #16142 OpenCode 2 threads were missing T3 Code's MCP tools
+  // regression: #16142 OpenCode 2 threads were missing A4 Code's MCP tools
   it.effect("names each thread's MCP server within OpenCode's limits, one name per thread", () =>
     Effect.gen(function* () {
       const project = "thread:project:ce04e4e2-6c29-4ff0-a1d7-b089dd63e258";

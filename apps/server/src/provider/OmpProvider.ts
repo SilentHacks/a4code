@@ -3,7 +3,7 @@ import {
   type OmpSettings,
   type ServerProvider,
   type ServerProviderModel,
-} from "@t3tools/contracts";
+} from "@a4code/contracts";
 import * as DateTime from "effect/DateTime";
 import * as Effect from "effect/Effect";
 import * as Result from "effect/Result";
@@ -22,11 +22,11 @@ import {
   parseGenericCliVersion,
   providerModelsFromSettings,
   type ProviderProbeResult,
-} from "@t3tools/provider-core/server/snapshotProbe";
+} from "@a4code/provider-core/server/snapshotProbe";
 import {
   enrichProviderSnapshotWithVersionAdvisory,
   type ProviderMaintenanceCapabilities,
-} from "@t3tools/provider-core/server/maintenanceResolver";
+} from "@a4code/provider-core/server/maintenanceResolver";
 
 const DRIVER = ProviderDriverKind.make("omp");
 const NO_MODELS_MESSAGE =
@@ -115,7 +115,7 @@ export const buildInitialOmpProviderSnapshot = Effect.fnUntraced(function* (sett
     auth: { status: "unknown" },
     message: settings.enabled
       ? "Checking Oh My Pi CLI availability..."
-      : "Oh My Pi is disabled in T3 Code settings.",
+      : "Oh My Pi is disabled in A4 Code settings.",
   });
 });
 
@@ -137,7 +137,7 @@ export const checkOmpProviderStatus = Effect.fn("checkOmpProviderStatus")(functi
       version: null,
       status: "warning",
       auth: { status: "unknown" },
-      message: "Oh My Pi is disabled in T3 Code settings.",
+      message: "Oh My Pi is disabled in A4 Code settings.",
     });
   const versionResult = yield* runOmpReadOnlyCommand(settings, environment, ["--version"], {
     cwd,

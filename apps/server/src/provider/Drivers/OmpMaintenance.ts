@@ -1,11 +1,11 @@
-import { ProviderDriverKind } from "@t3tools/contracts";
+import { ProviderDriverKind } from "@a4code/contracts";
 import * as Effect from "effect/Effect";
 import * as Path from "effect/Path";
 import {
   makeManualOnlyProviderMaintenanceCapabilities,
   makeProviderMaintenanceCapabilities,
   type ProviderMaintenanceCapabilitiesResolver,
-} from "@t3tools/provider-core/server/maintenanceResolver";
+} from "@a4code/provider-core/server/maintenanceResolver";
 import { ompProfileArgs, runOmpReadOnlyCommand } from "./OmpDiscovery.ts";
 
 const DRIVER = ProviderDriverKind.make("omp");

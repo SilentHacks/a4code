@@ -1,7 +1,7 @@
 // T3 ingest retains events and deduplicates retries by UUID.
-import * as HostProcess from "@t3tools/shared/HostProcess";
-import { isCiEnvironment, isDoNotTrackSet } from "@t3tools/shared/otelEnvironment";
-import type { ClientOs } from "@t3tools/contracts";
+import * as HostProcess from "@a4code/shared/HostProcess";
+import { isCiEnvironment, isDoNotTrackSet } from "@a4code/shared/otelEnvironment";
+import type { ClientOs } from "@a4code/contracts";
 import * as Clock from "effect/Clock";
 import * as Config from "effect/Config";
 import * as ConfigProvider from "effect/ConfigProvider";
@@ -68,15 +68,11 @@ function retryDelayMs(failures: number, random: number): number {
 }
 
 const TelemetryEnvConfig = Config.all({
-  ingestKey: Config.String("T3CODE_TELEMETRY_KEY").pipe(
-    Config.withDefault("phc_XOWci4oZP4VvLiEyrFqkFjP4CZn55mjYYBMREK5Wd6m"),
-  ),
-  ingestHost: Config.String("T3CODE_TELEMETRY_HOST").pipe(
-    Config.withDefault("https://ingest.t3.codes"),
-  ),
-  enabled: Config.Boolean("T3CODE_TELEMETRY_ENABLED").pipe(Config.option),
-  flushBatchSize: Config.Number("T3CODE_TELEMETRY_FLUSH_BATCH_SIZE").pipe(Config.withDefault(20)),
-  maxBufferedEvents: Config.Number("T3CODE_TELEMETRY_MAX_BUFFERED_EVENTS").pipe(
+  ingestKey: Config.String("A4CODE_TELEMETRY_KEY").pipe(Config.withDefault("")),
+  ingestHost: Config.String("A4CODE_TELEMETRY_HOST").pipe(Config.withDefault("")),
+  enabled: Config.Boolean("A4CODE_TELEMETRY_ENABLED").pipe(Config.option),
+  flushBatchSize: Config.Number("A4CODE_TELEMETRY_FLUSH_BATCH_SIZE").pipe(Config.withDefault(20)),
+  maxBufferedEvents: Config.Number("A4CODE_TELEMETRY_MAX_BUFFERED_EVENTS").pipe(
     Config.withDefault(1_000),
   ),
   wslDistroName: Config.String("WSL_DISTRO_NAME").pipe(Config.option),
@@ -104,7 +100,7 @@ export class AnalyticsService extends Context.Service<
       observedBy: "server" | "client",
     ) => Effect.Effect<void>;
   }
->()("t3/telemetry/AnalyticsService") {}
+>()("a4/telemetry/AnalyticsService") {}
 
 function serverOsFromNodePlatform(platform: string): ClientOs {
   switch (platform) {
@@ -122,11 +118,19 @@ function serverOsFromNodePlatform(platform: string): ClientOs {
 }
 
 /** @public */
-/** @public */
 export const make = Effect.gen(function* () {
   const telemetryConfig = yield* TelemetryEnvConfig;
+  const ingestKey = telemetryConfig.ingestKey.trim();
+  const ingestHost = telemetryConfig.ingestHost.trim().replace(/\/+$/u, "");
+  if (!ingestKey || !ingestHost) {
+    return AnalyticsService.of({
+      record: () => Effect.succeed(false),
+      flush: Effect.void,
+      recordOwners: () => Effect.void,
+    });
+  }
   const hostEnvironment = yield* HostProcess.Environment;
-  const awaitingShellConsent = hostEnvironment.T3CODE_DESKTOP_SHELL_DISCOVERY_PENDING === "1";
+  const awaitingShellConsent = hostEnvironment.A4CODE_DESKTOP_SHELL_DISCOVERY_PENDING === "1";
   const enabledByDefault = !isCiEnvironment(hostEnvironment);
   const enabledAtStartup = Option.getOrElse(telemetryConfig.enabled, () => enabledByDefault);
   // A managed policy can switch analytics off over the environment, never on.
@@ -137,15 +141,15 @@ export const make = Effect.gen(function* () {
     if (!enabledAtStartup || !policyAllows || isDoNotTrackSet(hostEnvironment))
       return Effect.succeed(false);
     if (!awaitingShellConsent) return Effect.succeed(true);
-    if (hostEnvironment.T3CODE_DESKTOP_SHELL_DISCOVERY_PENDING === "1")
+    if (hostEnvironment.A4CODE_DESKTOP_SHELL_DISCOVERY_PENDING === "1")
       return Effect.succeed(false);
-    const preference = hostEnvironment.T3CODE_TELEMETRY_ENABLED;
-    return Config.Boolean("T3CODE_TELEMETRY_ENABLED").pipe(
+    const preference = hostEnvironment.A4CODE_TELEMETRY_ENABLED;
+    return Config.Boolean("A4CODE_TELEMETRY_ENABLED").pipe(
       Config.withDefault(enabledByDefault),
       Effect.provideService(
         ConfigProvider.ConfigProvider,
         ConfigProvider.fromEnv({
-          env: preference === undefined ? {} : { T3CODE_TELEMETRY_ENABLED: preference },
+          env: preference === undefined ? {} : { A4CODE_TELEMETRY_ENABLED: preference },
         }),
       ),
       Effect.orElseSucceed(() => false),
@@ -212,7 +216,7 @@ export const make = Effect.gen(function* () {
     if (!(yield* telemetryEnabled) || !distinctId) return;
 
     const payload = {
-      api_key: telemetryConfig.ingestKey,
+      api_key: ingestKey,
       batch: events.map((event) => ({
         uuid: event.uuid,
         event: event.event,
@@ -221,7 +225,7 @@ export const make = Effect.gen(function* () {
           ? {
               ...event.properties,
               $process_person_profile: false,
-              t3CodeVersion: packageJson.version,
+              a4CodeVersion: packageJson.version,
               telemetryChannel: ServerConfig.telemetryChannel,
             }
           : {
@@ -231,7 +235,7 @@ export const make = Effect.gen(function* () {
               platform: hostPlatform,
               wsl: Option.getOrUndefined(telemetryConfig.wslDistroName),
               arch: hostArchitecture,
-              t3CodeVersion: packageJson.version,
+              a4CodeVersion: packageJson.version,
               telemetryChannel: ServerConfig.telemetryChannel,
               clientType,
               serverOs: serverOsFromNodePlatform(hostPlatform),
@@ -244,7 +248,7 @@ export const make = Effect.gen(function* () {
       })),
     };
 
-    yield* HttpClientRequest.post(`${telemetryConfig.ingestHost}/batch/`).pipe(
+    yield* HttpClientRequest.post(`${ingestHost}/batch/`).pipe(
       HttpClientRequest.bodyJson(payload),
       Effect.flatMap(httpClient.execute),
       Effect.flatMap(HttpClientResponse.filterStatusOk),

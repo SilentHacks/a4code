@@ -1,11 +1,11 @@
-import { errorDisplayMessage } from "@t3tools/client-runtime/errors";
+import { errorDisplayMessage } from "@a4code/client-runtime/errors";
 import { useAtomRefresh } from "@effect/atom-react";
 import {
   maintainerEditsChoiceInForce,
   type MaintainerEditsChoice,
-} from "@t3tools/client-runtime/pull-request-editing";
-import { squashAtomCommandFailure } from "@t3tools/client-runtime/state/runtime";
-import type { PullRequestDetail } from "@t3tools/contracts";
+} from "@a4code/client-runtime/pull-request-editing";
+import { squashAtomCommandFailure } from "@a4code/client-runtime/state/runtime";
+import type { PullRequestDetail } from "@a4code/contracts";
 import { AsyncResult } from "effect/reactivity";
 import { useGT } from "gt-react-native";
 import { useRef, useState } from "react";

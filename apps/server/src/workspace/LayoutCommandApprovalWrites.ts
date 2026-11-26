@@ -1,4 +1,4 @@
-import type { ProjectId, TaskFolderError, WorktreeLayoutCommandKind } from "@t3tools/contracts";
+import type { ProjectId, TaskFolderError, WorktreeLayoutCommandKind } from "@a4code/contracts";
 import * as Context from "effect/Context";
 import * as Digest from "effect/crypto/Digest";
 import * as DateTime from "effect/DateTime";

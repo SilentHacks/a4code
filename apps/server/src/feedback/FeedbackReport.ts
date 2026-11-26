@@ -1,5 +1,5 @@
-import { AgentFeedbackKind, AgentFeedbackTrace } from "@t3tools/contracts";
-import { resolveT3McpToolId } from "@t3tools/shared/t3McpToolPresentation";
+import { AgentFeedbackKind, AgentFeedbackTrace } from "@a4code/contracts";
+import { resolveT3McpToolId } from "@a4code/shared/t3McpToolPresentation";
 import * as Effect from "effect/Effect";
 import * as Schema from "effect/Schema";
 import * as Struct from "effect/Struct";
@@ -12,7 +12,7 @@ export const FEEDBACK_TRACE_TURNS = 5;
 
 const reportFields = {
   kind: AgentFeedbackKind,
-  subject: Schema.String.annotate({ description: "T3 tool name, `t3` command, or `general`." }),
+  subject: Schema.String.annotate({ description: "T3 tool name, `a4code` command, or `general`." }),
   expected: FeedbackText,
   actual: FeedbackText,
   workaround: FeedbackText.annotate({ description: "What you did instead, or empty." }),
@@ -66,7 +66,7 @@ export const FeedbackAwaitingApproval = Schema.Struct({
 export type FeedbackAwaitingApproval = typeof FeedbackAwaitingApproval.Type;
 
 export const FEEDBACK_OFF_MESSAGE =
-  "Agent feedback is off. Turn it on in T3 Code under Settings > Labs, then try again.";
+  "Agent feedback is off. Turn it on in A4 Code under Settings > Labs, then try again.";
 
 export class FeedbackOffError extends Schema.TaggedError<FeedbackOffError>()(
   "FeedbackOffError",
@@ -81,7 +81,7 @@ export type FeedbackSource = "mcp" | "cli";
 
 // Requested reports count when their card is shown, unprompted ones when stored.
 export const MAX_REPORTS_PER_TURN = 3;
-// Reports from no turn, such as `t3 feedback`, have no turn to count in.
+// Reports from no turn, such as `a4code feedback`, have no turn to count in.
 export const MAX_REPORTS_OUTSIDE_TURNS_PER_HOUR = 10;
 
 export class FeedbackLimitError extends Schema.TaggedError<FeedbackLimitError>()(
@@ -120,98 +120,98 @@ export class FeedbackStorageError extends Schema.TaggedError<FeedbackStorageErro
   }
 }
 
-/** The MCP client label `t3 feedback` signs in with, so its reports count as `cli`. */
-export const FEEDBACK_CLI_CLIENT_LABEL = "t3 feedback cli";
+/** The MCP client label `a4code feedback` signs in with, so its reports count as `cli`. */
+export const FEEDBACK_CLI_CLIENT_LABEL = "a4code feedback cli";
 
-/** Listed `t3` command paths a report may name. A CLI test keeps this in step with binCli. */
+/** Listed `a4code` command paths a report may name. A CLI test keeps this in step with binCli. */
 export const T3_CLI_COMMANDS: ReadonlyArray<string> = [
   "t3",
   "t3 help",
-  "t3 serve",
-  "t3 app",
-  "t3 pair",
-  "t3 auth",
-  "t3 auth connect-device",
-  "t3 auth connect-device approve",
-  "t3 auth connect-device list",
-  "t3 auth connect-device revoke",
-  "t3 auth pairing",
-  "t3 auth pairing create",
-  "t3 auth pairing list",
-  "t3 auth pairing revoke",
-  "t3 auth session",
-  "t3 auth session issue",
-  "t3 auth session list",
-  "t3 auth session revoke",
-  "t3 environment",
-  "t3 environment link",
-  "t3 environment list",
-  "t3 environment unlink",
+  "a4code serve",
+  "a4code app",
+  "a4code pair",
+  "a4code auth",
+  "a4code auth connect-device",
+  "a4code auth connect-device approve",
+  "a4code auth connect-device list",
+  "a4code auth connect-device revoke",
+  "a4code auth pairing",
+  "a4code auth pairing create",
+  "a4code auth pairing list",
+  "a4code auth pairing revoke",
+  "a4code auth session",
+  "a4code auth session issue",
+  "a4code auth session list",
+  "a4code auth session revoke",
+  "a4code environment",
+  "a4code environment link",
+  "a4code environment list",
+  "a4code environment unlink",
   "t3 browser",
   "t3 browser setup",
-  "t3 project",
-  "t3 project add",
-  "t3 project remove",
-  "t3 project rename",
-  "t3 thread",
-  "t3 thread list",
-  "t3 thread start",
-  "t3 thread send",
-  "t3 thread show",
-  "t3 feedback",
-  "t3 feedback list",
-  "t3 workflow",
-  "t3 workflow start",
-  "t3 workflow list",
-  "t3 workflow show",
-  "t3 workflow resume",
-  "t3 workflow cancel",
-  "t3 workflow signal",
-  "t3 workflow withdraw",
-  "t3 workflow questions",
-  "t3 workflow hooks",
-  "t3 workflow store",
-  "t3 workflow store list",
-  "t3 workflow store set",
-  "t3 workflow store delete",
-  "t3 up",
+  "a4code project",
+  "a4code project add",
+  "a4code project remove",
+  "a4code project rename",
+  "a4code thread",
+  "a4code thread list",
+  "a4code thread start",
+  "a4code thread send",
+  "a4code thread show",
+  "a4code feedback",
+  "a4code feedback list",
+  "a4code workflow",
+  "a4code workflow start",
+  "a4code workflow list",
+  "a4code workflow show",
+  "a4code workflow resume",
+  "a4code workflow cancel",
+  "a4code workflow signal",
+  "a4code workflow withdraw",
+  "a4code workflow questions",
+  "a4code workflow hooks",
+  "a4code workflow store",
+  "a4code workflow store list",
+  "a4code workflow store set",
+  "a4code workflow store delete",
+  "a4code up",
   "t3 status",
-  "t3 service",
-  "t3 service install",
-  "t3 service restart",
-  "t3 service uninstall",
-  "t3 service status",
-  "t3 service protect",
-  "t3 update",
-  "t3 install",
-  "t3 uninstall",
+  "a4code service",
+  "a4code service install",
+  "a4code service restart",
+  "a4code service uninstall",
+  "a4code service status",
+  "a4code service protect",
+  "a4code update",
+  "a4code install",
+  "a4code uninstall",
   "t3 theme",
   "t3 theme set",
   "t3 theme clear",
   "t3 theme show",
   "t3 trace",
   "t3 trace summary",
-  "t3 doctor",
-  "t3 policy",
-  "t3 policy show",
-  "t3 policy check",
-  "t3 policy templates",
-  "t3 policy settings",
+  "a4code doctor",
+  "a4code policy",
+  "a4code policy show",
+  "a4code policy check",
+  "a4code policy templates",
+  "a4code policy settings",
   "t3 triage",
-  "t3 connect",
-  "t3 connect link",
-  "t3 connect login",
-  "t3 connect logout",
-  "t3 connect publish",
-  "t3 connect status",
-  "t3 connect unlink",
+  "a4code connect",
+  "a4code connect link",
+  "a4code connect login",
+  "a4code connect logout",
+  "a4code connect publish",
+  "a4code connect status",
+  "a4code connect unlink",
 ];
 
 export type FeedbackInput = typeof FeedbackInput.Type;
 export type FeedbackReport = typeof FeedbackReport.Type;
 
 export const FEEDBACK_SUBJECT_MESSAGE =
-  "Set subject to the exact T3 tool name, the t3 command, or `general`.";
+  "Set subject to the exact T3 tool name, the a4code command, or `general`.";
 
 // The shared resolver knows the presented tools; the prefix covers the rest, such as these.
 // Codex also registers `t3-code-direct` for T3 tools it keeps out of Code Mode.
@@ -228,7 +228,7 @@ export const resolveT3ToolName = (name: string, toolNames: ReadonlyArray<string>
     .toSorted((a, b) => b.length - a.length)[0];
 };
 
-/** The stored subject, or undefined when the value names no T3 tool, `t3` command, or `general`. */
+/** The stored subject, or undefined when the value names no T3 tool, `a4code` command, or `general`. */
 export const resolveFeedbackSubject = (value: string, toolNames: ReadonlyArray<string>) => {
   const subject = value.trim();
   if (subject === "general" || T3_CLI_COMMANDS.includes(subject)) return subject;

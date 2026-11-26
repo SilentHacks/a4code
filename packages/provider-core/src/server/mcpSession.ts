@@ -1,4 +1,4 @@
-import type { EnvironmentId, ProviderInstanceId, ThreadId } from "@t3tools/contracts";
+import type { EnvironmentId, ProviderInstanceId, ThreadId } from "@a4code/contracts";
 import type * as Effect from "effect/Effect";
 
 /**

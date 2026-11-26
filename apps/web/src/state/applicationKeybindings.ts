@@ -1,6 +1,6 @@
-import type { EnvironmentCatalogState } from "@t3tools/client-runtime/state/connections";
-import type { EnvironmentId, ServerConfig } from "@t3tools/contracts";
-import { mergeWithDefaultKeybindings } from "@t3tools/shared/keybindings";
+import type { EnvironmentCatalogState } from "@a4code/client-runtime/state/connections";
+import type { EnvironmentId, ServerConfig } from "@a4code/contracts";
+import { mergeWithDefaultKeybindings } from "@a4code/shared/keybindings";
 import { Atom } from "effect/reactivity";
 
 import { environmentCatalog } from "../connection/catalog";

@@ -1449,9 +1449,9 @@ const program = Effect.gen(function* () {
                 type: "search",
                 query: "t3 code",
                 sources: [
-                  { type: "url", url: "https://t3.codes" },
-                  { type: "url", url: "https://t3.codes" },
-                  { type: "url", url: "https://github.com/pingdotgg/t3code" },
+                  { type: "url", url: "https://github.com/SilentHacks/a4code" },
+                  { type: "url", url: "https://github.com/SilentHacks/a4code" },
+                  { type: "url", url: "https://github.com/SilentHacks/a4code" },
                 ],
               },
               id: "grok-web-search",
@@ -1461,15 +1461,15 @@ const program = Effect.gen(function* () {
           {
             sessionUpdate: "tool_call_update",
             toolCallId: "grok-web-fetch",
-            title: "Fetch: https://t3.codes",
+            title: "Fetch: https://github.com/SilentHacks/a4code",
             kind: "fetch",
             status: "completed",
-            rawInput: { variant: "WebFetch", url: "https://t3.codes" },
+            rawInput: { variant: "WebFetch", url: "https://github.com/SilentHacks/a4code" },
             rawOutput: {
               type: "WebFetch",
-              Content: { url: "https://t3.codes", content: "T3 Code page" },
+              Content: { url: "https://github.com/SilentHacks/a4code", content: "A4 Code page" },
             },
-            content: [{ type: "content", content: { type: "text", text: "T3 Code page" } }],
+            content: [{ type: "content", content: { type: "text", text: "A4 Code page" } }],
           },
           {
             sessionUpdate: "tool_call_update",

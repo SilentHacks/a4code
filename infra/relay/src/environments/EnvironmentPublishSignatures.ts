@@ -2,14 +2,14 @@ import {
   RelayAgentActivityPublishProofPayload,
   RelayAgentActivityPublishProofInvalidReason,
   type RelayAgentActivityPublishRequest,
-} from "@t3tools/contracts/relay";
+} from "@a4code/contracts/relay";
 import {
   decodeRelayJwt,
   normalizeRelayIssuer,
   RELAY_ACTIVITY_PUBLISH_TYP,
   verifyRelayJwt,
-} from "@t3tools/shared/relayJwt";
-import { stableStringify } from "@t3tools/shared/relaySigning";
+} from "@a4code/shared/relayJwt";
+import { stableStringify } from "@a4code/shared/relaySigning";
 import * as Context from "effect/Context";
 import * as Digest from "effect/crypto/Digest";
 import * as Signature from "effect/crypto/Signature";
@@ -72,7 +72,7 @@ export class EnvironmentPublishSignatures extends Context.Service<
       readonly request: RelayAgentActivityPublishRequest;
     }) => Effect.Effect<void, EnvironmentPublishSignatureError>;
   }
->()("t3code-relay/environments/EnvironmentPublishSignatures") {}
+>()("a4code-relay/environments/EnvironmentPublishSignatures") {}
 
 function environmentPublishReplayThumbprintData(input: {
   readonly environmentId: string;

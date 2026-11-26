@@ -27,11 +27,11 @@ import type {
   VcsStatusResult,
   VcsStatusStreamEvent,
   VcsStatusSubscriptionInput,
-} from "@t3tools/contracts";
-import { DEFAULT_AUTOMATIC_GIT_FETCH_INTERVAL } from "@t3tools/contracts";
-import { mergeGitStatusParts } from "@t3tools/shared/git";
-import * as KeyedLock from "@t3tools/shared/KeyedLock";
-import { resolveProjectSettings } from "@t3tools/shared/projectSettings";
+} from "@a4code/contracts";
+import { DEFAULT_AUTOMATIC_GIT_FETCH_INTERVAL } from "@a4code/contracts";
+import { mergeGitStatusParts } from "@a4code/shared/git";
+import * as KeyedLock from "@a4code/shared/KeyedLock";
+import { resolveProjectSettings } from "@a4code/shared/projectSettings";
 
 import * as BackgroundPolicy from "../background/BackgroundPolicy.ts";
 import * as GitWorkflowService from "../git/GitWorkflowService.ts";
@@ -1121,7 +1121,7 @@ export const make = Effect.gen(function* () {
       ),
   );
 
-  // A checkout outside T3 Code, such as `git switch` in the terminal, calls no refresh RPC.
+  // A checkout outside A4 Code, such as `git switch` in the terminal, calls no refresh RPC.
   // Rereading remote too, without a fetch, sends the new branch with its own PR and counts.
   const publishCheckedOutRef = Effect.fn("VcsStatusBroadcaster.publishCheckedOutRef")(function* (
     cwd: string,

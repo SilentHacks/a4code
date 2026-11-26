@@ -3,8 +3,8 @@ import {
   PrimaryConnectionTarget,
   SshConnectionTarget,
   RelayConnectionTarget,
-} from "@t3tools/client-runtime/connection";
-import { EnvironmentId } from "@t3tools/contracts";
+} from "@a4code/client-runtime/connection";
+import { EnvironmentId } from "@a4code/contracts";
 import { Atom, AtomRegistry } from "effect/reactivity";
 import { describe, expect, it } from "vite-plus/test";
 

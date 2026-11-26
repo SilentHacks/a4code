@@ -1,13 +1,16 @@
 import { isLoopbackHost } from "./preview.ts";
 
-export function providerAuthReturnUrl(value: string | undefined): string | undefined {
+export function providerAuthReturnUrl(
+  value: string | undefined,
+  trustedOrigin?: string | null,
+): string | undefined {
   if (!value) return undefined;
   try {
     const url = new URL(value);
-    const desktop = ["t3code:", "t3code-dev:"].includes(url.protocol) && url.host === "app";
+    const desktop = ["a4code:", "a4code-dev:"].includes(url.protocol) && url.host === "app";
     const web =
-      ["http:", "https:"].includes(url.protocol) &&
-      (isLoopbackHost(url.hostname) || url.origin === "https://app.t3.codes");
+      (["http:", "https:"].includes(url.protocol) && isLoopbackHost(url.hostname)) ||
+      (url.protocol === "https:" && url.origin === trustedOrigin);
     if (
       url.username ||
       url.password ||

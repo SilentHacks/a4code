@@ -1,10 +1,10 @@
-import { threadChipCopyTarget } from "@t3tools/client-runtime/thread-reference";
-import { type ComposerContextClipboardFragment, EnvironmentId, ThreadId } from "@t3tools/contracts";
+import { threadChipCopyTarget } from "@a4code/client-runtime/thread-reference";
+import { type ComposerContextClipboardFragment, EnvironmentId, ThreadId } from "@a4code/contracts";
 import {
   COMPOSER_CONTEXT_CLIPBOARD_MIME,
   encodeComposerContextFragment,
-} from "@t3tools/shared/composerContextClipboard";
-import { threadContextRecord } from "@t3tools/shared/composerContextReferences";
+} from "@a4code/shared/composerContextClipboard";
+import { threadContextRecord } from "@a4code/shared/composerContextReferences";
 import { describe, expect, it } from "vite-plus/test";
 
 import { importPastedComposerText } from "./composerInlineTokenPaste";
@@ -44,7 +44,7 @@ describe("importPastedComposerText", () => {
 
   it("makes a chip of a v2 link pasted without T3's clipboard format", () => {
     const text = importPastedComposerText(
-      clipboard({ "text/plain": "[Login](t3-thread://v2/env-1/thread-1)" }),
+      clipboard({ "text/plain": "[Login](a4-thread://v2/env-1/thread-1)" }),
       importAll([]),
     );
     expect(text).toBe(chip("Login"));

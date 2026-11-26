@@ -8,8 +8,8 @@ import {
   ProjectId,
   ProviderInstanceId,
   ThreadId,
-} from "@t3tools/contracts";
-import { resolveSelfInvocation } from "@t3tools/shared/nodeRuntime";
+} from "@a4code/contracts";
+import { resolveSelfInvocation } from "@a4code/shared/nodeRuntime";
 import * as Effect from "effect/Effect";
 import * as Layer from "effect/Layer";
 import * as Option from "effect/Option";
@@ -18,19 +18,19 @@ import * as Stream from "effect/Stream";
 import { ChildProcess, ChildProcessSpawner } from "effect/process";
 
 import * as ServerConfig from "../config.ts";
-import * as TestProviderHost from "@t3tools/provider-testing/TestProviderHost";
-import * as McpProviderSessions from "@t3tools/provider-core/server/McpProviderSessions";
+import * as TestProviderHost from "@a4code/provider-testing/TestProviderHost";
+import * as McpProviderSessions from "@a4code/provider-core/server/McpProviderSessions";
 import { makeOmpAdapterV2 } from "./Adapters/OmpAdapterV2.ts";
 import * as EffectWorker from "./EffectWorker.ts";
 import * as EventSink from "./EventSink.ts";
-import * as IdAllocator from "@t3tools/provider-core/server/IdAllocator";
+import * as IdAllocator from "@a4code/provider-core/server/IdAllocator";
 import * as Orchestrator from "./Orchestrator.ts";
 import * as ProviderAdapterRegistry from "./ProviderAdapterRegistry.ts";
 import { layerWithRegistry } from "./testkit/ProviderReplayHarness.ts";
 
 const instanceId = ProviderInstanceId.make("omp");
 const settings = Schema.decodeSync(OmpSettings)({});
-const configLayer = ServerConfig.layerTest(process.cwd(), { prefix: "t3-omp-elicitation-" }).pipe(
+const configLayer = ServerConfig.layerTest(process.cwd(), { prefix: "a4code-elicitation-" }).pipe(
   Layer.provide(NodeServices.layer),
 );
 const agent = `

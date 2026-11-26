@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vite-plus/test";
 import * as Schema from "effect/Schema";
-import { ProviderInstanceId, ServerSettings, ServerSettingsPatch } from "@t3tools/contracts";
+import { ProviderInstanceId, ServerSettings, ServerSettingsPatch } from "@a4code/contracts";
 import {
   mobileOmpInstances,
   mobileOmpSettingsPatch,

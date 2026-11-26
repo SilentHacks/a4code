@@ -1,5 +1,5 @@
 {
-  "name": "@t3tools/desktop",
+  "name": "@a4code/desktop",
   "version": "0.1.12",
   "private": true,
   "type": "module",
@@ -11,16 +11,16 @@
     "i18n:generate": "node scripts/i18n-generate.mjs"
   },
   "dependencies": {
+    "@a4code/client-runtime": "workspace:*",
+    "@a4code/contracts": "workspace:*",
+    "@a4code/shared": "workspace:*",
+    "@a4code/ssh": "workspace:*",
+    "@a4code/tailscale": "workspace:*",
     "@clerk/electron": "catalog:",
     "@clerk/electron-passkeys": "catalog:",
     "@crowecawcaw/xa11y": "0.15.4",
     "@effect/platform-node": "catalog:",
     "@napi-rs/keyring": "^1.3.0",
-    "@t3tools/client-runtime": "workspace:*",
-    "@t3tools/contracts": "workspace:*",
-    "@t3tools/shared": "workspace:*",
-    "@t3tools/ssh": "workspace:*",
-    "@t3tools/tailscale": "workspace:*",
     "dbus-next": "0.10.2",
     "effect": "catalog:",
     "electron": "44.10.1",
@@ -44,5 +44,5 @@
     "tailwindcss": "^4.0.0",
     "vite-plus": "catalog:"
   },
-  "productName": "T3 Code (Beta)"
+  "productName": "A4 Code (Beta)"
 }

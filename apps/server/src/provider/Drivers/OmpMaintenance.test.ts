@@ -1,6 +1,6 @@
 import * as NodeServices from "@effect/platform-node/NodeServices";
 import { assert, describe, it } from "@effect/vitest";
-import * as HostProcess from "@t3tools/shared/HostProcess";
+import * as HostProcess from "@a4code/shared/HostProcess";
 import * as Effect from "effect/Effect";
 import * as FileSystem from "effect/FileSystem";
 import * as Schema from "effect/Schema";
@@ -14,7 +14,7 @@ describe("OmpMaintenance", () => {
     () =>
       Effect.gen(function* () {
         const fs = yield* FileSystem.FileSystem;
-        const directory = yield* fs.makeTempDirectoryScoped({ prefix: "t3-omp-maintenance-" });
+        const directory = yield* fs.makeTempDirectoryScoped({ prefix: "a4code-maintenance-" });
         const executable = `${directory}/omp`;
         yield* fs.writeFileString(
           executable,
@@ -63,7 +63,7 @@ console.log('Current version: 18.5.0');console.log('New version available: 18.6.
     () =>
       Effect.gen(function* () {
         const fs = yield* FileSystem.FileSystem;
-        const directory = yield* fs.makeTempDirectoryScoped({ prefix: "t3-omp-update-unknown-" });
+        const directory = yield* fs.makeTempDirectoryScoped({ prefix: "a4code-update-unknown-" });
         const executable = `${directory}/omp`;
         yield* fs.writeFileString(
           executable,

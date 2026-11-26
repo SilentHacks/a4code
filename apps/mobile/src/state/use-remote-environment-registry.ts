@@ -1,13 +1,13 @@
 import * as Dialog from "../components/ui/Dialog";
-import { errorDisplayMessage } from "@t3tools/client-runtime/errors";
+import { errorDisplayMessage } from "@a4code/client-runtime/errors";
 import { useAtomValue } from "@effect/atom-react";
 import { useNavigation } from "@react-navigation/native";
-import { Discovery } from "@t3tools/client-runtime/relay";
-import type { EnvironmentId } from "@t3tools/contracts";
+import { Discovery } from "@a4code/client-runtime/relay";
+import type { EnvironmentId } from "@a4code/contracts";
 import * as Cause from "effect/Cause";
 import { msg } from "gt-react-native";
 import { AsyncResult, Atom } from "effect/reactivity";
-import { runAtomCommand } from "@t3tools/client-runtime/state/runtime";
+import { runAtomCommand } from "@a4code/client-runtime/state/runtime";
 
 import { hasCloudPublicConfig } from "../features/cloud/publicConfig";
 import { m } from "../i18n/messages";
@@ -28,12 +28,12 @@ import { connectPairingUrl as connectPairingUrlCommand } from "../connection/onb
 const RELAY_REMOVAL_ACCOUNT_NOTE: Record<Discovery.RelayEnvironmentRegistration, string> = {
   registered: msg(
     "It stays on your {connect} account and keeps its host space. Deregister it under {account} → {connect} to free it.",
-    { connect: "T3 Connect", account: "T3 Account" },
+    { connect: "A4 Connect", account: "T3 Account" },
   ),
-  unregistered: msg("It's no longer on your {connect} account.", { connect: "T3 Connect" }),
+  unregistered: msg("It's no longer on your {connect} account.", { connect: "A4 Connect" }),
   unknown: msg(
     "This doesn't change your {connect} account. To deregister it there, use {account} → {connect}.",
-    { connect: "T3 Connect", account: "T3 Account" },
+    { connect: "A4 Connect", account: "T3 Account" },
   ),
 };
 

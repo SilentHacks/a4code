@@ -415,7 +415,7 @@ it("preserves in-app thread links through the shared Markdown sanitizer", () => 
     .use(CHAT_MARKDOWN_REHYPE_PLUGINS);
   const tree = processor.runSync(
     processor.parse(
-      '[Open thread](t3-thread://v1/thread)\n\n<t3-thread://v2/environment/thread:a%3A1>\n\n<a href="javascript:alert(1)">Unsafe</a>',
+      '[Open thread](a4-thread://v1/thread)\n\n<a4-thread://v2/environment/thread:a%3A1>\n\n<a href="javascript:alert(1)">Unsafe</a>',
     ),
   );
   expect(tree.children[0]).toMatchObject({
@@ -423,7 +423,7 @@ it("preserves in-app thread links through the shared Markdown sanitizer", () => 
     children: [
       {
         tagName: "a",
-        properties: { href: "t3-thread://v1/thread" },
+        properties: { href: "a4-thread://v1/thread" },
         children: [{ type: "text", value: "Open thread" }],
       },
     ],
@@ -433,8 +433,8 @@ it("preserves in-app thread links through the shared Markdown sanitizer", () => 
     children: [
       {
         tagName: "a",
-        properties: { href: "t3-thread://v2/environment/thread:a%3A1" },
-        children: [{ type: "text", value: "t3-thread://v2/environment/thread:a%3A1" }],
+        properties: { href: "a4-thread://v2/environment/thread:a%3A1" },
+        children: [{ type: "text", value: "a4-thread://v2/environment/thread:a%3A1" }],
       },
     ],
   });
@@ -571,8 +571,8 @@ it("keeps backslashes that CommonMark would read as escapes in prose Windows pat
   expect(render(String.raw`See C:\x and \*this\* and Note:\*that\*.`)).toBe(
     String.raw`See C:\x and *this* and Note:*that*.`,
   );
-  expect(render(String.raw`${"`"}C:\me\.t3${"`"} and C:\me\.t3`)).toBe(
-    String.raw`<code>C:\me\.t3</code> and C:\me\.t3`,
+  expect(render(String.raw`${"`"}C:\me\.t3${"`"} and C:\me\.a4code`)).toBe(
+    String.raw`<code>C:\me\.t3</code> and C:\me\.a4code`,
   );
 });
 
@@ -947,7 +947,7 @@ it("links complete absolute paths in prose and skips shortened ones", () => {
     ),
   ).toEqual([]);
   expect(
-    links("Config lives in /Users/me/Library/Application Support/T3 Code/settings.json now."),
+    links("Config lives in /Users/me/Library/Application Support/A4 Code/settings.json now."),
   ).toEqual([]);
   expect(links(`/chat/settings and https://example.com${path}`)).toEqual([
     `https://example.com${path}`,

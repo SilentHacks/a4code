@@ -9,7 +9,11 @@ import { LOCALES } from "./src/i18n/locales.ts";
 delete process.env.VP_RUN_NODE_CLIENT_PATH;
 
 export default defineConfig({
-  site: "https://t3.codes",
+  site:
+    process.env.A4CODE_MARKETING_SITE_URL ||
+    (process.env.VERCEL_PROJECT_PRODUCTION_URL
+      ? `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}`
+      : "http://localhost:4173"),
   // Vercel 308s `/path/` to `/path` (see vercel.ts), so every internal link and canonical uses one form.
   trailingSlash: "never",
   // English stays unprefixed at `/`; see src/i18n/locales.ts for each locale's URL segment.

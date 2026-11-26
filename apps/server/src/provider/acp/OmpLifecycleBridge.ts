@@ -83,7 +83,7 @@ export const makeOmpLifecycleBridge: Effect.Effect<OmpLifecycleBridge, never, Sc
     const frames = yield* Queue.unbounded<EffectAcpSchema.SessionNotification>();
 
     const directory = yield* Effect.acquireRelease(
-      Effect.promise(() => NodeFSP.mkdtemp(NodePath.join(NodeOS.tmpdir(), "t3-omp-"))),
+      Effect.promise(() => NodeFSP.mkdtemp(NodePath.join(NodeOS.tmpdir(), "a4code-"))),
       (path) => Effect.promise(() => NodeFSP.rm(path, { recursive: true, force: true })),
     );
     const socketPath = NodePath.join(directory, "bridge.sock");

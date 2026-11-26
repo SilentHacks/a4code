@@ -1,10 +1,10 @@
 Pod::Spec.new do |s|
   s.name           = 'T3ComposerEditor'
   s.version        = '1.0.0'
-  s.summary        = 'Native attributed composer editor for T3 Code mobile.'
+  s.summary        = 'Native attributed composer editor for A4 Code mobile.'
   s.description    = 'UIKit-backed rich text composer with atomic skill and file tokens.'
-  s.author         = 'T3 Tools'
-  s.homepage       = 'https://t3tools.com'
+  s.author         = 'A4 Code contributors'
+  s.homepage       = 'https://github.com/SilentHacks/a4code'
   s.platforms      = {
     :ios => '16.4',
   }

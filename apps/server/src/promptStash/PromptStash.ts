@@ -4,7 +4,7 @@ import {
   PromptStashError,
   type PromptStashEvent,
   type PromptStashTakeInput,
-} from "@t3tools/contracts";
+} from "@a4code/contracts";
 import * as Clock from "effect/Clock";
 import * as Context from "effect/Context";
 import * as DateTime from "effect/DateTime";

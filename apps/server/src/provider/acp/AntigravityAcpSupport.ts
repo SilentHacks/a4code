@@ -5,7 +5,7 @@ import {
   PROVIDER_SEND_TURN_MAX_IMAGE_BYTES,
   type ProviderSendTurnInput,
   type RuntimeMode,
-} from "@t3tools/contracts";
+} from "@a4code/contracts";
 import * as SecureRandom from "effect/crypto/SecureRandom";
 import * as Effect from "effect/Effect";
 import * as FileSystem from "effect/FileSystem";
@@ -23,14 +23,14 @@ import {
   makeAntigravityStderrHandler,
   makeAntigravityStdoutTransform,
 } from "../antigravityAuthSupport.ts";
-import * as AcpSessionRuntime from "@t3tools/provider-acp/server/AcpSessionRuntime";
+import * as AcpSessionRuntime from "@a4code/provider-acp/server/AcpSessionRuntime";
 import {
   acpPermissionDisposition,
   unknownRecord,
   type AcpRuntimePolicy,
-} from "@t3tools/provider-acp/server/clientPolicy";
-import type { AcpSessionModeState } from "@t3tools/provider-acp/server/runtimeModel";
-import { T3_MCP_TOOL_NAMES } from "@t3tools/shared/t3McpToolPresentation";
+} from "@a4code/provider-acp/server/clientPolicy";
+import type { AcpSessionModeState } from "@a4code/provider-acp/server/runtimeModel";
+import { T3_MCP_TOOL_NAMES } from "@a4code/shared/t3McpToolPresentation";
 import packageJson from "../../../package.json" with { type: "json" };
 import { normalizeAntigravitySessionUpdate } from "./AntigravityProtocol.ts";
 
@@ -108,7 +108,7 @@ export function antigravitySessionMeta(
 export function antigravityClientInfo(version: string | null | undefined) {
   const parsed = parseAntigravityVersion(version);
   return parsed !== undefined && compareVersions(parsed, OPEN_MODEL_ACCESS_RELEASE) >= 0
-    ? { name: "t3-code", title: "T3 Code", version: packageJson.version }
+    ? { name: "t3-code", title: "A4 Code", version: packageJson.version }
     : { name: "zed", version: "0.0.0" };
 }
 

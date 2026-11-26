@@ -1,10 +1,10 @@
 // @effect-diagnostics nodeBuiltinImport:off - plain local servers stand in for LAN services.
 import * as NodeServices from "@effect/platform-node/NodeServices";
 import { assert, describe, expect, it } from "@effect/vitest";
-import { EnvironmentId, ProviderInstanceId, ThreadId } from "@t3tools/contracts";
-import * as McpProviderSessions from "@t3tools/provider-core/server/McpProviderSessions";
-import * as HostProcess from "@t3tools/shared/HostProcess";
-import { symlinksSupported } from "@t3tools/shared/testing/symlinks";
+import { EnvironmentId, ProviderInstanceId, ThreadId } from "@a4code/contracts";
+import * as McpProviderSessions from "@a4code/provider-core/server/McpProviderSessions";
+import * as HostProcess from "@a4code/shared/HostProcess";
+import { symlinksSupported } from "@a4code/shared/testing/symlinks";
 import * as Deferred from "effect/Deferred";
 import * as Effect from "effect/Effect";
 import * as Exit from "effect/Exit";
@@ -28,7 +28,7 @@ import * as ResourceCleanupService from "../orchestration-v2/ResourceCleanupServ
 import * as ProjectionStore from "../orchestration-v2/ProjectionStore.ts";
 import * as PreviewBrowserHost from "../preview/PreviewBrowserHost.ts";
 
-const TEST_BROWSER_ENV = "T3CODE_TEST_HEADLESS_SHELL";
+const TEST_BROWSER_ENV = "A4CODE_TEST_HEADLESS_SHELL";
 
 const layerHtmlRender = (
   executable?: string,

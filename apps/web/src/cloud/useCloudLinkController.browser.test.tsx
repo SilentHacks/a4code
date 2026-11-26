@@ -5,12 +5,12 @@ import {
   AuthRelayConfigureScope,
   EnvironmentId,
   type EnvironmentCloudLinkStateResult,
-} from "@t3tools/contracts";
-import { ManagedRelay } from "@t3tools/client-runtime/relay";
+} from "@a4code/contracts";
+import { ManagedRelay } from "@a4code/client-runtime/relay";
 import {
   RelayEnvironmentLinkLimitExceededError,
   type RelayManagedEndpointProviderKind,
-} from "@t3tools/contracts/relay";
+} from "@a4code/contracts/relay";
 import * as Cause from "effect/Cause";
 import { AsyncResult } from "effect/reactivity";
 import { useLayoutEffect } from "react";

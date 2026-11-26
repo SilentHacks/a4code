@@ -3,9 +3,9 @@ import {
   ProviderDriverKind,
   type OrchestrationV2ProviderCapabilities,
   type RuntimeMode,
-} from "@t3tools/contracts";
-import * as HostProcess from "@t3tools/shared/HostProcess";
-import { resolveSelfInvocation } from "@t3tools/shared/nodeRuntime";
+} from "@a4code/contracts";
+import * as HostProcess from "@a4code/shared/HostProcess";
+import { resolveSelfInvocation } from "@a4code/shared/nodeRuntime";
 import * as NodeUtil from "node:util";
 import * as SecureRandom from "effect/crypto/SecureRandom";
 import * as Effect from "effect/Effect";
@@ -17,27 +17,27 @@ import { ChildProcessSpawner } from "effect/process";
 import * as EffectAcpErrors from "effect-acp/errors";
 import type * as EffectAcpSchema from "effect-acp/compat";
 
-import { makeAcpNativeLoggerFactory } from "@t3tools/provider-acp/server/nativeLogging";
+import { makeAcpNativeLoggerFactory } from "@a4code/provider-acp/server/nativeLogging";
 import { makeOmpAcpRuntime } from "../../provider/acp/OmpAcpSupport.ts";
 import { isManagedOmpCommand, isUnmanagedOmpPrompt } from "../../provider/Drivers/OmpCommands.ts";
-import { mergeProviderInstanceEnvironment } from "@t3tools/provider-core/server/instanceEnvironment";
-import * as ProviderEventLoggers from "@t3tools/provider-core/server/ProviderEventLoggers";
-import type * as ProviderHost from "@t3tools/provider-core/server/ProviderHost";
-import type * as McpProviderSessions from "@t3tools/provider-core/server/McpProviderSessions";
-import * as IdAllocator from "@t3tools/provider-core/server/IdAllocator";
-import * as ProviderContinuationRequests from "@t3tools/provider-core/server/ProviderContinuationRequests";
-import type * as ProviderAdapter from "@t3tools/provider-core/server/ProviderAdapter";
-import { makeProviderFailure } from "@t3tools/provider-core/server/failure";
+import { mergeProviderInstanceEnvironment } from "@a4code/provider-core/server/instanceEnvironment";
+import * as ProviderEventLoggers from "@a4code/provider-core/server/ProviderEventLoggers";
+import type * as ProviderHost from "@a4code/provider-core/server/ProviderHost";
+import type * as McpProviderSessions from "@a4code/provider-core/server/McpProviderSessions";
+import * as IdAllocator from "@a4code/provider-core/server/IdAllocator";
+import * as ProviderContinuationRequests from "@a4code/provider-core/server/ProviderContinuationRequests";
+import type * as ProviderAdapter from "@a4code/provider-core/server/ProviderAdapter";
+import { makeProviderFailure } from "@a4code/provider-core/server/failure";
 import {
   ProviderAdapterDriverCreateError,
   type ProviderAdapterDriver,
-} from "@t3tools/provider-core/server/adapterDriver";
+} from "@a4code/provider-core/server/adapterDriver";
 import {
   AcpProviderCapabilitiesV2,
   makeAcpAdapterV2,
   type AcpAdapterV2Flavor,
   type AcpAdapterV2SubagentUpdate,
-} from "@t3tools/provider-acp/server/adapter";
+} from "@a4code/provider-acp/server/adapter";
 
 const OMP_PROVIDER = ProviderDriverKind.make("omp");
 const DEFAULT_OMP_SETTINGS = Schema.decodeSync(OmpSettings)({});

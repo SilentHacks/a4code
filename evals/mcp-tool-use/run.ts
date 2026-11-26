@@ -21,7 +21,7 @@ import {
   PreviewAutomationError,
   PreviewAutomationUnavailableError,
   ProviderInstanceId,
-} from "@t3tools/contracts";
+} from "@a4code/contracts";
 import * as Cause from "effect/Cause";
 import * as Context from "effect/Context";
 import * as Config from "effect/Config";
@@ -41,18 +41,18 @@ import { FetchHttpClient, HttpClient, HttpClientRequest } from "effect/http";
 import { taskPrompt } from "../../apps/server/src/mcp/delegatedTaskModes.ts";
 import * as McpInvocationContext from "../../apps/server/src/mcp/McpInvocationContext.ts";
 import { advertisedJsonSchema } from "../../apps/server/src/mcp/advertisedJsonSchema.ts";
-import * as Contracts from "@t3tools/contracts";
+import * as Contracts from "@a4code/contracts";
 import {
   EnvironmentId,
   ORCHESTRATOR_MCP_RUNNING_TASK_NEXT,
   PullRequestState,
   ThreadId,
-} from "@t3tools/contracts";
-import { projectComposerContextForProvider } from "@t3tools/shared/composerContextReferences";
-import { THEME_GUIDE } from "@t3tools/shared/themeCss";
-import { formatThreadLink } from "@t3tools/shared/threadLinks";
+} from "@a4code/contracts";
+import { projectComposerContextForProvider } from "@a4code/shared/composerContextReferences";
+import { THEME_GUIDE } from "@a4code/shared/themeCss";
+import { formatThreadLink } from "@a4code/shared/threadLinks";
 import { buildCodexAdditionalContext } from "../../apps/server/src/provider/CodexDeveloperInstructions.ts";
-import { PULL_REQUEST_LINKING_INSTRUCTIONS } from "@t3tools/provider-core/server/runtimeInstructions";
+import { PULL_REQUEST_LINKING_INSTRUCTIONS } from "@a4code/provider-core/server/runtimeInstructions";
 import { makeSideChatContext } from "../../apps/server/src/orchestration-v2/ContextHandoffService.ts";
 import { withInlineContext } from "../../apps/server/src/orchestration-v2/ContextHandoffDelivery.ts";
 import { AttachmentToolkit } from "../../apps/server/src/mcp/toolkits/attachment/tools.ts";
@@ -1702,7 +1702,7 @@ export const t3Default = (
         .slice(0, 32);
       const home =
         /^\/(?:home|Users)\/[^/]+/.exec(sample.base.environment.cwd)?.[0] ?? "/home/user";
-      const fileFor = (key: string) => `${home}/.t3/userdata/secrets/files/${key}`;
+      const fileFor = (key: string) => `${home}/.a4code/userdata/secrets/files/${key}`;
       // A card with `fields` saves one file per field name.
       if (Array.isArray(input.fields) && !pastedSecret(name, input)) {
         const names = input.fields.flatMap((field) =>

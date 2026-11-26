@@ -1,16 +1,16 @@
 import { useAtomRefresh, useAtomValue } from "@effect/atom-react";
-import { cloudSpeechDisclosure } from "@t3tools/shared/speechCopy";
-import type { PreparedConnection } from "@t3tools/client-runtime/connection";
-import { hasFeatureFlag } from "@t3tools/client-runtime/state/server";
+import { cloudSpeechDisclosure } from "@a4code/shared/speechCopy";
+import type { PreparedConnection } from "@a4code/client-runtime/connection";
+import { hasFeatureFlag } from "@a4code/client-runtime/state/server";
 import {
   configuredSecretSources,
   secretRequestReference,
-} from "@t3tools/client-runtime/secret-request";
+} from "@a4code/client-runtime/secret-request";
 import {
   getCloudSpeechKeys,
   getCloudSpeechModels,
   setCloudSpeechKey,
-} from "@t3tools/client-runtime/voice-input";
+} from "@a4code/client-runtime/voice-input";
 import {
   AuthOrchestrationOperateScope,
   AuthProvidersManageScope,
@@ -25,7 +25,7 @@ import {
   type SecretProviderId,
   type SettingsSecretValue,
   type VoiceTranscriptionDestination,
-} from "@t3tools/contracts";
+} from "@a4code/contracts";
 import * as Effect from "effect/Effect";
 import * as Option from "effect/Option";
 import * as Schema from "effect/Schema";

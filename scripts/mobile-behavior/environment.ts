@@ -1,6 +1,6 @@
 // @effect-diagnostics nodeBuiltinImport:off globalTimers:off - the eval owns a server subprocess and a scratch workspace.
 /**
- * An isolated T3 server for one device run. Its only provider is `evalbot`, an Fx instance
+ * An isolated A4 Code server for one device run. Its only provider is `evalbot`, an Fx instance
  * backed by `fake-fx.ts`, so every reply is scripted. State lives under the run's `--out`.
  */
 import * as NodeChildProcess from "node:child_process";
@@ -21,7 +21,7 @@ import {
   ThreadId,
   WsRpcGroup,
   type OrchestrationV2ThreadProjection,
-} from "@t3tools/contracts";
+} from "@a4code/contracts";
 import * as SecureRandom from "effect/crypto/SecureRandom";
 import * as Effect from "effect/Effect";
 import * as Layer from "effect/Layer";

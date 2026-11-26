@@ -12,10 +12,10 @@ import * as Schema from "effect/Schema";
 import * as Stream from "effect/Stream";
 import * as TestClock from "effect/testing/TestClock";
 import { HttpClient, HttpClientResponse, HttpServer, type HttpClientRequest } from "effect/http";
-import { RELAY_LINK_PROOF_TYP, signRelayJwt, verifyRelayJwt } from "@t3tools/shared/relayJwt";
+import { RELAY_LINK_PROOF_TYP, signRelayJwt, verifyRelayJwt } from "@a4code/shared/relayJwt";
 import * as NetAddress from "effect/net/NetAddress";
 
-import { EnvironmentId } from "@t3tools/contracts";
+import { EnvironmentId } from "@a4code/contracts";
 import * as EnvironmentKeys from "./environmentKeys.ts";
 import * as EnvironmentAuth from "../auth/EnvironmentAuth.ts";
 import * as ServerSecretStore from "../auth/ServerSecretStore.ts";
@@ -34,7 +34,7 @@ import * as CliTokenManager from "./CliTokenManager.ts";
 import {
   RelayEnvironmentLinkProofPayload,
   RelayManagedEndpointRecoveryRegistrationRequest,
-} from "@t3tools/contracts/relay";
+} from "@a4code/contracts/relay";
 import {
   CLOUD_ENDPOINT_CONFIRMED_ORIGIN,
   CLOUD_ENDPOINT_RUNTIME_CONFIG,
@@ -259,11 +259,11 @@ describe("releaseManagedTunnelOnShutdown", () => {
         ),
 
         Effect.provide([
-          ServerConfigModule.layerTest("/", { prefix: "t3-http-release-test-" }).pipe(
+          ServerConfigModule.layerTest("/", { prefix: "a4code-http-release-test-" }).pipe(
             Layer.provideMerge(Layer.mergeAll(NodeServices.layer, NodeCrypto.layer)),
           ),
           ConfigProvider.layer(
-            ConfigProvider.fromEnv({ env: { T3CODE_RELAY_URL: "https://relay.example.test" } }),
+            ConfigProvider.fromEnv({ env: { A4CODE_RELAY_URL: "https://relay.example.test" } }),
           ),
         ]),
         Effect.scoped,
@@ -770,7 +770,7 @@ describe("releaseManagedTunnelOnShutdown", () => {
       const result = yield* relink.pipe(
         Effect.provide(
           ConfigProvider.layer(
-            ConfigProvider.fromEnv({ env: { T3CODE_RELAY_URL: "https://relay.example.test" } }),
+            ConfigProvider.fromEnv({ env: { A4CODE_RELAY_URL: "https://relay.example.test" } }),
           ),
         ),
         Effect.flip,
@@ -1265,7 +1265,7 @@ describe("releaseManagedTunnelOnShutdown", () => {
         "not_linked",
       );
       // The address shows before any check passes.
-      expect(state.tunnelHostname).toBe("prod-abc.t3coderelay.com");
+      expect(state.tunnelHostname).toBe("prod-abc.a4coderelay.com");
     }).pipe(
       provideReleaseHarness({
         store,
@@ -1275,7 +1275,7 @@ describe("releaseManagedTunnelOnShutdown", () => {
         connector: {
           pid: 123,
           readyConnections: 0,
-          hostname: "prod-abc.t3coderelay.com",
+          hostname: "prod-abc.a4coderelay.com",
           origin: null,
           protocol: null,
         },

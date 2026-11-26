@@ -3,7 +3,7 @@ import {
   RelayClientAuth,
   RelayClientPrincipal,
   type RelayClientDeviceRecord,
-} from "@t3tools/contracts/relay";
+} from "@a4code/contracts/relay";
 import * as EnvironmentLinker from "../environments/EnvironmentLinker.ts";
 import * as RelayTokens from "../auth/RelayTokens.ts";
 import * as Devices from "../agentActivity/Devices.ts";
@@ -32,16 +32,16 @@ import * as HttpServerRequest from "effect/http/HttpServerRequest";
 import * as HttpServerResponse from "effect/http/HttpServerResponse";
 import * as HttpApi from "effect/http-api/HttpApi";
 import * as HttpApiBuilder from "effect/http-api/HttpApiBuilder";
-import { EnvironmentId } from "@t3tools/contracts";
+import { EnvironmentId } from "@a4code/contracts";
 import {
   RelayEnvironmentAuth,
   RelayEnvironmentPrincipal,
   RelayApi,
   RelayEnvironmentLinkUnavailableError,
   RelayEnvironmentLinkRequest,
-} from "@t3tools/contracts/relay";
-import { relayProtectedErrorMessage } from "@t3tools/client-runtime/relay";
-import { RELAY_MANAGED_TUNNEL_RECOVERY_TYP, signRelayJwt } from "@t3tools/shared/relayJwt";
+} from "@a4code/contracts/relay";
+import { relayProtectedErrorMessage } from "@a4code/client-runtime/relay";
+import { RELAY_MANAGED_TUNNEL_RECOVERY_TYP, signRelayJwt } from "@a4code/shared/relayJwt";
 
 import {
   RELAY_HTTP_ROUTER_CONFIG,
@@ -84,7 +84,7 @@ const relaySettings: RelayConfiguration.RelayConfiguration["Service"] = {
   },
   clerkSecretKey: Redacted.make("clerk-secret-key"),
   clerkPublishableKey: "pk_test_test",
-  clerkJwtAudience: "t3-code-relay",
+  clerkJwtAudience: "a4-code-relay",
   apnsDeliveryJobSigningSecret: Redacted.make("apns-delivery-secret"),
   cloudMintPrivateKey: Redacted.make("cloud-mint-private-key"),
   cloudMintPublicKey: "cloud-mint-public-key",
@@ -1102,7 +1102,7 @@ describe("relay environment unlink", () => {
                   environmentId: "environment-1",
                   hostname: "dev-0123456789abcdef.example.test",
                   tunnelId: "tunnel-1",
-                  tunnelName: `t3coderelay-managedendpoint-dev-${endpointKey}`,
+                  tunnelName: `a4coderelay-managedendpoint-dev-${endpointKey}`,
                   dnsRecordId: "dns-1",
                   readyAt: "2026-07-28T00:00:00.000Z",
                   tunnelReleasedAt: null,
@@ -1410,7 +1410,7 @@ describe("relay request tracing", () => {
       const request = HttpServerRequest.fromWeb(
         new Request("https://relay.test/v1/mobile/devices", {
           method: "POST",
-          headers: { "user-agent": "T3Code/2.3.0 iPhone" },
+          headers: { "user-agent": "A4Code/2.3.0 iPhone" },
         }),
       ).modify({ remoteAddress: Option.some("203.0.113.9") });
 
@@ -1420,7 +1420,7 @@ describe("relay request tracing", () => {
 
       expect(spans[0]?.attributes.get("client.address")).toBeUndefined();
       expect(spans[0]?.attributes.get("user_agent.original")).toBeUndefined();
-      expect(seen).toEqual([{ remoteAddress: "203.0.113.9", userAgent: "T3Code/2.3.0 iPhone" }]);
+      expect(seen).toEqual([{ remoteAddress: "203.0.113.9", userAgent: "A4Code/2.3.0 iPhone" }]);
     }),
   );
 });
@@ -1525,7 +1525,7 @@ describe("relay routing fallback", () => {
 });
 
 describe("relay CORS", () => {
-  const origin = "https://app.t3.codes";
+  const origin = "https://app.example.test";
 
   class HandlerFailed extends Schema.TaggedError<HandlerFailed>()("HandlerFailed", {}) {}
 

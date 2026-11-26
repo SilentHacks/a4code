@@ -5,7 +5,7 @@ import {
   type ProviderInteractionMode,
   type OrchestrationV2LinkedSender,
   type RuntimeMode,
-} from "@t3tools/contracts";
+} from "@a4code/contracts";
 import * as Context from "effect/Context";
 import * as DateTime from "effect/DateTime";
 import * as Effect from "effect/Effect";
@@ -21,7 +21,7 @@ import * as HttpClientRequest from "effect/http/HttpClientRequest";
 import * as McpInvocationContext from "../mcp/McpInvocationContext.ts";
 import * as PeerLinks from "./PeerLinks.ts";
 
-/** The only MCP protocol version a T3 Code `/mcp` registers. */
+/** The only MCP protocol version a A4 Code `/mcp` registers. */
 const PROTOCOL_VERSION = "2025-06-18";
 
 /** A title can be any length; the header carrying it stays well under HTTP header limits. */
@@ -160,7 +160,7 @@ const make = Effect.gen(function* () {
           params: {
             protocolVersion: PROTOCOL_VERSION,
             capabilities: {},
-            clientInfo: { name: "t3code-peer", version: "1" },
+            clientInfo: { name: "a4code-peer", version: "1" },
           },
         },
         limitHeader,

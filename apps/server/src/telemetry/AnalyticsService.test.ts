@@ -18,9 +18,9 @@ import * as HttpClientResponse from "effect/http/HttpClientResponse";
 import * as HttpServer from "effect/http/HttpServer";
 import * as HttpServerRequest from "effect/http/HttpServerRequest";
 import * as HttpServerResponse from "effect/http/HttpServerResponse";
-import * as HostProcess from "@t3tools/shared/HostProcess";
+import * as HostProcess from "@a4code/shared/HostProcess";
 
-import type { ManagedPolicyDocument } from "@t3tools/contracts";
+import type { ManagedPolicyDocument } from "@a4code/contracts";
 
 import * as ServerConfig from "../config.ts";
 import * as ManagedPolicy from "../policy/ManagedPolicy.ts";
@@ -117,8 +117,8 @@ const recordTwentyEvents = Effect.gen(function* () {
 const analyticsLayerWith = (
   client: HttpClient.HttpClient,
   policy?: ManagedPolicyDocument,
-  telemetryEnv: { readonly T3CODE_TELEMETRY_ENABLED?: boolean } = {
-    T3CODE_TELEMETRY_ENABLED: true,
+  telemetryEnv: { readonly A4CODE_TELEMETRY_ENABLED?: boolean } = {
+    A4CODE_TELEMETRY_ENABLED: true,
   },
 ) =>
   AnalyticsService.layer.pipe(
@@ -129,8 +129,8 @@ const analyticsLayerWith = (
       ConfigProvider.layer(
         ConfigProvider.fromUnknown({
           ...telemetryEnv,
-          T3CODE_TELEMETRY_KEY: "phc_test_key",
-          T3CODE_TELEMETRY_HOST: "http://localhost",
+          A4CODE_TELEMETRY_KEY: "phc_test_key",
+          A4CODE_TELEMETRY_HOST: "http://localhost",
         }),
       ),
     ),
@@ -187,7 +187,7 @@ const sendFor = (
 it.layer(Layer.mergeAll(NodeServices.layer, NodeCrypto.layer))("AnalyticsService test", (it) => {
   it.effect("waits for desktop shell consent and honors a late telemetry opt-out", () =>
     Effect.gen(function* () {
-      const env: NodeJS.ProcessEnv = { T3CODE_DESKTOP_SHELL_DISCOVERY_PENDING: "1" };
+      const env: NodeJS.ProcessEnv = { A4CODE_DESKTOP_SHELL_DISCOVERY_PENDING: "1" };
       const batches = yield* sendFor(
         0,
         respondWithStatus(204),
@@ -195,11 +195,11 @@ it.layer(Layer.mergeAll(NodeServices.layer, NodeCrypto.layer))("AnalyticsService
           const analytics = yield* AnalyticsService.AnalyticsService;
           yield* analytics.record("test.before-discovery");
           yield* analytics.flush;
-          env.T3CODE_TELEMETRY_ENABLED = "false";
-          delete env.T3CODE_DESKTOP_SHELL_DISCOVERY_PENDING;
+          env.A4CODE_TELEMETRY_ENABLED = "false";
+          delete env.A4CODE_DESKTOP_SHELL_DISCOVERY_PENDING;
           yield* analytics.record("test.opted-out");
           yield* analytics.flush;
-          env.T3CODE_TELEMETRY_ENABLED = "true";
+          env.A4CODE_TELEMETRY_ENABLED = "true";
           yield* analytics.record("test.allowed");
           yield* analytics.flush;
         }),
@@ -331,7 +331,7 @@ it.layer(Layer.mergeAll(NodeServices.layer, NodeCrypto.layer))("AnalyticsService
           Effect.provideService(HostProcess.Environment, { GITHUB_ACTIONS: "true" }),
         );
       assert.deepEqual(yield* onCi({}), []);
-      assert.equal((yield* onCi({ T3CODE_TELEMETRY_ENABLED: true })).length, 1);
+      assert.equal((yield* onCi({ A4CODE_TELEMETRY_ENABLED: true })).length, 1);
     }),
   );
 
@@ -367,10 +367,10 @@ it.layer(Layer.mergeAll(NodeServices.layer, NodeCrypto.layer))("AnalyticsService
       const layerTelemetry = AnalyticsService.layer.pipe(Layer.provideMerge(layerServerConfig));
       const layerConfig = ConfigProvider.layer(
         ConfigProvider.fromUnknown({
-          T3CODE_TELEMETRY_ENABLED: true,
-          T3CODE_TELEMETRY_KEY: "phc_test_key",
-          T3CODE_TELEMETRY_HOST: "http://localhost",
-          T3CODE_TELEMETRY_FLUSH_BATCH_SIZE: 20,
+          A4CODE_TELEMETRY_ENABLED: true,
+          A4CODE_TELEMETRY_KEY: "phc_test_key",
+          A4CODE_TELEMETRY_HOST: "http://localhost",
+          A4CODE_TELEMETRY_FLUSH_BATCH_SIZE: 20,
         }),
       );
       const layerBatchServer = HttpServer.serve(
@@ -469,9 +469,9 @@ it.layer(Layer.mergeAll(NodeServices.layer, NodeCrypto.layer))("AnalyticsService
       const layerTelemetry = AnalyticsService.layer.pipe(Layer.provideMerge(layerServerConfig));
       const layerConfig = ConfigProvider.layer(
         ConfigProvider.fromUnknown({
-          T3CODE_TELEMETRY_ENABLED: false,
-          T3CODE_TELEMETRY_KEY: "phc_test_key",
-          T3CODE_TELEMETRY_HOST: "http://localhost",
+          A4CODE_TELEMETRY_ENABLED: false,
+          A4CODE_TELEMETRY_KEY: "phc_test_key",
+          A4CODE_TELEMETRY_HOST: "http://localhost",
         }),
       );
       const layerBatchServer = HttpServer.serve(

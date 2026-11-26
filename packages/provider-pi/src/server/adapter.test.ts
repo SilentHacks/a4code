@@ -18,7 +18,7 @@ import {
   type OrchestrationV2ProviderThread,
   OrchestrationV2UserInputQuestion,
   type OrchestrationV2ProviderTurn,
-} from "@t3tools/contracts";
+} from "@a4code/contracts";
 import * as Cause from "effect/Cause";
 import * as PlatformError from "effect/PlatformError";
 import * as DateTime from "effect/DateTime";
@@ -39,16 +39,16 @@ import * as TestClock from "effect/testing/TestClock";
 import * as ChildProcess from "effect/process/ChildProcess";
 import * as ChildProcessSpawner from "effect/process/ChildProcessSpawner";
 
-import * as TestProviderHost from "@t3tools/provider-testing/TestProviderHost";
-import * as ProviderContinuationRequests from "@t3tools/provider-core/server/ProviderContinuationRequests";
-import * as McpProviderSessions from "@t3tools/provider-core/server/McpProviderSessions";
-import * as IdAllocator from "@t3tools/provider-core/server/IdAllocator";
-import * as ProviderAdapter from "@t3tools/provider-core/server/ProviderAdapter";
-import * as ProviderHost from "@t3tools/provider-core/server/ProviderHost";
-import { handoffBudget } from "@t3tools/provider-core/server/handoffBudget";
-import * as HostProcess from "@t3tools/shared/HostProcess";
-import { AgentScope } from "@t3tools/shared/AgentScope";
-import { toolOutputImages, compactDynamicToolOutput } from "@t3tools/shared/toolOutput";
+import * as TestProviderHost from "@a4code/provider-testing/TestProviderHost";
+import * as ProviderContinuationRequests from "@a4code/provider-core/server/ProviderContinuationRequests";
+import * as McpProviderSessions from "@a4code/provider-core/server/McpProviderSessions";
+import * as IdAllocator from "@a4code/provider-core/server/IdAllocator";
+import * as ProviderAdapter from "@a4code/provider-core/server/ProviderAdapter";
+import * as ProviderHost from "@a4code/provider-core/server/ProviderHost";
+import { handoffBudget } from "@a4code/provider-core/server/handoffBudget";
+import * as HostProcess from "@a4code/shared/HostProcess";
+import { AgentScope } from "@a4code/shared/AgentScope";
+import { toolOutputImages, compactDynamicToolOutput } from "@a4code/shared/toolOutput";
 import {
   makePiAdapterV2,
   PiAdapterV2Driver,
@@ -2092,7 +2092,7 @@ describe("PiAdapterV2", () => {
         Effect.provideService(AgentScope, {
           ...AgentScope.defaultValue(),
           wrap: ({ command, args }) =>
-            Effect.succeed({ command, args, unit: "t3code-pi-test.scope" }),
+            Effect.succeed({ command, args, unit: "a4code-pi-test.scope" }),
           stop: (unit) =>
             Effect.sync(() => void stopped.push({ unit, processReleased })).pipe(
               Effect.andThen(Deferred.succeed(scopeStopped, undefined)),
@@ -2101,7 +2101,7 @@ describe("PiAdapterV2", () => {
         }),
       );
       assert.deepStrictEqual(stopped, [
-        { unit: "t3code-pi-test.scope", processReleased: exit === "session" },
+        { unit: "a4code-pi-test.scope", processReleased: exit === "session" },
       ]);
     }).pipe(Effect.provide(layerTest)),
   );
@@ -2240,7 +2240,7 @@ describe("PiAdapterV2", () => {
       assert.equal(spawn.env.T3_MCP_URL, "http://127.0.0.1:43123/mcp");
       assert.equal(spawn.env.T3_MCP_BEARER_TOKEN, "secret-pi-token");
       assert.equal(spawn.env.T3_PI_RUNTIME_MODE, "full-access");
-      assert.equal(spawn.env.T3CODE_THREAD_ID, THREAD_ID);
+      assert.equal(spawn.env.A4CODE_THREAD_ID, THREAD_ID);
     }).pipe(Effect.scoped, Effect.provide(layerTest)),
   );
 

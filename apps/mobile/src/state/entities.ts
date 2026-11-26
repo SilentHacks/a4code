@@ -1,12 +1,13 @@
+import { hostedAppOrigin } from "../lib/mobileBranding";
 import { useAtomValue } from "@effect/atom-react";
-import { deriveReportedModelSelection } from "@t3tools/client-runtime/state/thread-execution";
+import { deriveReportedModelSelection } from "@a4code/client-runtime/state/thread-execution";
 
 import { appAtomRegistry } from "./atom-registry";
 import type {
   EnvironmentProject,
   EnvironmentThread,
   EnvironmentThreadShell,
-} from "@t3tools/client-runtime/state/shell";
+} from "@a4code/client-runtime/state/shell";
 import {
   allowsPreviewTunnel,
   EnvironmentId,
@@ -15,8 +16,8 @@ import {
   type ScopedProjectRef,
   type ScopedThreadRef,
   type ServerConfig,
-} from "@t3tools/contracts";
-import { scopeThreadRef } from "@t3tools/client-runtime/environment";
+} from "@a4code/contracts";
+import { scopeThreadRef } from "@a4code/client-runtime/environment";
 import {
   guessThreadLinkRef,
   hasThreadLinks,
@@ -24,8 +25,8 @@ import {
   threadLinkCandidates,
   threadLinkRefs,
   type ThreadLink,
-} from "@t3tools/shared/threadLinks";
-import { relabelThreadLinks } from "@t3tools/shared/threadLinksCopy";
+} from "@a4code/shared/threadLinks";
+import { relabelThreadLinks } from "@a4code/shared/threadLinksCopy";
 import * as Schema from "effect/Schema";
 import { AsyncResult, Atom } from "effect/reactivity";
 import { msg, useGT, useMessages } from "gt-react-native";
@@ -158,7 +159,7 @@ const threadChipIconsAtom = Atom.family((key: string) => {
   return Atom.make((get) => {
     const icons = new Map<string, string>();
     for (const target of targets) {
-      const link = target.link ? parseThreadLinkHref(target.href) : null;
+      const link = target.link ? parseThreadLinkHref(target.href, hostedAppOrigin) : null;
       const ref =
         (link ? resolveThreadLink(get, link, target.environmentId) : null) ??
         scopeThreadRef(target.environmentId, target.threadId);
@@ -251,8 +252,10 @@ export function useLiveThreadLinkLabels(
   const resolve = useMessages();
   const gt = useGT();
   const titles = useAtomValue(
-    hasThreadLinks(markdown)
-      ? threadLinkTitlesAtom(JSON.stringify(threadLinkRefs(markdown, environmentId).map(threadKey)))
+    hasThreadLinks(markdown, hostedAppOrigin)
+      ? threadLinkTitlesAtom(
+          JSON.stringify(threadLinkRefs(markdown, environmentId, hostedAppOrigin).map(threadKey)),
+        )
       : EMPTY_THREAD_LINK_TITLES_ATOM,
   );
   return relabelThreadLinks(
@@ -269,6 +272,7 @@ export function useLiveThreadLinkLabels(
       return title && resolve(msg("Thread", { $context: "fallback title of a linked thread" }));
     },
     resolve,
+    hostedAppOrigin,
   );
 }
 

@@ -1,7 +1,7 @@
 import * as NodeServices from "@effect/platform-node/NodeServices";
 import { assert, describe, it } from "@effect/vitest";
-import { OmpSettings } from "@t3tools/contracts";
-import * as HostProcess from "@t3tools/shared/HostProcess";
+import { OmpSettings } from "@a4code/contracts";
+import * as HostProcess from "@a4code/shared/HostProcess";
 import * as Effect from "effect/Effect";
 import * as FileSystem from "effect/FileSystem";
 import * as Schema from "effect/Schema";
@@ -13,7 +13,7 @@ const checkedAt = "2026-10-03T00:00:00.000Z";
 const encodeJson = Schema.encodeSync(Schema.fromJsonString(Schema.Unknown));
 const makeProbe = Effect.fnUntraced(function* (output: unknown, exitCode = 0) {
   const fs = yield* FileSystem.FileSystem;
-  const directory = yield* fs.makeTempDirectoryScoped({ prefix: "t3-omp-usage-" });
+  const directory = yield* fs.makeTempDirectoryScoped({ prefix: "a4code-usage-" });
   const binaryPath = `${directory}/omp`;
   yield* fs.writeFileString(
     binaryPath,

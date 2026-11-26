@@ -1,7 +1,7 @@
 import { msg } from "gt-i18n";
 import { MarkedText, messageFromError, translatableMessage } from "../errors/translatable.ts";
-import type { EnvironmentId } from "@t3tools/contracts";
-import { decodeRelayJwt } from "@t3tools/shared/relayJwt";
+import type { EnvironmentId } from "@a4code/contracts";
+import { decodeRelayJwt } from "@a4code/shared/relayJwt";
 import * as Cause from "effect/Cause";
 import * as Clock from "effect/Clock";
 import * as Effect from "effect/Effect";
@@ -135,14 +135,14 @@ export function createManagedRelaySession(input: ManagedRelaySessionInput): Mana
           try: () => readCachedClerkToken(nowMillis),
           catch: (cause) =>
             new ManagedRelaySessionError({
-              ...translatableMessage(msg("Could not obtain the T3 Connect session token.")),
+              ...translatableMessage(msg("Could not obtain the A4 Connect session token.")),
               cause,
             }),
         }).pipe(Effect.timeoutOption(CLERK_TOKEN_READ_TIMEOUT_MS));
         if (Option.isSome(token)) return token.value;
       }
       return yield* new ManagedRelaySessionError(
-        translatableMessage(msg("Timed out obtaining the T3 Connect session token.")),
+        translatableMessage(msg("Timed out obtaining the A4 Connect session token.")),
       );
     }),
   };
@@ -197,16 +197,16 @@ function readSessionClerkToken(
       (token): token is string => Boolean(token),
       () =>
         new ManagedRelaySessionError(
-          translatableMessage(msg("The T3 Connect session token is unavailable.")),
+          translatableMessage(msg("The A4 Connect session token is unavailable.")),
         ),
     ),
   );
 }
 
 const SIGN_IN_BEFORE = {
-  deregister: msg("Sign in to T3 Connect before deregistering an environment."),
-  "link-t3chat": msg("Sign in to T3 Connect before linking T3 Chat."),
-  "unlink-t3chat": msg("Sign in to T3 Connect before unlinking T3 Chat."),
+  deregister: msg("Sign in to A4 Connect before deregistering an environment."),
+  "link-t3chat": msg("Sign in to A4 Connect before linking T3 Chat."),
+  "unlink-t3chat": msg("Sign in to A4 Connect before unlinking T3 Chat."),
 };
 
 function requireSessionClerkToken(
@@ -257,7 +257,7 @@ function requireClerkToken(
   if (!session || session.accountId !== accountId) {
     return Effect.fail(
       new ManagedRelaySessionError(
-        translatableMessage(msg("Sign in to T3 Connect before loading relay data.")),
+        translatableMessage(msg("Sign in to A4 Connect before loading relay data.")),
       ),
     );
   }
@@ -276,7 +276,7 @@ function describeManagedRelayFailure(cause: Cause.Cause<unknown>): {
   }
   return error instanceof Error
     ? { ...messageFromError(error), traceId }
-    : { ...translatableMessage(msg("Could not load T3 Connect data.")), traceId };
+    : { ...translatableMessage(msg("Could not load A4 Connect data.")), traceId };
 }
 
 export function readManagedRelaySnapshotState<A>(

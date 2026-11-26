@@ -34,7 +34,7 @@ const updateWriter = Effect.fn("TaskCache.manageWriter")(function* (
           `${import.meta.dirname}/../node_modules/alchemy/bin/cli.js`,
           "state",
           "read",
-          "T3TaskCache/prod/output",
+          "A4TaskCache/prod/output",
           "--backend",
           "cloudflare",
           "--no-input",
@@ -43,7 +43,7 @@ const updateWriter = Effect.fn("TaskCache.manageWriter")(function* (
       ),
     );
     const deployed = yield* decodeDeployment(output);
-    endpoint = new URL("/projects/t3code", deployed.url).href;
+    endpoint = new URL("/projects/a4code", deployed.url).href;
   }
   const file = yield* registry.update(name, revoke, endpoint, initialize);
   yield* Console.log(

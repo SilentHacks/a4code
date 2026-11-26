@@ -2,7 +2,7 @@
 // connection per WebSocket. Raw bytes, so pages keep their own origin, HMR sockets and TLS.
 import * as NodeHttpServerRequest from "@effect/platform-node/NodeHttpServerRequest";
 import * as NodeSocket from "@effect/platform-node/NodeSocket";
-import { allowsPreviewTunnel, AuthTerminalOperateScope } from "@t3tools/contracts";
+import { allowsPreviewTunnel, AuthTerminalOperateScope } from "@a4code/contracts";
 import type * as NodeNet from "node:net";
 import * as Context from "effect/Context";
 import * as Effect from "effect/Effect";
@@ -35,7 +35,7 @@ export class PreviewTunnelPortRefusedError extends Schema.TaggedError<PreviewTun
   { port: Schema.Number },
 ) {
   override get message(): string {
-    return `Port ${this.port} is this T3 Code server's own port.`;
+    return `Port ${this.port} is this A4 Code server's own port.`;
   }
 }
 
@@ -44,7 +44,7 @@ export class PreviewTunnelDisabledError extends Schema.TaggedError<PreviewTunnel
   {},
 ) {
   override get message(): string {
-    return "The preview tunnel is turned off on this T3 Code server.";
+    return "The preview tunnel is turned off on this A4 Code server.";
   }
 }
 
@@ -202,7 +202,7 @@ const handler = Effect.gen(function* () {
         Effect.succeed(
           HttpServerResponse.text(error.message, { status: 403, headers: PORT_REFUSED_HEADERS }),
         ),
-      // Not 502: Cloudflare, in front of T3 Connect, swaps an origin 502 for its own page.
+      // Not 502: Cloudflare, in front of A4 Connect, swaps an origin 502 for its own page.
       PreviewTunnelConnectError: (error) =>
         Effect.succeed(
           HttpServerResponse.text(error.message, { status: 403, headers: PORT_REFUSED_HEADERS }),

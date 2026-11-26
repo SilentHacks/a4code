@@ -2,7 +2,7 @@ import {
   normalizeProviderAccentColor,
   resolveProviderInstanceDisplayName,
   shouldShowInstanceBadge,
-} from "@t3tools/client-runtime/state/provider-instance-display";
+} from "@a4code/client-runtime/state/provider-instance-display";
 import { msg } from "gt-react-native";
 import { m } from "../i18n/messages";
 
@@ -12,18 +12,18 @@ import type {
   ProjectId,
   RuntimeMode,
   ServerConfig as T3ServerConfig,
-} from "@t3tools/contracts";
+} from "@a4code/contracts";
 import {
   isManagedDriverAllowed,
   isProviderDriverKind,
   resolveProjectProviderInstanceEnabled,
-} from "@t3tools/contracts";
+} from "@a4code/contracts";
 import {
   buildExplicitProviderOptionSelectionsFromDescriptors,
   getProviderOptionDescriptors,
-} from "@t3tools/shared/model";
-import { resolveModelShortName } from "@t3tools/client-runtime/provider-clients";
-import { resolveProvidersForCwd } from "@t3tools/client-runtime/providerSkills";
+} from "@a4code/shared/model";
+import { resolveModelShortName } from "@a4code/client-runtime/provider-clients";
+import { resolveProvidersForCwd } from "@a4code/client-runtime/providerSkills";
 
 /** The contracts `disallowedProviderMessage` English, as translatable sentences. */
 function disallowedProviderText(organization: string | undefined, label: string): string {
@@ -84,7 +84,7 @@ function providerDisplayLabel(provider: {
   if (provider.driver === "codex") return "Codex";
   if (provider.driver === "claudeAgent") return "Claude";
   if (provider.driver === "pi") return "Pi";
-  // oxlint-disable-next-line t3code/no-untranslated-copy -- Provider product name.
+  // oxlint-disable-next-line a4code/no-untranslated-copy -- Provider product name.
   if (provider.driver === "omp") return "Oh My Pi";
   return provider.instanceId;
 }

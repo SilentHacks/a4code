@@ -1,6 +1,6 @@
-import { formatFilePathForClipboard } from "@t3tools/client-runtime/media-actions";
-import { resolvePathLinkTarget } from "@t3tools/shared/fileLinks";
-import { resolveFilesystemReadAccess } from "@t3tools/client-runtime/state/filesystem";
+import { formatFilePathForClipboard } from "@a4code/client-runtime/media-actions";
+import { resolvePathLinkTarget } from "@a4code/shared/fileLinks";
+import { resolveFilesystemReadAccess } from "@a4code/client-runtime/state/filesystem";
 import { environmentSession } from "../../state/session";
 import {
   StackActions,
@@ -19,19 +19,19 @@ import {
   ProjectReadFileError,
   type ProjectReadFileResult,
   ThreadId,
-} from "@t3tools/contracts";
+} from "@a4code/contracts";
 import { AsyncResult } from "effect/reactivity";
 import * as Schema from "effect/Schema";
-import { videoMimeType } from "@t3tools/shared/video";
+import { videoMimeType } from "@a4code/shared/video";
 import {
   isWorkspaceBrowserPreviewPath,
   isWorkspaceImagePreviewPath,
   mediaMimeTypeFromExtension,
-} from "@t3tools/shared/filePreview";
-import { mediaFileReference } from "@t3tools/client-runtime/media-reference";
+} from "@a4code/shared/filePreview";
+import { mediaFileReference } from "@a4code/client-runtime/media-reference";
 
 import { ScreenContent } from "../../components/ui/ScreenContent";
-import { filePreviewDelimiter, parseDelimitedPreview } from "@t3tools/shared/delimitedPreview";
+import { filePreviewDelimiter, parseDelimitedPreview } from "@a4code/shared/delimitedPreview";
 import { DelimitedFilePreview } from "./DelimitedFilePreview";
 import { AudioFilePreview } from "./AudioFilePreview";
 import { EmptyState } from "../../components/ui/EmptyState";
