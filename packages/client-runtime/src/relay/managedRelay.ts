@@ -86,13 +86,7 @@ export class ManagedRelayDpopProofCreationError extends Schema.TaggedError<Manag
   }
 }
 
-export const ManagedRelayDpopSignerError = Schema.Union([
-  ManagedRelayDpopKeyLoadError,
-  ManagedRelayDpopProofCreationError,
-]);
-export type ManagedRelayDpopSignerError = typeof ManagedRelayDpopSignerError.Type;
-
-export const ManagedRelayRequestAction = Schema.Literals([
+const ManagedRelayRequestAction = Schema.Literals([
   "exchange relay DPoP access token",
   "list relay-managed environments",
   "list relay client devices",
@@ -109,9 +103,9 @@ export const ManagedRelayRequestAction = Schema.Literals([
   "start T3 Chat linking",
   "unlink T3 Chat account",
 ]);
-export type ManagedRelayRequestAction = typeof ManagedRelayRequestAction.Type;
+type ManagedRelayRequestAction = typeof ManagedRelayRequestAction.Type;
 
-export const ManagedRelayRequestActivity = Schema.Literals([
+const ManagedRelayRequestActivity = Schema.Literals([
   "Relay DPoP access token exchange",
   "Relay environment listing",
   "Relay client device listing",
@@ -128,7 +122,7 @@ export const ManagedRelayRequestActivity = Schema.Literals([
   "Relay T3 Chat link request",
   "Relay T3 Chat unlinking",
 ]);
-export type ManagedRelayRequestActivity = typeof ManagedRelayRequestActivity.Type;
+type ManagedRelayRequestActivity = typeof ManagedRelayRequestActivity.Type;
 
 const REQUEST_TIMED_OUT_TEXT: Record<ManagedRelayRequestActivity, string> = {
   "Relay DPoP access token exchange": msg("Relay DPoP access token exchange timed out."),
@@ -165,7 +159,7 @@ export class ManagedRelayRequestTimeoutError extends Schema.TaggedError<ManagedR
   }
 }
 
-export class ManagedRelayUrlInvalidError extends Schema.TaggedError<ManagedRelayUrlInvalidError>()(
+class ManagedRelayUrlInvalidError extends Schema.TaggedError<ManagedRelayUrlInvalidError>()(
   "ManagedRelayUrlInvalidError",
   {
     relayUrl: Schema.String,
@@ -269,7 +263,7 @@ export class ManagedRelayRequestFailedError extends Schema.TaggedError<ManagedRe
   }
 }
 
-export class ManagedRelayAccessTokenScopesUnexpectedError extends Schema.TaggedError<ManagedRelayAccessTokenScopesUnexpectedError>()(
+class ManagedRelayAccessTokenScopesUnexpectedError extends Schema.TaggedError<ManagedRelayAccessTokenScopesUnexpectedError>()(
   "ManagedRelayAccessTokenScopesUnexpectedError",
   {
     requestedScopes: Schema.Array(RelayDpopAccessTokenScope),
@@ -285,7 +279,7 @@ export class ManagedRelayAccessTokenScopesUnexpectedError extends Schema.TaggedE
   }
 }
 
-export class ManagedRelayTokenProofCreationError extends Schema.TaggedError<ManagedRelayTokenProofCreationError>()(
+class ManagedRelayTokenProofCreationError extends Schema.TaggedError<ManagedRelayTokenProofCreationError>()(
   "ManagedRelayTokenProofCreationError",
   {
     method: Schema.String,
@@ -302,7 +296,7 @@ export class ManagedRelayTokenProofCreationError extends Schema.TaggedError<Mana
   }
 }
 
-export class ManagedRelayRequestProofCreationError extends Schema.TaggedError<ManagedRelayRequestProofCreationError>()(
+class ManagedRelayRequestProofCreationError extends Schema.TaggedError<ManagedRelayRequestProofCreationError>()(
   "ManagedRelayRequestProofCreationError",
   {
     method: Schema.String,

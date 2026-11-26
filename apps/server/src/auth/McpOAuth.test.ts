@@ -11,6 +11,7 @@ import {
 } from "@a4code/contracts";
 import { expect, it } from "@effect/vitest";
 import * as Clock from "effect/Clock";
+import * as ConfigProvider from "effect/ConfigProvider";
 import * as Context from "effect/Context";
 import * as SecureRandom from "effect/crypto/SecureRandom";
 import * as Effect from "effect/Effect";
@@ -59,6 +60,7 @@ const notLinked: EnvironmentCloudLinkStateResult = {
 const makeLayerRoutes = (
   capture: (auth: EnvironmentAuth.EnvironmentAuth["Service"]) => void,
   linkState: EnvironmentCloudLinkStateResult,
+  hostedAppUrl: string,
 ) =>
   Layer.mergeAll(
     Layer.effectDiscard(
@@ -72,6 +74,11 @@ const makeLayerRoutes = (
           Layer.provide(ServerSettings.layerTest({ linkedEnvironmentsEnabled: true })),
           Layer.provide(
             Layer.mock(CloudLink.CloudLink)({ linkState: () => Effect.succeed(linkState) }),
+          ),
+          Layer.provide(
+            ConfigProvider.layer(
+              ConfigProvider.fromEnv({ env: { A4CODE_HOSTED_APP_URL: hostedAppUrl } }),
+            ),
           ),
         ),
       ),
@@ -112,14 +119,19 @@ type Handler = (request: Request) => Effect.Effect<Response>;
 const withRoutes = <A, E>(
   use: (handler: Handler, auth: EnvironmentAuth.EnvironmentAuth["Service"]) => Effect.Effect<A, E>,
   linkState = notLinked,
+  hostedAppUrl = "",
 ) =>
   Effect.gen(function* () {
     const random = yield* SecureRandom.SecureRandom;
     const context = Context.make(SecureRandom.SecureRandom, random);
     let routerAuth: EnvironmentAuth.EnvironmentAuth["Service"] | undefined;
-    const layerRoutes = makeLayerRoutes((auth) => {
-      routerAuth = auth;
-    }, linkState);
+    const layerRoutes = makeLayerRoutes(
+      (auth) => {
+        routerAuth = auth;
+      },
+      linkState,
+      hostedAppUrl,
+    );
     return yield* Effect.acquireUseRelease(
       Effect.sync(() => HttpRouter.toWebHandler(layerRoutes, { disableLogger: true })),
       (web) =>
@@ -791,7 +803,11 @@ it.effect(
   "sends an app sign-in on the linked tunnel to the hosted app, and a link to its own page",
   () =>
     Effect.gen(function* () {
-      const handoff = (tunnelHostname: string, peerLink = false) =>
+      const handoff = (
+        tunnelHostname: string,
+        peerLink = false,
+        hostedAppUrl = "https://app.example.com",
+      ) =>
         withRoutes(
           (handler) =>
             Effect.gen(function* () {
@@ -814,11 +830,12 @@ it.effect(
               return { location: response.headers.get("location")!, query: query.toString() };
             }),
           { ...notLinked, linked: true, cloudUserId: "user_1", tunnelHostname },
+          hostedAppUrl,
         );
 
       const onTunnel = yield* handoff("box.example.ts.net");
       const hosted = new URL(onTunnel.location);
-      expect(`${hosted.origin}${hosted.pathname}`).toBe("https://app.t3.codes/approve-agent");
+      expect(`${hosted.origin}${hosted.pathname}`).toBe("https://app.example.com/approve-agent");
       expect(hosted.searchParams.get("environment")).toEqual(expect.any(String));
       hosted.searchParams.delete("environment");
       expect(hosted.searchParams.toString()).toBe(onTunnel.query);
@@ -827,6 +844,8 @@ it.effect(
       expect(elsewhere.location).toBe(`/connect-agent?${elsewhere.query}`);
       const peerLink = yield* handoff("box.example.ts.net", true);
       expect(peerLink.location).toBe(`/connect-agent?${peerLink.query}`);
+      const standalone = yield* handoff("box.example.ts.net", false, "");
+      expect(standalone.location).toBe(`/connect-agent?${standalone.query}`);
     }),
 );
 

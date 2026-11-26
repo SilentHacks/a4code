@@ -128,7 +128,7 @@ export const layer = Layer.effect(
                 Ref.set(
                   preflightErrorRef,
                   Option.some(
-                    "Another A4 Code server is using this distro's T3 home, or an older background service is set up for it. Stop that server or pair with it, or try `a4code update` in the distro. If the older launcher cannot update, run `a4code service uninstall` and optionally reinstall with `a4code service install` from a current CLI in the distro. Use `npx a4code@latest` if `a4code` is missing or outdated, and pass `--base-dir` with the service's T3 home to each command.",
+                    "Another A4 Code server is using this distro's A4 Code data directory, or an older background service is set up for it. Stop that server or pair with it, or try `a4code update` in the distro. If the older launcher cannot update, run `a4code service uninstall` and optionally reinstall with `a4code service install` from a current CLI in the distro. Use `npx a4code@latest` if `a4code` is missing or outdated, and pass `--base-dir` with the service's A4 Code data directory to each command.",
                   ),
                 ),
               ),

@@ -2,6 +2,8 @@
 
 Deployment and client configuration for A4 Connect. See [A4 Connect](../internals/06_a4-connect.md) for trust boundaries and [infra/relay/README.md](../../infra/relay/README.md#deployment) for relay provisioning.
 
+Set the repository Actions variable `A4CODE_DEPLOY_RELAY=true` only after configuring the production account and credentials. Until then, pushes to `main` do not deploy a relay.
+
 ## Public application configuration
 
 A4 Connect is disabled in a fresh clone. Copy `.env.example` to `.env` for production, or set these public identifiers in `.env` / `.env.local` (process env > `.env.local` > `.env`):

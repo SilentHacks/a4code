@@ -29,7 +29,7 @@ const PEER_PAIRING_CODE_LABEL = "A4 Code link";
 const MCP_APPROVAL_CODE_LABEL = "App sign-in";
 
 /** Minting failed; the user can still paste a code from the other environment. */
-export class PeerPairingCodeError extends Schema.TaggedError<PeerPairingCodeError>()(
+class PeerPairingCodeError extends Schema.TaggedError<PeerPairingCodeError>()(
   "PeerPairingCodeError",
   {
     reason: Schema.Literals(["not_allowed", "unavailable"]),

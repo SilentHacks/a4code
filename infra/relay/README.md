@@ -9,7 +9,7 @@ optional mobile notifications and Live Activities.
 
 The relay is intentionally not in the hot path for normal A4 Code traffic. After a client connects,
 regular API and WebSocket traffic goes directly between that client and the selected environment.
-See the [A4 Connect architecture note](../../docs/internals/06_t3-connect.md) for the larger system
+See the [A4 Connect architecture note](../../docs/internals/06_a4-connect.md) for the larger system
 design.
 
 ## Responsibilities
@@ -172,4 +172,4 @@ See:
 
 - [A4 Connect setup](../../docs/operations/02_connect-setup.md) for Clerk keys, JWT templates, and sign-up restrictions.
 - [Relay Observability](../../docs/operations/05_relay-observability.md) for deployment tracing and diagnostics.
-- [A4 Connect architecture](../../docs/internals/06_t3-connect.md) for environment linking and trust boundaries.
+- [A4 Connect architecture](../../docs/internals/06_a4-connect.md) for environment linking and trust boundaries.

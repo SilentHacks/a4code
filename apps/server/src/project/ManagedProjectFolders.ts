@@ -38,7 +38,7 @@ export class ScratchUnavailableError extends Schema.TaggedError<ScratchUnavailab
     if (this.repositoryRoot === undefined) {
       return "Threads without a project are not available on this environment.";
     }
-    return `Threads without a project are off because the T3 home ${this.baseDir} is inside the Git repository ${this.repositoryRoot}. If that repository was created by mistake, move ${this.repositoryRoot}/.git out of the way; otherwise point A4CODE_HOME (or --base-dir) at a folder outside it. Then restart A4 Code.`;
+    return `Threads without a project are off because the A4 Code data directory ${this.baseDir} is inside the Git repository ${this.repositoryRoot}. If that repository was created by mistake, move ${this.repositoryRoot}/.git out of the way; otherwise point A4CODE_HOME (or --base-dir) at a folder outside it. Then restart A4 Code.`;
   }
 }
 
@@ -130,7 +130,7 @@ export class ManagedProjectFolders extends Context.Service<
       NamedProjectError
     >;
   }
->()("t3/project/ManagedProjectFolders") {}
+>()("a4code/project/ManagedProjectFolders") {}
 
 const folderWords = (text: string) =>
   foldLatinDiacritics(text)

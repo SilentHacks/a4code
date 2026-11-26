@@ -75,7 +75,7 @@ export class WorkspaceFolders extends Context.Service<
       input: WorkspaceScanFoldersInput,
     ) => Effect.Effect<WorkspaceScanFoldersResult, WorkspaceFoldersError>;
   }
->()("t3/workspace/WorkspaceFolders") {}
+>()("a4code/workspace/WorkspaceFolders") {}
 
 const DETECTION_CONCURRENCY = 8;
 // What `ProjectTrackedFolder.name` allows.

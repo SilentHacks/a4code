@@ -495,7 +495,7 @@ const layerTest = (
             platform,
             displayName: "A4 Code (Dev)",
             stateDir: "/state",
-            linuxDesktopEntryName: "com.t3tools.A4Code.desktop",
+            linuxDesktopEntryName: "io.github.silenthacks.a4code.desktop",
             appRoot: "/repo",
             linuxApplicationsDir: "/test-data/applications",
           } as DesktopEnvironment.DesktopEnvironment["Service"]),

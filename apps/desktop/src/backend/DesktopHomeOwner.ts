@@ -96,7 +96,7 @@ export const homeOwnedMessage = (owner: Option.Option<HomeOwner>): string =>
     onNone: () =>
       m(
         msg(
-          "Another A4 Code server, such as the background service, is using this data directory, or an older background service is set up for it. Stop that server or try `a4code update`. If the older launcher cannot update, run `a4code service uninstall` and optionally reinstall with `a4code service install` from a current CLI. Use `npx a4code@latest` if `a4code` is missing or outdated, and pass `--base-dir` with the service's T3 home to each command. Then reopen A4 Code. You can also set a separate A4CODE_HOME and pair with the running server.",
+          "Another A4 Code server, such as the background service, is using this data directory, or an older background service is set up for it. Stop that server or try `a4code update`. If the older launcher cannot update, run `a4code service uninstall` and optionally reinstall with `a4code service install` from a current CLI. Use `npx a4code@latest` if `a4code` is missing or outdated, and pass `--base-dir` with the service's A4 Code data directory to each command. Then reopen A4 Code. You can also set a separate A4CODE_HOME and pair with the running server.",
         ),
       ),
     onSome: (owner) => {
@@ -109,13 +109,13 @@ export const homeOwnedMessage = (owner: Option.Option<HomeOwner>): string =>
         return owner.serverVersion
           ? m(
               msg(
-                "The A4 Code background service is using this T3 home (PID {pid}, port {port}, version {version}). Stop it with `a4code service uninstall`, passing `--base-dir` with this T3 home, and reopen A4 Code. You can also set a separate A4CODE_HOME and pair with the running server.",
+                "The A4 Code background service is using this A4 Code data directory (PID {pid}, port {port}, version {version}). Stop it with `a4code service uninstall`, passing `--base-dir` with this A4 Code data directory, and reopen A4 Code. You can also set a separate A4CODE_HOME and pair with the running server.",
               ),
               variables,
             )
           : m(
               msg(
-                "The A4 Code background service is using this T3 home (PID {pid}, port {port}). Stop it with `a4code service uninstall`, passing `--base-dir` with this T3 home, and reopen A4 Code. You can also set a separate A4CODE_HOME and pair with the running server.",
+                "The A4 Code background service is using this A4 Code data directory (PID {pid}, port {port}). Stop it with `a4code service uninstall`, passing `--base-dir` with this A4 Code data directory, and reopen A4 Code. You can also set a separate A4CODE_HOME and pair with the running server.",
               ),
               variables,
             );
@@ -123,13 +123,13 @@ export const homeOwnedMessage = (owner: Option.Option<HomeOwner>): string =>
       return owner.serverVersion
         ? m(
             msg(
-              "Another A4 Code server (for example `a4code serve`, or one started over SSH) is using this T3 home (PID {pid}, port {port}, version {version}). If a A4 Code app on another machine started it over SSH, that app restarts it: remove or disconnect that SSH environment there, or quit that app. Then stop the server, and reopen A4 Code. You can also set a separate A4CODE_HOME and pair with the running server.",
+              "Another A4 Code server (for example `a4code serve`, or one started over SSH) is using this A4 Code data directory (PID {pid}, port {port}, version {version}). If an A4 Code app on another machine started it over SSH, that app restarts it: remove or disconnect that SSH environment there, or quit that app. Then stop the server, and reopen A4 Code. You can also set a separate A4CODE_HOME and pair with the running server.",
             ),
             variables,
           )
         : m(
             msg(
-              "Another A4 Code server (for example `a4code serve`, or one started over SSH) is using this T3 home (PID {pid}, port {port}). If a A4 Code app on another machine started it over SSH, that app restarts it: remove or disconnect that SSH environment there, or quit that app. Then stop the server, and reopen A4 Code. You can also set a separate A4CODE_HOME and pair with the running server.",
+              "Another A4 Code server (for example `a4code serve`, or one started over SSH) is using this A4 Code data directory (PID {pid}, port {port}). If an A4 Code app on another machine started it over SSH, that app restarts it: remove or disconnect that SSH environment there, or quit that app. Then stop the server, and reopen A4 Code. You can also set a separate A4CODE_HOME and pair with the running server.",
             ),
             variables,
           );

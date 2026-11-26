@@ -346,7 +346,7 @@ export const exportBrandIcons = Effect.fn("exportBrandIcons")(function* (checkOn
   for (const [file, source] of [
     ["icon.webp", BRAND_ASSET_PATHS.productionIosIconPng],
     ["icon-nightly.webp", BRAND_ASSET_PATHS.nightlyIosIconPng],
-  ]) {
+  ] as const) {
     const target = `${MARKETING_ASSETS}/${file}`;
     const input = generated.get(source);
     if (input === undefined) {

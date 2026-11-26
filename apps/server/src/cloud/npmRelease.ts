@@ -35,7 +35,7 @@ export class NpmRelease extends Context.Service<
       input: ServerNpmReleaseInput,
     ) => Effect.Effect<ServerNpmRelease | null, ServerNpmReleaseError>;
   }
->()("a4/cloud/npmRelease") {}
+>()("a4code/cloud/npmRelease") {}
 
 function toRelease(spec: string, json: string) {
   const decoded = Option.getOrUndefined(decodeManifest(json));

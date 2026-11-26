@@ -174,7 +174,7 @@ export class WindowsRegistry extends Context.Service<
       subkey: string,
     ) => Effect.Effect<RegistryKey | undefined, WindowsRegistryError>;
   }
->()("@t3tools/shared/managedPolicyFile/WindowsRegistry") {}
+>()("@a4code/shared/managedPolicyFile/WindowsRegistry") {}
 
 // (HKEY)(LONG)0x80000002, sign-extended to 64 bits.
 const HKEY_LOCAL_MACHINE = -0x7ffffffen;
@@ -429,7 +429,7 @@ function windowsPolicyDocument(
     }
     if (Object.hasOwn(WINDOWS_POLICY_GROUPS, value.name)) continue;
     if (!Object.hasOwn(WINDOWS_POLICY_VALUES, value.name)) {
-      return { error: `${value.name} is not a A4 Code policy value` };
+      return { error: `${value.name} is not an A4 Code policy value` };
     }
     const field = WINDOWS_POLICY_VALUES[value.name as keyof typeof WINDOWS_POLICY_VALUES];
     if (field.type === "boolean") {
@@ -530,7 +530,7 @@ const readPlatformPolicy = Effect.fnUntraced(function* (
               path,
               reason:
                 cause.code === undefined
-                  ? "this A4 Code install cannot load its registry reader; reinstall T3 Code"
+                  ? "this A4 Code install cannot load its registry reader; reinstall A4 Code"
                   : `the registry cannot be read (${cause.message})`,
               cause,
             }),
@@ -563,11 +563,11 @@ const readPlatformPolicy = Effect.fnUntraced(function* (
       const list = Object.keys(WINDOWS_POLICY_LISTS).find(
         (name) => name.toLowerCase() === subkey.toLowerCase(),
       );
-      if (list === undefined) return yield* refuse(`${subkey} is not a A4 Code policy key`);
+      if (list === undefined) return yield* refuse(`${subkey} is not an A4 Code policy key`);
       const checkboxes = yield* readKey(`${WINDOWS_POLICY_SUBKEY}\\${subkey}`);
       if (checkboxes === undefined) continue;
       if (checkboxes.subkeys.length > 0) {
-        return yield* refuse(`${subkey}\\${checkboxes.subkeys[0]} is not a A4 Code policy key`);
+        return yield* refuse(`${subkey}\\${checkboxes.subkeys[0]} is not an A4 Code policy key`);
       }
       values.push(...checkboxes.values.map((value) => ({ ...value, key: list })));
     }

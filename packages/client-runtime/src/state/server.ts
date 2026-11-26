@@ -118,7 +118,7 @@ export const serverUpdateStateAtom = Atom.family((environmentId: EnvironmentId) 
   ),
 );
 
-export class ServerUpdateResumeTimeoutError extends Schema.TaggedError<ServerUpdateResumeTimeoutError>()(
+class ServerUpdateResumeTimeoutError extends Schema.TaggedError<ServerUpdateResumeTimeoutError>()(
   "ServerUpdateResumeTimeoutError",
   {
     environmentId: Schema.String,

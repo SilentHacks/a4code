@@ -14,11 +14,11 @@ export * as ProfileStore from "./profileStore.ts";
 export * from "./routes.ts";
 export { type RouteCheck } from "./driver.ts";
 export * as EnvironmentRegistry from "./registry.ts";
-// Flat so consumers' inferred types can name them.
+/** @public Gives consumers a name for inferred connection errors. */
 export { EnvironmentNotRegisteredError, PlatformEnvironmentRemovalError } from "./registry.ts";
 export * as EnvironmentSupervisor from "./supervisor.ts";
 export * as Wakeups from "./wakeups.ts";
 
 export { orchestrationProtocolCompatibilityError } from "./compatibility.ts";
-// Flat so consumers' inferred command types can name it.
+/** @public Gives consumers a name for inferred host update errors. */
 export { OutdatedHostUpdateError } from "./outdatedHostUpdate.ts";

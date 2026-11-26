@@ -42,7 +42,7 @@ export class PromptStash extends Context.Service<
       input: PromptStashTakeInput,
     ) => Effect.Effect<{ readonly entry: PromptStashEntry | null }, StoreFailure>;
   }
->()("t3/promptStash/PromptStash") {}
+>()("a4code/promptStash/PromptStash") {}
 
 const make = Effect.gen(function* () {
   const sql = yield* SqlClient.SqlClient;

@@ -932,7 +932,7 @@ function DiagnosticsSettingsBody() {
           type: "info",
           title: gt("Process already exited"),
           description: gt(
-            "The process is not a child of the T3 Server. It might already have exited.",
+            "The process is not a child of the A4 Code server. It might already have exited.",
           ),
         });
         return;

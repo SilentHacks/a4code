@@ -808,7 +808,7 @@ export class BootService extends Context.Service<
     readonly uninstall: Effect.Effect<boolean, BootServiceError>;
     readonly status: Effect.Effect<BootServiceStatus, BootServiceError>;
   }
->()("a4/cloud/bootService") {}
+>()("a4code/cloud/bootService") {}
 
 export interface BootServiceHost {
   readonly execPath: string;

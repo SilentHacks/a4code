@@ -12,7 +12,7 @@ in their area.
 
 ## The model in one paragraph
 
-An environment is a A4 Code server running as an OS user. It is not a sandbox: it
+An environment is an A4 Code server running as an OS user. It is not a sandbox: it
 intentionally runs agents and terminals with that user's privileges. Clients
 gain authority by pairing, which issues a scoped session. A full-scope session
 equals a shell as the server's OS user, because `terminal:operate` opens a PTY
@@ -29,7 +29,7 @@ revocation and ceilings hold, not what a full-scope session can do once issued.
 | Narrow client                                                                                        | Pairing link with explicit scopes                                        | Only the RPCs and routes its scopes allow. Can never widen its own grant.                                                                                                                  |
 | MCP client (outside agent, subject `mcp-client`)                                                     | OAuth on `/mcp`                                                          | Only `/mcp`, within a read-only grant or a runtime-mode ceiling. Every other route rejects it.                                                                                             |
 | Linked environment (peer link)                                                                       | OAuth client `a4code-peer-link`                                          | Work it starts carries an immutable `linkOrigin` and never exceeds the access it was paired with.                                                                                          |
-| Agent run by T3                                                                                      | Thread's runtime mode and thread credential                              | Within its runtime mode, managed policy, and the MCP access declared per tool.                                                                                                             |
+| Agent run by A4 Code                                                                                 | Thread's runtime mode and thread credential                              | Within its runtime mode, managed policy, and the MCP access declared per tool.                                                                                                             |
 | Guest link                                                                                           | HMAC token for one share                                                 | Read one thread and propose messages. Never a session; no RPC, WebSocket, or MCP path accepts it.                                                                                          |
 | Signed asset URL                                                                                     | Minted with `filesystem:read`                                            | One file, by device and inode identity, until it expires.                                                                                                                                  |
 | Webhook sender                                                                                       | A task's webhook URL, plus its signing secret when the task requires one | Start that one task's run with content of its choosing. Nothing in the request is trusted beyond the signature check.                                                                      |

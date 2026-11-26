@@ -100,7 +100,7 @@ export class AnalyticsService extends Context.Service<
       observedBy: "server" | "client",
     ) => Effect.Effect<void>;
   }
->()("a4/telemetry/AnalyticsService") {}
+>()("a4code/telemetry/AnalyticsService") {}
 
 function serverOsFromNodePlatform(platform: string): ClientOs {
   switch (platform) {
@@ -124,9 +124,9 @@ export const make = Effect.gen(function* () {
   const ingestHost = telemetryConfig.ingestHost.trim().replace(/\/+$/u, "");
   if (!ingestKey || !ingestHost) {
     return AnalyticsService.of({
-      record: () => Effect.succeed(false),
+      record: Effect.fn("AnalyticsService.record")(() => Effect.succeed(false)),
       flush: Effect.void,
-      recordOwners: () => Effect.void,
+      recordOwners: Effect.fn("AnalyticsService.recordOwners")(() => Effect.void),
     });
   }
   const hostEnvironment = yield* HostProcess.Environment;

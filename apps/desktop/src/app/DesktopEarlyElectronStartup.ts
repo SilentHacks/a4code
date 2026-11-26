@@ -31,7 +31,9 @@ export interface EarlyLinuxElectronOptions {
 }
 
 export const resolveLinuxDesktopEntryName = (isDevelopment: boolean): string =>
-  isDevelopment ? "com.t3tools.A4Code.Development.desktop" : "com.t3tools.A4Code.desktop";
+  isDevelopment
+    ? "io.github.silenthacks.a4code.dev.desktop"
+    : "io.github.silenthacks.a4code.desktop";
 
 const trimNonEmpty = (value: string | undefined): string | null => {
   const trimmed = value?.trim();

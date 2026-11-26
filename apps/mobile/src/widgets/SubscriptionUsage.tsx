@@ -57,26 +57,26 @@ function SubscriptionUsage(
   const secondary = palette?.secondary ?? "secondary";
   // English until the app publishes its first snapshot in the UI language.
   const text = props.text ?? {
-    refresh: "Open T3 to refresh",
+    refresh: "Open A4 Code to refresh",
     noSessionLimit: "No session limit reported",
     noWeeklyLimit: "No weekly limit reported",
     subscriptionRemaining: "Subscription remaining",
     percentLeft: "{remaining}% left",
     windowPercentLeft: "{window} · {remaining}% left",
     notApplicable: "N/A",
-    openApp: "Open T3",
+    openApp: "Open A4 Code",
     noLimits: "No subscription limits available.",
     asOf: "As of {time}",
-    tapToConnect: "Tap to connect in T3",
+    tapToConnect: "Tap to connect in A4 Code",
     providerAccessibility: "{provider}. {detail}.",
     windowAccessibility: "{provider}, {window}, {remaining} percent remaining. {reset}. {detail}.",
     moreInApp: {} as Record<string, string>,
   };
   const providers = props.providers ?? [
     // oxlint-disable-next-line a4code/no-untranslated-copy -- widget fallback until the app publishes translated text
-    { name: "Codex", detail: "Open T3 to connect", windows: [], expiresAt: 0 },
+    { name: "Codex", detail: "Open A4 Code to connect", windows: [], expiresAt: 0 },
     // oxlint-disable-next-line a4code/no-untranslated-copy -- widget fallback until the app publishes translated text
-    { name: "Claude", detail: "Open T3 to connect", windows: [], expiresAt: 0 },
+    { name: "Claude", detail: "Open A4 Code to connect", windows: [], expiresAt: 0 },
   ];
   const columns = providers.map((provider) => {
     const stale = provider.windows.length > 0 && now >= provider.expiresAt;
@@ -263,7 +263,7 @@ function SubscriptionUsage(
             modifiers={[font({ textStyle: "caption2" }), foregroundStyle(secondary), lineLimit(1)]}
           >
             {/* oxlint-disable-next-line a4code/no-untranslated-copy -- widget fallback until the app publishes translated text */}
-            {text.moreInApp[String(hiddenCount)] ?? `${hiddenCount} more in T3`}
+            {text.moreInApp[String(hiddenCount)] ?? `${hiddenCount} more in A4 Code`}
           </Text>
         ) : null}
       </VStack>

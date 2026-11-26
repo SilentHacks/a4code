@@ -583,7 +583,7 @@ export interface OrchestratorV2Shape {
 }
 
 export class OrchestratorV2 extends Context.Service<OrchestratorV2, OrchestratorV2Shape>()(
-  "t3/orchestration-v2/Orchestrator/OrchestratorV2",
+  "a4code/orchestration-v2/Orchestrator/OrchestratorV2",
 ) {}
 
 /** Run ordinals can skip values: a queued run moves past newer runs when it starts. */
@@ -11380,7 +11380,7 @@ const makeOrchestrator = Effect.fn("orchestrationV2.Orchestrator.layer")(functio
             : command.feedbackStatus === "sent"
               ? "completed"
               : "cancelled",
-          title: "Feedback for the T3 team",
+          title: "Feedback for the A4 Code team",
           startedAt: existing?.startedAt ?? now,
           completedAt: pending ? null : now,
           updatedAt: now,

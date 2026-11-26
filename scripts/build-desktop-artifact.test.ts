@@ -554,7 +554,7 @@ it.layer(NodeServices.layer)("build-desktop-artifact", (it) => {
       assert.deepStrictEqual(release.publish, [
         {
           provider: "github",
-          owner: "pingdotgg",
+          owner: "SilentHacks",
           repo: "a4code",
           releaseType: "release",
         },
@@ -580,7 +580,11 @@ it.layer(NodeServices.layer)("build-desktop-artifact", (it) => {
         undefined,
       );
 
-      assert.nestedPropertyVal(linux, "linux.desktop.entry.StartupWMClass", "com.t3tools.A4Code");
+      assert.nestedPropertyVal(
+        linux,
+        "linux.desktop.entry.StartupWMClass",
+        "io.github.silenthacks.a4code",
+      );
     }),
   );
 
@@ -1967,7 +1971,7 @@ it.layer(NodeServices.layer)("build-desktop-artifact", (it) => {
     );
     assert.match(
       entitlements,
-      /<key>keychain-access-groups<\/key>\s*<array>\s*<string>ABC1234567\.com\.t3tools\.a4code\.webauthn<\/string>\s*<\/array>/u,
+      /<key>keychain-access-groups<\/key>\s*<array>\s*<string>ABC1234567\.io\.github\.silenthacks\.a4code\.webauthn<\/string>\s*<\/array>/u,
     );
     assert.match(
       entitlements,
@@ -2141,7 +2145,7 @@ it.layer(NodeServices.layer)("build-desktop-artifact", (it) => {
   it("parses Windows bsdtar member listings with CRLF line endings", () => {
     assert.deepStrictEqual(
       parseWslRuntimeArchiveMembers(
-        "./a4code-1.2.3-linux-x64/t3\r\nt3-1.2.3-linux-x64/client/\r\n",
+        "./a4code-1.2.3-linux-x64/a4code\r\na4code-1.2.3-linux-x64/client/\r\n",
       ),
       ["a4code-1.2.3-linux-x64/a4code", "a4code-1.2.3-linux-x64/client"],
     );

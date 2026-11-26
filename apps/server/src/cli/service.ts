@@ -191,7 +191,7 @@ function formatServiceStatus(
   if (status.otherBaseDir !== undefined) {
     return [
       "A4 Code service",
-      "  Status: installed for another T3 home",
+      "  Status: installed for another A4 Code data directory",
       `  Base dir: ${status.otherBaseDir}`,
       `  Next: Pass \`${BootService.formatBootServiceBaseDirOption(status.otherBaseDir)}\` to manage it.`,
     ].join("\n");

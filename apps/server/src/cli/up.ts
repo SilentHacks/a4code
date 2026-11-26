@@ -148,7 +148,7 @@ const formatSetup = (setup: Setup, hints: Hints) => {
   // This home's access settings reach no service, so only the service is shown.
   if (service.otherBaseDir !== undefined) {
     return [
-      `  ${"Service".padEnd(15)}installed for another T3 home · ${service.otherBaseDir}`,
+      `  ${"Service".padEnd(15)}installed for another A4 Code data directory · ${service.otherBaseDir}`,
       "",
       `Pass \`${BootService.formatBootServiceBaseDirOption(service.otherBaseDir)}\` to manage it.`,
     ].join("\n");
@@ -168,7 +168,7 @@ const formatSetup = (setup: Setup, hints: Hints) => {
           [
             "A4 Connect",
             setup.connect
-              ? "on · your T3 account"
+              ? "on · your A4 Code account"
               : setup.connectRevoked
                 ? `off · link revoked. Run \`${hints.connect}\`.`
                 : "off",
@@ -459,7 +459,7 @@ export const upCommand = Command.make("up", {
   ...projectLocationFlags,
   connect: Flag.Boolean("connect").pipe(
     Flag.withDescription(
-      "Allow access through A4 Connect with your T3 account. Turn off with --no-connect.",
+      "Allow access through A4 Connect with your A4 Code account. Turn off with --no-connect.",
     ),
     Flag.optional,
   ),

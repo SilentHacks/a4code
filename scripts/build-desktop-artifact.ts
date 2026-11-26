@@ -2974,7 +2974,7 @@ export const createBuildConfig = Effect.fn("createBuildConfig")(function* (
       desktop: {
         entry: {
           // Match Electron's WM_CLASS from setDesktopName so docks use this launcher.
-          StartupWMClass: "com.t3tools.A4Code",
+          StartupWMClass: "io.github.silenthacks.a4code",
         },
       },
     };

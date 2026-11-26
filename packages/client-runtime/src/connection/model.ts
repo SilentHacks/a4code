@@ -58,7 +58,7 @@ export type PersistedConnectionTarget = typeof PersistedConnectionTarget.Type;
 
 export type NetworkStatus = "unknown" | "offline" | "online";
 
-export const ConnectionTransientReason = Schema.Literals([
+const ConnectionTransientReason = Schema.Literals([
   "network",
   "timeout",
   "transport",
@@ -68,15 +68,13 @@ export const ConnectionTransientReason = Schema.Literals([
   "session-pending",
   "approval-pending",
 ]);
-export type ConnectionTransientReason = typeof ConnectionTransientReason.Type;
 
-export const ConnectionBlockedReason = Schema.Literals([
+const ConnectionBlockedReason = Schema.Literals([
   "authentication",
   "configuration",
   "permission",
   "unsupported",
 ]);
-export type ConnectionBlockedReason = typeof ConnectionBlockedReason.Type;
 
 /** A part of the path to an environment: this device, A4 Connect, the host's tunnel, or A4 Code on the host. */
 export const ConnectionHop = Schema.Literals(["device", "relay", "tunnel", "server"]);

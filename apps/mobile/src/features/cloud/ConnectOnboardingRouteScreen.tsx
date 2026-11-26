@@ -98,7 +98,9 @@ function ConfiguredConnectOnboardingRouteScreen() {
         ) : (
           <View collapsable={false} className="rounded-[24px] bg-grouped-card p-5">
             <Text className="text-sm leading-normal text-foreground-muted">
-              {gt("Sign in to your T3 account to set up {product}.", { product: "A4 Connect" })}
+              {gt("Sign in to your A4 Code account to set up {product}.", {
+                product: "A4 Connect",
+              })}
             </Text>
           </View>
         )}

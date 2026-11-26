@@ -24,11 +24,11 @@ The architecture of A4 Code's websocket layer (`a4code`) enables a lot of awesom
 
 A4 Code has 3 key app surfaces: **web**, **desktop**, and **mobile**.
 
-**Web** is kind of two surfaces, as we have the public facing "app.t3.codes" as well as locally hosting the web app through the `a4code` command. Both need to be supported by all new features where reasonable.
+**Web** runs from the `a4code` server or from a separately configured hosted client. Both deployment modes should work where reasonable.
 
-**Desktop** is the main surface most users install first. It's a full Electron app that bundles the server runner as well. The desktop app can also be used as the host server, allowing remote connections from app.t3.codes or the mobile app.
+**Desktop** wraps the web client in Electron and bundles the server. It can also host remote connections from A4 Code web and mobile clients.
 
-**Mobile** is a React Native app for both iOS and Android, available on the App Store and Google Play. The mobile app allows for connecting to any A4 Code server to control work remotely.
+**Mobile** is a React Native app for iOS and Android. Build the fork from source; upstream store apps are not A4 Code clients.
 
 ## A note from Theo
 

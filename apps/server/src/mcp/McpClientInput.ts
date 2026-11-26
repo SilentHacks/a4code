@@ -21,7 +21,7 @@ export class McpClientInput extends Context.Service<
     /** Where a thread's adapter finds what A4 Code asks through the thread's own client. */
     readonly sessions?: McpProviderSessions.McpProviderSessions["Service"] | undefined;
   }
->()("t3/mcp/McpClientInput") {}
+>()("a4code/mcp/McpClientInput") {}
 
 /**
  * "asked": the request went out with this call's answer, so the handler ends now and runs again

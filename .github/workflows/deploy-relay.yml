@@ -25,8 +25,11 @@ jobs:
   deploy_relay:
     name: Deploy production relay
     # A manual run from another branch would deploy that branch to production.
-    if: github.repository == 'SilentHacks/a4code' && github.ref == 'refs/heads/main'
-    runs-on: blacksmith-8vcpu-ubuntu-2404
+    if: >-
+      github.repository == 'SilentHacks/a4code' &&
+      github.ref == 'refs/heads/main' &&
+      vars.A4CODE_DEPLOY_RELAY == 'true'
+    runs-on: ubuntu-24.04
     timeout-minutes: 15
     permissions:
       contents: read

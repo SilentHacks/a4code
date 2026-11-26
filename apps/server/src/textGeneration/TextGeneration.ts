@@ -38,7 +38,7 @@ export type {
 } from "@a4code/provider-core/server/textGeneration";
 
 export class TextGeneration extends Context.Service<TextGeneration, ProviderTextGeneration>()(
-  "t3/textGeneration/TextGeneration",
+  "a4code/textGeneration/TextGeneration",
 ) {}
 
 type TextGenerationOp =

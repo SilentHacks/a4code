@@ -19,6 +19,8 @@ Install Git and authenticate on the machine running your A4 Code server (for rem
 
 > Note: Git `push` and `clone` still require Git SSH/HTTPS credentials on the server, separate from API tokens.
 
+GitHub App sign-in is off by default. Enable it only after registering `a4-code-for-github` as a fork-owned GitHub App, enabling its device flow, and setting `A4CODE_FEATURE_FLAGS=github_app_client_id=<client-id>` on the server. GitHub CLI and token sign-in do not need this app.
+
 ## Start, clone, or publish a project
 
 - **New project**: Run **New project** from the command palette (`Cmd/Ctrl+K`) or **Add Project** to initialize a new Git repo in `~/.a4code/projects/<slug>` with a README, icon, and first commit (optionally creating a private GitHub repo).

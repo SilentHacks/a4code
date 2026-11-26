@@ -264,7 +264,7 @@ describe("DesktopLifecycle", () => {
         Effect.provideService(HostProcess.Arguments, [
           "/opt/A4 Code/a4code",
           "--no-sandbox",
-          "T3CODE://pair?token=spent",
+          "A4CODE://pair?token=spent",
           "a4code://new?prompt=hello",
         ]),
       );

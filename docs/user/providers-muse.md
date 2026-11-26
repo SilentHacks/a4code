@@ -19,4 +19,4 @@ Run [Muse Code](https://dev.meta.ai/docs/muse-code) on your A4 Code server. Muse
 - **Permission modes**: Supports **Supervised** and **Full access** only (**Auto** and **Auto-accept edits** are unavailable).
 - **Skills**: Muse loads its own skills (`muse skills` on the host); they do not appear in the composer's `$` menu.
 - **Forks & rewind**: Forking starts a new session with copied conversation context; conversation rewind is not supported.
-- **T3 tools**: Muse can use A4 Code's MCP tools when reachable (turns continue without them if unavailable).
+- **MCP tools**: Muse can use A4 Code's MCP tools when reachable (turns continue without them if unavailable).

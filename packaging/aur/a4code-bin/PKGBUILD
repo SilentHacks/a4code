@@ -77,7 +77,7 @@ package() {
 # to keep /opt/a4code-bin/usr/lib etc. out of terminal and agent shells (#28993).
 exec env APPDIR=/opt/a4code-bin /opt/a4code-bin/AppRun "$@"
 EOF
-  ln -s a4code "$pkgdir/usr/bin/t3-code-desktop"
+  ln -s a4code "$pkgdir/usr/bin/a4code-desktop"
 
   # Icon lookup only sees sizes registered in hicolor's index.theme (max 512x512).
   local icon size_dir
@@ -96,7 +96,7 @@ TryExec=a4code
 Terminal=false
 Type=Application
 Icon=a4code
-StartupWMClass=com.t3tools.A4Code
+StartupWMClass=io.github.silenthacks.a4code
 Categories=Development;
 MimeType=x-scheme-handler/a4code;
 EOF

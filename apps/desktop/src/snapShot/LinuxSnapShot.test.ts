@@ -36,7 +36,7 @@ vi.mock("electron", () => ({
 import { captureLinuxWindow, getLinuxCaptureSupport, readPortalPng } from "./LinuxSnapShot.ts";
 
 const png = Buffer.from([137, 80, 78, 71, 13, 10, 26, 10, 0]);
-const appId = "com.t3tools.A4Code";
+const appId = "io.github.silenthacks.a4code";
 const metadata = {
   title: "Editor",
   appName: "Text Editor",

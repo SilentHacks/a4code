@@ -328,7 +328,7 @@ export function T3ConnectUserProfilePage() {
                 </EmptyTitle>
                 <EmptyDescription>
                   <T>
-                    Link an environment from its local Settings to make it available through T3
+                    Link an environment from its local Settings to make it available through A4
                     Connect.
                   </T>
                 </EmptyDescription>

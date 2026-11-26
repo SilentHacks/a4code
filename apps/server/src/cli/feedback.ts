@@ -125,7 +125,7 @@ export const feedbackCommand = Command.make("feedback", {
   ),
   subject: Flag.String("subject").pipe(
     Flag.withDescription(
-      "The T3 tool name, a4code command such as `a4code thread send`, or `general`.",
+      "The A4 Code tool name, a4code command such as `a4code thread send`, or `general`.",
     ),
   ),
   expected: Flag.String("expected").pipe(Flag.withDescription("What you expected.")),
