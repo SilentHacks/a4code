@@ -98,8 +98,7 @@ export function resolveRelayClientTracingConfig(
 }
 
 export function makeRelayUrlConfig(fallback = buildTimeRelayUrl) {
-  const runtimeConfig = Config.NonEmptyString("A4CODE_RELAY_URL");
-  return (fallback ? runtimeConfig.pipe(Config.withDefault(fallback)) : runtimeConfig).pipe(
+  return makePublicValueConfig("A4CODE_RELAY_URL", fallback).pipe(
     Config.mapEffect(validateRelayUrl),
   );
 }
@@ -109,7 +108,14 @@ export const relayUrlConfig = makeRelayUrlConfig();
 export const hostedAppUrlConfig = makePublicValueConfig(
   "A4CODE_HOSTED_APP_URL",
   typeof __A4CODE_BUILD_HOSTED_APP_URL__ === "undefined" ? "" : __A4CODE_BUILD_HOSTED_APP_URL__,
-).pipe(Config.mapEffect(validateHostedAppUrl));
+).pipe(
+  Config.orElse(() =>
+    relayUrlConfig.pipe(
+      Config.map((relay) => (relay === "https://relay.t3.codes" ? "https://app.t3.codes" : "")),
+    ),
+  ),
+  Config.mapEffect(validateHostedAppUrl),
+);
 
 function validateHostedAppUrl(value: string) {
   try {
@@ -142,8 +148,9 @@ function validateHostedAppUrl(value: string) {
 }
 
 function makePublicValueConfig(name: string, fallback: string) {
-  const runtimeConfig = Config.NonEmptyString(name);
-  return (fallback ? runtimeConfig.pipe(Config.withDefault(fallback)) : runtimeConfig).pipe(
+  return Config.NonEmptyString(name).pipe(
+    Config.orElse(() => Config.NonEmptyString(name.replace(/^A4CODE_/u, "T3CODE_"))),
+    ...(fallback ? [Config.withDefault(fallback)] : []),
     Config.map((value) => value.trim()),
   );
 }
@@ -204,7 +211,12 @@ export function makeCloudCliOAuthConfig({
 export const cloudCliOAuthConfig = makeCloudCliOAuthConfig();
 
 export const hasCloudPublicConfig = Boolean(
-  (normalizeSecureRelayUrl(process.env.A4CODE_RELAY_URL ?? "") ?? buildTimeRelayUrl) &&
-  (process.env.A4CODE_CLERK_PUBLISHABLE_KEY?.trim() || buildTimeClerkPublishableKey) &&
-  (process.env.A4CODE_CLERK_CLI_OAUTH_CLIENT_ID?.trim() || buildTimeClerkCliOAuthClientId),
+  (normalizeSecureRelayUrl(process.env.A4CODE_RELAY_URL ?? process.env.T3CODE_RELAY_URL ?? "") ??
+    buildTimeRelayUrl) &&
+  (process.env.A4CODE_CLERK_PUBLISHABLE_KEY?.trim() ||
+    process.env.T3CODE_CLERK_PUBLISHABLE_KEY?.trim() ||
+    buildTimeClerkPublishableKey) &&
+  (process.env.A4CODE_CLERK_CLI_OAUTH_CLIENT_ID?.trim() ||
+    process.env.T3CODE_CLERK_CLI_OAUTH_CLIENT_ID?.trim() ||
+    buildTimeClerkCliOAuthClientId),
 );

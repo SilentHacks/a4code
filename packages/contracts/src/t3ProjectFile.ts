@@ -5,10 +5,10 @@ import { ThreadEnvMode, WorktreeSubmodules } from "./environment.ts";
 import { ProjectScriptIcon } from "./project.ts";
 import type { ProjectScopedServerSettingKey, ServerSettings } from "./settings.ts";
 
-export const T3_PROJECT_FILE_NAME = "a4.json";
+export const T3_PROJECT_FILE_NAME = "t3.json";
 
 export const T3_PROJECT_FILE_SCHEMA_URL =
-  "https://raw.githubusercontent.com/SilentHacks/a4code/main/packages/contracts/schema/a4.json";
+  "https://raw.githubusercontent.com/SilentHacks/a4code/main/packages/contracts/schema/t3.json";
 
 const T3_PROJECT_FILE_PATH_MAX_LENGTH = 512;
 const T3_PROJECT_FILE_COMMAND_MAX_LENGTH = 4096;
@@ -152,11 +152,11 @@ export const T3ProjectFile = Schema.Struct({
 }).annotate({
   title: "A4 project file",
   description:
-    "Checked-in project configuration for A4 Code (a4.json at the repository root). See https://github.com/SilentHacks/a4code for documentation.",
+    "Checked-in project configuration for A4 Code (t3.json at the repository root). See https://github.com/SilentHacks/a4code for documentation.",
 });
 export type T3ProjectFile = typeof T3ProjectFile.Type;
 
-/** Keys must be nullable in ServerSettings so both environment and project overrides can inherit a4.json. */
+/** Keys must be nullable in ServerSettings so both environment and project overrides can inherit t3.json. */
 export const PROJECT_FILE_BACKED_SETTINGS = {
   defaultThreadEnvMode: { field: "defaultThreadEnvMode", builtIn: "local" },
   worktreeSubmodules: { field: "worktreeSubmodules", builtIn: "recursive" },

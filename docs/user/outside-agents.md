@@ -6,7 +6,7 @@ Connect external agents (Claude Code or Codex in your terminal, ChatGPT, or any 
 
 Open the command palette (`Cmd/Ctrl+K`) and run **Use A4 Code in another app (MCP)** (or open **Settings → Sharing & access**), pick your app, and follow the prompts.
 
-- Cloud assistants (like ChatGPT or Claude) require **A4 Connect** enabled on the environment.
+- Cloud assistants (like ChatGPT or Claude) require **T3 Connect** enabled on the environment.
 - To also reach other machines through the same connection, enable **Settings → Labs → Linked environments** and [link them](./remote-access.md#link-another-environment).
 - To copy the raw MCP endpoint (`https://<environment-address>/mcp`), open an environment's menu in **Settings → Environments → Copy MCP URL**. OAuth requires `https://` or `localhost` (plain `http://` LAN/Tailscale addresses cannot complete OAuth).
 
@@ -26,7 +26,7 @@ Open the command palette (`Cmd/Ctrl+K`) and run **Use A4 Code in another app (MC
 
 ## Approve access and permissions
 
-The first time an outside agent connects, approve its sign-in page (via your A4 Connect account, an already-authorized browser, or a one-time pairing code from **Settings → Sharing & access** / `a4code auth pairing create`).
+The first time an outside agent connects, approve its sign-in page (via your T3 Connect account, an already-authorized browser, or a one-time pairing code from **Settings → Sharing & access** / `a4code auth pairing create`).
 
 - **Read only**: Inspect projects, threads, providers, and models.
 - **Supervised → Full access**: Also launch, message, and stop threads up to the granted permission mode. Managing [workflow runs](./workflows.md) or using approval-skipping agent modes requires **Full access** (or your policy's maximum mode).

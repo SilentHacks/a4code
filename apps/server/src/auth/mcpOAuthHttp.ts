@@ -79,7 +79,7 @@ export const layer = HttpApiBuilder.group(
     const cloudLink = yield* CloudLink.CloudLink;
     const serverEnvironment = yield* ServerEnvironment.ServerEnvironmentIdentity;
     const hostedAppUrl = yield* Effect.option(hostedAppUrlConfig);
-    // A4 Connect serves this host, so the owner can approve on the hosted app by signing in there.
+    // T3 Connect serves this host, so the owner can approve on the hosted app by signing in there.
     const hostedApprovalUrl = (issuer: string, search: string) =>
       Option.match(hostedAppUrl, {
         onNone: () => Effect.succeedNone,

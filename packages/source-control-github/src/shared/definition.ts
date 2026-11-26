@@ -47,11 +47,11 @@ function isRepositoryPath(repository: string): boolean {
   );
 }
 
-/** Signing in through the A4 Code for GitHub app lifts the per-user API rate limit to the app's. */
+/** Signing in through the T3 Code for GitHub app lifts the per-user API rate limit to the app's. */
 export const APP_SIGN_IN: SourceControlAppSignIn = {
-  appName: "A4 Code for GitHub",
+  appName: "T3 Code for GitHub",
   hosts: ["github.com"],
-  installUrl: "https://github.com/apps/a4-code-for-github/installations/new",
+  installUrl: "https://github.com/apps/t3-code-for-github/installations/new",
   revokeUrl: "https://github.com/settings/apps/authorizations",
 };
 

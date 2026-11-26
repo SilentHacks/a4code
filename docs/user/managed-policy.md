@@ -100,19 +100,19 @@ Key constraints:
 
 When `maxRuntimeMode` is set, users cannot modify provider launch settings (`binaryPath`, `launchArgs`, config home, or env vars)—pin required values (including absolute `binaryPath`s so user `PATH` entries can't shadow them) in `providers.instances`. Leave `acpRegistry` out of `allowedDrivers` if you don't want users adding arbitrary ACP Registry agents.
 
-### Clients and A4 Connect
+### Clients and T3 Connect
 
 `clients` allows any subset of `desktop`, `local-browser`, and `remote` (keep `desktop` on desktop machines).
 
-- Omitting `remote` restricts the server to loopback, revokes paired devices, disables LAN/Tailscale Serve/A4 Connect, and refuses startup if a Tailscale Serve route still forwards to A4 Code (or if a legacy service has LAN enabled—run `a4code up --no-lan`).
-- Set `"connect": false` to disable A4 Connect while allowing LAN/Tailscale remote access.
+- Omitting `remote` restricts the server to loopback, revokes paired devices, disables LAN/Tailscale Serve/T3 Connect, and refuses startup if a Tailscale Serve route still forwards to A4 Code (or if a legacy service has LAN enabled—run `a4code up --no-lan`).
+- Set `"connect": false` to disable T3 Connect while allowing LAN/Tailscale remote access.
 
 ### Other capabilities
 
 - `webhookTasks: false`: Disables scheduled-task and workflow webhooks.
 - `browserCookieImport: false`: Disables importing cookies from other browsers.
 - `previewTunnel: false`: Disables remote `localhost` tunneling and port forwarding (streams tabs instead).
-- `worktreeLayoutCommands: false`: Disables `a4.json` `worktreeLayout` `create`/`remove` commands.
+- `worktreeLayoutCommands: false`: Disables `t3.json` `worktreeLayout` `create`/`remove` commands.
 - `telemetry: false`: Disables product usage data and relay tracing for the server, desktop app, and server-opened browsers (does not control the hosted web client or mobile).
 
 ### Providers

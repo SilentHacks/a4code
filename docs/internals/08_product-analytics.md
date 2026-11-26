@@ -24,7 +24,7 @@ count as product use.
   server-global "current client". Keep client and server dimensions separate, and leave missing
   client metadata unknown rather than backfilling from server properties.
 - Active-use reports count `client.turn.requested` (deduplicated by command ID), not connections
-  (A4 Connect sessions renew hourly).
+  (T3 Connect sessions renew hourly).
 
 ## Collection boundary and delivery
 

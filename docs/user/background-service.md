@@ -22,7 +22,7 @@ Install the `a4code` CLI first ([Command line](./install.md#command-line)), then
 
 ## Local network access
 
-New services bind to localhost only. Run `a4code up --lan` (sets `A4CODE_LAN=true` in `service.env`) to listen on LAN and Tailscale addresses for direct desktop/mobile connections, or `a4code up --no-lan` to disable it. Anyone on that network can reach the port (gated by pairing). `A4CODE_HOST` overrides `A4CODE_LAN`. Hosted the hosted web client always uses A4 Connect.
+New services bind to localhost only. Run `a4code up --lan` (sets `A4CODE_LAN=true` in `service.env`) to listen on LAN and Tailscale addresses for direct desktop/mobile connections, or `a4code up --no-lan` to disable it. Anyone on that network can reach the port (gated by pairing). `A4CODE_HOST` overrides `A4CODE_LAN`. Hosted the hosted web client always uses T3 Connect.
 
 ## Configure the service environment
 
@@ -42,7 +42,7 @@ A4CODE_HOST=127.0.0.1
 - **macOS**: Starts at login, stops at logout. Keep the Mac logged in and awake for unattended access. If agents can't read Desktop/Documents/Downloads, grant Full Disk Access to the `a4code` path in `~/Library/LaunchAgents/io.github.silenthacks.a4code.service.plist`.
 - **Windows**: Runs windowless via Task Scheduler (`a4code-<domain>-<user>`) while signed in and auto-restarts on exit. Lock the screen instead of signing out for unattended access.
 
-> Note: Signing out of A4 Connect does not stop or uninstall the background service.
+> Note: Signing out of T3 Connect does not stop or uninstall the background service.
 
 ## Keep the server responsive under memory pressure (Linux)
 
@@ -66,7 +66,7 @@ Run `a4code service status` on the host to see the log path and health checks:
 | `service-disabled` / `service-stopped` | Check the log and `systemctl --user status a4code.service`, then run `a4code service install`.                                                  |
 | `restart-pending`                      | Run `a4code service restart` to switch to the newly installed version.                                                                          |
 
-For A4 Connect issues, see [A4 Connect troubleshooting](./a4-connect-troubleshooting.md).
+For T3 Connect issues, see [T3 Connect troubleshooting](./a4-connect-troubleshooting.md).
 
 ## Reclaim database space
 

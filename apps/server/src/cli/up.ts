@@ -37,9 +37,9 @@ type Routes = Readonly<Record<Route, boolean>>;
 /** How other devices reach this machine now. */
 interface Setup {
   readonly service: BootService.BootServiceStatus;
-  /** Null in builds without A4 Connect. Off when A4 Connect revoked the link. */
+  /** Null in builds without T3 Connect. Off when T3 Connect revoked the link. */
   readonly connect: boolean | null;
-  /** A4 Connect revoked the link; `a4code connect` links again. */
+  /** T3 Connect revoked the link; `a4code connect` links again. */
   readonly connectRevoked: boolean;
   readonly lan: boolean;
   /** An installed service with no A4CODE_LAN or A4CODE_HOST keeps the old default: on. */
@@ -48,7 +48,7 @@ interface Setup {
 }
 
 /**
- * A4 Connect is on when this CLI asked for a managed link, or when the desktop or
+ * T3 Connect is on when this CLI asked for a managed link, or when the desktop or
  * web app made one: that saves the tunnel config but no CLI marker. Revoked is off.
  */
 export const connectEnabled = (link: {
@@ -93,7 +93,7 @@ const readSetup = Effect.fn("cli.up.read_setup")(function* () {
 
 /**
  * The routes `a4code up` starts from. With no route flag it asks about every
- * route, starting a machine with no service from A4 Connect. Any route flag
+ * route, starting a machine with no service from T3 Connect. Any route flag
  * means it asks nothing and keeps the routes not named as they are.
  */
 export const planRoutes = (
@@ -116,12 +116,12 @@ export const planRoutes = (
   };
 };
 
-/** A running service reads A4CODE_LAN and its A4 Connect link only when it starts. */
+/** A running service reads A4CODE_LAN and its T3 Connect link only when it starts. */
 const needsRestart = (before: Routes, after: Routes) =>
   after.lan !== before.lan || (after.connect && !before.connect);
 
 const CHOICES = {
-  connect: { title: "A4 Connect", description: "Creates a tunnel to control your PC." },
+  connect: { title: "T3 Connect", description: "Creates a tunnel to control your PC." },
   lan: { title: "Local network", description: "LAN and tailnet. Pairing code required." },
 } satisfies Record<Route, { readonly title: string; readonly description: string }>;
 
@@ -166,9 +166,9 @@ const formatSetup = (setup: Setup, hints: Hints) => {
       ? []
       : [
           [
-            "A4 Connect",
+            "T3 Connect",
             setup.connect
-              ? "on · your A4 Code account"
+              ? "on · your T3 account"
               : setup.connectRevoked
                 ? `off · link revoked. Run \`${hints.connect}\`.`
                 : "off",
@@ -202,7 +202,7 @@ const formatSetup = (setup: Setup, hints: Hints) => {
 const formatNextSteps = (routes: Routes, serviceInstalled: boolean, hints: Hints) =>
   [
     ...(routes.connect
-      ? ["On your other device, sign in to A4 Connect with the same account."]
+      ? ["On your other device, sign in to T3 Connect with the same account."]
       : []),
     ...(routes.lan ? [`Run \`${hints.pair}\`. Use the code on your other device.`] : []),
     ...(routes.connect || routes.lan
@@ -241,7 +241,7 @@ const setUp = Effect.fn("cli.up")(function* (flags: {
   if (before.connect === null && Option.getOrElse(flags.connect, () => false)) {
     return yield* new CliError.UserError({
       cause: "connect",
-      userMessage: "A4 Connect is unavailable in this build.",
+      userMessage: "T3 Connect is unavailable in this build.",
     });
   }
 
@@ -329,7 +329,7 @@ const setUp = Effect.fn("cli.up")(function* (flags: {
     });
     if (linked === null) return;
     yield* Console.log(
-      `✓ Signed in to A4 Connect${linked.identity ? ` as ${linked.identity}` : ""}`,
+      `✓ Signed in to T3 Connect${linked.identity ? ` as ${linked.identity}` : ""}`,
     );
   }
   // A running server unlinks live; when that fails, only a restart stops its tunnel.
@@ -342,7 +342,7 @@ const setUp = Effect.fn("cli.up")(function* (flags: {
   yield* CliService.writeServiceEnv(baseDir, { A4CODE_LAN: String(routes.lan) });
   // When the service step fails, an installed service still runs with the old
   // value, so the file goes back to match it.
-  // A new A4 Connect link is undone too, with any tunnel the failed start saved, so a
+  // A new T3 Connect link is undone too, with any tunnel the failed start saved, so a
   // rerun sees it as a change and restarts. The sign-in stays.
   const restoreServiceEnv = before.service.installed
     ? CliService.writeServiceEnv(baseDir, { A4CODE_LAN: previousLan }).pipe(
@@ -418,13 +418,13 @@ const setUp = Effect.fn("cli.up")(function* (flags: {
         (yield* Prompt.run(
           Prompt.Confirm({
             message:
-              "The running service still has A4 Connect on. Restart it? Running agent turns will stop.",
+              "The running service still has T3 Connect on. Restart it? Running agent turns will stop.",
             initial: true,
           }),
         ).pipe(Effect.catchTags({ QuitError: () => Effect.succeed(false) })));
       if (!confirmed) {
         const { command } = yield* resolveHostCliCommand("service restart", baseDirArgs);
-        yield* Console.log(`Run \`${command}\` to turn A4 Connect off.`);
+        yield* Console.log(`Run \`${command}\` to turn T3 Connect off.`);
       } else {
         if (!interactive && !stopped) {
           yield* Console.log("Restarting A4 Code. Running agent turns will stop.");
@@ -459,7 +459,7 @@ export const upCommand = Command.make("up", {
   ...projectLocationFlags,
   connect: Flag.Boolean("connect").pipe(
     Flag.withDescription(
-      "Allow access through A4 Connect with your A4 Code account. Turn off with --no-connect.",
+      "Allow access through T3 Connect with your T3 account. Turn off with --no-connect.",
     ),
     Flag.optional,
   ),
@@ -471,7 +471,7 @@ export const upCommand = Command.make("up", {
   ),
   yes: Flag.Boolean("yes").pipe(
     Flag.withDescription(
-      "Ask nothing. Keep the access settings; a new machine gets A4 Connect. A restart stops running agent turns.",
+      "Ask nothing. Keep the access settings; a new machine gets T3 Connect. A restart stops running agent turns.",
     ),
     Flag.withDefault(false),
   ),
@@ -483,7 +483,7 @@ export const upCommand = Command.make("up", {
   ),
   Command.withExamples([
     { command: "a4code up", description: "Choose remote access." },
-    { command: "a4code up --connect", description: "Turn on A4 Connect. Keep other settings." },
+    { command: "a4code up --connect", description: "Turn on T3 Connect. Keep other settings." },
     { command: "a4code up --lan", description: "Allow LAN access with pairing codes." },
     { command: "a4code up --no-lan", description: "Stop LAN access." },
     { command: "a4code up --yes", description: "Take the defaults with no questions." },
@@ -496,7 +496,7 @@ export const connectCommand = Command.make("connect", {
   ...projectLocationFlags,
   headless: headlessFlag,
 }).pipe(
-  Command.withDescription("Set up A4 Connect for this machine. Same as `a4code up --connect`."),
+  Command.withDescription("Set up T3 Connect for this machine. Same as `a4code up --connect`."),
   Command.withHandler((flags) =>
     runCloudCommand(
       flags,
@@ -546,7 +546,7 @@ export const statusCommand = Command.make("status", {
       const config = yield* resolveCliAuthConfig(flags, yield* GlobalFlag.LogLevel, {
         quietLogs: flags.json,
       });
-      // Only what readSetup reads: no database, unlike the A4 Connect commands.
+      // Only what readSetup reads: no database, unlike the T3 Connect commands.
       const setup = yield* readSetup().pipe(
         Effect.provide(
           Layer.merge(CliService.layer(config), ServerSecretStore.layer).pipe(

@@ -145,7 +145,7 @@ export const getTelemetryIdentity = upsertAnonymousId.pipe(
 );
 
 /**
- * The owner the server can read without a client: the linked A4 Connect
+ * The owner the server can read without a client: the linked T3 Connect
  * account. Clients add `connect` and `device` owners when they connect.
  */
 export const getServerOwners = Effect.gen(function* () {
@@ -153,7 +153,7 @@ export const getServerOwners = Effect.gen(function* () {
   const connectUser = yield* secrets.get(CLOUD_LINKED_USER_ID).pipe(
     Effect.map(Option.map((bytes) => new TextDecoder().decode(bytes))),
     Effect.catch((cause) =>
-      Effect.logWarning("Failed to read the linked A4 Connect account for telemetry", {
+      Effect.logWarning("Failed to read the linked T3 Connect account for telemetry", {
         errorTag: cause._tag,
       }).pipe(Effect.as(Option.none<string>())),
     ),

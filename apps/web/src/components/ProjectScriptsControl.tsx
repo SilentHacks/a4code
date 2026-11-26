@@ -185,7 +185,7 @@ export default function ProjectScriptsControl({
       <MenuGroup>
         <MenuGroupLabel>
           <T>
-            From <Var>a4.json</Var>
+            From <Var>t3.json</Var>
           </T>
         </MenuGroupLabel>
         {importableScripts.map((fileScript) => (
@@ -199,7 +199,7 @@ export default function ProjectScriptsControl({
             <MenuShortcut>
               <DownloadIcon
                 className="size-3.5"
-                aria-label={gt("Import", { $context: "verb, import an action from a4.json" })}
+                aria-label={gt("Import", { $context: "verb, import an action from t3.json" })}
               />
             </MenuShortcut>
           </MenuItem>

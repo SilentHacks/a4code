@@ -43,7 +43,7 @@ for (const signal of ["SIGINT", "SIGTERM", "SIGHUP"] as const) {
 
 const projectRoot = process.env.A4CODE_PROJECT_ROOT;
 if (!projectRoot) {
-  throw new Error("A4CODE_PROJECT_ROOT is not set. Run this through the a4.json setup action.");
+  throw new Error("A4CODE_PROJECT_ROOT is not set. Run this through the t3.json setup action.");
 }
 
 // Use the shell for Windows vp shims. Unattended installs need pnpm's confirmation

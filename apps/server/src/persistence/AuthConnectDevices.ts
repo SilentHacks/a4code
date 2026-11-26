@@ -29,7 +29,7 @@ const RemoveAllExceptInput = Schema.Struct({
   keepProofKeyThumbprint: Schema.NullOr(Schema.String),
 });
 
-/** A4 Connect device keys this environment lets in without asking. A key leaves when revoked. */
+/** T3 Connect device keys this environment lets in without asking. A key leaves when revoked. */
 export class AuthConnectDeviceRepository extends Context.Service<
   AuthConnectDeviceRepository,
   {

@@ -901,7 +901,7 @@ export const SETTINGS_SEARCH_ITEMS = [
     title: msg("Submodules"),
     to: "/settings/worktrees",
     scope: "project-defaults",
-    searchTerms: [msg("git submodule init recursive top-level none worktree a4.json")],
+    searchTerms: [msg("git submodule init recursive top-level none worktree t3.json")],
   },
   {
     id: "start-from-origin",
@@ -1360,7 +1360,7 @@ export const SETTINGS_SEARCH_ITEMS = [
     id: "project-actions",
     title: msg("Actions"),
     to: "/settings/projects",
-    searchTerms: [msg("commands scripts setup run dev server checkout worktree a4.json import")],
+    searchTerms: [msg("commands scripts setup run dev server checkout worktree t3.json import")],
   },
   {
     id: "project-repositories",
@@ -1416,7 +1416,7 @@ export const SETTINGS_SEARCH_ITEMS = [
   {
     id: "a4-connect",
     localEnvironmentOnly: true,
-    title: msg("A4 Connect"),
+    title: msg("T3 Connect"),
     to: "/settings/access",
     targetId: "connections-environment",
     searchTerms: [msg("managed tunnel cloud other devices remote tunnels limit t3 chat")],

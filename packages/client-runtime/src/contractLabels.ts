@@ -168,7 +168,7 @@ function managedCapabilityDeniedMessage(
         }),
       );
     case "connect":
-      return resolve(msg("{organization}'s policy does not allow A4 Connect.", { organization }));
+      return resolve(msg("{organization}'s policy does not allow T3 Connect.", { organization }));
     case "webhookTasks":
       return resolve(
         msg("{organization}'s policy does not allow webhook tasks.", { organization }),

@@ -423,7 +423,7 @@ export const resolveServerConfig = Effect.fn("config.resolveServerConfig")(funct
     Option.fromUndefinedOr(bootstrap?.host),
   ).pipe(Option.map((host) => (isWildcardHost(host) ? normalizeHostname(host) : host)));
   // Private networks only, so clients learn a LAN address and prefer it over
-  // A4 Connect. `a4code service install` writes A4CODE_LAN=false for a new
+  // T3 Connect. `a4code service install` writes A4CODE_LAN=false for a new
   // service; one installed before A4CODE_LAN existed keeps listening.
   const lan = resolveOptionPrecedence(normalizedFlags.lan, Option.fromUndefinedOr(env.lan));
   const privateNetworkOnly =

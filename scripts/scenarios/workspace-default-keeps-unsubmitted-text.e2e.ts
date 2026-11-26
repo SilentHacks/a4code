@@ -16,7 +16,7 @@ test(
   "A pending send does not submit text typed while workspace defaults load",
   WEB,
   async ({ t3, app, browser, screen }) => {
-    const project = await t3.project("demo", { "a4.json": '{"defaultThreadEnvMode":"local"}' });
+    const project = await t3.project("demo", { "t3.json": '{"defaultThreadEnvMode":"local"}' });
     await t3.thread({ project, title: "Earlier work", messages: ["first"] });
 
     await browser.addInitScript(() => {
@@ -25,13 +25,13 @@ test(
       let sendHeld = () => {};
       const send = WebSocket.prototype.send;
       WebSocket.prototype.send = function (data) {
-        if (typeof data !== "string" || !data.includes('"relativePath":"a4.json"')) {
+        if (typeof data !== "string" || !data.includes('"relativePath":"t3.json"')) {
           return send.call(this, data);
         }
         const parsed = JSON.parse(data);
         const messages = [parsed].flat();
         const isProjectFile = (frame: { tag?: string; payload?: { relativePath?: string } }) =>
-          frame.tag === "projects.readFile" && frame.payload?.relativePath === "a4.json";
+          frame.tag === "projects.readFile" && frame.payload?.relativePath === "t3.json";
         const held = messages.filter(isProjectFile);
         if (held.length === 0) return send.call(this, data);
         const others = messages.filter((frame) => !isProjectFile(frame));

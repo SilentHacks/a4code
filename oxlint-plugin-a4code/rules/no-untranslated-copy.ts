@@ -110,7 +110,7 @@ const WHOLE_TEXT_NAMES = new Set([
 // Names shown as-is in every language. Removed from the text before looking for words.
 const PROPER_NOUNS = [
   "A4 Code",
-  "A4 Connect",
+  "T3 Connect",
   "T3 Chat",
   "GitHub",
   "GitLab",

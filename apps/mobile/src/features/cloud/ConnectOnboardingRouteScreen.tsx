@@ -23,7 +23,7 @@ import {
 import { optOutOfConnectOnboarding } from "./connectOnboardingOptOut";
 import { hasCloudPublicConfig } from "./publicConfig";
 
-// Only reachable with cloud config: onboarding is requested after a A4 Connect
+// Only reachable with cloud config: onboarding is requested after a T3 Connect
 // sign-in, and appLinking drops the deep link otherwise.
 export function ConnectOnboardingRouteScreen() {
   return hasCloudPublicConfig() ? <ConfiguredConnectOnboardingRouteScreen /> : null;
@@ -66,7 +66,7 @@ function ConfiguredConnectOnboardingRouteScreen() {
   return (
     <View collapsable={false} className="flex-1 bg-sheet">
       <AppBar
-        title={gt("Set up {product}", { product: "A4 Connect" })}
+        title={gt("Set up {product}", { product: "T3 Connect" })}
         onClose={handleClose}
         refresh={{
           accessibilityLabel: gt("Refresh environments"),
@@ -98,8 +98,8 @@ function ConfiguredConnectOnboardingRouteScreen() {
         ) : (
           <View collapsable={false} className="rounded-[24px] bg-grouped-card p-5">
             <Text className="text-sm leading-normal text-foreground-muted">
-              {gt("Sign in to your A4 Code account to set up {product}.", {
-                product: "A4 Connect",
+              {gt("Sign in to your T3 account to set up {product}.", {
+                product: "T3 Connect",
               })}
             </Text>
           </View>

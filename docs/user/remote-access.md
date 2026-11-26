@@ -2,32 +2,32 @@
 
 Drive A4 Code from your phone, browser, or another desktop app while your agents run on a host computer or server. The host must stay awake and running while you work.
 
-## A4 Connect (recommended)
+## T3 Connect (recommended)
 
-A4 Connect links your host to your other devices without router port-forwarding.
+T3 Connect links your host to your other devices without router port-forwarding. For source builds, copy `.env.example` to `.env` before building to use the hosted service.
 
-- **Desktop host**: Open **Settings → Sharing & access**, sign in, and turn on **A4 Connect** (note: closing the desktop app's last window stops its local server—use the [background service](./background-service.md) for unattended access).
-- **CLI / headless host**: Run `a4code up` (or `a4code connect` / `a4code up --connect --lan --yes` for non-interactive scripts) and complete the printed sign-in link on any device. Check status with `t3 status [--json]`.
-- **Other devices**: Sign in to the same A4 Connect account and pick the environment.
+- **Desktop host**: Open **Settings → Sharing & access**, sign in, and turn on **T3 Connect** (note: closing the desktop app's last window stops its local server—use the [background service](./background-service.md) for unattended access).
+- **CLI / headless host**: Run `a4code up` (or `a4code connect` / `a4code up --connect --lan --yes` for non-interactive scripts) and complete the printed sign-in link on any device. Check status with `a4code status [--json]`.
+- **Other devices**: Sign in to the same T3 Connect account and pick the environment.
 
 ### Approve new devices
 
-By default, any device signed into your A4 Connect account can connect. Turn on **Require approval for new devices** in **Settings → Sharing & access** on the host so new devices must present a short code (valid 10 minutes) that you approve from an existing device or via `a4code auth connect-device approve <code>`. Revoke devices anytime in **Settings → Sharing & access** or `a4code auth connect-device revoke <code>`.
+By default, any device signed into your T3 Connect account can connect. Turn on **Require approval for new devices** in **Settings → Sharing & access** on the host so new devices must present a short code (valid 10 minutes) that you approve from an existing device or via `a4code auth connect-device approve <code>`. Revoke devices anytime in **Settings → Sharing & access** or `a4code auth connect-device revoke <code>`.
 
 ### More machines with T3 Chat
 
-Free A4 Connect accounts can link up to **3 host machines** (phones and browsers don't count). Link a paid T3 Chat account from your account menu → **T3 Chat → Link T3 Chat** to raise the limit to **10** (Pro) or **100** (Premier).
+Free T3 Connect accounts can link up to **3 host machines** (phones and browsers don't count). Link a paid T3 Chat account from your account menu → **T3 Chat → Link T3 Chat** to raise the limit to **10** (Pro) or **100** (Premier).
 
 ## Pair over a LAN or private network
 
 - **Desktop host**: Enable **Settings → Sharing & access → Network access** (restarts desktop) and create a one-time pairing link.
 - **CLI host**: Run `a4code up --lan` (background service) or `a4code serve --lan` (foreground), then run `a4code pair` to generate a QR code / pairing URL (`a4code://pair` opens directly in the desktop app).
-- **Hosted web app**: Requires an HTTPS endpoint (A4 Connect or Tailscale HTTPS). For plain HTTP on a LAN, open the direct pairing URL in a local browser or pair from the desktop/mobile app. For custom CAs on Android, install the CA certificate in Android security settings.
+- **Hosted web app**: Requires an HTTPS endpoint (T3 Connect or Tailscale HTTPS). For plain HTTP on a LAN, open the direct pairing URL in a local browser or pair from the desktop/mobile app. For custom CAs on Android, install the CA certificate in Android security settings.
 - **Session lifetime**: Paired devices stay signed in while active; sessions unused for 30 days must re-pair.
 
 ### Reach one machine several ways
 
-A host can have multiple routes (LAN, Tailscale, VPN, public URL, SSH, A4 Connect). A4 Code automatically learns LAN and Tailscale routes when network access is enabled, connects over the fastest working route, and switches back to higher-priority routes when you return home. Reorder or add routes in **Settings → Environments** (**Add route**).
+A host can have multiple routes (LAN, Tailscale, VPN, public URL, SSH, T3 Connect). A4 Code automatically learns LAN and Tailscale routes when network access is enabled, connects over the fastest working route, and switches back to higher-priority routes when you return home. Reorder or add routes in **Settings → Environments** (**Add route**).
 
 ### Tailscale HTTPS
 
@@ -89,7 +89,7 @@ Open a delegated task or thread link on a linked machine to follow it live (read
 Manage pairing links and active client sessions in **Settings → Sharing & access** or via `a4code auth --help`.
 
 - **Scoped tokens**: Pass `--scope <scope>` (repeatable) to `a4code pair`, `a4code auth pairing create`, or `a4code auth session issue` to restrict permissions (e.g. `orchestration:read`, `source-control:write`, `filesystem:read`, `filesystem:write`, `terminal:operate`, `relay:configure`). Re-pair with a fresh link to change an existing client's scopes.
-- **Deregister from A4 Connect**: Open your account menu → **A4 Connect → Deregister** (or `a4code connect unlink` / `a4code connect logout` on CLI hosts). Idle tunnels are automatically cleaned up after 5–10 minutes offline and recreated on reconnect (hosts on older versions offline for 7+ days need an update first).
+- **Deregister from T3 Connect**: Open your account menu → **T3 Connect → Deregister** (or `a4code connect unlink` / `a4code connect logout` on CLI hosts). Idle tunnels are automatically cleaned up after 5–10 minutes offline and recreated on reconnect (hosts on older versions offline for 7+ days need an update first).
 - Treat pairing URLs and codes as passwords—never paste them into logs or screenshots.
 
 ## Desktop app as a remote only
@@ -98,4 +98,4 @@ Switch off **Settings → Environments → Local environment** in the desktop ap
 
 ## Troubleshooting
 
-See [A4 Connect troubleshooting](./a4-connect-troubleshooting.md) for step-by-step connection diagnostics, and [Outside agents](./outside-agents.md) for MCP connections.
+See [T3 Connect troubleshooting](./a4-connect-troubleshooting.md) for step-by-step connection diagnostics, and [Outside agents](./outside-agents.md) for MCP connections.

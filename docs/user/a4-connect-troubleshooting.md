@@ -1,9 +1,9 @@
-# A4 Connect troubleshooting
+# T3 Connect troubleshooting
 
-A A4 Connect connection passes through four stages:
+A T3 Connect connection passes through four stages:
 
-1. **This device** reaches A4 Connect over the internet.
-2. **A4 Connect** verifies your sign-in and host link.
+1. **This device** reaches T3 Connect over the internet.
+2. **T3 Connect** verifies your sign-in and host link.
 3. **The host's tunnel** (`cloudflared`) forwards the request to the host.
 4. **A4 Code on the host** answers.
 
@@ -11,7 +11,7 @@ When a connection fails, open **Settings → Environments**, select the environm
 
 ## The host's tunnel is offline
 
-A4 Connect could not reach the host's tunnel (host is asleep/offline, A4 Code isn't running, or outbound port 7844 is blocked).
+T3 Connect could not reach the host's tunnel (host is asleep/offline, A4 Code isn't running, or outbound port 7844 is blocked).
 
 1. Confirm the host is awake and running A4 Code.
 2. Run `a4code connect status` on the host.
@@ -22,7 +22,7 @@ A4 Connect could not reach the host's tunnel (host is asleep/offline, A4 Code is
 `cloudflared` connects outbound to Cloudflare on **TCP and UDP port 7844** (normal web traffic still works when 7844 is blocked).
 
 - **Tailscale exit node**: Run `tailscale set --exit-node=` on the host or allow outbound 7844 on the exit node.
-- **Work VPN / firewall**: Allow outbound TCP/UDP 7844, or bypass A4 Connect by adding a direct Tailscale route ([Reach one machine several ways](./remote-access.md#reach-one-machine-several-ways)).
+- **Work VPN / firewall**: Allow outbound TCP/UDP 7844, or bypass T3 Connect by adding a direct Tailscale route ([Reach one machine several ways](./remote-access.md#reach-one-machine-several-ways)).
 
 ## The tunnel works, but A4 Code does not answer
 
@@ -30,15 +30,15 @@ The tunnel is up, but A4 Code didn't respond on `127.0.0.1` (crashed, starting u
 
 Restart A4 Code on the host (`a4code service restart` for a background service) and run `a4code connect status`.
 
-## The A4 Connect address does not resolve or answer
+## The T3 Connect address does not resolve or answer
 
-The host's A4 Connect address failed DNS, TLS, connection, or timed out.
+The host's T3 Connect address failed DNS, TLS, connection, or timed out.
 
 1. Confirm the host is online and run `a4code connect status`.
 2. If only the host fails, check DNS/VPN/proxy (stale DNS caches clear in ~30 minutes).
-3. If the address no longer points to this host, re-link it: toggle **A4 Connect** off and on in **Settings → Sharing & access**, or run `a4code connect link` and restart the server.
+3. If the address no longer points to this host, re-link it: toggle **T3 Connect** off and on in **Settings → Sharing & access**, or run `a4code connect link` and restart the server.
 
-## This device can't reach A4 Connect
+## This device can't reach T3 Connect
 
 The issue is on the client device's network:
 
@@ -48,22 +48,22 @@ The issue is on the client device's network:
 
 ## Sign-in, account, or link problems
 
-- **Different account**: Sign in to the same A4 Connect account on both sides (on host: `a4code connect logout && a4code connect`).
-- **A4 Connect disabled on host**: Turn on **Settings → Sharing & access → A4 Connect** or run `a4code connect`.
+- **Different account**: Sign in to the same T3 Connect account on both sides (on host: `a4code connect logout && a4code connect`).
+- **T3 Connect disabled on host**: Turn on **Settings → Sharing & access → T3 Connect** or run `a4code connect`.
 - **Link not yet applied**: Restart A4 Code on the host (`a4code service restart` or restart desktop app).
-- **Expired session**: Sign out of A4 Connect and sign back in.
+- **Expired session**: Sign out of T3 Connect and sign back in.
 - **Waiting for device approval**: Approve the displayed code from an existing device or run `a4code auth connect-device approve <code>` on the host ([Approve new devices](./remote-access.md#approve-new-devices)).
 - **Machine limit reached**: Deregister an unused host or [link a paid T3 Chat account](./remote-access.md#more-machines-with-t3-chat), then restart the host.
 
 ## The clock is off
 
-A4 Connect uses short-lived signed proofs. Enable automatic date and time on both the host and client device, then retry.
+T3 Connect uses short-lived signed proofs. Enable automatic date and time on both the host and client device, then retry.
 
 ## The host runs an older A4 Code
 
 Update A4 Code on the host machine ([Updating A4 Code](./updating.md)).
 
-## A4 Connect returned an error
+## T3 Connect returned an error
 
 | Error                                            | Fix                                                                                                                           |
 | ------------------------------------------------ | ----------------------------------------------------------------------------------------------------------------------------- |

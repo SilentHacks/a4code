@@ -122,7 +122,7 @@ vi.mock(import("../files/projectFilesQueryState"), async (original) => ({
 
 function projectFileResult(contents: string) {
   return AsyncResult.success<ProjectReadFileResult>({
-    relativePath: "a4.json",
+    relativePath: "t3.json",
     byteLength: new TextEncoder().encode(contents).byteLength,
     contents,
     truncated: false,

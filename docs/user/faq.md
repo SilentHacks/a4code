@@ -19,13 +19,13 @@ Yes.
 
 ## How much does A4 Code cost?
 
-Nothing. You pay your own model/agent providers. A4 Connect is free for up to 3 connected host machines per account (phones and browsers don't count). You can also self-host or use LAN/Tailscale.
+Nothing. You pay your own model/agent providers. T3 Connect is free for up to 3 connected host machines per account (phones and browsers don't count). You can also self-host or use LAN/Tailscale.
 
 ## Can I fork or redistribute A4 Code?
 
 Yes, for the source code. The [MIT License](../../LICENSE) covers source code only—not A4 Code's trademarks, name, wordmark, logos, or icons. Any public fork or build must use its own branding and clearly state that it is unofficial and not affiliated with T3 Tools, Inc. See [TRADEMARK.md](../../TRADEMARK.md).
 
-## Can I connect more than 3 machines with A4 Connect?
+## Can I connect more than 3 machines with T3 Connect?
 
 Yes. Link a paid T3 Chat account from your account menu → **T3 Chat → Link T3 Chat**: T3 Chat Pro raises the limit to 10 machines, and Premier raises it to 100. See [More machines with T3 Chat](./remote-access.md#more-machines-with-t3-chat).
 
@@ -35,15 +35,15 @@ Since v0.1.7, Claude in A4 Code drains your 5-hour limit at the same rate as Cla
 
 ## How do I use A4 Code remotely?
 
-Your agents run wherever the A4 Code server runs (desktop, server, or VPS). Run `a4code up` on that machine and connect via A4 Connect, LAN, Tailscale, or a configured hosted web app. See [Remote access](./remote-access.md).
+Your agents run wherever the A4 Code server runs (desktop, server, or VPS). Run `a4code up` on that machine and connect via T3 Connect, LAN, Tailscale, or a configured hosted web app. See [Remote access](./remote-access.md).
 
 ## How do I use A4 Code on my phone?
 
-Build the [iOS or Android app](./install.md#mobile-app) from source and connect it to your A4 Code server with a pairing link or a configured A4 Connect service. The host must stay on while the agents run.
+Build the [iOS or Android app](./install.md#mobile-app) from source and connect it to your A4 Code server with a pairing link or a configured T3 Connect service. The host must stay on while the agents run.
 
-## Why does A4 Connect keep disconnecting?
+## Why does T3 Connect keep disconnecting?
 
-Open **Settings → Environments**, select the machine, and choose **Details**—the first failed check identifies the cause. See [A4 Connect troubleshooting](./a4-connect-troubleshooting.md). Tailscale also works great as a direct fallback.
+Open **Settings → Environments**, select the machine, and choose **Details**—the first failed check identifies the cause. See [T3 Connect troubleshooting](./a4-connect-troubleshooting.md). Tailscale also works great as a direct fallback.
 
 ## Will I get banned for using my subscription?
 
@@ -63,7 +63,7 @@ No. A4 Code focuses on frontier coding agents.
 
 ## Does my code go to T3 servers?
 
-No. Code and prompts go directly from your machine to your chosen provider. With A4 Connect, traffic travels over a Cloudflare tunnel (`cloudflared` on your machine); T3's relay coordinates the link without proxying your HTTP/WebSocket sessions.
+No. Code and prompts go directly from your machine to your chosen provider. With T3 Connect, traffic travels over a Cloudflare tunnel (`cloudflared` on your machine); T3's relay coordinates the link without proxying your HTTP/WebSocket sessions.
 
 A4 Code sends basic product usage events (provider, model, token totals—no prompts or file contents). Disable with `A4CODE_TELEMETRY_ENABLED=false` or `DO_NOT_TRACK=1`. See [Product usage data](./telemetry.md).
 

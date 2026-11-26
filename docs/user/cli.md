@@ -11,8 +11,8 @@ See [Install A4 Code](./install.md#command-line) for installation (`curl -fsSL h
 | `t3 [path]` / `a4code start` | Start a foreground server and open the web app (optionally in a project directory).                                              |
 | `a4code serve`               | Start the server without opening a browser (`--lan`, `--tailscale-serve`, `--host`, `--port`, `--base-dir`).                     |
 | `a4code app [path]`          | Open a directory as a project/thread in the running desktop app.                                                                 |
-| `a4code up`                  | Interactive setup for remote access (A4 Connect and/or LAN) plus background service (`--connect`, `--lan`, `--no-lan`, `--yes`). |
-| `a4code connect`             | Manage A4 Connect (`a4code connect`, `status`, `login`, `logout`, `link`, `unlink`).                                             |
+| `a4code up`                  | Interactive setup for remote access (T3 Connect and/or LAN) plus background service (`--connect`, `--lan`, `--no-lan`, `--yes`). |
+| `a4code connect`             | Manage T3 Connect (`a4code connect`, `status`, `login`, `logout`, `link`, `unlink`).                                             |
 | `t3 status`                  | Show how other devices can reach this host (`--json`).                                                                           |
 | `a4code pair`                | Generate a one-time pairing URL / QR code (`--tailscale`, `--scope <scope>`).                                                    |
 
@@ -37,7 +37,7 @@ See [Install A4 Code](./install.md#command-line) for installation (`curl -fsSL h
 | Command              | Description                                                                                                                                            |
 | -------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------ |
 | `a4code environment` | Link or manage peer environments (`a4code environment link <addr> --pairing-code <code> --access <mode>`, `--from <file>`).                            |
-| `a4code auth`        | Manage pairing codes, sessions, and A4 Connect device approvals (`pairing create`, `session list/revoke/issue`, `connect-device list/approve/revoke`). |
+| `a4code auth`        | Manage pairing codes, sessions, and T3 Connect device approvals (`pairing create`, `session list/revoke/issue`, `connect-device list/approve/revoke`). |
 | `t3 theme`           | Manage server-published themes (`set <id>`, `clear`, `show`). See [Appearance](./appearance.md#environment-themes).                                    |
 | `a4code policy`      | Validate, inspect, and generate MDM/GPO templates for [managed policies](./managed-policy.md) (`check`, `show`, `settings`, `templates`).              |
 

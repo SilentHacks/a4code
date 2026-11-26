@@ -16,7 +16,7 @@ export const T3_CONNECT_ACCOUNT_PAGES = [
     content: <MobileClientsUserProfilePage />,
   },
   {
-    label: "A4 Connect",
+    label: "T3 Connect",
     url: "a4-connect",
     icon: <ServerIcon className="size-4" />,
     content: <T3ConnectUserProfilePage />,

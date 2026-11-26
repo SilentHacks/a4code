@@ -1,5 +1,5 @@
 {
-  "$schema": "./packages/contracts/schema/a4.json",
+  "$schema": "./packages/contracts/schema/t3.json",
   "iconPath": "assets/dev/blueprint-web-apple-touch-180.png",
   "scripts": [
     {

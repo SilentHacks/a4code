@@ -4,7 +4,7 @@ A4 Code sends lightweight product usage events and relay connection traces to ke
 
 ## Product usage events
 
-With both `A4CODE_TELEMETRY_HOST` and `A4CODE_TELEMETRY_KEY` set, the server sends usage events to the configured endpoint under a hashed random install ID (plus a hashed A4 Connect account ID when signed in, and random client device IDs). Events contain provider, catalog model name (non-catalog models report as custom), reasoning effort, permission mode, turn/request outcome, duration, release channel, and token counts.
+With both `A4CODE_TELEMETRY_HOST` and `A4CODE_TELEMETRY_KEY` set, the server sends usage events to the configured endpoint under a hashed random install ID (plus a hashed T3 Connect account ID when signed in, and random client device IDs). Events contain provider, catalog model name (non-catalog models report as custom), reasoning effort, permission mode, turn/request outcome, duration, release channel, and token counts.
 
 ## Disable telemetry
 
@@ -15,7 +15,7 @@ With both `A4CODE_TELEMETRY_HOST` and `A4CODE_TELEMETRY_KEY` set, the server sen
 
 ## Relay connection diagnostics
 
-A4 Connect sends connection timings, request paths, environment/thread IDs, and error types (no addresses, logs, or stack frames) to Axiom. Disabled by the server telemetry opt-outs above or by `A4CODE_OTEL_SDK_DISABLED` / `OTEL_SDK_DISABLED`.
+T3 Connect sends connection timings, request paths, environment/thread IDs, and error types (no addresses, logs, or stack frames) to Axiom. Disabled by the server telemetry opt-outs above or by `A4CODE_OTEL_SDK_DISABLED` / `OTEL_SDK_DISABLED`.
 
 ## Agent feedback
 
@@ -29,7 +29,7 @@ Approval cards show exact payloads (expected/actual/workaround, turn outline wit
 
 ## Agent activity for mobile notifications
 
-**Settings → Sharing & access → Publish agent activity** sends project/thread titles, model names, and turn status to the A4 Connect relay for [mobile notifications and live activities](./mobile-notifications.md). This is independent of telemetry—turn it off directly on the host if you don't want it.
+**Settings → Sharing & access → Publish agent activity** sends project/thread titles, model names, and turn status to the T3 Connect relay for [mobile notifications and live activities](./mobile-notifications.md). This is independent of telemetry—turn it off directly on the host if you don't want it.
 
 ## Export diagnostics to your own OpenTelemetry receiver
 

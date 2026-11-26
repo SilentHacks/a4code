@@ -8281,7 +8281,7 @@ it.layer(layerTest)("GitVcsDriver core integration", (it) => {
       }).pipe(withGitFileProtocol),
     );
 
-    it.effect("sparse worktrees read .gitmodules and a4.json from HEAD", () =>
+    it.effect("sparse worktrees read .gitmodules and t3.json from HEAD", () =>
       Effect.gen(function* () {
         const fileSystem = yield* FileSystem.FileSystem;
         const pathService = yield* Path.Path;
@@ -8298,7 +8298,7 @@ it.layer(layerTest)("GitVcsDriver core integration", (it) => {
         const worktrees = yield* makeTmpDir("git-worktrees-");
 
         const createSparse = Effect.fn(function* (projectFile: string, branch: string) {
-          yield* writeTextFile(cwd, "a4.json", projectFile);
+          yield* writeTextFile(cwd, "t3.json", projectFile);
           yield* git(cwd, ["add", "."]);
           yield* git(cwd, ["commit", "-m", branch]);
           const sparsePath = pathService.join(worktrees, branch);
@@ -8310,7 +8310,7 @@ it.layer(layerTest)("GitVcsDriver core integration", (it) => {
             newRefName: branch,
           });
           assert.isFalse(yield* fileSystem.exists(pathService.join(sparsePath, ".gitmodules")));
-          assert.isFalse(yield* fileSystem.exists(pathService.join(sparsePath, "a4.json")));
+          assert.isFalse(yield* fileSystem.exists(pathService.join(sparsePath, "t3.json")));
           return yield* fileSystem.exists(pathService.join(sparsePath, "shared", "SHARED.md"));
         });
 
@@ -8499,7 +8499,7 @@ it.layer(layerTest)("GitVcsDriver core integration", (it) => {
       }),
     );
 
-    it.effect("resolves the submodule mode from the option, then a4.json", () =>
+    it.effect("resolves the submodule mode from the option, then t3.json", () =>
       Effect.gen(function* () {
         const fileSystem = yield* FileSystem.FileSystem;
         const pathService = yield* Path.Path;
@@ -8528,11 +8528,11 @@ it.layer(layerTest)("GitVcsDriver core integration", (it) => {
           branch: string,
           submodules: WorktreeSubmodules | null = null,
         ) {
-          yield* writeTextFile(cwd, "a4.json", `{ "worktreeSubmodules": "${fileMode}" }`);
-          yield* git(cwd, ["add", "a4.json"]);
+          yield* writeTextFile(cwd, "t3.json", `{ "worktreeSubmodules": "${fileMode}" }`);
+          yield* git(cwd, ["add", "t3.json"]);
           yield* git(cwd, ["commit", "--allow-empty", "-m", `submodules: ${fileMode}`]);
           const worktreePath = pathService.join(worktreesDir, branch);
-          const disabled = yield* Ref.make<"settings" | "a4.json" | false>(false);
+          const disabled = yield* Ref.make<"settings" | "t3.json" | false>(false);
           yield* driver.createWorktree(
             { cwd, path: worktreePath, refName: initialBranch, newRefName: branch },
             {
@@ -8570,14 +8570,14 @@ it.layer(layerTest)("GitVcsDriver core integration", (it) => {
           nested: false,
         });
         assert.deepEqual(yield* createWithMode("none", "none"), {
-          disabled: "a4.json",
+          disabled: "t3.json",
           inner: false,
           nested: false,
         });
       }).pipe(withGitFileProtocol),
     );
 
-    it.effect("checks out only the a4.json sparse patterns in a new worktree", () =>
+    it.effect("checks out only the t3.json sparse patterns in a new worktree", () =>
       Effect.gen(function* () {
         const fileSystem = yield* FileSystem.FileSystem;
         const pathService = yield* Path.Path;
@@ -8588,7 +8588,7 @@ it.layer(layerTest)("GitVcsDriver core integration", (it) => {
         yield* writeTextFile(repo, "sparse-patterns.txt", "/*\n!/assets/\n");
         yield* writeTextFile(
           repo,
-          "a4.json",
+          "t3.json",
           `{ "worktreeSparsePatternsPath": "./sparse-patterns.txt" }`,
         );
         yield* git(repo, ["add", "."]);
@@ -8646,7 +8646,7 @@ it.layer(layerTest)("GitVcsDriver core integration", (it) => {
       }),
     );
 
-    it.effect("fails without a worktree when the a4.json sparse pattern path is not a file", () =>
+    it.effect("fails without a worktree when the t3.json sparse pattern path is not a file", () =>
       Effect.gen(function* () {
         const fileSystem = yield* FileSystem.FileSystem;
         const pathService = yield* Path.Path;
@@ -8658,7 +8658,7 @@ it.layer(layerTest)("GitVcsDriver core integration", (it) => {
         for (const patternsPath of ["missing.txt", "patterns"]) {
           yield* writeTextFile(
             cwd,
-            "a4.json",
+            "t3.json",
             JSON.stringify({ worktreeSparsePatternsPath: patternsPath }),
           );
           yield* git(cwd, ["add", "."]);

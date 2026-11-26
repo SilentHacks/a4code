@@ -244,7 +244,7 @@ export function createFilesystemEnvironmentAtoms<R, E>(
       label: "environment-data:workspace:add-task-folder-repository",
       tag: WS_METHODS.workspaceAddTaskFolderRepository,
     }),
-    /** A project's `worktreeLayout` commands as its `a4.json` holds them now, and whether each is approved. */
+    /** A project's `worktreeLayout` commands as its `t3.json` holds them now, and whether each is approved. */
     layoutCommands: createEnvironmentRpcQueryAtomFamily(runtime, {
       label: "environment-data:workspace:layout-commands",
       tag: WS_METHODS.workspaceLayoutCommands,

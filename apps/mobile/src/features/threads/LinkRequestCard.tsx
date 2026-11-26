@@ -506,7 +506,7 @@ function MachineRow(props: {
     : machine.connected
       ? null
       : machine.connectOnly
-        ? "A4 Connect"
+        ? "T3 Connect"
         : gt("Not connected");
   return (
     <Pressable

@@ -26,7 +26,7 @@ export const allowedFor = (
   env.A4CODE_DESKTOP_SHELL_DISCOVERY_PENDING !== "1" &&
   isRelayTracingEnabled(env);
 
-/** Relay traces leave the machine for A4 Connect, so a policy with `telemetry: false` stops them. */
+/** Relay traces leave the machine for T3 Connect, so a policy with `telemetry: false` stops them. */
 export const relayLayer = (
   resource: Omit<RelayTracing.RelayClientTracingResource, "serviceInstanceId">,
   tracingConfig = relayClientTracingConfig,

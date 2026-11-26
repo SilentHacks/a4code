@@ -15,7 +15,7 @@ import { useEnvironmentQuery } from "../../state/query";
 import { environmentSession } from "../../state/session";
 
 /**
- * A project's new-task defaults: server settings merged with its a4.json. The
+ * A project's new-task defaults: server settings merged with its t3.json. The
  * new-task flow and the home pending-drafts list both read the default
  * workspace mode here, so a draft that never picked one shows what it sends.
  * Every read is a shared per-environment or per-project atom.
@@ -71,7 +71,7 @@ export function useNewTaskProjectDefaults(project: EnvironmentProject | null) {
         newProjectsRoot: serverConfig?.newProjectsRoot,
         projectHasThreads,
       });
-  // While a4.json loads, the environment default is provisional; a4.json may replace it.
+  // While t3.json loads, the environment default is provisional; t3.json may replace it.
   const defaultWorkspaceModeSettled =
     projectSettings.sources.defaultThreadEnvMode !== "environment" ||
     (!t3ProjectFileQuery.isPending && !fileAccessPending);

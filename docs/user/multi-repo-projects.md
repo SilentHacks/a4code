@@ -13,7 +13,7 @@ The project folder itself does not need to be a Git repository.
 A4 Code automatically discovers every Git repository inside the project folder—one level down, plus one level deeper inside non-repo folders (such as `src/` or `packages/`). Cloned or deleted repos update automatically; worktrees of other repos are ignored. View covered repos in **Settings → Projects → Repositories**.
 
 - **Add external folders**: Use **Add folder** in **Settings → Projects → Repositories** (web/desktop), import entries from a `.code-workspace` file (web/desktop/mobile), or run `a4code project add <path> --track <folder>`. Added folders are per machine (up to 128 folders per project); removing one never deletes files.
-- **Ignore a repository**: Add relative paths to `a4.json` in the project folder (applies on every machine):
+- **Ignore a repository**: Add relative paths to `t3.json` in the project folder (applies on every machine):
 
 ```json
 {
@@ -39,7 +39,7 @@ A4 Code automatically discovers every Git repository inside the project folder�
 
 ### Custom worktree layout
 
-For custom workspace generation (e.g., per-thread build dirs or submodule setup), declare `worktreeLayout` in the project folder's `a4.json`:
+For custom workspace generation (e.g., per-thread build dirs or submodule setup), declare `worktreeLayout` in the project folder's `t3.json`:
 
 ```json
 {
@@ -79,7 +79,7 @@ Example (`sh`) for a single repo that also initializes submodules:
 
 #### Command approval and security
 
-A4 Code prompts you to approve the exact `create` and `remove` command strings on web/desktop before running them (manage approvals in **Settings → Projects → Worktree layout**; requires `terminal:operate`). Approvals are stored per environment and invalidated if the command string in `a4.json` changes.
+A4 Code prompts you to approve the exact `create` and `remove` command strings on web/desktop before running them (manage approvals in **Settings → Projects → Worktree layout**; requires `terminal:operate`). Approvals are stored per environment and invalidated if the command string in `t3.json` changes.
 
 - Unapproved commands block worktree creation from mobile, scheduled tasks, and agents.
 - Agents can never approve commands and must be in **Full access** to trigger `worktreeLayout` or worktree-creation setup scripts.
@@ -88,4 +88,4 @@ A4 Code prompts you to approve the exact `create` and `remove` command strings o
 ## Rewind and limits
 
 - **Rewind**: Restores every repository with an earlier snapshot. Plain-folder files outside repositories and repositories with no earlier snapshot keep their current contents (the rewind reports any skipped repos).
-- **Limits**: Git actions run one repository at a time; only the project folder's `a4.json` is read; the Diff pane repository picker and plain-folder base branch field are web/desktop only.
+- **Limits**: Git actions run one repository at a time; only the project folder's `t3.json` is read; the Diff pane repository picker and plain-folder base branch field are web/desktop only.

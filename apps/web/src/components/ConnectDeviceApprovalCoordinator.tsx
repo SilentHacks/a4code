@@ -24,7 +24,7 @@ import { toastManager } from "./ui/toast";
 import { stackedThreadToast } from "./ui/toastHelpers";
 
 /**
- * Asks whoever can approve to look at A4 Connect devices waiting on an environment, and tells
+ * Asks whoever can approve to look at T3 Connect devices waiting on an environment, and tells
  * them about devices that got in without approval.
  */
 export function ConnectDeviceApprovalCoordinator() {
@@ -118,13 +118,13 @@ function NewConnectDeviceToast({
           ? m(
               msg("{device} connected through {product}. Not you? Review it.", {
                 device: describeConnectDeviceClient(first),
-                product: "A4 Connect",
+                product: "T3 Connect",
               }),
             )
           : m(
               msg(
                 "{count, plural, one {{count} device} other {{count} devices}} connected through {product}. Not you? Review them.",
-                { count: unseen.length, product: "A4 Connect" },
+                { count: unseen.length, product: "T3 Connect" },
               ),
             ),
       timeout: 0,

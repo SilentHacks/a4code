@@ -76,7 +76,7 @@ const policies = (): ReadonlyArray<Policy> => [
   {
     id: "Clients",
     title: "Allowed clients",
-    help: "What may connect to A4 Code on this machine.\n\nWithout Remote, A4 Code only listens on this machine, does not create pairing links, signs out devices that paired earlier, and turns A4 Connect off. Check at least one client.\n\nDisabled or Not Configured: no restriction.",
+    help: "What may connect to A4 Code on this machine.\n\nWithout Remote, A4 Code only listens on this machine, does not create pairing links, signs out devices that paired earlier, and turns T3 Connect off. Check at least one client.\n\nDisabled or Not Configured: no restriction.",
     elements: [
       {
         kind: "checkbox",
@@ -103,8 +103,8 @@ const policies = (): ReadonlyArray<Policy> => [
   },
   {
     id: "Connect",
-    title: "Allow A4 Connect",
-    help: "Disabled turns A4 Connect off and unlinks this machine. Other remote access still follows Allowed clients.\n\nEnabled or Not Configured leaves A4 Connect available.",
+    title: "Allow T3 Connect",
+    help: "Disabled turns T3 Connect off and unlinks this machine. Other remote access still follows Allowed clients.\n\nEnabled or Not Configured leaves T3 Connect available.",
     toggle: "Connect",
   },
   {
@@ -128,7 +128,7 @@ const policies = (): ReadonlyArray<Policy> => [
   {
     id: "WorktreeLayoutCommands",
     title: "Allow project worktree layout commands",
-    help: "Disabled stops A4 Code from running the worktreeLayout commands a project's a4.json declares, whether or not a user approved them. Such a project gets no new worktree threads; existing thread folders are restored and removed without the project's commands.",
+    help: "Disabled stops A4 Code from running the worktreeLayout commands a project's t3.json declares, whether or not a user approved them. Such a project gets no new worktree threads; existing thread folders are restored and removed without the project's commands.",
     toggle: "WorktreeLayoutCommands",
   },
   {

@@ -162,7 +162,7 @@ export interface McpInvocationScope {
   /** True while Labs → Workflows is on here; `/mcp` reads it per request. Unset is off. */
   readonly workflows?: boolean;
   /**
-   * The origin this `/mcp` request reached, e.g. a A4 Connect tunnel. Hosted clients cannot
+   * The origin this `/mcp` request reached, e.g. a T3 Connect tunnel. Hosted clients cannot
    * see the URL they were configured with, so links they must fetch carry it. Unset in-process.
    */
   readonly origin?: string | undefined;
@@ -171,7 +171,7 @@ export interface McpInvocationScope {
 }
 
 /**
- * A4 Code renders `a4-thread://` links as thread chips. Other MCP clients cannot open them, so
+ * A4 Code renders `t3-thread://` links as thread chips. Other MCP clients cannot open them, so
  * they get the hosted link Copy thread copies, which opens the thread in either app or a browser.
  * A known `title` labels the chip for clients that cannot load this environment's threads.
  */

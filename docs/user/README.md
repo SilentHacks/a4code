@@ -28,7 +28,7 @@ A4 Code is an open-source control plane for coding agents. It gives the coding a
 1. **Install A4 Code** on the machine where your agents will run ([Install A4 Code](./install.md)).
 2. **Set up at least one agent** via the [Welcome page](./welcome-page.md) or **Settings → Providers** (for example, `claude auth login` or `codex login`).
 3. **Open or clone a project** and start a thread ([Working with threads](./thread-sidebar.md)).
-4. **Optional — connect your phone or another computer**: Run `a4code up` on the host or enable **A4 Connect** in **Settings → Sharing & access** ([Remote access](./remote-access.md)).
+4. **Optional — connect your phone or another computer**: Run `a4code up` on the host or enable **T3 Connect** in **Settings → Sharing & access** ([Remote access](./remote-access.md)).
 
 ---
 
@@ -68,7 +68,7 @@ A4 Code is an open-source control plane for coding agents. It gives the coding a
 ### Projects, automation & customization
 
 - [Settings and project overrides](./project-settings.md) — Scope inheritance, pinning/archiving projects, worktree cleanup, scheduled tasks, and webhooks.
-- [Project configuration (`a4.json`) and actions](./a4-json.md) — Checked-in repo config, setup/dev/settle scripts, and schema reference.
+- [Project configuration (`t3.json`) and actions](./a4-json.md) — Checked-in repo config, setup/dev/settle scripts, and schema reference.
 - [Projects with several repositories](./multi-repo-projects.md) — Multi-repo folders, external folders, submodules, and custom worktree layouts.
 - [Workflows](./workflows.md) — Durable multi-stage TypeScript workflows (Labs) with schedules, webhooks, and approvals.
 - [Text generation models](./text-generation.md) — Fast/cheap API models for titles, commits, PR descriptions, and voice cleanup.
@@ -92,8 +92,8 @@ A4 Code is an open-source control plane for coding agents. It gives the coding a
 
 ### Remote, mobile & integrations
 
-- [Remote access](./remote-access.md) — A4 Connect, LAN/Tailscale pairing, desktop SSH, multi-route failover, load balancing, and linked environments.
-- [A4 Connect troubleshooting](./a4-connect-troubleshooting.md) — Diagnosing tunnel, port 7844, DNS, clock, and account errors.
+- [Remote access](./remote-access.md) — T3 Connect, LAN/Tailscale pairing, desktop SSH, multi-route failover, load balancing, and linked environments.
+- [T3 Connect troubleshooting](./a4-connect-troubleshooting.md) — Diagnosing tunnel, port 7844, DNS, clock, and account errors.
 - [Mobile notifications](./mobile-notifications.md) — Push alerts, iOS Live Activities/widgets, and Android Live Updates.
 - [Guest links](./guest-links.md) — Sharing a live thread with a teammate in their browser (no account needed).
 - [Outside agents](./outside-agents.md) — Connecting Claude Code, Codex, ChatGPT, or bots to A4 Code over MCP, plus `a4code thread` host scripting.

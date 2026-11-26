@@ -37,7 +37,7 @@ class LocalTracer extends Context.Reference("@a4code/shared/relayTracing/LocalTr
   defaultValue: () => Option.none<Tracer.Tracer>(),
 }) {}
 
-/** Export only A4 Connect spans; wrap local work with {@link withLocalTracing}. */
+/** Export only T3 Connect spans; wrap local work with {@link withLocalTracing}. */
 export const withRelayClientTracing = <A, E, R>(
   effect: Effect.Effect<A, E, R>,
 ): Effect.Effect<A, E, R> =>

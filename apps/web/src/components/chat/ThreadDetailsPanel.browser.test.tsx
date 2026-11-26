@@ -18,7 +18,7 @@ const state = vi.hoisted(() => ({
   configLoaded: true,
 }));
 
-// The read of a4.json is a cache: a re-read is the only way to see what is on disk now.
+// The read of t3.json is a cache: a re-read is the only way to see what is on disk now.
 const t3File = vi.hoisted(() => ({
   disk: "",
   cached: "",
@@ -43,7 +43,7 @@ vi.mock(import("~/components/files/projectFilesQueryState"), async (importOrigin
         for (const listener of t3File.listeners) listener();
       };
       const data =
-        relativePath === "a4.json" && contents !== ""
+        relativePath === "t3.json" && contents !== ""
           ? { relativePath, contents, byteLength: contents.length, truncated: false }
           : null;
       return {
@@ -295,7 +295,7 @@ it("offers no Initialize Git before the server config says where No project live
     .not.toBeInTheDocument();
 });
 
-it("lists the a4.json actions on disk when the actions menu opens again after the file changed", async () => {
+it("lists the t3.json actions on disk when the actions menu opens again after the file changed", async () => {
   using fixture = setup({ workspaceRoot: "/work/plain", folder: "/work/plain" });
   const t3Json = (name: string) =>
     JSON.stringify({ scripts: [{ name, command: `npm run dev -- --port ${name.slice(-4)}` }] });
@@ -309,7 +309,7 @@ it("lists the a4.json actions on disk when the actions menu opens again after th
   await chooser.click();
   await expect.element(page.getByRole("menu")).not.toBeInTheDocument();
 
-  // A setup hook rewrites this checkout's a4.json outside A4 Code.
+  // A setup hook rewrites this checkout's t3.json outside A4 Code.
   t3File.disk = t3Json("Dev 4200");
 
   await chooser.click();

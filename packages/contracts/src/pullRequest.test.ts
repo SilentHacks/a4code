@@ -164,7 +164,7 @@ describe("resolvePullRequestAuthorFilter", () => {
 
 describe("PullRequestOperationError", () => {
   // Cloudflare swaps an origin 502 for its own body without CORS headers, so a
-  // client behind a A4 Connect tunnel sees a transport error instead of this error.
+  // client behind a T3 Connect tunnel sees a transport error instead of this error.
   it.effect("answers with a status a Cloudflare tunnel passes through", () =>
     Effect.gen(function* () {
       const error = new PullRequestOperationError({

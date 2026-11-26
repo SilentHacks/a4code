@@ -2,9 +2,9 @@
 
 A4 Code can use an existing [Oh My Pi (OMP)](https://github.com/can1357/oh-my-pi) installation.
 OMP runs on the environment hosting the A4 Code server, including when you connect from web,
-desktop, mobile, or A4 Connect. OMP 18.6.0 is the integration baseline.
+desktop, mobile, or T3 Connect. OMP 18.6.0 is the integration baseline.
 
-## Ubuntu VPS with A4 Connect
+## Ubuntu VPS with T3 Connect
 
 This fork includes a source installer for Ubuntu 22.04+ on x64 or ARM64. Allow several GB of
 disk and at least 4 GB of RAM/swap for building. Run it as the user who will run OMP:
@@ -22,7 +22,7 @@ It builds the fork with the production public Connect configuration and installs
 Do not run two servers against the same home. The fork listens on port 3774 instead of stock
 T3's 3773; override it with `A4CODE_FORK_PORT` or an explicit `--port`.
 
-Authorize the VPS using your usual A4 Connect account, then start the fork service:
+Authorize the VPS using your usual T3 Connect account, then start the fork service:
 
 ```sh
 ~/.local/bin/a4code connect link --headless

@@ -3,7 +3,7 @@
 The Welcome page runs on a fresh local installation to help you verify an agent, optionally import existing projects and conversations, and connect the mobile app. Only one ready agent is required to start.
 
 - Reopen it anytime from **Settings → About → Welcome page → Open**.
-- Hosted the hosted web client skips this page and prompts you to sign in to A4 Connect and run `a4code connect` on your computer instead.
+- Hosted the hosted web client skips this page and prompts you to sign in to T3 Connect and run `a4code connect` on your computer instead.
 
 ## Agents
 
@@ -19,7 +19,7 @@ Click **Start** once at least one agent is ready, or **Start without an agent** 
 
 ## Phone
 
-Select **Set up** to scan the QR code for iOS or Android, then sign in to A4 Connect on both devices. If A4 Connect is unavailable or disabled by policy, pair with a code from **Settings → Sharing & access**.
+Select **Set up** to scan the QR code for iOS or Android, then sign in to T3 Connect on both devices. If T3 Connect is unavailable or disabled by policy, pair with a code from **Settings → Sharing & access**.
 
 ## Projects and conversation import
 

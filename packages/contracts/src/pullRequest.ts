@@ -1065,7 +1065,7 @@ export class PullRequestOperationError extends Schema.TaggedError<PullRequestOpe
     listResult: Schema.optional(PullRequestListResult),
     cause: Schema.optional(Schema.Defect()),
   },
-  // Not 502: Cloudflare, in front of A4 Connect, swaps an origin 502 for its own page.
+  // Not 502: Cloudflare, in front of T3 Connect, swaps an origin 502 for its own page.
   { httpApiStatus: 503 },
 ) {
   [HttpServerRespondable.symbol]() {

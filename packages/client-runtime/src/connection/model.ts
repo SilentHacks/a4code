@@ -76,7 +76,7 @@ const ConnectionBlockedReason = Schema.Literals([
   "unsupported",
 ]);
 
-/** A part of the path to an environment: this device, A4 Connect, the host's tunnel, or A4 Code on the host. */
+/** A part of the path to an environment: this device, T3 Connect, the host's tunnel, or A4 Code on the host. */
 export const ConnectionHop = Schema.Literals(["device", "relay", "tunnel", "server"]);
 export type ConnectionHop = typeof ConnectionHop.Type;
 
@@ -151,7 +151,7 @@ export type PreparedHttpAuthorization =
       readonly _tag: "Dpop";
       readonly accessToken: string;
       readonly expiresAtEpochMs: number;
-      /** Set when the token renews directly with the host instead of through A4 Connect. */
+      /** Set when the token renews directly with the host instead of through T3 Connect. */
       readonly directConnection?: DirectDpopConnection;
     };
 

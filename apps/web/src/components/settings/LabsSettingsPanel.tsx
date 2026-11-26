@@ -39,7 +39,7 @@ export function LabsSettingsPanel() {
     <SettingsPageContainer>
       <SettingsSection id="beta" title={gt("Beta")}>
         <BoringSidebarRow />
-        {/* Clerk is only mounted when this build has A4 Connect. */}
+        {/* Clerk is only mounted when this build has T3 Connect. */}
         {hasCloudPublicConfig() ? <GuestLinksRowWithSignIn /> : <GuestLinksRow />}
         <LinkedEnvironmentsRow />
         <WorkflowsRow />
@@ -108,7 +108,7 @@ function BoringSidebarMultilineRow() {
   );
 }
 
-/** Signed out of A4 Connect, the row offers to sign in instead of its switch. */
+/** Signed out of T3 Connect, the row offers to sign in instead of its switch. */
 function GuestLinksRowWithSignIn() {
   const searchableSetting = useSearchableSetting();
   const gt = useGT();
@@ -120,7 +120,7 @@ function GuestLinksRowWithSignIn() {
     <SettingsRow
       {...searchableSetting("guest-links")}
       description={gt(
-        "Share a thread with a guest who watches it live in a browser and sends messages you approve. Sign in to A4 Connect to use guest links.",
+        "Share a thread with a guest who watches it live in a browser and sends messages you approve. Sign in to T3 Connect to use guest links.",
       )}
       control={
         <Button size="sm" variant="outline" onClick={openAuthPrompt}>
@@ -139,7 +139,7 @@ function GuestLinksRow() {
   const messages = useMessages();
   const scope = useOptionalSettingsScope();
   const primaryPolicy = usePrimaryManagedPolicy();
-  // Guests arrive through A4 Connect, so a policy that turns Connect off turns this off too.
+  // Guests arrive through T3 Connect, so a policy that turns Connect off turns this off too.
   const connectDenial = firstManagedDenial(
     scope
       ? scope.connectedEnvironments.map((environment) => environment.serverConfig?.managedPolicy)
@@ -151,12 +151,12 @@ function GuestLinksRow() {
       serverScoped
       {...searchableSetting("guest-links")}
       settingKeys={["guestSharingEnabled"]}
-      // Turning guest links off still works without A4 Connect.
+      // Turning guest links off still works without T3 Connect.
       managed={settings.guestSharingEnabled ? undefined : connectDenial}
       description={
         <T>
           Share a thread with a guest who watches it live in a browser and sends messages you
-          approve. Needs A4 Connect: sign in and link this machine in{" "}
+          approve. Needs T3 Connect: sign in and link this machine in{" "}
           <Link to="/settings/access" className="underline underline-offset-2">
             Sharing & access
           </Link>

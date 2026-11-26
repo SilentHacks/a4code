@@ -2,7 +2,7 @@ import { EnvironmentId, ThreadId, type ScopedThreadRef } from "@a4code/contracts
 import * as Option from "effect/Option";
 import * as Schema from "effect/Schema";
 
-export const THREAD_LINK_PROTOCOL = "a4-thread";
+export const THREAD_LINK_PROTOCOL = "t3-thread";
 const V1_PREFIX = `${THREAD_LINK_PROTOCOL}://v1/`;
 const V2_PREFIX = `${THREAD_LINK_PROTOCOL}://v2/`;
 const NATIVE_HOSTED_PREFIX = "a4code://threads/";

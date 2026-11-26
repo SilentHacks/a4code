@@ -1,6 +1,6 @@
-# A4 Connect
+# T3 Connect
 
-A4 Connect is optional and uses Clerk for cloud identity. The relay manages environment links,
+T3 Connect is optional and uses Clerk for cloud identity. The relay manages environment links,
 bootstrap credentials, and managed tunnel allocations. Regular HTTP and WebSocket traffic goes
 directly from clients to the environment's tunnel hostname—the relay Worker is not in the data path.
 
@@ -11,9 +11,8 @@ traces. Opt-in offline holding stores raw webhook requests in a per-link Durable
 ([`HookInboxObject.ts`](../../infra/relay/src/hooks/HookInboxObject.ts)) rather than Queues or
 Postgres because held requests need per-link ordering, retry timing, and larger payload limits.
 
-Local, LAN, and direct pairing do not require Connect. Configure your own Clerk application and
-relay to enable it. Browser-based CLI sign-in also needs `A4CODE_HOSTED_APP_URL`; the headless
-device grant does not. See the [Connect setup runbook](../operations/02_connect-setup.md).
+Local, LAN, and direct pairing do not require Connect. Clients can use the hosted T3 Connect
+service or an operator's Clerk application and relay. See the [Connect setup runbook](../operations/02_connect-setup.md).
 
 ## The relay is a trusted broker
 

@@ -215,7 +215,7 @@ const ROUTE_TITLES: Readonly<Record<string, string>> = {
   ThreadFiles: msg("Files"),
   WorkflowRun: msg("Run", { $context: "noun, page title for one workflow run" }),
   SettingsLegal: msg("Legal"),
-  ConnectOnboarding: msg("Set up {product}", { product: "A4 Connect" }),
+  ConnectOnboarding: msg("Set up {product}", { product: "T3 Connect" }),
   Connections: msg("Environments"),
   ConnectionsNew: msg("Add Environment"),
 };

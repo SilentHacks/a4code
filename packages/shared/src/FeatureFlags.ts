@@ -15,7 +15,7 @@ const VARIABLE = "A4CODE_FEATURE_FLAGS";
 const config = Config.all({
   secretProviders: Config.Boolean("secret_providers").pipe(Config.withDefault(false)),
   tanstackSource: Config.Boolean("tanstack_source").pipe(Config.withDefault(false)),
-  /** The public client ID of the A4 Code for GitHub app; unset turns its sign-in off. */
+  /** The public client ID of the T3 Code for GitHub app; unset turns its sign-in off. */
   githubAppClientId: Config.option(Config.String("github_app_client_id")),
 });
 

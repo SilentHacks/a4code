@@ -4,7 +4,7 @@ Get push alerts, Live Activities, and home-screen widgets on iOS and Android whe
 
 ## Prerequisites
 
-- Sign in to **A4 Connect** on both your phone and host machine (direct/Tailscale connections alone do not deliver background push notifications).
+- Sign in to **T3 Connect** on both your phone and host machine (direct/Tailscale connections alone do not deliver background push notifications).
 - Enable **Publish agent activity** in **Settings → Sharing & access** on the host.
 - Enable **Device Notifications** in **Settings → Notifications** on mobile (Android requires Android 7.0+ and Google Play services).
 

@@ -46,7 +46,7 @@ export async function readT3ProjectFile(
   );
 }
 
-/** The project's a4.json from an earlier read, or `undefined` when none has loaded yet. */
+/** The project's t3.json from an earlier read, or `undefined` when none has loaded yet. */
 export function peekT3ProjectFile(
   environmentId: EnvironmentId,
   workspaceRoot: string,

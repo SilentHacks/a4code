@@ -230,7 +230,7 @@ export function createNewThreadHandler(router: AnyRouter) {
         envMode,
         newWorktreesStartFromOrigin: projectSettings.settings.newWorktreesStartFromOrigin,
       });
-    // The draft opens without waiting on a4.json: a cold read takes seconds on a loaded host.
+    // The draft opens without waiting on t3.json: a cold read takes seconds on a loaded host.
     // Its workspace default lands afterwards unless the user picked a workspace or sent first.
     const resolveDefaultEnvMode = () => {
       // Environment queries wait for a connection, so an offline machine's file is never read.

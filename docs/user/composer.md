@@ -56,7 +56,7 @@ Slash commands (such as `/compact` or `/context`) wait for the current turn to f
 
 ## Queue messages offline on mobile
 
-Mobile keeps local copies of draft attachments so you can preview them and queue messages offline. Uploads resume on reconnect, and drafts/queued messages survive app restarts and A4 Connect sign-out (restored when signing back into the same account).
+Mobile keeps local copies of draft attachments so you can preview them and queue messages offline. Uploads resume on reconnect, and drafts/queued messages survive app restarts and T3 Connect sign-out (restored when signing back into the same account).
 
 ## Custom models and defaults
 
@@ -112,7 +112,7 @@ If there's only one prompt saved on this device and none on a connected
 environment, the shortcut restores it directly.
 
 Prompts are saved on the environment where you stash them. The stash shows prompts
-from all connected environments, including local ones, without a A4 Connect
+from all connected environments, including local ones, without a T3 Connect
 sign-in requirement. If an environment goes offline, its prompts reappear when
 you reconnect. When you stash while offline or connected to an older server,
 the prompt is saved in your browser or desktop app instead.

@@ -41,7 +41,7 @@ export function connectDeviceApprovalPrompts(input: {
           {
             device: describeConnectDevice(device),
             environment: input.environmentLabel,
-            product: "A4 Connect",
+            product: "T3 Connect",
             code: verificationCode,
           },
         ),

@@ -1,18 +1,23 @@
-# A4 Connect setup
+# T3 Connect setup
 
-Deployment and client configuration for A4 Connect. See [A4 Connect](../internals/06_a4-connect.md) for trust boundaries and [infra/relay/README.md](../../infra/relay/README.md#deployment) for relay provisioning.
-
-Set the repository Actions variable `A4CODE_DEPLOY_RELAY=true` only after configuring the production account and credentials. Until then, pushes to `main` do not deploy a relay.
+Use the existing T3 Connect service with A4 Code, or run your own relay. See [T3 Connect architecture](../internals/06_a4-connect.md) for trust boundaries.
 
 ## Public application configuration
 
-A4 Connect is disabled in a fresh clone. Copy `.env.example` to `.env` for production, or set these public identifiers in `.env` / `.env.local` (process env > `.env.local` > `.env`):
+For source builds, copy `.env.example` to `.env` to use the hosted T3 Connect service. Existing `T3CODE_*` public Connect settings still work. No new account or relay is needed. Local, LAN, and direct pairing do not require Connect.
+
+Use a supported T3-hosted sign-in origin for browser-based sign-in. Clerk controls which origins, native callbacks, and passkey associations it accepts; fork-specific native IDs are not automatically registered with the upstream service.
+
+## Run your own relay
+
+See the [relay deployment guide](../../infra/relay/README.md#deployment). Set the repository Actions variable `A4CODE_DEPLOY_RELAY=true` only after configuring the production account and credentials. To use that relay, set these public identifiers in `.env` or `.env.local` (process env > `.env.local` > `.env`):
 
 ```dotenv
 A4CODE_CLERK_PUBLISHABLE_KEY=<publishable key>
 A4CODE_CLERK_JWT_TEMPLATE=<JWT template name>
 A4CODE_CLERK_CLI_OAUTH_CLIENT_ID=<public OAuth application client ID>
 A4CODE_RELAY_URL=https://relay.example.com
+A4CODE_HOSTED_APP_URL=https://app.example.com
 ```
 
 `CLERK_SECRET_KEY` belongs only in relay secrets, never in client config. Client and bundled-server builds embed these values at build time; EAS preview/production environments need the publishable key, JWT template, and relay URL.

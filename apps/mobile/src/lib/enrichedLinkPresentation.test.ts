@@ -104,7 +104,7 @@ describe("Enriched link presentation", () => {
   });
 
   it("presents thread links as thread chips and leaves other links alone", () => {
-    for (const href of ["a4-thread://v1/thread%3Aproject%3A1", "a4-thread://v2/env/thread_1"]) {
+    for (const href of ["t3-thread://v1/thread%3Aproject%3A1", "t3-thread://v2/env/thread_1"]) {
       expect(enrichedThreadLinkPresentation(href), href).toEqual({
         accent: "#009c96",
         icon: { kind: "chip", name: "messages-square" },
@@ -125,7 +125,7 @@ describe("Enriched link presentation", () => {
     expect(
       threadChipTargets(
         here,
-        "See [A](a4-thread://v1/thread_a), [A again](a4-thread://v1/thread_a), [B](a4-thread://v1/thread_b) and [D](a4-thread://v2/env-there/thread_d).",
+        "See [A](t3-thread://v1/thread_a), [A again](t3-thread://v1/thread_a), [B](t3-thread://v1/thread_b) and [D](t3-thread://v2/env-there/thread_d).",
         [
           {
             version: 1,
@@ -139,10 +139,10 @@ describe("Enriched link presentation", () => {
         ],
       ),
     ).toEqual([
-      { href: "a4-thread://v1/thread_a", environmentId: here, threadId: "thread_a", link: true },
-      { href: "a4-thread://v1/thread_b", environmentId: here, threadId: "thread_b", link: true },
+      { href: "t3-thread://v1/thread_a", environmentId: here, threadId: "thread_a", link: true },
+      { href: "t3-thread://v1/thread_b", environmentId: here, threadId: "thread_b", link: true },
       {
-        href: "a4-thread://v2/env-there/thread_d",
+        href: "t3-thread://v2/env-there/thread_d",
         environmentId: there,
         threadId: "thread_d",
         link: true,
@@ -159,9 +159,9 @@ describe("Enriched link presentation", () => {
 
   it("finds thread links with angle-bracketed destinations", () => {
     const here = "env-here" as EnvironmentId;
-    expect(threadChipTargets(here, "See [A](<a4-thread://v2/env-here/thread_a>).")).toEqual([
+    expect(threadChipTargets(here, "See [A](<t3-thread://v2/env-here/thread_a>).")).toEqual([
       {
-        href: "a4-thread://v2/env-here/thread_a",
+        href: "t3-thread://v2/env-here/thread_a",
         environmentId: here,
         threadId: "thread_a",
         link: true,

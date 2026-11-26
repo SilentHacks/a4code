@@ -26,7 +26,7 @@ import { settingsScopeEnvironmentLabels } from "./settingsScopeAxis";
 import { SharedTooltipTrigger } from "../ui/shared-tooltip";
 
 interface InheritanceLayer {
-  readonly key: "project" | "environment" | "a4.json" | "built-in";
+  readonly key: "project" | "environment" | "t3.json" | "built-in";
   readonly label: string;
   readonly value: string;
   readonly effective: boolean;
@@ -151,14 +151,14 @@ export function settingInheritanceLayers(
   });
   if (fileBacked && target.projectId !== null) {
     layers.push({
-      key: "a4.json",
-      label: "a4.json",
+      key: "t3.json",
+      label: "t3.json",
       value:
-        source === "a4.json"
+        source === "t3.json"
           ? formatValue(key, target.settings[key], resolve)
           : resolve(msg("Inherits")),
-      effective: source === "a4.json",
-      set: source === "a4.json",
+      effective: source === "t3.json",
+      set: source === "t3.json",
     });
   }
   // File-backed defaults come from the resolver, not the schema's decoded null.

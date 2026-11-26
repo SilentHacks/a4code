@@ -29,7 +29,7 @@ When an agent opens a device, it floats over chat by default (disable **Settings
 
 ## Remote connections
 
-Device video streams through the environment server (works over LAN, Tailscale, and A4 Connect). Live video requires HTTPS or `localhost`—plain HTTP remote origins fall back to still images on iOS and disable video on Android (except Expo Simulators).
+Device video streams through the environment server (works over LAN, Tailscale, and T3 Connect). Live video requires HTTPS or `localhost`—plain HTTP remote origins fall back to still images on iOS and disable video on Android (except Expo Simulators).
 
 ## SSH device hosts
 

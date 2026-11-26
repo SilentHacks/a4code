@@ -42,6 +42,21 @@ it.effect("has no hosted app without operator configuration", () =>
   hostedAppUrlConfig.pipe(provideEnv({}), Effect.flip),
 );
 
+it.effect("uses the existing T3 Connect relay and hosted sign-in with legacy configuration", () =>
+  Effect.gen(function* () {
+    const env = {
+      T3CODE_RELAY_URL: "https://relay.t3.codes",
+      T3CODE_CLERK_PUBLISHABLE_KEY: "pk_live_Y2xlcmsudDMuY29kZXMk",
+      T3CODE_CLERK_CLI_OAUTH_CLIENT_ID: "existing-client",
+    };
+    assert.equal(yield* makeRelayUrlConfig("").pipe(provideEnv(env)), "https://relay.t3.codes");
+    assert.equal(yield* hostedAppUrlConfig.pipe(provideEnv(env)), "https://app.t3.codes");
+    const oauth = yield* makeCloudCliOAuthConfig().pipe(provideEnv(env));
+    assert.equal(oauth.tokenEndpoint, "https://clerk.t3.codes/oauth/token");
+    assert.equal(oauth.clientId, "existing-client");
+  }),
+);
+
 it.effect("derives direct Clerk OAuth endpoints from statically injected public config", () =>
   Effect.gen(function* () {
     const config = yield* makeCloudCliOAuthConfig({

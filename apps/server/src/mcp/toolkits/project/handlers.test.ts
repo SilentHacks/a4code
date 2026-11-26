@@ -251,7 +251,7 @@ it.effect(
       expect(belowCeiling.result).toMatchObject({
         projectId: belowCeiling.projectId,
         modelSelection: belowCeiling.modelSelection,
-        link: `[Fix](a4-thread://v2/environment/${belowCeiling.launched[0]?.threadId})`,
+        link: `[Fix](t3-thread://v2/environment/${belowCeiling.launched[0]?.threadId})`,
       });
       expect(belowCeiling.launched[0]?.runtimeMode).toBe("approval-required");
       expect(belowCeiling.launched[0]?.initialMessage?.senderThreadId).toBeUndefined();
@@ -920,7 +920,7 @@ it.effect("a worktree launch that omits startFromOrigin follows the new-worktree
 it.effect("a launch that omits its workspace follows the new-threads-in-a-worktree default", () =>
   Effect.gen(function* () {
     const fileSystem = yield* FileSystem.FileSystem;
-    for (const source of ["setting", "a4.json"] as const) {
+    for (const source of ["setting", "t3.json"] as const) {
       const repo = yield* fileSystem.makeTempDirectoryScoped({ prefix: "t3-launch-env-mode-" });
       const launched: Array<ThreadLaunch.ThreadLaunchInput> = [];
       const { projectId, dependencies } = clientLaunchHarness({
@@ -936,9 +936,9 @@ it.effect("a launch that omits its workspace follows the new-threads-in-a-worktr
       ]) {
         yield* git.execute({ operation: "test.setupRepo", cwd: repo, args });
       }
-      if (source === "a4.json")
+      if (source === "t3.json")
         yield* fileSystem.writeFileString(
-          `${repo}/a4.json`,
+          `${repo}/t3.json`,
           JSON.stringify({ defaultThreadEnvMode: "worktree" }),
         );
       const toolkit = yield* ProjectToolkit.pipe(

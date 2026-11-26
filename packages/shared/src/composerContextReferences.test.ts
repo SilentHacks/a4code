@@ -579,7 +579,7 @@ describe("threadLinkContextReferences", () => {
     const pasted = threadLinkContextReferences(
       [
         "https://app.example.test/threads/env-1/t1",
-        "<a4-thread://v2/env-1/t2>",
+        "<t3-thread://v2/env-1/t2>",
         "[Written](https://app.example.test/threads/env-2/t3)",
       ].join(" "),
       [],
@@ -625,7 +625,7 @@ describe("threadLinkContextReferences", () => {
   it("keeps links it may not chip, v1 links, and links in code as written", () => {
     const text = [
       "https://app.example.test/threads/elsewhere/t1",
-      "[Old](a4-thread://v1/t2)",
+      "[Old](t3-thread://v1/t2)",
       "`https://app.example.test/threads/env-1/t3`",
     ].join(" ");
     const pasted = threadLinkContextReferences(

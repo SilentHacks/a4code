@@ -51,7 +51,7 @@ With `origin` on the mirror, use `src` instead of `gh`. PRs into `main` still me
 
 ### Reusable dev credential
 
-Only use this on a hostname where you trust every service (browsers share cookies across ports on the same hostname). Generate one secret once and put it in the main checkout's gitignored `.env` (which `a4.json` links into worktrees):
+Only use this on a hostname where you trust every service (browsers share cookies across ports on the same hostname). Generate one secret once and put it in the main checkout's gitignored `.env` (which `t3.json` links into worktrees):
 
 ```sh
 openssl rand -hex 32

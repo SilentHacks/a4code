@@ -1929,7 +1929,7 @@ function OpenCommandPaletteDialog(props: {
         "grouping",
         "checkout",
         "remove",
-        "a4.json",
+        "t3.json",
       ],
       title: gt("Project settings"),
       description: contextualProjectGroup.displayName,

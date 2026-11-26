@@ -213,9 +213,9 @@ describe("scoreThreadSearch", () => {
           branch: "t3/diagnose-connect",
           projectTitle: "a4code",
         }),
-        thread("A4 Connect Tunnel Lifecycle Review", { projectTitle: "a4code" }),
+        thread("T3 Connect Tunnel Lifecycle Review", { projectTitle: "a4code" }),
       ])[0],
-    ).toBe("A4 Connect Tunnel Lifecycle Review");
+    ).toBe("T3 Connect Tunnel Lifecycle Review");
     expect(
       rankTitles("a4code", [
         thread("Fix sidebar lag", { ...busy, projectTitle: "a4code", branch: "a4code/sidebar" }),

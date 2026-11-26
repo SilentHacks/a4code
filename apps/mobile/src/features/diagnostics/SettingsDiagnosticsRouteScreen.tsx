@@ -220,7 +220,7 @@ function ConnectionTracesSetting() {
       <Text className="px-2 text-sm leading-normal text-foreground-muted">
         {gt(
           "When the app connects to a computer through {product}, it sends the A4 Code team how long each step took, any error type, an ID for this app session, and the app version. Traces never include your threads, prompts, or code.",
-          { product: "A4 Connect" },
+          { product: "T3 Connect" },
         )}
       </Text>
     </View>

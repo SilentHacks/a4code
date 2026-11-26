@@ -9,7 +9,7 @@ New to A4 Code? Start with the **[User Guide & Index](./user/README.md)** for ho
 - [Install A4 Code](./user/install.md) · [Welcome page](./user/welcome-page.md) · [FAQ](./user/faq.md)
 - [Working with threads](./user/thread-sidebar.md) · [Messages and context](./user/composer.md) · [Permission modes](./user/permission-modes.md)
 - [Diffs and workspace files](./user/diffs.md) · [Source control](./user/source-control.md) · [Subagents and delegation](./user/subagents.md)
-- [Settings and project overrides](./user/project-settings.md) · [Project config (`a4.json`)](./user/a4-json.md) · [Multi-repo projects](./user/multi-repo-projects.md)
+- [Settings and project overrides](./user/project-settings.md) · [Project config (`t3.json`)](./user/a4-json.md) · [Multi-repo projects](./user/multi-repo-projects.md)
 
 ### Workspace tools & automation
 
@@ -20,7 +20,7 @@ New to A4 Code? Start with the **[User Guide & Index](./user/README.md)** for ho
 
 ### Remote, security & operations
 
-- [Remote access](./user/remote-access.md) · [A4 Connect troubleshooting](./user/a4-connect-troubleshooting.md) · [Mobile notifications](./user/mobile-notifications.md) · [Guest links](./user/guest-links.md)
+- [Remote access](./user/remote-access.md) · [T3 Connect troubleshooting](./user/a4-connect-troubleshooting.md) · [Mobile notifications](./user/mobile-notifications.md) · [Guest links](./user/guest-links.md)
 - [Outside agents (MCP)](./user/outside-agents.md) · [Secrets](./user/secrets.md) ([1Password service account](./user/secrets-1password-service-account.md) · [1Password Connect](./user/secrets-1password-connect.md))
 - [Background service](./user/background-service.md) · [Updating A4 Code](./user/updating.md) · [Usage and limits](./user/usage.md) · [Maintenance & diagnostics](./user/diagnostics.md)
 - [CLI reference (`a4code`)](./user/cli.md) · [Product usage data](./user/telemetry.md) · [Managed policy](./user/managed-policy.md) · [Triage an issue](./user/triage.md) · [V1 migration](./user/thread-migration.md) · [Portable handoffs](./user/portable-handoffs.md) · [Question attachments](./user/question-attachments.md) · [Open source licenses](./user/open-source-licenses.md)
@@ -49,7 +49,7 @@ anything.
 - [03 · Providers](./internals/03_providers.md)
 - [04 · Environment auth](./internals/04_environment-auth.md)
 - [05 · Remote environments](./internals/05_remote.md)
-- [06 · A4 Connect](./internals/06_a4-connect.md)
+- [06 · T3 Connect](./internals/06_a4-connect.md)
 - [07 · Server updates](./internals/07_server-updates.md)
 - [08 · Product analytics](./internals/08_product-analytics.md)
 - [09 · Connection runtime](./internals/09_connection-runtime.md)
@@ -66,7 +66,7 @@ anything.
 
 - [00 · Development and local builds](./operations/00_development.md)
 - [01 · Dev container](./operations/01_devcontainer.md)
-- [02 · A4 Connect setup](./operations/02_connect-setup.md)
+- [02 · T3 Connect setup](./operations/02_connect-setup.md)
 - [03 · Release](./operations/03_release.md)
 - [04 · Observability](./operations/04_observability.md)
 - [05 · Relay observability](./operations/05_relay-observability.md)

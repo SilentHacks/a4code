@@ -51,6 +51,31 @@ describe("loadRepoEnv", () => {
       VITE_A4CODE_RELAY_URL: "https://ci.example.test",
     });
   });
+
+  it("feeds existing T3 Connect settings to server, web, and mobile builds", () => {
+    const repoRoot = makeTemporaryDirectory();
+    NodeFS.writeFileSync(
+      NodePath.join(repoRoot, ".env"),
+      "A4CODE_CLERK_PUBLISHABLE_KEY=pk_root\nT3CODE_RELAY_URL=https://relay.t3.codes\n",
+    );
+    expect(
+      loadRepoEnv({
+        repoRoot,
+        baseEnv: {
+          T3CODE_CLERK_PUBLISHABLE_KEY: "pk_existing",
+          EXPO_PUBLIC_CLERK_JWT_TEMPLATE: "t3-relay",
+        },
+      }),
+    ).toMatchObject({
+      A4CODE_RELAY_URL: "https://relay.t3.codes",
+      VITE_A4CODE_RELAY_URL: "https://relay.t3.codes",
+      A4CODE_CLERK_PUBLISHABLE_KEY: "pk_existing",
+      VITE_CLERK_PUBLISHABLE_KEY: "pk_existing",
+      EXPO_PUBLIC_CLERK_PUBLISHABLE_KEY: "pk_existing",
+      VITE_CLERK_JWT_TEMPLATE: "t3-relay",
+      A4CODE_HOSTED_APP_URL: "https://app.t3.codes",
+    });
+  });
 });
 
 function makeTemporaryDirectory() {

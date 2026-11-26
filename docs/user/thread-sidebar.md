@@ -66,7 +66,7 @@ Enable **Settings → Labs → Boring sidebar (group by project)** on web/deskto
 - **Per-thread override**: Open a thread's menu → **Auto-settle behavior → Never** to exempt a single thread.
 - **Drag-to-settle** (web/desktop): Press and drag down/up from a thread's **Settle**, **Un-settle**, or **Wake** button to act on a contiguous range (`Esc` cancels).
 - **Offline settle/snooze**: Queues locally (**Pending** / **Waiting to sync**) and syncs on reconnect; remote changes take precedence if the thread changed in the meantime.
-- **Worktree cleanup on settle**: Enable **Run in the thread's worktree when the thread settles** on a project action (or `"runOnSettle": true` in `a4.json`), e.g. `cargo clean`, to reclaim disk space automatically in worktree threads.
+- **Worktree cleanup on settle**: Enable **Run in the thread's worktree when the thread settles** on a project action (or `"runOnSettle": true` in `t3.json`), e.g. `cargo clean`, to reclaim disk space automatically in worktree threads.
 
 ### Snooze options
 

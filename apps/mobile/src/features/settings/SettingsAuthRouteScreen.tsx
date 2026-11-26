@@ -14,7 +14,7 @@ import { T3ConnectProfilePage } from "../cloud/T3ConnectProfilePage";
 const USER_PROFILE_CUSTOM_PAGES = [
   {
     path: "a4-connect",
-    label: "A4 Connect",
+    label: "T3 Connect",
     icon: "globe",
     content: <T3ConnectProfilePage />,
   },
@@ -35,7 +35,7 @@ function ConfiguredSettingsAuthRouteScreen() {
   if (isSignedIn && !hasBeenSignedIn) setHasBeenSignedIn(true);
 
   // Clerk reports sign-out only through its auth store (the native profile view
-  // and the A4 Connect page can both sign out), so this follows that store.
+  // and the T3 Connect page can both sign out), so this follows that store.
   // oxlint-disable-next-line a4code/no-unreasoned-state-sync -- pops the navigator when Clerk's auth store reports a sign-out from the profile view or Connect page
   useEffect(() => {
     if (hasBeenSignedIn && isLoaded && isSignedIn === false) {

@@ -251,14 +251,14 @@ export const watchManagedTunnelOrigin = Effect.fn("ManagedTunnelOrigin.watch")(f
       continue;
     }
     yield* Effect.logWarning(
-      "A4 Connect routes this server's tunnel to another origin; registering this server again",
+      "T3 Connect routes this server's tunnel to another origin; registering this server again",
       { ingressOrigin: ingressOrigin ?? "unparseable", localOrigin },
     );
     yield* options.register.pipe(
       Effect.catchCause((cause) =>
         Cause.hasInterrupts(cause)
           ? Effect.interrupt
-          : Effect.logWarning("Failed to register this server's A4 Connect origin again", {
+          : Effect.logWarning("Failed to register this server's T3 Connect origin again", {
               cause,
             }),
       ),

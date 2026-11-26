@@ -90,7 +90,7 @@ export function classifyReachability(
     // A running server reads the link `a4code connect` stores only at startup.
     return fail(
       "not_linked",
-      "The server has not set up a A4 Connect tunnel.",
+      "The server has not set up a T3 Connect tunnel.",
       "Run `a4code connect`, then restart A4 Code so it applies the link.",
     );
   }
@@ -154,15 +154,15 @@ export function classifyReachability(
   if (status === 530 && cloudflareError === "1016") {
     return fail(
       "dns_failed",
-      "The A4 Connect address no longer points to this machine's tunnel (Cloudflare error 1016). A4 Connect may have removed this environment.",
-      "Link this environment again. Turn A4 Connect off and on in Settings > Sharing & access, or run `a4code connect link` and then restart A4 Code.",
+      "The T3 Connect address no longer points to this machine's tunnel (Cloudflare error 1016). T3 Connect may have removed this environment.",
+      "Link this environment again. Turn T3 Connect off and on in Settings > Sharing & access, or run `a4code connect link` and then restart A4 Code.",
     );
   }
   if (status !== null) {
     const code = cloudflareError === undefined ? "" : ` (Cloudflare error ${cloudflareError})`;
     return fail(
       "unexpected_response",
-      `The A4 Connect address answered with HTTP ${status}${code}.`,
+      `The T3 Connect address answered with HTTP ${status}${code}.`,
       restart,
     );
   }
@@ -172,7 +172,7 @@ export function classifyReachability(
     if (endpoint.existsPublicly === true) {
       return fail(
         "dns_failed",
-        "The A4 Connect address resolves in public DNS, but this network's DNS still has an old cached answer that it does not exist.",
+        "The T3 Connect address resolves in public DNS, but this network's DNS still has an old cached answer that it does not exist.",
         "Wait. The cached answer usually clears within about 30 minutes.",
         exitNodeHint(exitNode),
       );
@@ -180,20 +180,20 @@ export function classifyReachability(
     if (endpoint.existsPublicly === false) {
       return fail(
         "dns_failed",
-        "The A4 Connect address is missing from public DNS. The relay did not publish it.",
+        "The T3 Connect address is missing from public DNS. The relay did not publish it.",
         restart,
       );
     }
     return fail(
       "dns_failed",
-      "The A4 Connect address does not resolve from this machine.",
+      "The T3 Connect address does not resolve from this machine.",
       "Check the DNS settings on this machine or its VPN.",
       exitNodeHint(exitNode),
     );
   }
   return fail(
     "timeout",
-    "The A4 Connect address did not answer from this machine.",
+    "The T3 Connect address did not answer from this machine.",
     "Check the network, VPN, or proxy on this machine.",
     exitNodeHint(exitNode),
   );
@@ -202,7 +202,7 @@ export function classifyReachability(
 /** The loud diagnosis the CLI prints and the server logs. */
 export function formatReachabilityFailure(result: Unreachable): string {
   return [
-    "✕ A4 Connect is NOT reachable from other devices",
+    "✕ T3 Connect is NOT reachable from other devices",
     `  ${result.reason}`,
     ...(result.hint ? [`  ${result.hint}`] : []),
     `  Fix: ${result.fix}`,
@@ -475,7 +475,7 @@ const make = Effect.gen(function* () {
       );
     } else {
       yield* Effect.logInfo(
-        `A4 Connect is reachable from other devices. ${formatConnectReachable(result)}`,
+        `T3 Connect is reachable from other devices. ${formatConnectReachable(result)}`,
       );
     }
     return result;
